@@ -103,6 +103,15 @@
     <Compile Include="Execution\CallSiteBinders\MessageSendCallSiteBinderBase.cs" />
     <Compile Include="Execution\CallSiteBinders\SmalltalkDynamicMetaObjectBinder.cs" />
     <Compile Include="Execution\Dynamic\SmalltalkRuntimeDynamicMetaObject.cs" />
+    <Compile Include="Execution\Internals\Primitives\BuiltInPrimitives.cs" />
+    <Compile Include="Execution\Internals\Primitives\BuiltInPrimitiveHelper.cs" />
+    <Compile Include="Execution\Internals\Primitives\BuiltInPrimitivesEnum.cs" />
+    <Compile Include="Execution\Internals\Primitives\PrimitiveBuilder.cs" />
+    <Compile Include="Execution\Internals\Primitives\PrimitiveHelper.cs" />
+    <Compile Include="Execution\Internals\Primitives\PrimitiveInternalException.cs" />
+    <Compile Include="Execution\Internals\Primitives\PrimitiveSemanticException.cs" />
+    <Compile Include="Execution\Internals\Primitives\PrimitivesEnum.cs" />
+    <Compile Include="Execution\Internals\SemanticCodeGenerationException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Execution\CallSiteBinders\CallSiteBinderCache.cs" />
     <Compile Include="Execution\CallSiteBinders\ConstantSendCallSiteBinder.cs" />
@@ -133,8 +142,8 @@
     <Compile Include="Execution\CallSiteBinders\CallSiteBinderCacheTable.cs" />
     <Compile Include="Execution\Internals\CodeGenerationException.cs" />
     <Compile Include="Execution\Internals\InternalCodeGenerationException.cs" />
-    <Compile Include="Execution\Internals\PrimitiveInvalidMemberException.cs" />
-    <Compile Include="Execution\Internals\PrimitiveInvalidTypeException.cs" />
+    <Compile Include="Execution\Internals\Primitives\PrimitiveInvalidMemberException.cs" />
+    <Compile Include="Execution\Internals\Primitives\PrimitiveInvalidTypeException.cs" />
     <Compile Include="Execution\Internals\RuntimeCodeGenerationException.cs" />
     <Compile Include="Internal\NativeTypeClassMap.cs" />
     <Compile Include="Behavior\MethodDictionary.cs" />
@@ -181,7 +190,9 @@
       <Name>IronSmalltalk.Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Execution\Internals\Primitives\Primitives Read Me.htm" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

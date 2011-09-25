@@ -3,48 +3,31 @@
   <Class Name="IronSmalltalk.AstJitCompiler.Internals.BindingCodeGeneraionException" Collapsed="true">
     <Position X="0.75" Y="3.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
       <FileName>Internals\BindingCodeGeneraionException.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.AstJitCompiler.Internals.CodeGenerationErrors" Collapsed="true">
-    <Position X="10.5" Y="0.5" Width="1.5" />
+    <Position X="7.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AABAFAAECAAAAAACAAAkBAAAUAACAAAAAAABAAAQAAA=</HashCode>
+      <HashCode>AABAFAAECAAAAAACAAAkRAAAUAACAAAAAAABAAAQAAA=</HashCode>
       <FileName>Internals\CodeGenerationErrors.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="IronSmalltalk.AstJitCompiler.Internals.SemanticCodeGenerationException" Collapsed="true">
-    <Position X="2.25" Y="2" Width="2.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
-      <FileName>Internals\SemanticCodeGenerationException.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="IronSmalltalk.AstJitCompiler.Internals.PrimitiveInvalidTypeException" Collapsed="true">
-    <Position X="7.25" Y="4.75" Width="2.25" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
-      <FileName>Internals\PrimitiveInvalidTypeException.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="IronSmalltalk.AstJitCompiler.Internals.PrimitiveSemanticException" Collapsed="true">
-    <Position X="4" Y="3.5" Width="2.25" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Internals\PrimitiveSemanticException.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="IronSmalltalk.Runtime.Execution.Internals.RuntimeCodeGenerationException" Collapsed="true">
-    <Position X="7" Y="2" Width="2.5" />
+    <Position X="4" Y="2" Width="2.5" />
     <TypeIdentifier />
   </Class>
   <Class Name="IronSmalltalk.Runtime.Execution.Internals.CodeGenerationException" Collapsed="true">
-    <Position X="4.25" Y="0.5" Width="1.75" />
+    <Position X="2.75" Y="0.5" Width="1.75" />
     <TypeIdentifier />
   </Class>
-  <Class Name="IronSmalltalk.Runtime.Execution.Internals.PrimitiveInvalidTypeException" Collapsed="true">
-    <Position X="7.25" Y="3.5" Width="2.25" />
+  <Class Name="IronSmalltalk.Runtime.Execution.Internals.Primitives.PrimitiveInvalidTypeException" Collapsed="true">
+    <Position X="4" Y="3.5" Width="2.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="IronSmalltalk.Runtime.Execution.Internals.SemanticCodeGenerationException" Collapsed="true">
+    <Position X="1.25" Y="2" Width="1.5" />
     <TypeIdentifier />
   </Class>
   <Font Name="Segoe UI" Size="9" />

@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ApplicationIcon>Scientia.ico</ApplicationIcon>
+  </PropertyGroup>
   <Import Project="$(SolutionDir)\Common.proj" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -30,6 +33,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -413,6 +417,7 @@
     <Content Include="External\SmalltalkSystem.xml" />
     <Content Include="Definitions\Description\Read Me.htm" />
     <Content Include="External\Read Me.txt" />
+    <Content Include="Scientia.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IronSmalltalk.AstJitCompiler\IronSmalltalk.AstJitCompiler.csproj">

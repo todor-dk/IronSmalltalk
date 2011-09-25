@@ -23,12 +23,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     /// <summary>
     /// Parse node representing primitive (API) call. This is an addition to the X3J20 standard.
     /// </summary>
-    // <api call> ::= '<' <api convention> <api type> <api name> <api parameter>* <api result> '>'
+    // <api call> ::= '<' <api convention> <api parameter>* '>'
     //      <api convention> ::= keyword
-    //      <api type> ::= identifier | quotedString 
-    //      <api name> ::= identifier | quotedString 
     //      <api parameter> ::= identifier | quotedString 
-    //      <api result> ::= identifier | quotedString 
     // EXAMPLE: <static: Array Copy Array Array Int32>
     //      Array.Copy(Array arg1, Array arg2, Int32 arg3);
     // EXAMPLE: <static: 'System.Console' WriteLine string>

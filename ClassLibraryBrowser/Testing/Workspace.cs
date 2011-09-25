@@ -132,7 +132,7 @@ namespace IronSmalltalk.Tools.ClassLibraryBrowser.Testing
 
         #region Reporting
 
-        private class ErrorSink : IParseErrorSink, IInterchangeErrorSink, IInstallErrorSink
+        private class ErrorSink : IronSmalltalk.Internals.ErrorSinkBase
         {
             public bool HadErrors;
             private IWorkspaceClient Client;
@@ -142,32 +142,7 @@ namespace IronSmalltalk.Tools.ClassLibraryBrowser.Testing
                 this.Client = client;
             }
 
-            void IParseErrorSink.AddParserError(SourceLocation startPosition, SourceLocation stopPosition, string parseErrorMessage, IronSmalltalk.Compiler.LexicalTokens.IToken offendingToken)
-            {
-                this.ReportError(parseErrorMessage, startPosition, stopPosition);
-            }
-
-            void IParseErrorSink.AddParserError(IParseNode node, SourceLocation startPosition, SourceLocation stopPosition, string parseErrorMessage, IronSmalltalk.Compiler.LexicalTokens.IToken offendingToken)
-            {
-                this.ReportError(parseErrorMessage, startPosition, stopPosition);
-            }
-
-            void IronSmalltalk.Compiler.LexicalAnalysis.IScanErrorSink.AddScanError(IronSmalltalk.Compiler.LexicalTokens.IToken token, SourceLocation startPosition, SourceLocation stopPosition, string scanErrorMessage)
-            {
-                this.ReportError(scanErrorMessage, startPosition, stopPosition);
-            }
-
-            void IInterchangeErrorSink.AddInterchangeError(SourceLocation startPosition, SourceLocation stopPosition, string errorMessage)
-            {
-                this.ReportError(errorMessage, startPosition, stopPosition);
-            }
-
-            void IInstallErrorSink.AddInstallError(string installErrorMessage, ISourceReference sourceReference)
-            {
-                this.ReportError(installErrorMessage, sourceReference.StartPosition, sourceReference.StopPosition);
-            }
-
-            private void ReportError(string message, SourceLocation start, SourceLocation end)
+            protected override void ReportError(string message, SourceLocation start, SourceLocation end, IronSmalltalk.Internals.ErrorSinkBase.ErrorType type, params object[] offenders)
             {
                 this.HadErrors = true;
                 if (this.Client != null)

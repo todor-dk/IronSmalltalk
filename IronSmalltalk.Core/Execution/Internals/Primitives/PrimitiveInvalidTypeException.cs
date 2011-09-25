@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace IronSmalltalk.Runtime.Execution.Internals
+namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
 {
     /// <summary>
     /// Exception that indicates that attempt to resolve some .Net type during

@@ -384,22 +384,12 @@ namespace IronSmalltalk.Tools.ClassLibraryBrowser.Controls.Methods
             return node.Selector;
         }
 
-        private class ParseErrorSink : IronSmalltalk.Compiler.SemanticAnalysis.IParseErrorSink
+        private class ParseErrorSink : IronSmalltalk.Internals.ErrorSinkBase
         {
             public readonly List<string> Errors = new List<string>();
-            void Compiler.SemanticAnalysis.IParseErrorSink.AddParserError(SourceLocation startPosition, SourceLocation stopPosition, string parseErrorMessage, Compiler.LexicalTokens.IToken offendingToken)
+            protected override void ReportError(string message, SourceLocation start, SourceLocation end, IronSmalltalk.Internals.ErrorSinkBase.ErrorType type, params object[] offenders)
             {
-                this.Errors.Add(parseErrorMessage);
-            }
-
-            void Compiler.SemanticAnalysis.IParseErrorSink.AddParserError(Compiler.SemanticNodes.IParseNode node, SourceLocation startPosition, SourceLocation stopPosition, string parseErrorMessage, Compiler.LexicalTokens.IToken offendingToken)
-            {
-                this.Errors.Add(parseErrorMessage);
-            }
-
-            void Compiler.LexicalAnalysis.IScanErrorSink.AddScanError(Compiler.LexicalTokens.IToken token, SourceLocation startPosition, SourceLocation stopPosition, string scanErrorMessage)
-            {
-                this.Errors.Add(scanErrorMessage);
+                this.Errors.Add(message);
             }
         }
 
