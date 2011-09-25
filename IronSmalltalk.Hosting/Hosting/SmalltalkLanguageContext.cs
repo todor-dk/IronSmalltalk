@@ -51,7 +51,6 @@ namespace IronSmalltalk.Runtime.Hosting
         {
         }
 
-
         public override ScriptCode CompileSourceCode(SourceUnit sourceUnit, CompilerOptions options, ErrorSink errorSink)
         {
             if (sourceUnit == null)

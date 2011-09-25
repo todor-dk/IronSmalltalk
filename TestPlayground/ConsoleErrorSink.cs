@@ -24,26 +24,11 @@ using IronSmalltalk.Common;
 
 namespace TestPlayground
 {
-    public class ConsoleErrorSink : IInterchangeErrorSink
+    public class ConsoleErrorSink : IronSmalltalk.Internals.ErrorSinkBase
     {
-        public void AddInterchangeError(SourceLocation startPosition, SourceLocation stopPosition, string errorMessage)
+        protected override void ReportError(string message, SourceLocation start, SourceLocation end, IronSmalltalk.Internals.ErrorSinkBase.ErrorType type, params object[] offenders)
         {
-            Console.WriteLine("InterchangeError [{0} - {1}]: {2}", startPosition, stopPosition, errorMessage);
-        }
-
-        public void AddParserError(SourceLocation startPosition, SourceLocation stopPosition, string parseErrorMessage, IronSmalltalk.Compiler.LexicalTokens.IToken offendingToken)
-        {
-            Console.WriteLine("ParseError [{0} - {1}]: {2}", startPosition, stopPosition, parseErrorMessage);
-        }
-
-        public void AddParserError(IronSmalltalk.Compiler.SemanticNodes.IParseNode node, SourceLocation startPosition, SourceLocation stopPosition, string parseErrorMessage, IronSmalltalk.Compiler.LexicalTokens.IToken offendingToken)
-        {
-            Console.WriteLine("ParseError [{0} - {1}]: {2}", startPosition, stopPosition, parseErrorMessage);
-        }
-
-        public void AddScanError(IronSmalltalk.Compiler.LexicalTokens.IToken token, SourceLocation startPosition, SourceLocation stopPosition, string scanErrorMessage)
-        {
-            Console.WriteLine("ScanError [{0} - {1}]: {2}", startPosition, stopPosition, scanErrorMessage);
+            Console.WriteLine("Error [{0} - {1}]: {2}", start, end, message);
         }
     }
 }

@@ -30,7 +30,7 @@ using IronSmalltalk.Common;
 
 namespace TestPlayground
 {
-    public partial class BulkParseTester : Form, IParseErrorSink 
+    public partial class BulkParseTester : Form 
     {
         public bool Stop;
         public ParseTester ParseTester;
@@ -110,7 +110,7 @@ namespace TestPlayground
             {
                 Parser parser = new VseCompatibleParser();
                 this.Errors = new Dictionary<object, List<string>>();
-                parser.ErrorSink = this;
+                parser.ErrorSink = new ErrorSink(this);
                 MethodNode node = parser.ParseMethod(reader);
                 ok = (this.Errors.Count == 0);
                 if (!ok)
@@ -154,25 +154,20 @@ namespace TestPlayground
 
         }
 
-        void IParseErrorSink.AddParserError(SourceLocation startPosition, SourceLocation stopPosition, string parseErrorMessage, IronSmalltalk.Compiler.LexicalTokens.IToken offendingToken)
+        private class ErrorSink : IronSmalltalk.Internals.ErrorSinkBase
         {
-            if (!this.Errors.ContainsKey(this))
-                this.Errors.Add(this, new List<string>());
-            this.Errors[this].Add(parseErrorMessage);
-        }
+            private BulkParseTester Tester;
+            public ErrorSink(BulkParseTester tester)
+            {
+                this.Tester = tester;
+            }
 
-        void IParseErrorSink.AddParserError(IParseNode node, SourceLocation startPosition, SourceLocation stopPosition, string parseErrorMessage, IronSmalltalk.Compiler.LexicalTokens.IToken offendingToken)
-        {
-            if (!this.Errors.ContainsKey(node))
-                this.Errors.Add(node, new List<string>());
-            this.Errors[node].Add(parseErrorMessage);
-        }
-
-        void IronSmalltalk.Compiler.LexicalAnalysis.IScanErrorSink.AddScanError(IronSmalltalk.Compiler.LexicalTokens.IToken token, SourceLocation startPosition, SourceLocation stopPosition, string scanErrorMessage)
-        {
-            if (!this.Errors.ContainsKey(token))
-                this.Errors.Add(token, new List<string>());
-            this.Errors[token].Add(scanErrorMessage);
+            protected override void ReportError(string message, SourceLocation start, SourceLocation end, IronSmalltalk.Internals.ErrorSinkBase.ErrorType type, params object[] offenders)
+            {
+                if (!this.Tester.Errors.ContainsKey(this))
+                    this.Tester.Errors.Add(this, new List<string>());
+                this.Tester.Errors[this].Add(message);
+            }
         }
     }
 }

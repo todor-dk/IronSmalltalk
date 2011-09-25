@@ -25,7 +25,7 @@ using IronSmalltalk.Runtime.CodeGeneration.Bindings;
 namespace IronSmalltalk.AstJitCompiler.Internals
 {
     [Serializable]
-    public class BindingCodeGeneraionException : SemanticCodeGenerationException
+    public class BindingCodeGeneraionException : IronSmalltalk.Runtime.Execution.Internals.SemanticCodeGenerationException
     {
         public BindingCodeGeneraionException() { }
         public BindingCodeGeneraionException(string message) : base(message) { }
@@ -33,8 +33,17 @@ namespace IronSmalltalk.AstJitCompiler.Internals
 #if !SILVERLIGHT
         protected BindingCodeGeneraionException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 #endif
-        public BindingCodeGeneraionException(string message, SemanticNode node) : base(message, node) { }
+        public BindingCodeGeneraionException(string message, SemanticNode node)
+            : this(message)
+        {
+            this.Node = node;
+        }
         public BindingCodeGeneraionException(NameBinding binding, SemanticNode node)
-            : base((binding is IErrorBinding) ? ((IErrorBinding)binding).ErrorDescription : CodeGenerationErrors.UndefinedBinding, node) { }
+            : this((binding is IErrorBinding) ? ((IErrorBinding)binding).ErrorDescription : CodeGenerationErrors.UndefinedBinding, node)
+        {
+        }
+
+        [NonSerialized]
+        public SemanticNode Node;
     }
 }

@@ -28,6 +28,7 @@ using IronSmalltalk.Compiler.SemanticAnalysis;
 using System.Numerics;
 using IronSmalltalk.Runtime.CodeGeneration.Bindings;
 using IronSmalltalk.Runtime.Execution.CallSiteBinders;
+using IronSmalltalk.Runtime.Execution.Internals.Primitives;
 
 namespace IronSmalltalk.AstJitCompiler.Visiting
 {
@@ -194,7 +195,7 @@ namespace IronSmalltalk.AstJitCompiler.Visiting
             if (node.Messages != null)
                 result = node.Messages.Accept(new MessageVisitor(this, result, visitor.IsSuperSend, visitor.IsConstant, false));
             else if (visitor.IsSuperSend)
-                throw new SemanticCodeGenerationException(CodeGenerationErrors.SuperNotFollowedByMessage, node);
+                throw (new IronSmalltalk.Runtime.Execution.Internals.SemanticCodeGenerationException(CodeGenerationErrors.SuperNotFollowedByMessage)).SetNode(node);
 
             return result;
         }
@@ -207,7 +208,7 @@ namespace IronSmalltalk.AstJitCompiler.Visiting
             if (node.Messages != null)
                 result = node.Messages.Accept(new MessageVisitor(this, result, visitor.IsSuperSend, visitor.IsConstant, false));
             else if (visitor.IsSuperSend)
-                throw new SemanticCodeGenerationException(CodeGenerationErrors.SuperNotFollowedByMessage, node);
+                throw (new IronSmalltalk.Runtime.Execution.Internals.SemanticCodeGenerationException(CodeGenerationErrors.SuperNotFollowedByMessage)).SetNode(node);
 
             return result;
         }
@@ -281,9 +282,7 @@ namespace IronSmalltalk.AstJitCompiler.Visiting
 
         private Expression InlineIdentityTest(Expression a, Expression b)
         {
-            NameBinding trueBinding = this.GetBinding(SemanticConstants.True);
-            NameBinding falseBinding = this.GetBinding(SemanticConstants.False);
-            return PrimitiveCallVisitor.EncodeReferenceEquals(a, b, trueBinding.GenerateReadExpression(this), falseBinding.GenerateReadExpression(this));
+            return BuiltInPrimitiveHelper.EncodeReferenceEquals(a, b, Expression.Constant(true), Expression.Constant(false));
         }
 
         private Expression InlineMessageSend(Compiler.SemanticNodes.KeywordMessageSequenceNode node)

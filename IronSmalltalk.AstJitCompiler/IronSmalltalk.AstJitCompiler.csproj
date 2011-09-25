@@ -93,15 +93,12 @@
   <ItemGroup>
     <Compile Include="Internals\BindingCodeGeneraionException.cs" />
     <Compile Include="Internals\CodeGenerationErrors.cs" />
-    <Compile Include="Internals\PrimitiveInvalidTypeException.cs" />
-    <Compile Include="Internals\PrimitiveSemanticException.cs" />
-    <Compile Include="Internals\SemanticCodeGenerationException.cs" />
+    <Compile Include="Internals\ExceptionHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runtime\AstIntermediateInitializerCode.cs" />
     <Compile Include="Runtime\AstIntermediateMethodCode.cs" />
     <Compile Include="Visiting\LiteralVisitor.cs" />
     <Compile Include="Visiting\PrimaryVisitor.cs" />
-    <Compile Include="Visiting\PrimitiveCallPrimitives.cs" />
     <Compile Include="Visiting\StatementVisitor.cs" />
     <Compile Include="Visiting\TO-DO\BlockVisitor.cs" />
     <Compile Include="Visiting\TO-DO\EncoderVisitor.cs" />
@@ -129,6 +126,9 @@
       <Project>{876AB5DB-133A-47DC-B912-62511E312ED6}</Project>
       <Name>IronSmalltalk.Runtime</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

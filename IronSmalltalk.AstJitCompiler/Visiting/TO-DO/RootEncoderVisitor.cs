@@ -163,7 +163,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
             if (node == null)
                 throw new ArgumentNullException();
             if (!node.Accept(Compiler.Visiting.ParseTreeValidatingVisitor.Current))
-                throw new SemanticCodeGenerationException(CodeGenerationErrors.InvalidCode, node);
+                throw (new Execution.Internals.SemanticCodeGenerationException(CodeGenerationErrors.InvalidCode)).SetNode(node);
 
             this.DefineArguments(node);
             this.DefineTemporaries(node);

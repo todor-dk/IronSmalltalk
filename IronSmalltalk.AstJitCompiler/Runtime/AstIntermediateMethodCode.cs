@@ -27,6 +27,7 @@ using IronSmalltalk.Runtime.CodeGeneration.Visiting;
 using IronSmalltalk.Runtime.Bindings;
 using IronSmalltalk.Common;
 using IronSmalltalk.Runtime.CodeGeneration.BindingScopes;
+using IronSmalltalk.AstJitCompiler.Internals;
 
 namespace IronSmalltalk.AstJitCompiler.Runtime
 {
@@ -131,13 +132,13 @@ namespace IronSmalltalk.AstJitCompiler.Runtime
                     return AstIntermediateMethodCode.ReportError(errorSink, rootNode, "Could not compile method");
                 return true;
             }
-            catch (IronSmalltalk.AstJitCompiler.Internals.PrimitiveInvalidTypeException ex)
+            catch (IronSmalltalk.Runtime.Execution.Internals.Primitives.PrimitiveInvalidTypeException ex)
             {
-                return AstIntermediateMethodCode.ReportError(errorSink, ex.Node, ex.Message);
+                return AstIntermediateMethodCode.ReportError(errorSink, ex.GetNode(), ex.Message);
             }
-            catch (IronSmalltalk.AstJitCompiler.Internals.SemanticCodeGenerationException ex)
+            catch (IronSmalltalk.Runtime.Execution.Internals.SemanticCodeGenerationException ex)
             {
-                return AstIntermediateMethodCode.ReportError(errorSink, ex.Node, ex.Message);
+                return AstIntermediateMethodCode.ReportError(errorSink, ex.GetNode(), ex.Message);
             }
             catch (IronSmalltalk.Runtime.Internal.SmalltalkDefinitionException ex)
             {

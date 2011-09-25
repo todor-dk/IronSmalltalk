@@ -31,7 +31,7 @@ using IronSmalltalk.Common;
 
 namespace TestPlayground
 {
-    public partial class InstallTester : Form, IInterchangeErrorSink, IInstallErrorSink 
+    public partial class InstallTester : Form
     {
         SmalltalkEnvironment Environment;
         public InstallTester()
@@ -62,7 +62,7 @@ namespace TestPlayground
             Properties.Settings.Default.Save();
             this.listErrors.Items.Clear();
 
-            this.Environment.CompilerService.InstallSource(this.txtSource.Text, this, this);
+            this.Environment.CompilerService.InstallSource(this.txtSource.Text, new ErrorSink(this), new ErrorSink(this));
         }
 
         private void AddError(string type, SourceLocation startPosition, SourceLocation stopPosition, string errorMessage)
@@ -74,29 +74,17 @@ namespace TestPlayground
             lvi.Tag = new SourceLocation[] {startPosition, stopPosition};
         }
 
-        void IInterchangeErrorSink.AddInterchangeError(SourceLocation startPosition, SourceLocation stopPosition, string errorMessage)
+        private class ErrorSink : IronSmalltalk.Internals.ErrorSinkBase
         {
-            this.AddError("Interchange", startPosition, stopPosition, errorMessage);
-        }
-
-        void IronSmalltalk.Compiler.SemanticAnalysis.IParseErrorSink.AddParserError(SourceLocation startPosition, SourceLocation stopPosition, string parseErrorMessage, IronSmalltalk.Compiler.LexicalTokens.IToken offendingToken)
-        {
-            this.AddError("Parse", startPosition, stopPosition, parseErrorMessage);
-        }
-
-        void IronSmalltalk.Compiler.SemanticAnalysis.IParseErrorSink.AddParserError(IronSmalltalk.Compiler.SemanticNodes.IParseNode node, SourceLocation startPosition, SourceLocation stopPosition, string parseErrorMessage, IronSmalltalk.Compiler.LexicalTokens.IToken offendingToken)
-        {
-            this.AddError("Parse", startPosition, stopPosition, parseErrorMessage);
-        }
-
-        void IronSmalltalk.Compiler.LexicalAnalysis.IScanErrorSink.AddScanError(IronSmalltalk.Compiler.LexicalTokens.IToken token, SourceLocation startPosition, SourceLocation stopPosition, string scanErrorMessage)
-        {
-            this.AddError("Scan", startPosition, stopPosition, scanErrorMessage);
-        }
-
-        void IInstallErrorSink.AddInstallError(string installErrorMessage, ISourceReference sourceReference)
-        {
-            this.AddError("Install", sourceReference.StartPosition, sourceReference.StopPosition, installErrorMessage);
+            private InstallTester Tester;
+            public ErrorSink(InstallTester tester)
+            {
+                this.Tester = tester;
+            }
+            protected override void ReportError(string message, SourceLocation start, SourceLocation end, IronSmalltalk.Internals.ErrorSinkBase.ErrorType type, params object[] offenders)
+            {
+                this.Tester.AddError(type.ToString(), start, end, message);
+            }
         }
 
         private void listErrors_SelectedIndexChanged(object sender, EventArgs e)
