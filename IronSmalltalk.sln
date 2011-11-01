@@ -39,7 +39,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronSmalltalk.ConsoleHost",
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 13
+		SccNumberOfProjects = 14
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs08
 		SccLocalPath0 = .
@@ -79,6 +79,9 @@ Global
 		SccProjectUniqueName12 = Unit\u0020Tests\\Unit\u0020Tests.csproj
 		SccProjectName12 = Unit\u0020Tests
 		SccLocalPath12 = Unit\u0020Tests
+		SccProjectUniqueName13 = IronSmalltalk.ConsoleHost\\IronSmalltalk.ConsoleHost.csproj
+		SccProjectName13 = IronSmalltalk.ConsoleHost
+		SccLocalPath13 = IronSmalltalk.ConsoleHost
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = IronSmalltalk.vsmdi
