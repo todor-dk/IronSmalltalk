@@ -180,6 +180,7 @@
   <xs:complexType abstract="false" name="Method">
     <xs:sequence minOccurs="1" maxOccurs="1">
       <xs:element name="Source" minOccurs="1" maxOccurs="1" type="xs:string" />
+      <xs:element name="Annotations" minOccurs="0" maxOccurs="1" type="Annotations" />
       <xs:element name="Documentation" minOccurs="0" maxOccurs="1" >
         <xs:complexType>
           <xs:sequence>

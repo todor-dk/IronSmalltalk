@@ -386,6 +386,7 @@
     <None Include="Coordinators\Coordinators Diagram.cd" />
     <None Include="Definitions\Description\Definitions.cd" />
     <None Include="External\ANSI INCITS 319-1998 %28R2007%29.pdf" />
+    <None Include="External\IronSmalltalk.ist" />
     <None Include="External\LicenseAdder.zip" />
     <None Include="External\SystemImplementation.xsd">
       <SubType>Designer</SubType>
