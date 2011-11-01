@@ -84,6 +84,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         /// </remarks>
         public static Expression DivideIntT(Expression arg1, Expression arg2, Type type1, Type type2)
         {
+            // BUGBUG: Do we throw an OverflowException?
             return Expression.Divide(arg1, arg2);
         }
 
@@ -108,6 +109,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         /// </remarks>
         public static Expression DivideIntF(Expression arg1, Expression arg2, Type type1, Type type2)
         {
+            // BUGBUG: Do we throw an OverflowException?
             if (BuiltInPrimitiveHelper.IsUnsignedType(type1) && BuiltInPrimitiveHelper.IsUnsignedType(type2))
                 return Expression.Divide(arg1, arg2);
 

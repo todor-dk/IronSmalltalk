@@ -102,16 +102,26 @@ namespace IronSmalltalk.Runtime.Bindings
             get { return this._contents.Count; }
         }
 
+        /// <summary>
+        /// Gets a collection containing the keys of the binding dictionary.
+        /// </summary>
         public ICollection<Symbol> Keys
         {
             get { return this._contents.Keys; }
         }
 
+        /// <summary>
+        /// Gets a collection containing the values (bindings) in the binding dictionary.
+        /// </summary>
         public ICollection<TItem> Values
         {
             get { return this._contents.Values; }
         }
 
+        /// <summary>
+        /// Returns an enumerator that iterates through the binding dictionary.
+        /// </summary>
+        /// <returns>An IEnumerator that can be used to iterate through the binding dictionary.</returns>
         public IEnumerator<TItem> GetEnumerator()
         {
             return this._contents.Select(pair => pair.Value).GetEnumerator();
