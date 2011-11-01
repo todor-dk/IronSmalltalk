@@ -21,6 +21,11 @@ using IronSmalltalk.Runtime;
 using System.Collections.Generic;
 using System.IO;
 using IronSmalltalk.Runtime.Installer;
+using IronSmalltalk.Compiler.SemanticAnalysis;
+using IronSmalltalk.Compiler.SemanticNodes;
+using System.Linq.Expressions;
+using IronSmalltalk.AstJitCompiler.Runtime;
+using IronSmalltalk.Compiler.Visiting;
 
 
 namespace IronSmalltalk.Internals
@@ -55,28 +60,81 @@ namespace IronSmalltalk.Internals
 #endif
         }
 
+        public void Install(TextReader reader, IInterchangeErrorSink parseErrorSink, IInstallErrorSink installErrorSink)
+        {
+            this.Install(new TextReader[] { reader }, parseErrorSink, installErrorSink);
+        }
+
+        public void Install(TextReader[] readers, IInterchangeErrorSink parseErrorSink, IInstallErrorSink installErrorSink)
+        {
+            if (readers == null)
+                throw new ArgumentNullException("readers");
+
+            this.CompleteInstall(this.Read(readers, parseErrorSink), installErrorSink);
+        }
+
         public void InstallFile(string path, IInterchangeErrorSink parseErrorSink, IInstallErrorSink installErrorSink)
         {
+            if (String.IsNullOrWhiteSpace(path))
+                throw new ArgumentNullException("path");
+
             this.InstallFiles(new string[] { path }, parseErrorSink, installErrorSink);
         }
 
         public void InstallFiles(string[] paths, IInterchangeErrorSink parseErrorSink, IInstallErrorSink installErrorSink)
         {
+            if (paths == null)
+                throw new ArgumentNullException("paths");
+
             this.CompleteInstall(this.ReadFiles(paths, parseErrorSink), installErrorSink);
         }
 
         public void InstallSource(string interchangeCode, IInterchangeErrorSink parseErrorSink, IInstallErrorSink installErrorSink)
         {
+            if (interchangeCode == null)
+                throw new ArgumentNullException("interchangeCode");
+
             this.InstallSources(new string[] { interchangeCode }, parseErrorSink, installErrorSink);
         }
 
         public void InstallSources(string[] interchangeCode, IInterchangeErrorSink parseErrorSink, IInstallErrorSink installErrorSink)
         {
+            if (interchangeCode == null)
+                throw new ArgumentNullException("interchangeCode");
+
             this.CompleteInstall(this.ReadSources(interchangeCode, parseErrorSink), installErrorSink);
+        }
+
+        public InterchangeInstallerContext Read(TextReader interchangeCodeReader, IInterchangeErrorSink errorSink)
+        {
+            if (interchangeCodeReader == null)
+                throw new ArgumentNullException("interchangeCodeReader");
+
+            return this.Read(new TextReader[] { interchangeCodeReader }, errorSink);
+        }
+
+        public InterchangeInstallerContext Read(TextReader[] interchangeCodeReaders, IInterchangeErrorSink errorSink)
+        {
+            if (interchangeCodeReaders == null)
+                throw new ArgumentNullException("interchangeCodeReaders");
+
+            InterchangeInstallerContext installer = this.CreateInstallerContext();
+
+            foreach (TextReader reader in interchangeCodeReaders)
+            {
+                InterchangeFormatProcessor processor = new InterchangeFormatProcessor(reader, installer, this.VersionServicesMap);
+                processor.ErrorSink = errorSink;
+                processor.ProcessInterchangeFile();
+            }
+
+            return installer;
         }
 
         public InterchangeInstallerContext ReadFile(string path, IInterchangeErrorSink errorSink)
         {
+            if (String.IsNullOrWhiteSpace(path))
+                throw new ArgumentNullException("path");
+
             return this.ReadFiles(new string[] { path }, errorSink);
         }
 
@@ -103,6 +161,9 @@ namespace IronSmalltalk.Internals
 
         public InterchangeInstallerContext ReadSource(string interchangeCode, IInterchangeErrorSink errorSink)
         {
+            if (interchangeCode == null)
+                throw new ArgumentNullException("interchangeCode");
+
             return this.ReadSources(new string[] { interchangeCode }, errorSink);
         }
 
@@ -121,6 +182,40 @@ namespace IronSmalltalk.Internals
             }
 
             return installer;
+        }
+
+        public bool Evaluate(string initializerCode, IParseErrorSink errorSink, out object result)
+        {
+            if (initializerCode == null)
+                throw new ArgumentNullException("initializerCode");
+
+            return this.Evaluate(new StringReader(initializerCode), errorSink, out result);
+        }
+
+        public bool Evaluate(TextReader initializerCode, IParseErrorSink errorSink, out object result)
+        {
+            if (initializerCode == null)
+                throw new ArgumentNullException("initializerCode");
+
+            result = null;
+            Parser parser = new Parser();
+            parser.ErrorSink = errorSink;
+            InitializerNode node = parser.ParseInitializer(initializerCode);
+            if ((node == null) || !node.Accept(ParseTreeValidatingVisitor.Current))
+                return false;
+
+            Expression<Func<SmalltalkRuntime, object, object>> lambda;
+            AstIntermediateInitializerCode code = new AstIntermediateInitializerCode(node);
+            var compilationResult = code.CompileGlobalInitializer(this.Runtime);
+            if (compilationResult == null)
+                return false;
+            lambda = compilationResult.ExecutableCode;
+            if (lambda == null)
+                return false;
+
+            var function = lambda.Compile();
+            result = function(this.Runtime, null);
+            return true;
         }
 
         protected virtual InterchangeInstallerContext CreateInstallerContext()
