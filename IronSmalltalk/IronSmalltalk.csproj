@@ -99,6 +99,10 @@
     <Compile Include="SmalltalkEnvironment.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IronSmalltalk.AstJitCompiler\IronSmalltalk.AstJitCompiler.csproj">
+      <Project>{A5C3F31C-DD5F-44BC-9D8F-103E136A13F7}</Project>
+      <Name>IronSmalltalk.AstJitCompiler</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk.Common\IronSmalltalk.Common.csproj">
       <Project>{CBBBA006-546A-4DFF-95A9-D7B1544205AD}</Project>
       <Name>IronSmalltalk.Common</Name>
