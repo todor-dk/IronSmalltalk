@@ -16,7 +16,6 @@
 
 using System;
 using System.Linq;
-using IronSmalltalk.Runtime.Internal;
 using IronSmalltalk.Runtime.Bindings;
 
 namespace IronSmalltalk.Runtime.Installer.Definitions

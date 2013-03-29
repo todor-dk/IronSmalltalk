@@ -15,7 +15,6 @@
 */
 
 using System;
-using IronSmalltalk.Runtime.Internal;
 using IronSmalltalk.Runtime.Behavior;
 
 namespace IronSmalltalk.Runtime.Installer.Definitions

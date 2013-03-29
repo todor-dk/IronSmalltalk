@@ -15,9 +15,6 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using IronSmalltalk.Compiler.SemanticNodes;
 
 namespace IronSmalltalk.Compiler.Visiting

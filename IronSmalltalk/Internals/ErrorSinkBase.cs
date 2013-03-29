@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.SemanticAnalysis;
+using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Interchange;
 using IronSmalltalk.Runtime.Installer;
-using IronSmalltalk.Common;
-using IronSmalltalk.Compiler.SemanticNodes;
 
 namespace IronSmalltalk.Internals
 {

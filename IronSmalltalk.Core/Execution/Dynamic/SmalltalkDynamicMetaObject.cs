@@ -16,29 +16,42 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Dynamic;
 using System.Linq.Expressions;
-using IronSmalltalk.Runtime.Behavior;
-using IronSmalltalk.Runtime.Execution.CallSiteBinders;
+using System.Reflection;
 
 namespace IronSmalltalk.Runtime.Execution.Dynamic
 {
     public interface ISmalltalkDynamicMetaObjectProvider : IDynamicMetaObjectProvider
     {
+        DynamicMetaObject PerformOperation(SmalltalkDynamicMetaObject target, string name, bool ignoreCase, int argumentCount, DynamicMetaObject[] args, out bool caseConflict);
     }
 
     public class SmalltalkDynamicMetaObject : DynamicMetaObject
     {
-        private SmalltalkClass Class;
+        private ISmalltalkDynamicMetaObjectProvider Self;
 
-        public SmalltalkDynamicMetaObject(Expression expression, BindingRestrictions restrictions, SmalltalkClass cls, object value)
-            : base(expression, restrictions, value)
+        public SmalltalkDynamicMetaObject(Expression expression, BindingRestrictions restrictions, ISmalltalkDynamicMetaObjectProvider self)
+            : base(expression, restrictions, self)
         {
-            if (cls == null)
-                throw new ArgumentNullException("cls");
-            this.Class = cls;
+            if (self == null)
+                throw new ArgumentNullException("self");
+            this.Self = self;
+        }
+
+        internal static Expression CreateCaseConflictException(string message)
+        {
+            if (message == null)
+                throw new ArgumentNullException();
+
+            Type type = typeof(InvalidOperationException); // TO-DO ... what is the correct exception type for this?
+            ConstructorInfo ctor = type.GetConstructor(new Type[]{ typeof(string) });
+            if (ctor == null)
+                throw new InvalidOperationException(String.Format(
+                    "Expected the exception class {0} to have a constructor that takes a string.", type));
+            
+            return Expression.Throw(
+                Expression.New(ctor, Expression.Constant(message, typeof(string))));
         }
 
         public override DynamicMetaObject BindInvokeMember(InvokeMemberBinder binder, DynamicMetaObject[] args)
@@ -111,22 +124,16 @@ namespace IronSmalltalk.Runtime.Execution.Dynamic
 
         private DynamicMetaObject PerformOperation(string name, bool ignoreCase, int argumentCount, DynamicMetaObject[] args)
         {
-            bool caseConflict = false;
-            SmalltalkClass cls = this.Class;
-            Symbol na = null;
-            CompiledMethod method = MethodLookupHelper.LookupMethod(ref cls, ref na, delegate(SmalltalkClass c)
-            {
-                return c.InstanceBehavior.GetMethodByNativeName(name, argumentCount, ignoreCase, out caseConflict);
-            });
+            if (args == null)
+                args = new DynamicMetaObject[0];
+            bool caseConflict;
+            DynamicMetaObject result = this.Self.PerformOperation(this, name, ignoreCase, argumentCount, args, out caseConflict);
+            if (!caseConflict)
+                return result;
 
-            if (method != null)
-            {
-                if (args == null)
-                    args = new DynamicMetaObject[0];
-                var compilationResult = method.Code.CompileInstanceMethod(cls.Runtime, cls, this, args, null);
-                return compilationResult.GetDynamicMetaObject(this.Restrictions);
-            }
-            return null;
+            // The case-conflict exception
+            return new DynamicMetaObject(SmalltalkDynamicMetaObject.CreateCaseConflictException(
+                String.Format("Several methods exist with the name '{0}' and only differ in case.", name)), this.Restrictions);
         }
     }
 }

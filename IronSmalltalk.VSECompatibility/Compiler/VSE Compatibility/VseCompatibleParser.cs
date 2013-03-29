@@ -14,12 +14,11 @@
  * **************************************************************************
 */
 
-using System;
+using System.Collections.Generic;
+using IronSmalltalk.Compiler.LexicalAnalysis;
+using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
-using IronSmalltalk.Compiler.LexicalTokens;
-using IronSmalltalk.Compiler.LexicalAnalysis;
-using System.Collections.Generic;
 
 namespace IronSmalltalk.Compiler.VseCompatibility
 {

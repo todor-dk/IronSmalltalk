@@ -15,12 +15,8 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using IronSmalltalk.Runtime.Installer;
-using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Common;
+using IronSmalltalk.Runtime.Behavior;
 
 namespace IronSmalltalk.Runtime.Installer.Definitions
 {

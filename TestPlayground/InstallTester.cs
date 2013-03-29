@@ -15,19 +15,10 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using IronSmalltalk.Runtime;
-using IronSmalltalk.Compiler.Interchange;
-using IronSmalltalk.Runtime.Installer;
-using IronSmalltalk.Interchange;
 using IronSmalltalk;
 using IronSmalltalk.Common;
+
 
 namespace TestPlayground
 {

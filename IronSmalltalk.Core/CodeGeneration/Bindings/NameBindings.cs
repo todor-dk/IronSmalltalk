@@ -15,11 +15,7 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Linq.Expressions;
-using AST = System.Linq.Expressions;
 using IronSmalltalk.Runtime.Execution.Internals;
 
 namespace IronSmalltalk.Runtime.CodeGeneration.Bindings

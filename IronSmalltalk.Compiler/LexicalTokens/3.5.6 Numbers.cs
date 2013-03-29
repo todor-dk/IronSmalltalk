@@ -14,7 +14,6 @@
  * **************************************************************************
 */
 
-using System;
 using System.Numerics;
 using IronSmalltalk.Common;
 

@@ -15,19 +15,17 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using IronSmalltalk.Runtime;
-using IronSmalltalk.Compiler.SemanticNodes;
-using System.Linq.Expressions;
 using System.Dynamic;
-using IronSmalltalk.Runtime.Behavior;
-using IronSmalltalk.Runtime.CodeGeneration.Visiting;
-using IronSmalltalk.Runtime.Bindings;
-using IronSmalltalk.Common;
-using IronSmalltalk.Runtime.CodeGeneration.BindingScopes;
+using System.Linq;
+using System.Linq.Expressions;
 using IronSmalltalk.AstJitCompiler.Internals;
+using IronSmalltalk.Common;
+using IronSmalltalk.Compiler.SemanticNodes;
+using IronSmalltalk.Runtime;
+using IronSmalltalk.Runtime.Behavior;
+using IronSmalltalk.Runtime.Bindings;
+using IronSmalltalk.Runtime.CodeGeneration.BindingScopes;
+using IronSmalltalk.Runtime.CodeGeneration.Visiting;
 
 namespace IronSmalltalk.AstJitCompiler.Runtime
 {

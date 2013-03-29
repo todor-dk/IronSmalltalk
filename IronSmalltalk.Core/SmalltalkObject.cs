@@ -15,8 +15,6 @@
 */
 
 using System;
-using System.Dynamic;
-using System.Linq.Expressions;
 
 namespace IronSmalltalk.Runtime
 {

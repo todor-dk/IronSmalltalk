@@ -15,18 +15,12 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using IronSmalltalk.Runtime;
-using Microsoft.Scripting.Hosting;
-using IronSmalltalk.Runtime.Hosting;
-using IronSmalltalk.Internals;
 using IronSmalltalk;
+using IronSmalltalk.Internals;
+using IronSmalltalk.Runtime.Hosting;
+using Microsoft.Scripting.Hosting;
+
 
 namespace TestPlayground
 {

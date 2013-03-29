@@ -17,10 +17,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using IronSmalltalk.Compiler.LexicalTokens;
 using System.Numerics;
+using System.Text;
 using IronSmalltalk.Common;
+using IronSmalltalk.Compiler.LexicalTokens;
 
 namespace IronSmalltalk.Compiler.LexicalAnalysis
 {

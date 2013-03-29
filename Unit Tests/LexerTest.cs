@@ -14,16 +14,13 @@
  * **************************************************************************
 */
 
-using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
-using IronSmalltalk.Compiler.LexicalAnalysis;
-using IronSmalltalk.Compiler.LexicalTokens;
 using System.Numerics;
 using IronSmalltalk.Common;
+using IronSmalltalk.Compiler.LexicalAnalysis;
+using IronSmalltalk.Compiler.LexicalTokens;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 
 namespace IronSmalltalk.UnitTesting
 {

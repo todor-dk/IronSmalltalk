@@ -16,11 +16,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.LexicalAnalysis;
+using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticNodes;
 
 namespace IronSmalltalk.Compiler.SemanticAnalysis

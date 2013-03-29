@@ -15,11 +15,11 @@
 */
 
 using System;
-using IronSmalltalk.Compiler.SemanticNodes;
-using IronSmalltalk.Compiler.LexicalTokens;
 using System.Collections.Generic;
 using System.Linq;
+using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
+using IronSmalltalk.Compiler.SemanticNodes;
 
 namespace IronSmalltalk.Compiler.VseCompatibility
 {

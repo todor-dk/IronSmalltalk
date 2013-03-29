@@ -15,12 +15,11 @@
 */
 
 using System;
-using IronSmalltalk.Compiler.SemanticAnalysis;
-using IronSmalltalk.Runtime.Installer;
 using System.Linq;
-using IronSmalltalk.Interchange;
-using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Common;
+using IronSmalltalk.Compiler.SemanticAnalysis;
+using IronSmalltalk.Interchange;
+using IronSmalltalk.Runtime.Installer;
 
 namespace IronSmalltalk.Compiler.Interchange
 {

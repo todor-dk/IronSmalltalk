@@ -14,7 +14,6 @@
  * **************************************************************************
 */
 
-using System;
 using IronSmalltalk.Compiler.LexicalTokens;
 
 namespace IronSmalltalk.Compiler.Interchange.ParseNodes

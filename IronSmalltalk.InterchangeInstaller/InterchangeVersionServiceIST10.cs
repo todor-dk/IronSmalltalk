@@ -15,11 +15,8 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using IronSmalltalk.Compiler.Interchange;
 using System.IO;
+using IronSmalltalk.Compiler.Interchange;
 
 namespace IronSmalltalk.Interchange
 {

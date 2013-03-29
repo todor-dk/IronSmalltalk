@@ -7,16 +7,17 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C3A588AE-808A-4A8E-B460-18FAAB3F6D20}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>IronSmalltalk.Hosting</RootNamespace>
     <AssemblyName>IronSmalltalk.Hosting</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,6 +27,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,6 +36,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SilverlightDebug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -50,6 +53,7 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SilverlightRelease|AnyCPU'">
     <OutputPath>bin\SilverlightRelease\</OutputPath>
@@ -66,72 +70,53 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(SilverlightBuild)' != 'true' ">
-    <Reference Include="Microsoft.Scripting">
-      <HintPath>..\..\..\..\..\..\..\Documents\Tech Documents\DLR\dlr-54115\DLR_Main\bin\Debug\Microsoft.Scripting.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(SilverlightBuild)' == 'true' ">
-    <Reference Include="Microsoft.Scripting">
-      <HintPath>..\..\..\..\..\..\..\Documents\Tech Documents\DLR\dlr-54115\DLR_Main\bin\Debug\Microsoft.Scripting.dll</HintPath>
-    </Reference>
-    <Reference Include="mscorlib, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(SilverlightPath)\mscorlib.dll</HintPath>
-    </Reference>
-    <Reference Include="System, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(SilverlightPath)\System.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Core, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(SilverlightPath)\System.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(SilverlightSdkPath)\System.Numerics.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Hosting\ErrorSinkWrapper.cs" />
+    <Compile Include="Hosting\SmalltalkCommandLine.cs" />
+    <Compile Include="Hosting\SmalltalkConsoleOptions.cs" />
     <Compile Include="Hosting\SmalltalkHosting.cs" />
     <Compile Include="Hosting\SmalltalkLanguageContext.cs" />
+    <Compile Include="Hosting\SmalltalkOptionsParser.cs" />
     <Compile Include="Hosting\SmalltalkScriptCode.cs" />
+    <Compile Include="ConsoleHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IronSmalltalk.AstJitCompiler\IronSmalltalk.AstJitCompiler.csproj">
-      <Project>{A5C3F31C-DD5F-44BC-9D8F-103E136A13F7}</Project>
-      <Name>IronSmalltalk.AstJitCompiler</Name>
-    </ProjectReference>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\IronSmalltalk.Common\IronSmalltalk.Common.csproj">
-      <Project>{CBBBA006-546A-4DFF-95A9-D7B1544205AD}</Project>
+      <Project>{cbbba006-546a-4dff-95a9-d7b1544205ad}</Project>
       <Name>IronSmalltalk.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk.Compiler\IronSmalltalk.Compiler.csproj">
-      <Project>{8C1EF7F5-B3AF-401B-9223-E10EF00EBAE6}</Project>
+      <Project>{8c1ef7f5-b3af-401b-9223-e10ef00ebae6}</Project>
       <Name>IronSmalltalk.Compiler</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IronSmalltalk.Core\IronSmalltalk.Runtime.csproj">
-      <Project>{876AB5DB-133A-47DC-B912-62511E312ED6}</Project>
-      <Name>IronSmalltalk.Runtime</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IronSmalltalk.DefinitionInstaller\IronSmalltalk.DefinitionInstaller.csproj">
-      <Project>{0BF739EF-002C-4B90-A06B-5E6639FAD2CF}</Project>
-      <Name>IronSmalltalk.DefinitionInstaller</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk.InterchangeInstaller\IronSmalltalk.InterchangeInstaller.csproj">
-      <Project>{33CC4F2A-E078-4130-89E1-F48752ACAB38}</Project>
+      <Project>{33cc4f2a-e078-4130-89e1-f48752acab38}</Project>
       <Name>IronSmalltalk.InterchangeInstaller</Name>
     </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk\IronSmalltalk.csproj">
-      <Project>{F03C018B-B9AD-4D3C-A1BA-F459BC544C97}</Project>
+      <Project>{f03c018b-b9ad-4d3c-a1ba-f459bc544c97}</Project>
       <Name>IronSmalltalk</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Dynamic, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Development\Tech Documents\DLR\IronLanguages-main-af33202\bin\Debug\Microsoft.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Development\Tech Documents\DLR\IronLanguages-main-af33202\bin\Debug\Microsoft.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

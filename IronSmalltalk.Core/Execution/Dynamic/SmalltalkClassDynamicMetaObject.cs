@@ -14,44 +14,67 @@
  * **************************************************************************
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Dynamic;
 using System.Linq.Expressions;
+using IronSmalltalk.Runtime.Behavior;
+using IronSmalltalk.Runtime.Execution.CallSiteBinders;
+using IronSmalltalk.Runtime.Execution.Dynamic;
 
 namespace IronSmalltalk.Runtime
 {
-    partial class SmalltalkClass //: IDynamicMetaObjectProvider
+    partial class SmalltalkClass : ISmalltalkDynamicMetaObjectProvider
     {
-        //#region IDynamicMetaObjectProvider implementation
+        DynamicMetaObject IDynamicMetaObjectProvider.GetMetaObject(Expression parameter)
+        {
+            // Create the restrictions, which in pseudo-C# is defines as:
+            //  SmalltalkClass cls = this.Class;    // Constant value  
+            //  (self == this) // Reference equals
+            BindingRestrictions restrictions = BindingRestrictions.GetInstanceRestriction(parameter, this);
 
-        //DynamicMetaObject IDynamicMetaObjectProvider.GetMetaObject(Expression parameter)
-        //{
-        //    return new SmalltalkClassDynamicMetaObject(parameter, BindingRestrictions.Empty, this);
-        //}
+            return new SmalltalkDynamicMetaObject(parameter, restrictions, this);
+        }
 
-        //public class SmalltalkClassDynamicMetaObject : DynamicMetaObject
-        //{
-        //    public SmalltalkClassDynamicMetaObject(Expression parameter, BindingRestrictions restrictions, SmalltalkClass cls)
-        //        : base(parameter, restrictions, cls)
-        //    {
+        DynamicMetaObject ISmalltalkDynamicMetaObjectProvider.PerformOperation(SmalltalkDynamicMetaObject target, string name, bool ignoreCase, int argumentCount, DynamicMetaObject[] args, out bool caseConflict)
+        {
+            SmalltalkClass cls = this;
+            Symbol na = null;
+            bool localCaseConflict = false;
+            CompiledMethod method = MethodLookupHelper.LookupMethod(ref cls, ref na, delegate(SmalltalkClass c)
+            {
+                return c.ClassBehavior.GetMethodByNativeName(name, argumentCount, ignoreCase, out localCaseConflict);
+            });
 
-        //    }
+            caseConflict = localCaseConflict;
+            if (localCaseConflict)
+                return null;
 
-        //    public override DynamicMetaObject BindInvoke(InvokeBinder binder, DynamicMetaObject[] args)
-        //    {
-        //        return base.BindInvoke(binder, args);
-        //    }
+            if (method != null)
+            {
+                var compilationResult = method.Code.CompileClassMethod(cls.Runtime, cls, target, args, null);
+                return compilationResult.GetDynamicMetaObject(target.Restrictions);
+            }
 
-        //    public override DynamicMetaObject BindInvokeMember(InvokeMemberBinder binder, DynamicMetaObject[] args)
-        //    {
-        //        //return new DynamicMetaObject(this.Expression, this.Restrictions.Merge(BindingRestrictions.GetInstanceRestriction(this.Expression, this.Value)));
-        //        return base.BindInvokeMember(binder, args);
-        //    }
-        //}
+            // If no method found on the class side, we must do a lookup on the instance side.
+            cls = this.Runtime.NativeTypeClassMap.Class;
+            if (cls == null)
+                cls = this.Runtime.NativeTypeClassMap.Object;
+            method = MethodLookupHelper.LookupMethod(ref cls, ref na, delegate(SmalltalkClass c)
+            {
+                return c.InstanceBehavior.GetMethodByNativeName(name, argumentCount, ignoreCase, out localCaseConflict);
+            });
 
-        //#endregion
+            caseConflict = localCaseConflict;
+            if (localCaseConflict)
+                return null;
+
+            if (method != null)
+            {
+                var compilationResult = method.Code.CompileInstanceMethod(cls.Runtime, cls, target, args, null);
+                return compilationResult.GetDynamicMetaObject(target.Restrictions);
+            }
+
+            // No luck
+            return null;
+        }
     }
 }

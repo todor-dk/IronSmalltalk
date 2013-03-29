@@ -14,9 +14,8 @@
  * **************************************************************************
 */
 
-using System;
-using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Common;
+using IronSmalltalk.Compiler.SemanticAnalysis;
 
 namespace IronSmalltalk.Interchange
 {
