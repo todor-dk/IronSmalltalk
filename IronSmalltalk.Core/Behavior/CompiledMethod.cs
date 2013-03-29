@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using IronSmalltalk.Runtime.Internal;
 
 namespace IronSmalltalk.Runtime.Behavior

@@ -16,11 +16,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Dynamic;
 using System.Linq.Expressions;
-using IronSmalltalk.Runtime.Bindings;
 using IronSmalltalk.Common;
 
 namespace IronSmalltalk.Runtime.Behavior

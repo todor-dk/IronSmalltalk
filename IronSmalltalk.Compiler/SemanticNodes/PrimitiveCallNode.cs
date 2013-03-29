@@ -14,7 +14,6 @@
  * **************************************************************************
 */
 
-using System;
 using System.Collections.Generic;
 using IronSmalltalk.Compiler.LexicalTokens;
 

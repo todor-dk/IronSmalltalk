@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using IronSmalltalk.Common;
 
@@ -79,12 +77,18 @@ namespace IronSmalltalk.Console
                 }
             }
 
+            if ((evaluates.Count == 0) && (sources.Count == 0))
+            {
+                Program.PrintHelp();
+                return;
+            }
+
             if (ist)
                 sources.Insert(0, Program.GetIronStamlltalkClassLibraryCode());
 
             SmalltalkEnvironment env = new SmalltalkEnvironment();
             env.CompilerService.Install(sources.ToArray(), ConsoleErrorSink.Current, ConsoleErrorSink.Current);
-            
+
             object na;
             foreach (string code in evaluates)
             {

@@ -14,7 +14,6 @@
  * **************************************************************************
 */
 
-using System;
 
 namespace IronSmalltalk.Compiler.LexicalAnalysis
 {

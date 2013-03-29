@@ -15,17 +15,16 @@
 */
 
 using System;
-using System.Linq;
-using IronSmalltalk.Interchange;
-using IronSmalltalk.Runtime;
 using System.Collections.Generic;
 using System.IO;
-using IronSmalltalk.Runtime.Installer;
-using IronSmalltalk.Compiler.SemanticAnalysis;
-using IronSmalltalk.Compiler.SemanticNodes;
 using System.Linq.Expressions;
 using IronSmalltalk.AstJitCompiler.Runtime;
+using IronSmalltalk.Compiler.SemanticAnalysis;
+using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Compiler.Visiting;
+using IronSmalltalk.Interchange;
+using IronSmalltalk.Runtime.Installer;
+
 
 
 namespace IronSmalltalk.Internals
@@ -182,6 +181,22 @@ namespace IronSmalltalk.Internals
             }
 
             return installer;
+        }
+
+        public object Evaluate(string initializerCode)
+        {
+            object result;
+            if (this.Evaluate(initializerCode, null, out result))
+                return result;
+            return null;
+        }
+
+        public object Evaluate(TextReader initializerCode)
+        {
+            object result;
+            if (this.Evaluate(initializerCode, null, out result))
+                return result;
+            return null;
         }
 
         public bool Evaluate(string initializerCode, IParseErrorSink errorSink, out object result)

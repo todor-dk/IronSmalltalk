@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using IronSmalltalk.Compiler.LexicalTokens;
-using IronSmalltalk.Compiler.SemanticAnalysis;
 
 
 namespace IronSmalltalk.Compiler.SemanticNodes

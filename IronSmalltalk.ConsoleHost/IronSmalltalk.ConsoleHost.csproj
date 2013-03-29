@@ -10,9 +10,14 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>IronSmalltalk.Console</RootNamespace>
     <AssemblyName>IST</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
+    <SccProjectName>%24/IronSmalltalk/IronSmalltalk.ConsoleHost</SccProjectName>
+    <SccLocalPath>.</SccLocalPath>
+    <SccAuxPath>https://tfs.codeplex.com/tfs/tfs08</SccAuxPath>
+    <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -23,6 +28,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -32,42 +38,41 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IronSmalltalk.Common\IronSmalltalk.Common.csproj">
-      <Project>{CBBBA006-546A-4DFF-95A9-D7B1544205AD}</Project>
-      <Name>IronSmalltalk.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IronSmalltalk.Compiler\IronSmalltalk.Compiler.csproj">
-      <Project>{8C1EF7F5-B3AF-401B-9223-E10EF00EBAE6}</Project>
-      <Name>IronSmalltalk.Compiler</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IronSmalltalk.DefinitionInstaller\IronSmalltalk.DefinitionInstaller.csproj">
-      <Project>{0BF739EF-002C-4B90-A06B-5E6639FAD2CF}</Project>
-      <Name>IronSmalltalk.DefinitionInstaller</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IronSmalltalk.InterchangeInstaller\IronSmalltalk.InterchangeInstaller.csproj">
-      <Project>{33CC4F2A-E078-4130-89E1-F48752ACAB38}</Project>
-      <Name>IronSmalltalk.InterchangeInstaller</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IronSmalltalk\IronSmalltalk.csproj">
-      <Project>{F03C018B-B9AD-4D3C-A1BA-F459BC544C97}</Project>
-      <Name>IronSmalltalk</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="..\ClassLibraryBrowser\External\IronSmalltalk.ist">
       <Link>IronSmalltalk.ist</Link>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IronSmalltalk.Common\IronSmalltalk.Common.csproj">
+      <Project>{cbbba006-546a-4dff-95a9-d7b1544205ad}</Project>
+      <Name>IronSmalltalk.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IronSmalltalk.Compiler\IronSmalltalk.Compiler.csproj">
+      <Project>{8c1ef7f5-b3af-401b-9223-e10ef00ebae6}</Project>
+      <Name>IronSmalltalk.Compiler</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IronSmalltalk.DefinitionInstaller\IronSmalltalk.DefinitionInstaller.csproj">
+      <Project>{0bf739ef-002c-4b90-a06b-5e6639fad2cf}</Project>
+      <Name>IronSmalltalk.DefinitionInstaller</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IronSmalltalk.InterchangeInstaller\IronSmalltalk.InterchangeInstaller.csproj">
+      <Project>{33cc4f2a-e078-4130-89e1-f48752acab38}</Project>
+      <Name>IronSmalltalk.InterchangeInstaller</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IronSmalltalk\IronSmalltalk.csproj">
+      <Project>{f03c018b-b9ad-4d3c-a1ba-f459bc544c97}</Project>
+      <Name>IronSmalltalk</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -17,14 +17,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using IronSmalltalk.Tools.ClassLibraryBrowser.Coordinators;
-using IronSmalltalk.Tools.ClassLibraryBrowser.Definitions.Description;
 using IronSmalltalk.Tools.ClassLibraryBrowser.Definitions;
+using IronSmalltalk.Tools.ClassLibraryBrowser.Definitions.Description;
 
 namespace IronSmalltalk.Tools.ClassLibraryBrowser.Controls.Protocols
 {

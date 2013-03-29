@@ -14,10 +14,7 @@
  * **************************************************************************
 */
 
-using System;
-using IronSmalltalk.Runtime.Internal;
 using IronSmalltalk.Runtime.Behavior;
-using System.Linq.Expressions;
 
 namespace IronSmalltalk.Runtime.Installer.Definitions
 {

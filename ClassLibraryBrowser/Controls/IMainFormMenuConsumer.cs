@@ -14,7 +14,6 @@
  * **************************************************************************
 */
 
-using System;
 using System.Windows.Forms;
 
 namespace IronSmalltalk.Tools.ClassLibraryBrowser.Controls

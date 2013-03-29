@@ -16,18 +16,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using IronSmalltalk.AstJitCompiler.Internals;
 using IronSmalltalk.Compiler.SemanticAnalysis;
-using IronSmalltalk.Runtime.Behavior;
-using IronSmalltalk.Runtime.Internal;
 using IronSmalltalk.Runtime.CodeGeneration.Bindings;
-using IronSmalltalk.Runtime.Execution.Internals;
-using System.Dynamic;
-using IronSmalltalk.Runtime.Execution.Internals.Primitives;
 using IronSmalltalk.Runtime.Execution.CallSiteBinders;
+using IronSmalltalk.Runtime.Execution.Internals;
+using IronSmalltalk.Runtime.Execution.Internals.Primitives;
+using IronSmalltalk.Runtime.Internal;
 
 namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
 {

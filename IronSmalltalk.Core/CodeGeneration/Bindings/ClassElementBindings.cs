@@ -15,13 +15,9 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Linq.Expressions;
-using RTB = IronSmalltalk.Runtime.Bindings;
-using IronSmalltalk.Runtime;
 using System.Reflection;
+using RTB = IronSmalltalk.Runtime.Bindings;
 
 namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
 {

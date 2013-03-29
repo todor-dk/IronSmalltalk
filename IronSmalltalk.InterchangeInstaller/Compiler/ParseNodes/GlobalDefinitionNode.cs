@@ -17,9 +17,9 @@
 using System;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
+using IronSmalltalk.Interchange;
 using IronSmalltalk.Runtime.Installer;
 using IronSmalltalk.Runtime.Installer.Definitions;
-using IronSmalltalk.Interchange;
 
 namespace IronSmalltalk.Compiler.Interchange.ParseNodes
 {

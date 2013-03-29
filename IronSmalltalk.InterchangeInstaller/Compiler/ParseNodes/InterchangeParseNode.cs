@@ -14,13 +14,8 @@
  * **************************************************************************
 */
 
-using System;
-using IronSmalltalk.Compiler.SemanticNodes;
 using System.Collections.Generic;
-using IronSmalltalk.Compiler.LexicalTokens;
-using IronSmalltalk.Runtime.Installer;
-using IronSmalltalk.Compiler.LexicalAnalysis;
-using System.IO;
+using IronSmalltalk.Compiler.SemanticNodes;
 
 namespace IronSmalltalk.Compiler.Interchange.ParseNodes
 {

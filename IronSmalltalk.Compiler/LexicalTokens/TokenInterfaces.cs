@@ -14,8 +14,6 @@
  * **************************************************************************
 */
 
-using System;
-using IronSmalltalk.Compiler.SemanticNodes;
 
 namespace IronSmalltalk.Compiler.LexicalTokens
 {

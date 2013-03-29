@@ -14,17 +14,11 @@
  * **************************************************************************
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Linq.Expressions;
-using IronSmalltalk.Compiler.SemanticNodes;
-using IronSmalltalk.Runtime.Internal;
 using IronSmalltalk.AstJitCompiler.Internals;
 using IronSmalltalk.Compiler.SemanticAnalysis;
+using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Runtime.CodeGeneration.Bindings;
-using IronSmalltalk.Runtime.Behavior;
 
 namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
 {

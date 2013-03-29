@@ -17,10 +17,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using IronSmalltalk.Runtime.Internal;
-using IronSmalltalk.Runtime.Bindings;
 using IronSmalltalk.Runtime.Behavior;
+using IronSmalltalk.Runtime.Bindings;
+using IronSmalltalk.Runtime.Internal;
 
 namespace IronSmalltalk.Runtime
 {

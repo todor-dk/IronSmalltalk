@@ -14,7 +14,6 @@
  * **************************************************************************
 */
 
-using System;
 using IronSmalltalk.Common;
 
 namespace IronSmalltalk.Compiler.LexicalTokens

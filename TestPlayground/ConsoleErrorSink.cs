@@ -15,11 +15,6 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using IronSmalltalk.Compiler.Interchange;
-using IronSmalltalk.Interchange;
 using IronSmalltalk.Common;
 
 namespace TestPlayground

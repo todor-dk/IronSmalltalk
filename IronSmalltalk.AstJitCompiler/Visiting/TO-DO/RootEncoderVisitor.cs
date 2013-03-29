@@ -16,21 +16,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
-using System.Text;
-using IronSmalltalk.Compiler.Visiting;
-using IronSmalltalk.Compiler.SemanticNodes;
 using System.Linq.Expressions;
-using IronSmalltalk.AstJitCompiler.Runtime;
 using IronSmalltalk.AstJitCompiler.Internals;
-using IronSmalltalk.Runtime.Internal;
-using IronSmalltalk.Common;
-using IronSmalltalk.Runtime.CodeGeneration.BindingScopes;
+using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Runtime.CodeGeneration.Bindings;
+using IronSmalltalk.Runtime.CodeGeneration.BindingScopes;
 using IronSmalltalk.Runtime.Execution.CallSiteBinders;
 using IronSmalltalk.Runtime.Execution.Internals;
-using IronSmalltalk.Runtime.Behavior;
-using System.Dynamic;
+using IronSmalltalk.Runtime.Internal;
 
 namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
 {
@@ -276,19 +271,23 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
 
         public Expression AddDebugInfo(Expression expression, int startLine, int startColumn, int endLine, int endColumn)
         {
-            if (this.SymbolDocument == null)
-                return expression;
+            //if (this.SymbolDocument == null)
+            //    return expression;
 
-            DebugInfoExpression debugInfo = Expression.DebugInfo(this.SymbolDocument, startLine, startColumn, endLine, endColumn);
-            return Expression.Block(debugInfo, expression);
+            //DebugInfoExpression debugInfo = Expression.DebugInfo(this.SymbolDocument, startLine, startColumn, endLine, endColumn);
+            //return Expression.Block(debugInfo, expression);
+
+            return Debugger.AddDebugInfo(this, expression, startLine, startColumn, endLine, endColumn);
         }
 
         public Expression AddDebugInfo(Expression expression, IParseNode node)
         {
-            var tokens = node.GetTokens().Concat(node.GetChildNodes().SelectMany(n => n.GetTokens()));
-            SourceLocation start = tokens.Min(t => t.StartPosition);
-            SourceLocation end = tokens.Min(t => t.StopPosition);
-            return this.AddDebugInfo(expression, start.Line, start.Column, end.Line, end.Column);
+            //var tokens = node.GetTokens().Concat(node.GetChildNodes().SelectMany(n => n.GetTokens()));
+            //SourceLocation start = tokens.Min(t => t.StartPosition);
+            //SourceLocation end = tokens.Min(t => t.StopPosition);
+            //return this.AddDebugInfo(expression, start.Line, start.Column, end.Line, end.Column);
+
+            return Debugger.AddDebugInfo(this, expression, node);
         }
 
         #region Helpers 

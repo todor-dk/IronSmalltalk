@@ -14,15 +14,11 @@
  * **************************************************************************
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using IronSmalltalk.Compiler.LexicalAnalysis;
-using IronSmalltalk.Runtime.Installer;
 using IronSmalltalk.Compiler.SemanticAnalysis;
-using IronSmalltalk.Runtime.Installer.Definitions;
 using IronSmalltalk.Interchange;
+using IronSmalltalk.Runtime.Installer;
+using IronSmalltalk.Runtime.Installer.Definitions;
 
 namespace IronSmalltalk.Compiler.Interchange.ParseNodes
 {

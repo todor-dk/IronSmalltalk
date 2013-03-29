@@ -15,15 +15,10 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using IronSmalltalk.Common;
-using System.Threading;
+
 
 namespace IronSmalltalk.Tools.ClassLibraryBrowser.Testing
 {

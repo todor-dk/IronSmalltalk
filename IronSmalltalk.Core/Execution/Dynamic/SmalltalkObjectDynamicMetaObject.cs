@@ -15,14 +15,12 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Dynamic;
-using System.Reflection;
 using System.Linq.Expressions;
-using IronSmalltalk.Runtime.Execution.Dynamic;
+using System.Reflection;
 using IronSmalltalk.Runtime.Behavior;
+using IronSmalltalk.Runtime.Execution.CallSiteBinders;
+using IronSmalltalk.Runtime.Execution.Dynamic;
 
 namespace IronSmalltalk.Runtime
 {
@@ -40,7 +38,29 @@ namespace IronSmalltalk.Runtime
             restrictions = restrictions.Merge(BindingRestrictions.GetExpressionRestriction(
                 Expression.ReferenceEqual(Expression.Field(Expression.Convert(parameter, typeof(SmalltalkObject)), field), Expression.Constant(this.Class))));
 
-            return new SmalltalkDynamicMetaObject(parameter, restrictions, this.Class, this);
+            return new SmalltalkDynamicMetaObject(parameter, restrictions, this);
+        }
+
+        DynamicMetaObject ISmalltalkDynamicMetaObjectProvider.PerformOperation(SmalltalkDynamicMetaObject target, string name, bool ignoreCase, int argumentCount, DynamicMetaObject[] args, out bool caseConflict)
+        {
+            bool localCaseConflict = false;
+            SmalltalkClass cls = this.Class;
+            Symbol na = null;
+            CompiledMethod method = MethodLookupHelper.LookupMethod(ref cls, ref na, delegate(SmalltalkClass c)
+            {
+                return c.InstanceBehavior.GetMethodByNativeName(name, argumentCount, ignoreCase, out localCaseConflict);
+            });
+
+            caseConflict = localCaseConflict;
+            if (localCaseConflict)
+                return null;
+
+            if (method != null)
+            {
+                var compilationResult = method.Code.CompileInstanceMethod(cls.Runtime, cls, target, args, null);
+                return compilationResult.GetDynamicMetaObject(target.Restrictions);
+            }
+            return null;
         }
     }
 }

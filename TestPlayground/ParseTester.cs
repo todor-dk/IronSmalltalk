@@ -16,19 +16,18 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using System.IO;
+using IronSmalltalk.Common;
+using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
-using System.Reflection;
-using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.VseCompatibility;
-using IronSmalltalk.Common;
+
 
 namespace TestPlayground
 {

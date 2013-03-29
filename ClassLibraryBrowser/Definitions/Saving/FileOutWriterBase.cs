@@ -16,10 +16,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using IronSmalltalk.Tools.ClassLibraryBrowser.Definitions.Implementation;
 using System.IO;
+using System.Linq;
+using IronSmalltalk.Tools.ClassLibraryBrowser.Definitions.Implementation;
 
 namespace IronSmalltalk.Tools.ClassLibraryBrowser.Definitions.Saving
 {

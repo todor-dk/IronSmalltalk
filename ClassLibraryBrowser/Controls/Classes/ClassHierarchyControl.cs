@@ -17,15 +17,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using IronSmalltalk.Tools.ClassLibraryBrowser.Coordinators;
-using IronSmalltalk.Tools.ClassLibraryBrowser.Definitions.Implementation;
 using IronSmalltalk.Tools.ClassLibraryBrowser.Definitions;
-using System.Runtime.InteropServices;
+using IronSmalltalk.Tools.ClassLibraryBrowser.Definitions.Implementation;
 
 namespace IronSmalltalk.Tools.ClassLibraryBrowser.Controls.Classes
 {

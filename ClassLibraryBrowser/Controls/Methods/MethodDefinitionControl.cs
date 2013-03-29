@@ -18,14 +18,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using IronSmalltalk.Common;
+using IronSmalltalk.Tools.ClassLibraryBrowser.Controls.Classes;
 using IronSmalltalk.Tools.ClassLibraryBrowser.Coordinators;
 using IronSmalltalk.Tools.ClassLibraryBrowser.Definitions.Implementation;
-using IronSmalltalk.Tools.ClassLibraryBrowser.Controls.Classes;
-using IronSmalltalk.Common;
 
 namespace IronSmalltalk.Tools.ClassLibraryBrowser.Controls.Methods
 {

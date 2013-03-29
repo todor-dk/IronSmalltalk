@@ -15,16 +15,11 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using IronSmalltalk.Compiler.Visiting;
-using IronSmalltalk.Compiler.SemanticNodes;
 using System.Linq.Expressions;
-using IronSmalltalk.AstJitCompiler.Runtime;
 using IronSmalltalk.Compiler.SemanticAnalysis;
+using IronSmalltalk.Compiler.SemanticNodes;
+using IronSmalltalk.Compiler.Visiting;
 using IronSmalltalk.Runtime.CodeGeneration.Bindings;
-using IronSmalltalk.Runtime.Behavior;
 
 namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
 {

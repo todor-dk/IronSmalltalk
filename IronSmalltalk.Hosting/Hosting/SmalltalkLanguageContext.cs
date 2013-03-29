@@ -15,10 +15,9 @@
 */
 
 using System;
-using Microsoft.Scripting.Runtime;
-using Microsoft.Scripting;
 using System.Collections.Generic;
-using IronSmalltalk.Compiler;
+using Microsoft.Scripting;
+using Microsoft.Scripting.Runtime;
 
 namespace IronSmalltalk.Runtime.Hosting
 {

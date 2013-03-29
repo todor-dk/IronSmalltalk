@@ -15,13 +15,11 @@
 */
 
 using System;
-//using IronSmalltalk.Compiler;
-using System.Linq;
-using IronSmalltalk.Internals;
-using IronSmalltalk.Runtime.Bindings;
-using IronSmalltalk.Runtime.Internal;
 using System.Collections.Generic;
+//using IronSmalltalk.Compiler;
+using IronSmalltalk.Internals;
 using IronSmalltalk.Runtime;
+using IronSmalltalk.Runtime.Bindings;
 
 namespace IronSmalltalk
 {

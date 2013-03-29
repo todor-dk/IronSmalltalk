@@ -15,15 +15,11 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using IronSmalltalk.Runtime.Internal;
-using System.Linq.Expressions;
-using IronSmalltalk.Runtime.Behavior;
 using System.Dynamic;
-using IronSmalltalk.Runtime;
+using System.Linq.Expressions;
 using System.Reflection;
+using IronSmalltalk.Runtime.Behavior;
+using IronSmalltalk.Runtime.Internal;
 
 namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 {
@@ -62,8 +58,10 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 cls = (SmalltalkClass)receiver;
                 if (cls.Runtime == runtime)
                 {
+                    // The class of a SmalltalkClass object is a special class known by the runtime.
                     receiverClass = runtime.NativeTypeClassMap.Class;
                     if (receiverClass == null)
+                        // And in case it's not set (not normal), we default to object
                         receiverClass = runtime.NativeTypeClassMap.Object;
                     // Lookup method in class behavior
                     CompiledMethod mth = MethodLookupHelper.LookupClassMethod(selector, ref cls, ref superLookupScope);
