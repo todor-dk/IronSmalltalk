@@ -41,8 +41,14 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ConsoleHost.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SmalltalkCommandLine.cs" />
+    <Compile Include="SmalltalkCommandLineCommand.cs" />
+    <Compile Include="SmalltalkConsoleOptions.cs" />
+    <Compile Include="SmalltalkOptionsParser.cs" />
+    <Compile Include="SmalltalkScriptHost.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\ClassLibraryBrowser\External\IronSmalltalk.ist">
@@ -53,6 +59,14 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DLR\Microsoft.Dynamic\Microsoft.Dynamic.csproj">
+      <Project>{b1b06754-96c5-48fe-a517-1f67ce65eade}</Project>
+      <Name>Microsoft.Dynamic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DLR\Microsoft.Scripting\Microsoft.Scripting.csproj">
+      <Project>{d4a87b34-2a94-4da7-ae80-a3be7e0b519a}</Project>
+      <Name>Microsoft.Scripting</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk.Common\IronSmalltalk.Common.csproj">
       <Project>{cbbba006-546a-4dff-95a9-d7b1544205ad}</Project>
       <Name>IronSmalltalk.Common</Name>
@@ -64,6 +78,10 @@
     <ProjectReference Include="..\IronSmalltalk.DefinitionInstaller\IronSmalltalk.DefinitionInstaller.csproj">
       <Project>{0bf739ef-002c-4b90-a06b-5e6639fad2cf}</Project>
       <Name>IronSmalltalk.DefinitionInstaller</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IronSmalltalk.Hosting\IronSmalltalk.Hosting.csproj">
+      <Project>{c3a588ae-808a-4a8e-b460-18faab3f6d20}</Project>
+      <Name>IronSmalltalk.Hosting</Name>
     </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk.InterchangeInstaller\IronSmalltalk.InterchangeInstaller.csproj">
       <Project>{33cc4f2a-e078-4130-89e1-f48752acab38}</Project>

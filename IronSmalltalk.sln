@@ -37,9 +37,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronSmalltalk.Runtime", "Ir
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronSmalltalk.ConsoleHost", "IronSmalltalk.ConsoleHost\IronSmalltalk.ConsoleHost.csproj", "{2681C5C9-CF05-4381-8D34-894106A08EC2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DLR", "DLR", "{45E8BE01-D715-4F3F-A8E6-05DE6545EA32}"
+	ProjectSection(SolutionItems) = preProject
+		License.txt = License.txt
+		Read Me.txt = Read Me.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Scripting", "DLR\Microsoft.Scripting\Microsoft.Scripting.csproj", "{D4A87B34-2A94-4DA7-AE80-A3BE7E0B519A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Dynamic", "DLR\Microsoft.Dynamic\Microsoft.Dynamic.csproj", "{B1B06754-96C5-48FE-A517-1F67CE65EADE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Scripting.Metadata", "DLR\Microsoft.Scripting.Metadata\Microsoft.Scripting.Metadata.csproj", "{A59A9E4D-66DC-4110-B40C-D6985DE30050}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 14
+		SccNumberOfProjects = 17
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs08
 		SccLocalPath0 = .
@@ -82,6 +94,18 @@ Global
 		SccProjectUniqueName13 = IronSmalltalk.ConsoleHost\\IronSmalltalk.ConsoleHost.csproj
 		SccProjectName13 = IronSmalltalk.ConsoleHost
 		SccLocalPath13 = IronSmalltalk.ConsoleHost
+		SccProjectUniqueName14 = DLR\\Microsoft.Scripting\\Microsoft.Scripting.csproj
+		SccProjectTopLevelParentUniqueName14 = IronSmalltalk.sln
+		SccProjectName14 = DLR/Microsoft.Scripting
+		SccLocalPath14 = DLR\\Microsoft.Scripting
+		SccProjectUniqueName15 = DLR\\Microsoft.Dynamic\\Microsoft.Dynamic.csproj
+		SccProjectTopLevelParentUniqueName15 = IronSmalltalk.sln
+		SccProjectName15 = DLR/Microsoft.Dynamic
+		SccLocalPath15 = DLR\\Microsoft.Dynamic
+		SccProjectUniqueName16 = DLR\\Microsoft.Scripting.Metadata\\Microsoft.Scripting.Metadata.csproj
+		SccProjectTopLevelParentUniqueName16 = IronSmalltalk.sln
+		SccProjectName16 = DLR/Microsoft.Scripting.Metadata
+		SccLocalPath16 = DLR\\Microsoft.Scripting.Metadata
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = IronSmalltalk.vsmdi
@@ -228,8 +252,43 @@ Global
 		{2681C5C9-CF05-4381-8D34-894106A08EC2}.Release|Mixed Platforms.Build.0 = Release|x86
 		{2681C5C9-CF05-4381-8D34-894106A08EC2}.Release|x86.ActiveCfg = Release|x86
 		{2681C5C9-CF05-4381-8D34-894106A08EC2}.Release|x86.Build.0 = Release|x86
+		{D4A87B34-2A94-4DA7-AE80-A3BE7E0B519A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4A87B34-2A94-4DA7-AE80-A3BE7E0B519A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4A87B34-2A94-4DA7-AE80-A3BE7E0B519A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D4A87B34-2A94-4DA7-AE80-A3BE7E0B519A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D4A87B34-2A94-4DA7-AE80-A3BE7E0B519A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D4A87B34-2A94-4DA7-AE80-A3BE7E0B519A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4A87B34-2A94-4DA7-AE80-A3BE7E0B519A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4A87B34-2A94-4DA7-AE80-A3BE7E0B519A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D4A87B34-2A94-4DA7-AE80-A3BE7E0B519A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D4A87B34-2A94-4DA7-AE80-A3BE7E0B519A}.Release|x86.ActiveCfg = Release|Any CPU
+		{B1B06754-96C5-48FE-A517-1F67CE65EADE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1B06754-96C5-48FE-A517-1F67CE65EADE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1B06754-96C5-48FE-A517-1F67CE65EADE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B1B06754-96C5-48FE-A517-1F67CE65EADE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B1B06754-96C5-48FE-A517-1F67CE65EADE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B1B06754-96C5-48FE-A517-1F67CE65EADE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1B06754-96C5-48FE-A517-1F67CE65EADE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1B06754-96C5-48FE-A517-1F67CE65EADE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B1B06754-96C5-48FE-A517-1F67CE65EADE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B1B06754-96C5-48FE-A517-1F67CE65EADE}.Release|x86.ActiveCfg = Release|Any CPU
+		{A59A9E4D-66DC-4110-B40C-D6985DE30050}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A59A9E4D-66DC-4110-B40C-D6985DE30050}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A59A9E4D-66DC-4110-B40C-D6985DE30050}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A59A9E4D-66DC-4110-B40C-D6985DE30050}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A59A9E4D-66DC-4110-B40C-D6985DE30050}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A59A9E4D-66DC-4110-B40C-D6985DE30050}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A59A9E4D-66DC-4110-B40C-D6985DE30050}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A59A9E4D-66DC-4110-B40C-D6985DE30050}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A59A9E4D-66DC-4110-B40C-D6985DE30050}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A59A9E4D-66DC-4110-B40C-D6985DE30050}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D4A87B34-2A94-4DA7-AE80-A3BE7E0B519A} = {45E8BE01-D715-4F3F-A8E6-05DE6545EA32}
+		{B1B06754-96C5-48FE-A517-1F67CE65EADE} = {45E8BE01-D715-4F3F-A8E6-05DE6545EA32}
+		{A59A9E4D-66DC-4110-B40C-D6985DE30050} = {45E8BE01-D715-4F3F-A8E6-05DE6545EA32}
 	EndGlobalSection
 EndGlobal

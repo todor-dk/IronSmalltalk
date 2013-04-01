@@ -59,125 +59,44 @@ namespace IronSmalltalk.Internals
 #endif
         }
 
-        public void Install(TextReader reader, IInterchangeErrorSink parseErrorSink, IInstallErrorSink installErrorSink)
+        public void Install(FileInInformation fileIn)
         {
-            this.Install(new TextReader[] { reader }, parseErrorSink, installErrorSink);
+            if (fileIn == null)
+                throw new ArgumentNullException();
+            this.Install(new FileInInformation[] { fileIn });
         }
 
-        public void Install(TextReader[] readers, IInterchangeErrorSink parseErrorSink, IInstallErrorSink installErrorSink)
+        public void Install(IEnumerable<FileInInformation> fileIns)
         {
-            if (readers == null)
-                throw new ArgumentNullException("readers");
+            if (fileIns == null)
+                throw new ArgumentNullException("fileIns");
 
-            this.CompleteInstall(this.Read(readers, parseErrorSink), installErrorSink);
+            InterchangeInstallerContext context = this.Read(fileIns);
+
+            this.CompleteInstall(context);
         }
 
-        public void InstallFile(string path, IInterchangeErrorSink parseErrorSink, IInstallErrorSink installErrorSink)
+        public InterchangeInstallerContext Read(FileInInformation fileIn)
         {
-            if (String.IsNullOrWhiteSpace(path))
-                throw new ArgumentNullException("path");
-
-            this.InstallFiles(new string[] { path }, parseErrorSink, installErrorSink);
+            if (fileIn == null)
+                throw new ArgumentNullException();
+            return this.Read(new FileInInformation[] { fileIn });
         }
 
-        public void InstallFiles(string[] paths, IInterchangeErrorSink parseErrorSink, IInstallErrorSink installErrorSink)
+        public InterchangeInstallerContext Read(IEnumerable<FileInInformation> fileIns)
         {
-            if (paths == null)
-                throw new ArgumentNullException("paths");
-
-            this.CompleteInstall(this.ReadFiles(paths, parseErrorSink), installErrorSink);
-        }
-
-        public void InstallSource(string interchangeCode, IInterchangeErrorSink parseErrorSink, IInstallErrorSink installErrorSink)
-        {
-            if (interchangeCode == null)
-                throw new ArgumentNullException("interchangeCode");
-
-            this.InstallSources(new string[] { interchangeCode }, parseErrorSink, installErrorSink);
-        }
-
-        public void InstallSources(string[] interchangeCode, IInterchangeErrorSink parseErrorSink, IInstallErrorSink installErrorSink)
-        {
-            if (interchangeCode == null)
-                throw new ArgumentNullException("interchangeCode");
-
-            this.CompleteInstall(this.ReadSources(interchangeCode, parseErrorSink), installErrorSink);
-        }
-
-        public InterchangeInstallerContext Read(TextReader interchangeCodeReader, IInterchangeErrorSink errorSink)
-        {
-            if (interchangeCodeReader == null)
-                throw new ArgumentNullException("interchangeCodeReader");
-
-            return this.Read(new TextReader[] { interchangeCodeReader }, errorSink);
-        }
-
-        public InterchangeInstallerContext Read(TextReader[] interchangeCodeReaders, IInterchangeErrorSink errorSink)
-        {
-            if (interchangeCodeReaders == null)
-                throw new ArgumentNullException("interchangeCodeReaders");
+            if (fileIns == null)
+                throw new ArgumentNullException("fileIns");
 
             InterchangeInstallerContext installer = this.CreateInstallerContext();
 
-            foreach (TextReader reader in interchangeCodeReaders)
+            foreach (FileInInformation info in fileIns)
             {
-                InterchangeFormatProcessor processor = new InterchangeFormatProcessor(reader, installer, this.VersionServicesMap);
-                processor.ErrorSink = errorSink;
-                processor.ProcessInterchangeFile();
-            }
-
-            return installer;
-        }
-
-        public InterchangeInstallerContext ReadFile(string path, IInterchangeErrorSink errorSink)
-        {
-            if (String.IsNullOrWhiteSpace(path))
-                throw new ArgumentNullException("path");
-
-            return this.ReadFiles(new string[] { path }, errorSink);
-        }
-
-        public InterchangeInstallerContext ReadFiles(string[] paths, IInterchangeErrorSink errorSink)
-        {
-            if (paths == null)
-                throw new ArgumentNullException("paths");
-
-            InterchangeInstallerContext installer = this.CreateInstallerContext();
-            
-            foreach (string path in paths)
-            {
-                // Issue - expects UTF-8 encoding
-                using (StreamReader sourceFileReader = File.OpenText(path))
+                using (TextReader souceCodeReader = info.GetTextReader())
                 {
-                    InterchangeFormatProcessor processor = new InterchangeFormatProcessor(sourceFileReader, installer, this.VersionServicesMap);
-                    processor.ErrorSink = errorSink;
+                    InterchangeFormatProcessor processor = new InterchangeFormatProcessor(info, souceCodeReader, installer, this.VersionServicesMap);
                     processor.ProcessInterchangeFile();
                 }
-            }
-
-            return installer;
-        }
-
-        public InterchangeInstallerContext ReadSource(string interchangeCode, IInterchangeErrorSink errorSink)
-        {
-            if (interchangeCode == null)
-                throw new ArgumentNullException("interchangeCode");
-
-            return this.ReadSources(new string[] { interchangeCode }, errorSink);
-        }
-
-        public InterchangeInstallerContext ReadSources(string[] interchangeCode, IInterchangeErrorSink errorSink)
-        {
-            if (interchangeCode == null)
-                throw new ArgumentNullException("interchangeCode");
-
-            InterchangeInstallerContext installer = this.CreateInstallerContext();
-
-            foreach (string code in interchangeCode)
-            {
-                InterchangeFormatProcessor processor = new InterchangeFormatProcessor(new StringReader(code), installer, this.VersionServicesMap);
-                processor.ErrorSink = errorSink;
-                processor.ProcessInterchangeFile();
             }
 
             return installer;
@@ -238,12 +157,30 @@ namespace IronSmalltalk.Internals
             return new InterchangeInstallerContext(this.Runtime);
         }
 
-        private void CompleteInstall(InterchangeInstallerContext installer, IInstallErrorSink errorSink)
+        private void CompleteInstall(InterchangeInstallerContext installer)
         {
-            installer.ErrorSink = errorSink;
+            installer.ErrorSink = new InstallErrorSink();
             installer.InstallMetaAnnotations = this.InstallMetaAnnotations;
             if (installer.Install())
                 installer.Initialize();
+        }
+
+        private class InstallErrorSink : IInstallErrorSink
+        {
+            public void AddInstallError(string installErrorMessage, ISourceReference sourceReference)
+            {
+                if (sourceReference == null)
+                    throw new ArgumentNullException("sourceReference");
+                FileInInformation sourceObject = sourceReference.SourceObject as FileInInformation;
+#if DEBUG
+                System.Diagnostics.Debug.Assert(sourceObject != null);
+#endif
+                if (sourceObject == null)
+                    return; // This is like having no error sink
+                if (sourceObject.ErrorSink == null)
+                    return;
+                sourceObject.ErrorSink.AddInstallError(sourceReference.StartPosition, sourceReference.StopPosition, installErrorMessage);
+            }
         }
     }
 }

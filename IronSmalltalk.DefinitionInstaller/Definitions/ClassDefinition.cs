@@ -285,7 +285,8 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
                 }
             }
 
-            installer.RegisterNewClass(cls);
+            // NB: We must give some source reference, but since we don't have for the whole class, we use the name.
+            installer.RegisterNewClass(cls, this.Name);
 
             return true; // OK
         }

@@ -92,13 +92,17 @@
     <Compile Include="Definitions\PoolVariableDefinition.cs" />
     <Compile Include="Definitions\PoolVariableInitializer.cs" />
     <Compile Include="Definitions\ProgramInitializer.cs" />
+    <Compile Include="IInstallerContext.cs" />
     <Compile Include="IInstallErrorSink.cs" />
     <Compile Include="InstallerContext.cs" />
     <Compile Include="InstallerErrors.cs" />
+    <Compile Include="ISourceCodeReferenceService.cs" />
+    <Compile Include="ISourceReference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SourceReference.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Definition Installer Diagram.cd" />
     <None Include="Definitions\Installer Definitions Diagram.cd" />
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +116,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

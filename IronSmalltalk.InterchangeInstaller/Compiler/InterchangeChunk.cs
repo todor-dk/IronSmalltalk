@@ -162,5 +162,17 @@ namespace IronSmalltalk.Compiler.Interchange
             return new SourceLocation(abspos, this.StartPosition.Line + position.Line - 1, 
                 ((position.Line == 1) ? this.StartPosition.Column - 1 : 0) + position.Column + escapedChars);
         }
+
+        /// <summary>
+        /// Get the source (file-in object / source file) where the source code references reside.
+        /// </summary>
+        /// <remarks>
+        /// Due to the assembly dependencies, it's not possible to have this property strongly types.
+        /// </remarks>
+        public object SourceObject 
+        {
+            get { return this.Processor.FileInInformation; }
+        }
+
     }
 }

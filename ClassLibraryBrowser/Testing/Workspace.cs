@@ -24,6 +24,7 @@ using IronSmalltalk.AstJitCompiler.Runtime;
 using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
+using IronSmalltalk.Interchange;
 
 namespace IronSmalltalk.Tools.ClassLibraryBrowser.Testing
 {
@@ -49,7 +50,7 @@ namespace IronSmalltalk.Tools.ClassLibraryBrowser.Testing
             ErrorSink errorSink = new ErrorSink(this.Client);
             try
             {
-                this.Environment.CompilerService.InstallSource(txt, errorSink, errorSink);
+                this.Environment.CompilerService.Install(new StringFileInInformation(txt, errorSink));
             }
             catch (IronSmalltalk.Runtime.Internal.SmalltalkDefinitionException ex)
             {

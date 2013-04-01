@@ -27,48 +27,31 @@ namespace IronSmalltalk.Runtime.Hosting
     /// times in different scopes. Hosting API counterpart for this class is <c>CompiledCode</c>.
     /// </summary>
     /// <typeparam name="TEnvironment">Type of the SmalltalkEnvironment passed to the target delegate.</typeparam>
-    public class SmalltalkScriptCode<TEnvironment> : ScriptCode
-        where TEnvironment : class
+    public class SmalltalkScriptCode : ScriptCode
     {
-        /// <summary>
-        /// Helper interface that wraps the LanguageContext that this source is bound to.
-        /// </summary>
-        /// <typeparam name="TEnvironment">Type of the SmalltalkEnvironment passed to the target delegate.</typeparam>
-        /// <remarks>
-        /// The reason we have this is because we would like to avoid hardcoding the SmalltalkEnvironment and 
-        /// SmalltalkLanguageContext into this class. We would like to use generics in case we refactor this
-        /// in the future and want somebody else to use/reuse this class.
-        /// </remarks>
-        public interface IRuntimeLanguageContext
-        {
-            TEnvironment Environment { get; }
-            SmalltalkLanguageContext LanguageContext { get; }
-            Func<TEnvironment, object, object> Compile(Expression<Func<TEnvironment, object, object>> code);
-        }
-
         /// <summary>
         /// Create a new SmalltalkScriptCode.
         /// </summary>
         /// <param name="code">Expression/Expression Tree code representing the code to be execution.</param>
-        /// <param name="context">Wrapper to the LanguageContext that this source is bound to.</param>
+        /// <param name="runtime">The IronSmalltalk Runtime this source is bound to.</param>
         /// <param name="sourceUnit">SourceUnit that resulted in the generated code.</param>
-        public SmalltalkScriptCode(Expression<Func<TEnvironment, object, object>> code, IRuntimeLanguageContext context, SourceUnit sourceUnit)
+        public SmalltalkScriptCode(Expression<Func<SmalltalkRuntime, object, object>> code, SmalltalkRuntime runtime, SourceUnit sourceUnit)
             : base(sourceUnit)
         {
             if (code == null)
                 throw new ArgumentNullException("code");
-            if (context == null)
-                throw new ArgumentNullException("context");
+            if (runtime == null)
+                throw new ArgumentNullException("runtime");
             if (sourceUnit == null)
                 throw new ArgumentNullException("sourceUnit");
             this.Code = code;
-            this.RuntimeLanguageContext = context;
+            this.Runtime = runtime;
         }
 
         /// <summary>
-        /// Wrapper to the LanguageContext that this source is bound to.
+        /// The IronSmalltalk Runtime this source is bound to.
         /// </summary>
-        public IRuntimeLanguageContext RuntimeLanguageContext { get; private set; }
+        public SmalltalkRuntime Runtime { get; private set; }
 
         /// <summary>
         /// This is the Expression/Expression Tree code representing the code to be execution.
@@ -76,24 +59,24 @@ namespace IronSmalltalk.Runtime.Hosting
         /// <remarks>
         /// This is equivelent to metadata for the actual IL code to be generated.
         /// </remarks>
-        public Expression<Func<TEnvironment, object, object>> Code { get; private set; }
+        public Expression<Func<SmalltalkRuntime, object, object>> Code { get; private set; }
 
         /// <summary>
         /// Private variable being lazy-initialized and that holds the compiled executable code.
         /// </summary>
-        private Func<TEnvironment, object, object> _target;
+        private Func<SmalltalkRuntime, object, object> _target;
 
         /// <summary>
         /// This is the compiled code (delegate) that can be executed.
         /// </summary>
-        public Func<TEnvironment, object, object> Target
+        public Func<SmalltalkRuntime, object, object> Target
         {
             get
             {
                 // If not compiled, compile the metadata to IL code (delegate).
                 if (this._target == null)
                 {
-                    Func<TEnvironment, object, object> compiled = this.RuntimeLanguageContext.Compile(this.Code);
+                    Func<SmalltalkRuntime, object, object> compiled = this.Code.Compile();
                     Interlocked.CompareExchange(ref this._target, compiled, null);
                 }
                 return this._target;
@@ -112,7 +95,7 @@ namespace IronSmalltalk.Runtime.Hosting
             // 2. We execute it with:
             //      - The SmalltalkEnvironment (that is bound to the LanguageContext)
             //      - The receiver ... which is currently set to nil (null).
-            return this.Target(this.RuntimeLanguageContext.Environment, null);
+            return this.Target(this.Runtime, null);
         }
     }
 }

@@ -71,6 +71,11 @@ namespace IronSmalltalk.Interchange
         public IInterchangeFileInProcessor FileInProcessor { get; private set; }
 
         /// <summary>
+        /// Object that represent the source code being filed-in.
+        /// </summary>
+        public FileInInformation FileInInformation { get; private set; }
+
+        /// <summary>
         /// The text reader containing the source code.
         /// </summary>
         private readonly TextReader Reader;
@@ -102,18 +107,22 @@ namespace IronSmalltalk.Interchange
         /// <summary>
         /// Create a new interchange format processor.
         /// </summary>
+        /// <param name="fileInInfo">Source code to be filed in.</param>
         /// <param name="sourceCodeReader">Text reader containing the source code.</param>
         /// <param name="fileInProcessor">File-in processor that will be notified about each filed-in element.</param>
         /// <param name="versionServicesMap">Map between interchange versions and interchange-version-services.</param>
-        public InterchangeFormatProcessor(TextReader sourceCodeReader, IInterchangeFileInProcessor fileInProcessor, 
+        public InterchangeFormatProcessor(FileInInformation fileInInfo, TextReader sourceCodeReader, IInterchangeFileInProcessor fileInProcessor, 
             IDictionary<string, InterchangeVersionService> versionServicesMap)
         {
+            if (fileInInfo == null)
+                throw new ArgumentNullException("fileInInfo");
             if (sourceCodeReader == null)
                 throw new ArgumentNullException("sourceCodeReader");
             if (fileInProcessor == null)
                 throw new ArgumentNullException("fileInProcessor");
             if (versionServicesMap == null)
                 throw new ArgumentNullException("versionServicesMap");
+            this.ErrorSink = fileInInfo.ErrorSink;
             this.Reader = sourceCodeReader;
             this.FileInProcessor = fileInProcessor;
             this.VersionServicesMap = versionServicesMap;
@@ -229,10 +238,10 @@ namespace IronSmalltalk.Interchange
         /// <typeparam name="TValue">Type of the value.</typeparam>
         /// <param name="value">Value that was created based on the source code.</param>
         /// <returns>Source code reference for the given value.</returns>
-        public SourceReference<TValue> CreateSourceReference<TValue>(TValue value)
-        {
-            return new SourceReference<TValue>(value);
-        }
+        //public SourceReference<TValue> CreateSourceReference<TValue>(TValue value)
+        //{
+        //    return new SourceReference<TValue>(value);
+        //}
 
         /// <summary>
         /// Creates a reference to a source code for the given value.

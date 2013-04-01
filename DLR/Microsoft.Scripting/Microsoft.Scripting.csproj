@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D4A87B34-2A94-4DA7-AE80-A3BE7E0B519A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Scripting</RootNamespace>
+    <AssemblyName>Microsoft.Scripting</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ArgumentTypeException.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AssemblyLoadedEventArgs.cs" />
+    <Compile Include="CompilerOptions.cs" />
+    <Compile Include="ErrorSink.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Hosting\CompiledCode.cs" />
+    <Compile Include="Hosting\Configuration\LanguageElement.cs" />
+    <Compile Include="Hosting\Configuration\LanguageElementCollection.cs" />
+    <Compile Include="Hosting\Configuration\OptionElement.cs" />
+    <Compile Include="Hosting\Configuration\OptionElementCollection.cs" />
+    <Compile Include="Hosting\Configuration\Section.cs" />
+    <Compile Include="Hosting\DocumentationOperations.cs" />
+    <Compile Include="Hosting\ErrorListener.cs" />
+    <Compile Include="Hosting\ErrorListenerProxy.cs" />
+    <Compile Include="Hosting\ErrorSinkProxyListener.cs" />
+    <Compile Include="Hosting\ExceptionOperations.cs" />
+    <Compile Include="Hosting\LanguageSetup.cs" />
+    <Compile Include="Hosting\MemberDoc.cs" />
+    <Compile Include="Hosting\MemberKind.cs" />
+    <Compile Include="Hosting\ObjectOperations.cs" />
+    <Compile Include="Hosting\OverloadDoc.cs" />
+    <Compile Include="Hosting\ParameterDoc.cs" />
+    <Compile Include="Hosting\ParameterFlags.cs" />
+    <Compile Include="Hosting\Providers\HostingHelpers.cs" />
+    <Compile Include="Hosting\ScriptEngine.cs" />
+    <Compile Include="Hosting\ScriptHost.cs" />
+    <Compile Include="Hosting\ScriptHostProxy.cs" />
+    <Compile Include="Hosting\ScriptIO.cs" />
+    <Compile Include="Hosting\ScriptRuntime.cs" />
+    <Compile Include="Hosting\ScriptRuntimeSetup.cs" />
+    <Compile Include="Hosting\ScriptScope.cs" />
+    <Compile Include="Hosting\ScriptSource.cs" />
+    <Compile Include="Hosting\TokenCategorizer.cs" />
+    <Compile Include="IndexSpan.cs" />
+    <Compile Include="InvalidImplementationException.cs" />
+    <Compile Include="LanguageOptions.cs" />
+    <Compile Include="PlatformAdaptationLayer.cs" />
+    <Compile Include="Runtime\ContextId.cs" />
+    <Compile Include="Runtime\DlrConfiguration.cs" />
+    <Compile Include="Runtime\DocumentationProvider.cs" />
+    <Compile Include="Runtime\DynamicOperations.cs" />
+    <Compile Include="Runtime\DynamicOperations.Generated.cs" />
+    <Compile Include="Runtime\DynamicRuntimeHostingProvider.cs" />
+    <Compile Include="Runtime\DynamicStackFrame.cs" />
+    <Compile Include="Runtime\InvariantContext.cs" />
+    <Compile Include="Runtime\LanguageBoundTextContentProvider.cs" />
+    <Compile Include="Runtime\LanguageContext.cs" />
+    <Compile Include="Runtime\NotNullAttribute.cs" />
+    <Compile Include="Runtime\ObjectDictionaryExpando.cs" />
+    <Compile Include="Runtime\ParamDictionaryAttribute.cs" />
+    <Compile Include="Runtime\ParserSink.cs" />
+    <Compile Include="Runtime\Scope.cs" />
+    <Compile Include="Runtime\ScopeExtension.cs" />
+    <Compile Include="Runtime\ScopeStorage.cs" />
+    <Compile Include="Runtime\ScriptCode.cs" />
+    <Compile Include="Runtime\ScriptDomainManager.cs" />
+    <Compile Include="Runtime\SharedIO.cs" />
+    <Compile Include="Runtime\SourceStringContentProvider.cs" />
+    <Compile Include="Runtime\StreamContentProvider.cs" />
+    <Compile Include="Runtime\StringDictionaryExpando.cs" />
+    <Compile Include="Runtime\TokenInfo.cs" />
+    <Compile Include="Runtime\TokenizerService.cs" />
+    <Compile Include="Runtime\TokenTriggers.cs" />
+    <Compile Include="ScriptCodeParseResult.cs" />
+    <Compile Include="Severity.cs" />
+    <Compile Include="SourceCodeKind.cs" />
+    <Compile Include="SourceCodeReader.cs" />
+    <Compile Include="SourceFileContentProvider.cs" />
+    <Compile Include="SourceLocation.cs" />
+    <Compile Include="SourceSpan.cs" />
+    <Compile Include="SourceUnit.cs" />
+    <Compile Include="Stubs.cs" />
+    <Compile Include="SyntaxErrorException.cs" />
+    <Compile Include="TextContentProvider.cs" />
+    <Compile Include="TokenCategory.cs" />
+    <Compile Include="Utils\ArrayUtils.cs" />
+    <Compile Include="Utils\AssemblyQualifiedTypeName.cs" />
+    <Compile Include="Utils\Assert.cs" />
+    <Compile Include="Utils\CheckedDictionaryEnumerator.cs" />
+    <Compile Include="Utils\CollectionExtensions.cs" />
+    <Compile Include="Utils\ConsoleInputStream.cs" />
+    <Compile Include="Utils\ConsoleStreamType.cs" />
+    <Compile Include="Utils\ContractUtils.cs" />
+    <Compile Include="Utils\DelegateUtils.cs" />
+    <Compile Include="Utils\DictionaryUnionEnumerator.cs" />
+    <Compile Include="Utils\ExceptionFactory.Generated.cs" />
+    <Compile Include="Utils\ExceptionUtils.cs" />
+    <Compile Include="Utils\ExpressionUtils.cs" />
+    <Compile Include="Utils\NativeMethods.cs" />
+    <Compile Include="Utils\ReadOnlyDictionary.cs" />
+    <Compile Include="Utils\ReflectionUtils.cs" />
+    <Compile Include="Utils\StringUtils.cs" />
+    <Compile Include="Utils\TextStream.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

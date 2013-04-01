@@ -17,6 +17,8 @@
 using System;
 using System.Windows.Forms;
 using IronSmalltalk;
+using IronSmalltalk.Hosting.Hosting;
+using IronSmalltalk.Interchange;
 using IronSmalltalk.Internals;
 using IronSmalltalk.Runtime.Hosting;
 using Microsoft.Scripting.Hosting;
@@ -55,7 +57,7 @@ namespace TestPlayground
             path = @"D:\Users\TT\Desktop\IronSmalltalk.ist";
             SmalltalkEnvironment env = new SmalltalkEnvironment();
             CompilerService compiler = env.CompilerService;
-            compiler.InstallFiles(new string[] { path }, new ConsoleErrorSink(), null);
+            compiler.Install(new PathFileInInformation(path, System.Text.Encoding.UTF8, new ConsoleErrorSink()));
         }
 
         private void buttonInstallTester_Click(object sender, EventArgs e)
@@ -71,7 +73,11 @@ namespace TestPlayground
             // an app.config file and ScriptRuntime.CreateFromConfiguration.
             ScriptRuntimeSetup setup = new ScriptRuntimeSetup();
             string qualifiedname = typeof(SmalltalkLanguageContext).AssemblyQualifiedName;
-            setup.LanguageSetups.Add(SmalltalkHosting.CreateLanguageSetup());
+            setup.LanguageSetups.Add(new LanguageSetup(
+                typeof(SmalltalkLanguageContext).AssemblyQualifiedName,
+                "IronSmalltalk",
+                new string[] { "IronSmalltalk", "Iron Smalltalk", "ist" },
+                new string[] { "ist" }));
 
             ScriptRuntime dlrRuntime = new ScriptRuntime(setup);
 

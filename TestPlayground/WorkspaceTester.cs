@@ -26,6 +26,7 @@ using IronSmalltalk.AstJitCompiler.Runtime;
 using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
+using IronSmalltalk.Interchange;
 
 
 namespace TestPlayground
@@ -161,7 +162,7 @@ namespace TestPlayground
             if (String.IsNullOrEmpty(txt))
                 txt = this.textInstall.Text;
 
-            this.Environment.CompilerService.InstallSource(txt, new ErrorSink(this.textResultInstall), new ErrorSink(this.textResultInstall));
+            this.Environment.CompilerService.Install(new StringFileInInformation(txt, new ErrorSink(this.textResultInstall)));
 
             if (String.IsNullOrEmpty(this.textResultInstall.Text))
                 this.textResultInstall.Text = "OK";
