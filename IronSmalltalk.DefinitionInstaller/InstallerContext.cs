@@ -41,7 +41,7 @@ namespace IronSmalltalk.Runtime.Installer
         private List<PoolValueDefinition> _poolVariables = new List<PoolValueDefinition>();
         private List<MethodDefinition> _methods = new List<MethodDefinition>();
         private List<InitializerDefinition> _initializers = new List<InitializerDefinition>();
-        private List<SmalltalkClass> _newClasses = new List<SmalltalkClass>(); 
+        private List<Tuple<SmalltalkClass, ISourceReference>> _newClasses = new List<Tuple<SmalltalkClass, ISourceReference>>();
         
         /// <summary>
         /// Smalltalk context that this installation is part of.
@@ -259,14 +259,14 @@ namespace IronSmalltalk.Runtime.Installer
 
         private bool RecompileClasses()
         {
-            List<SmalltalkClass> toRecompile = new List<SmalltalkClass>();
-            foreach(SmalltalkClass cls in this._newClasses)
+            List<Tuple<SmalltalkClass, ISourceReference>> toRecompile = new List<Tuple<SmalltalkClass, ISourceReference>>();
+            foreach(Tuple<SmalltalkClass, ISourceReference> cls in this._newClasses)
             {
                 // Do not recompile classes that we are going to recompile anyway
                 bool subclassOfRecompiled = false;
-                foreach(SmalltalkClass c in this._newClasses)
+                foreach (Tuple<SmalltalkClass, ISourceReference> c in this._newClasses)
                 {
-                    if (this.InheritsFrom(cls, c))
+                    if (this.InheritsFrom(cls.Item1, c.Item1))
                     {
                         subclassOfRecompiled = true;
                         break;
@@ -277,16 +277,16 @@ namespace IronSmalltalk.Runtime.Installer
             }
 
             bool success = true;
-            foreach (SmalltalkClass cls in toRecompile)
+            foreach (Tuple<SmalltalkClass, ISourceReference> cls in toRecompile)
             {
                 try
                 {
-                    cls.Recompile();
+                    cls.Item1.Recompile();
                 }
                 catch (SmalltalkDefinitionException ex)
                 {
                     if (this.ErrorSink != null)
-                        this.ErrorSink.AddInstallError(ex.Message, InvalidSourceReference.Current);
+                        this.ErrorSink.AddInstallError(ex.Message, cls.Item2);
                     success = false;
                 }
             }
@@ -316,17 +316,20 @@ namespace IronSmalltalk.Runtime.Installer
 
         bool IInstallerContext.ReportError(ISourceReference sourceReference, string errorMessage)
         {
+            
             if (this.ErrorSink != null)
                 this.ErrorSink.AddInstallError(errorMessage, sourceReference);
             // This value has no mening to us, but makes it easier for senders to use us and return <false> directly.
             return false; 
         }
 
-        void IInstallerContext.RegisterNewClass(SmalltalkClass cls)
+        void IInstallerContext.RegisterNewClass(SmalltalkClass cls, ISourceReference sourceReference)
         {
             if (cls == null)
-                throw new ArgumentNullException();
-            this._newClasses.Add(cls);
+                throw new ArgumentNullException("cls");
+            if (sourceReference == null)
+                throw new ArgumentNullException("sourceReference");
+            this._newClasses.Add(new Tuple<SmalltalkClass, ISourceReference>(cls, sourceReference));
         }
 
         void IInstallerContext.AddClassBinding(ClassBinding binding)
@@ -423,28 +426,5 @@ namespace IronSmalltalk.Runtime.Installer
         }
 
         #endregion
-    }
-
-    public interface IInstallerContext 
-    {
-        SmalltalkRuntime Runtime { get; }
-        void RegisterNewClass(SmalltalkClass cls);
-        void AddClassBinding(ClassBinding binding);
-        void AddGlobalConstantBinding(GlobalConstantBinding binding);
-        void AddGlobalVariableBinding(GlobalVariableBinding binding);
-        void AddPoolBinding(PoolBinding binding);
-        IDiscreteGlobalBinding GetLocalGlobalBinding(Symbol name);
-        ClassBinding GetLocalClassBinding(Symbol name);
-        ClassBinding GetClassBinding(Symbol name);
-        ClassBinding GetClassBinding(string name);
-        PoolBinding GetLocalPoolBinding(Symbol name);
-        PoolBinding GetPoolBinding(Symbol name);
-        PoolBinding GetPoolBinding(string name);
-        GlobalVariableOrConstantBinding GetGlobalVariableOrConstantBinding(Symbol name);
-        GlobalVariableOrConstantBinding GetGlobalVariableOrConstantBinding(string name);
-        bool IsProtectedName(Symbol name);
-        bool ReportError(ISourceReference sourceReference, string errorMessage);
-        bool AnnotateObject(IAnnotetable annotetableObject, IEnumerable<KeyValuePair<string, string>> annotations);
-        SmalltalkNameScope NameScope { get; }
     }
 }

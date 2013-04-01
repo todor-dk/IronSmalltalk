@@ -118,18 +118,23 @@
     </Compile>
     <EmbeddedResource Include="BulkParseTester.resx">
       <DependentUpon>BulkParseTester.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="WorkspaceTester.resx">
       <DependentUpon>WorkspaceTester.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="InstallTester.resx">
       <DependentUpon>InstallTester.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="LexTester.resx">
       <DependentUpon>LexTester.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ParseTester.resx">
       <DependentUpon>ParseTester.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -143,6 +148,7 @@
     </Compile>
     <EmbeddedResource Include="TestTools.resx">
       <DependentUpon>TestTools.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
@@ -157,16 +163,16 @@
     <None Include="Test.ist" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Scripting, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Development\Tech Documents\DLR\IronLanguages-main-af33202\bin\Debug\Microsoft.Scripting.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DLR\Microsoft.Scripting\Microsoft.Scripting.csproj">
+      <Project>{d4a87b34-2a94-4da7-ae80-a3be7e0b519a}</Project>
+      <Name>Microsoft.Scripting</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk.AstJitCompiler\IronSmalltalk.AstJitCompiler.csproj">
       <Project>{a5c3f31c-dd5f-44bc-9d8f-103e136a13f7}</Project>
       <Name>IronSmalltalk.AstJitCompiler</Name>

@@ -3,12 +3,12 @@
   <Class Name="IronSmalltalk.Compiler.Interchange.InterchangeFormatParser">
     <Position X="2" Y="4.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AACIAEQAAABACAAgABAAgEAAAAIQAAAAIAAQIAECAgY=</HashCode>
+      <HashCode>AACIQEwAAEBACAAgAAEAgEAAAAIQEAQAKAAQIEkCAgY=</HashCode>
       <FileName>Compiler\InterchangeFormatParser.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Compiler.Interchange.InterchangeChunk">
-    <Position X="16.25" Y="4.5" Width="3.25" />
+    <Position X="15.5" Y="1.75" Width="3.25" />
     <TypeIdentifier>
       <HashCode>AAAAAEAAEAgAAAAIAAAAAAAAQAAAAAAAAAAAAAAEAAA=</HashCode>
       <FileName>Compiler\InterchangeChunk.cs</FileName>
@@ -18,7 +18,7 @@
   <Class Name="IronSmalltalk.Interchange.InterchangeFormatProcessor">
     <Position X="10.75" Y="1" Width="3.5" />
     <TypeIdentifier>
-      <HashCode>IACQAAQAAAAAAAAiAAAAAAAAEABAAAAEABgCgQAAAAA=</HashCode>
+      <HashCode>IACQAAQAAAAAAAAiAAAAAAAAEABAAAAkABgCgQAAAAA=</HashCode>
       <FileName>InterchangeFormatProcessor.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -45,7 +45,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Interface Name="IronSmalltalk.Interchange.IInterchangeFileInProcessor">
-    <Position X="17" Y="1.5" Width="1.5" />
+    <Position X="20.25" Y="1.75" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAEAAAAAACIACAAAAEAAAAAAAAAAAAAIABAAAAACAAA=</HashCode>
       <FileName>IInterchangeFileInProcessor.cs</FileName>

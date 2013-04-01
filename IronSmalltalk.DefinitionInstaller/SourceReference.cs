@@ -28,10 +28,6 @@ namespace IronSmalltalk.Runtime.Installer
         private SourceLocation _stopPosition;
         private ISourceCodeReferenceService SourceCodeReferenceService;
 
-        protected SourceReference()
-        {
-        }
-
         public SourceReference(SourceLocation startPosition, SourceLocation stopPosition, ISourceCodeReferenceService service)
         {
             if (service == null)
@@ -67,6 +63,17 @@ namespace IronSmalltalk.Runtime.Installer
                 return this.SourceCodeReferenceService.TranslateSourcePosition(this._stopPosition);
             }
         }
+
+        /// <summary>
+        /// Returns the source (file-in object / source file) where this source location belongs to.
+        /// </summary>
+        /// <remarks>
+        /// Due to the assembly dependencies, it's not possible to have this property strongly types.
+        /// </remarks>
+        public object SourceObject
+        {
+            get { return this.SourceCodeReferenceService; }
+        }
     }
 
     /// <summary>
@@ -94,12 +101,12 @@ namespace IronSmalltalk.Runtime.Installer
         /// Create a new source reference wrapped value without setting the source locations.
         /// </summary>
         /// <param name="value">Value being wrapped.</param>
-        public SourceReference(TValue value)
-        {
-            if (value == null)
-                throw new ArgumentNullException("value");
-            this.Value = value;
-        }
+        //public SourceReference(TValue value)
+        //{
+        //    if (value == null)
+        //        throw new ArgumentNullException("value");
+        //    this.Value = value;
+        //}
 
         /// <summary>
         /// Create a new source reference wrapped value and set the source locations.
@@ -114,65 +121,6 @@ namespace IronSmalltalk.Runtime.Installer
             if (value == null)
                 throw new ArgumentNullException("value");
             this.Value = value;
-        }
-    }
-
-    /// <summary>
-    /// Service that can translate the locations of source references from relative to absolute positions.
-    /// </summary>
-    public interface ISourceCodeReferenceService
-    {
-        /// <summary>
-        /// Translate the locations of source references from relative to absolute positions.
-        /// </summary>
-        /// <param name="position">Relative source location.</param>
-        /// <returns>Absolute source location.</returns>
-        int TranslateSourcePosition(int position);
-
-        /// <summary>
-        /// Translate the locations of source references from relative to absolute positions.
-        /// </summary>
-        /// <param name="position">Relative source location.</param>
-        /// <returns>Absolute source location.</returns>
-        SourceLocation TranslateSourcePosition(SourceLocation position);
-    }
-
-    /// <summary>
-    /// Represents a reference to a source code.
-    /// </summary>
-    /// <remarks>
-    /// Having reference to source location is optional. In other words, it is
-    /// legal to let the source location attributes be empty and just set the Value.
-    /// </remarks>
-    public interface ISourceReference
-    {
-        /// <summary>
-        /// Absolute start location in the source code that defines the value.
-        /// </summary>
-        SourceLocation StartPosition { get; }
-
-        /// <summary>
-        /// Absolute stop location in the source code that defines the value.
-        /// </summary>
-        SourceLocation StopPosition { get; }
-    }
-
-    /// <summary>
-    /// Class for source reference where we've list track where in the source code
-    /// certain things comes from. This is mainly used for reporting rare exceptions.
-    /// </summary>
-    public class InvalidSourceReference : ISourceReference
-    {
-        public static readonly InvalidSourceReference Current = new InvalidSourceReference();
-
-        SourceLocation ISourceReference.StartPosition
-        {
-            get { return SourceLocation.Invalid; }
-        }
-
-        SourceLocation ISourceReference.StopPosition
-        {
-            get { return SourceLocation.Invalid; }
         }
     }
 }

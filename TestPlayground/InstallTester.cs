@@ -18,6 +18,7 @@ using System;
 using System.Windows.Forms;
 using IronSmalltalk;
 using IronSmalltalk.Common;
+using IronSmalltalk.Interchange;
 
 
 namespace TestPlayground
@@ -53,7 +54,7 @@ namespace TestPlayground
             Properties.Settings.Default.Save();
             this.listErrors.Items.Clear();
 
-            this.Environment.CompilerService.InstallSource(this.txtSource.Text, new ErrorSink(this), new ErrorSink(this));
+            this.Environment.CompilerService.Install(new StringFileInInformation(this.txtSource.Text, new ErrorSink(this)));
         }
 
         private void AddError(string type, SourceLocation startPosition, SourceLocation stopPosition, string errorMessage)

@@ -1,0 +1,10 @@
+The contents of the DLR (this) folder were taken from the 
+IronLanguages project (https://github.com/IronLanguages)
+version (IronLanguages-main-af33202).
+
+The projects included here were extracted from the Runtime
+folder of the IronLanguages project to make browsing of
+the source code and debugging easier. 
+During development, we can change those as we see fit.
+
+See also the License.txt file.
