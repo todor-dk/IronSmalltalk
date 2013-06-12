@@ -19,6 +19,7 @@ using System.Windows.Forms;
 using IronSmalltalk;
 using IronSmalltalk.Hosting.Hosting;
 using IronSmalltalk.Interchange;
+using IronSmalltalk.InterchangeInstaller;
 using IronSmalltalk.Internals;
 using IronSmalltalk.Runtime.Hosting;
 using Microsoft.Scripting.Hosting;
@@ -56,7 +57,7 @@ namespace TestPlayground
             string path = @"D:\Users\TT\Documents\Visual Studio 2010\Projects\IronSmalltalk\TestPlayground\Test.ist";
             path = @"D:\Users\TT\Desktop\IronSmalltalk.ist";
             SmalltalkEnvironment env = new SmalltalkEnvironment();
-            CompilerService compiler = env.CompilerService;
+            FileInService compiler = env.CompilerService;
             compiler.Install(new PathFileInInformation(path, System.Text.Encoding.UTF8, new ConsoleErrorSink()));
         }
 
@@ -91,6 +92,12 @@ namespace TestPlayground
         private void buttonWorkspaceTester_Click(object sender, EventArgs e)
         {
             WorkspaceTester tester = new WorkspaceTester();
+            tester.Show();
+        }
+
+        private void buttonNativeCompileTest_Click(object sender, EventArgs e)
+        {
+            NativeCompileTester tester = new NativeCompileTester();
             tester.Show();
         }
     }

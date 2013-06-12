@@ -179,7 +179,7 @@ namespace IronSmalltalk
             {
                 if (method != null)
                 {
-                    var compilationResult = method.Code.CompileInstanceMethod(cls.Runtime, cls, this, args, null);
+                    var compilationResult = method.CompileInstanceMethod(cls.Runtime, cls, this, args, null);
                     return compilationResult.GetDynamicMetaObject(this.Restrictions);
                 }
                 return null;

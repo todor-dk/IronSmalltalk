@@ -13,5 +13,8 @@ Interchange element comes here!</Value>
     <Setting Name="LastWorkspaceEvalSource" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="LastNativePaths" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -129,7 +129,7 @@ namespace IronSmalltalk.Runtime.Bindings
     /// <summary>
     /// Binding to a class variable. A class contains a list of those.
     /// </summary>
-    public class ClassVariableBinding : DiscreteBinding<object>, IWritableBinding
+    public sealed class ClassVariableBinding : DiscreteBinding<object>, IWritableBinding
     {
         public ClassVariableBinding(Symbol name)
             : base(name)

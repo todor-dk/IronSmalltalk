@@ -19,13 +19,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using IronSmalltalk.AstJitCompiler.Runtime;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Compiler.Visiting;
 using IronSmalltalk.Hosting;
 using IronSmalltalk.Hosting.Hosting;
 using IronSmalltalk.Interchange;
+using IronSmalltalk.InterchangeInstaller.Runtime;
 using IronSmalltalk.Internals;
 using IronSmalltalk.Runtime.Hosting;
 using Microsoft.Scripting;
@@ -161,7 +161,7 @@ namespace IronSmalltalk.Hosting.Hosting
                 ResourceStreamContentProvider contentProvider = new ResourceStreamContentProvider(this.GetType(), "IronSmalltalk.ist");
                 SourceUnit sourceUnit = this.CreateSourceUnit(contentProvider, null, this.DefaultEncoding, SourceCodeKind.Statements);
                 ErrorSinkWrapper errorSink = new ErrorSinkWrapper(sourceUnit, ErrorSink.Default);
-                FileInInformation fileIn = new DelegateFileInInformation(() => sourceUnit.GetReader(), errorSink);
+                FileInInformation fileIn = new DelegateFileInInformation(() => sourceUnit.GetReader(), errorSink, sourceUnit.Document);
                 // BUG BUG - Can't get the InternalCompilerService to work yet.
                 //InternalCompilerService service = new InternalCompilerService(this.SmalltalkEnvironment.Runtime);
                 //service.Install(fileIn);
@@ -174,13 +174,19 @@ namespace IronSmalltalk.Hosting.Hosting
             {
                 SourceUnit sourceUnit = command.GetSourceUnit(this);
                 ErrorSinkWrapper errorSink = new ErrorSinkWrapper(sourceUnit, ErrorSink.Default);
-                return new DelegateFileInInformation(() => sourceUnit.GetReader(), errorSink);
+                return new DelegateFileInInformation(() => sourceUnit.GetReader(), errorSink, sourceUnit.Document);
             });
 
             // Install the rest that is to be filed-in
             this.SmalltalkEnvironment.CompilerService.Install(ist.Concat(fileIns));
         }
 
+        /// <summary>
+        /// Parses the source code within a specified compiler context. 
+        /// The source unit to parse is held on by the context.
+        /// </summary>
+        /// <returns><b>null</b> on failure.</returns>
+        /// <remarks>Could also set the code properties and line/file mappings on the source unit.</remarks>
         public override ScriptCode CompileSourceCode(SourceUnit sourceUnit, CompilerOptions options, ErrorSink errorSink)
         {
             if (sourceUnit == null)
@@ -205,8 +211,8 @@ namespace IronSmalltalk.Hosting.Hosting
                 return null; // Failed to compile the code, return null
 
             // 2. Compile the AST to Expression
-            AstIntermediateInitializerCode code = new AstIntermediateInitializerCode(node);
-            IronSmalltalk.Runtime.Behavior.InitializerCompilationResult compilationResult = code.CompileGlobalInitializer(this.SmalltalkEnvironment.Runtime);
+            RuntimeProgramInitializer code = new RuntimeProgramInitializer(node, null);
+            IronSmalltalk.Runtime.Behavior.InitializerCompilationResult compilationResult = code.Compile(this.SmalltalkEnvironment.Runtime);
             if (compilationResult == null)
                 return null; // Failed to compile the code, return null
             Expression<Func<SmalltalkRuntime, object, object>> lambda = compilationResult.ExecutableCode;

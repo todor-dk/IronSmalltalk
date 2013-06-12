@@ -18,12 +18,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.InterchangeInstaller.Compiler;
+using IronSmalltalk.Runtime.Behavior;
 
 namespace IronSmalltalk.Interchange
 {
-    public abstract class FileInInformation
+    public abstract class FileInInformation : ISymbolDocumentProvider
     {
         /// <summary>
         /// Error sink for reporting errors encountered during processing of the source code contained in interchange file.
@@ -35,6 +38,11 @@ namespace IronSmalltalk.Interchange
         /// </summary>
         /// <returns></returns>
         public abstract TextReader GetTextReader();
+
+        /// <summary>
+        /// Get or set the document containing the debug symbols.
+        /// </summary>
+        public SymbolDocumentInfo SymbolDocument { get; protected set; }
     }
 
     public class StringFileInInformation : FileInInformation
@@ -77,6 +85,11 @@ namespace IronSmalltalk.Interchange
         public Encoding Encoding { get; private set; }
 
         public PathFileInInformation(string path, Encoding encoding)
+            : this(path, encoding, null, null)
+        {
+        }
+
+        public PathFileInInformation(string path, Encoding encoding, IFileInErrorSink errorSink, SymbolDocumentInfo symbolDocument)
         {
             if (String.IsNullOrWhiteSpace(path))
                 throw new ArgumentNullException("path");
@@ -84,12 +97,13 @@ namespace IronSmalltalk.Interchange
                 throw new ArgumentNullException("encoding");
             this.Path = path;
             this.Encoding = encoding;
+            this.ErrorSink = errorSink; // null is OK
+            this.SymbolDocument = symbolDocument; // null is OK
         }
 
         public PathFileInInformation(string path, Encoding encoding, IFileInErrorSink errorSink)
-            : this(path, encoding)
+            : this(path, encoding, errorSink, null)
         {
-            this.ErrorSink = errorSink;
         }
 
         public override TextReader GetTextReader()
@@ -113,9 +127,15 @@ namespace IronSmalltalk.Interchange
         }
 
         public DelegateFileInInformation(Func<TextReader> getReaderFunction, IFileInErrorSink errorSink)
+            : this(getReaderFunction, errorSink, null)
+        {
+        }
+
+        public DelegateFileInInformation(Func<TextReader> getReaderFunction, IFileInErrorSink errorSink, SymbolDocumentInfo symbolDocument)
             : this(getReaderFunction)
         {
             this.ErrorSink = errorSink;
+            this.SymbolDocument = symbolDocument;
         }
 
         public override TextReader GetTextReader()

@@ -35,7 +35,7 @@ namespace IronSmalltalk.Runtime.Bindings
     /// <summary>
     /// Global binding to a pool variable.
     /// </summary>
-    public class PoolVariableBinding : PoolVariableOrConstantBinding, IWritableBinding
+    public sealed class PoolVariableBinding : PoolVariableOrConstantBinding, IWritableBinding
     {
         /// <summary>
         /// Create a new pool variable binding.
@@ -63,7 +63,7 @@ namespace IronSmalltalk.Runtime.Bindings
     /// <summary>
     /// Global binding to a pool constant. This is a constant binding.
     /// </summary>
-    public class PoolConstantBinding : PoolVariableOrConstantBinding
+    public sealed class PoolConstantBinding : PoolVariableOrConstantBinding
     {
         /// <summary>
         /// Create a new pool constant binding.

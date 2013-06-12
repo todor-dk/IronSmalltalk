@@ -57,7 +57,7 @@ namespace IronSmalltalk.Runtime
 
             if (method != null)
             {
-                var compilationResult = method.Code.CompileInstanceMethod(cls.Runtime, cls, target, args, null);
+                var compilationResult = method.CompileInstanceMethod(cls.Runtime, cls, target, args, null);
                 return compilationResult.GetDynamicMetaObject(target.Restrictions);
             }
             return null;

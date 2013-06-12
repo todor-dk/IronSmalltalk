@@ -18,26 +18,15 @@ using IronSmalltalk.Runtime.Behavior;
 
 namespace IronSmalltalk.Runtime.Installer.Definitions
 {
-    public abstract class InitializerDefinition : CodeBasedDefinition<IntermediateInitializerCode>
+    public abstract class InitializerDefinition : CodeBasedDefinition<CompiledInitializer>
     {
-        public InitializerDefinition(ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, IntermediateInitializerCode code)
+        public InitializerDefinition(ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, CompiledInitializer code)
             : base(sourceCodeService, methodSourceCodeService, code)
         {
         }
 
-                /// <summary>
-        /// Add annotations the the object being created.
-        /// </summary>
-        /// <param name="installer">Context which is performing the installation.</param>
-        /// <returns>Returns true if successful, otherwise false.</returns>
-        protected internal override bool AnnotateObject(IInstallerContext installer)
-        {
-            // Those are run immedeately, so nothing to annotate.
-            return true; 
-        }
-
         protected internal abstract bool ValidateInitializer(IInstallerContext installer);
 
-        protected internal abstract void Execute(SmalltalkRuntime runtime);
+        protected internal abstract void Execute(IInstallerContext installer);
     }
 }

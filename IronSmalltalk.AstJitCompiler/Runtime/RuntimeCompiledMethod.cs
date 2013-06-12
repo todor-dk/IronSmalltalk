@@ -1,43 +1,34 @@
-/*
- * **************************************************************************
- *
- * Copyright (c) The IronSmalltalk Project. 
- *
- * This source code is subject to terms and conditions of the 
- * license agreement found in the solution directory. 
- * See: $(SolutionDir)\License.htm ... in the root of this distribution.
- * By using this source code in any fashion, you are agreeing 
- * to be bound by the terms of the license agreement.
- *
- * You must not remove this notice, or any other, from this software.
- *
- * **************************************************************************
-*/
-
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
-using IronSmalltalk.AstJitCompiler.Internals;
-using IronSmalltalk.Common;
+using System.Text;
+using System.Threading.Tasks;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
 using IronSmalltalk.Runtime.CodeGeneration.BindingScopes;
 using IronSmalltalk.Runtime.CodeGeneration.Visiting;
+using IronSmalltalk.AstJitCompiler.Internals;
+using IronSmalltalk.Common;
 
-namespace IronSmalltalk.AstJitCompiler.Runtime
+namespace IronSmalltalk.InterchangeInstaller.Runtime
 {
-    public class AstIntermediateMethodCode : IntermediateMethodCode
+    public sealed class RuntimeCompiledMethod : CompiledMethod
     {
         public MethodNode ParseTree { get; private set; }
 
-        public AstIntermediateMethodCode(MethodNode parseTree)
+        public IDebugInfoService DebugInfoService { get; private set; }
+
+        public RuntimeCompiledMethod(Symbol selector, MethodNode parseTree, IDebugInfoService debugInfoService)
+            : base(selector)
         {
             if (parseTree == null)
                 throw new ArgumentNullException();
             this.ParseTree = parseTree;
+            this.DebugInfoService = debugInfoService;
         }
 
         public override MethodCompilationResult CompileClassMethod(SmalltalkRuntime runtime, SmalltalkClass cls, DynamicMetaObject self, DynamicMetaObject[] arguments, Symbol superScope)
@@ -60,7 +51,8 @@ namespace IronSmalltalk.AstJitCompiler.Runtime
                 ReservedScope.ForClassMethod(self.Expression),
                 self,
                 arguments,
-                cls.Name);
+                cls.Name,
+                this.DebugInfoService);
             //visitor.SymbolDocument = Expression.SymbolDocument("<mod>", new Guid("{E1A254E3-FD2E-4D82-BAB3-D4E9B115154E}"), new Guid("{6A28E03C-E404-4190-A012-72B2CCE48DD5}"));
             Expression code = this.ParseTree.Accept(visitor);
             return new MethodCompilationResult(code, visitor.BindingRestrictions);
@@ -88,9 +80,16 @@ namespace IronSmalltalk.AstJitCompiler.Runtime
                     ReservedScope.ForInstanceMethod(self.Expression),
                 self,
                 arguments,
-                cls.Name);
+                cls.Name,
+                this.DebugInfoService);
             Expression code = this.ParseTree.Accept(visitor);
             return new MethodCompilationResult(code, visitor.BindingRestrictions);
+        }
+
+
+        public override bool ValidateInstanceMethod(SmalltalkClass cls, SmalltalkNameScope globalNameScope, IIntermediateCodeValidationErrorSink errorSink)
+        {
+            return this.Validate(cls, errorSink, (r, c, s, a, u) => this.CompileInstanceMethod(r, c, s, a, u, globalNameScope));
         }
 
         public override bool ValidateClassMethod(SmalltalkClass cls, SmalltalkNameScope globalNameScope, IIntermediateCodeValidationErrorSink errorSink)
@@ -98,14 +97,9 @@ namespace IronSmalltalk.AstJitCompiler.Runtime
             return this.Validate(cls, errorSink, (r, c, s, a, u) => this.CompileClassMethod(r, c, s, a, u, globalNameScope));
         }
 
-        public override bool ValidateInstanceMethod(SmalltalkClass cls, SmalltalkNameScope globalNameScope, IIntermediateCodeValidationErrorSink errorSink)
-        {
-            return this.Validate(cls, errorSink, (r, c, s, a, u) => this.CompileInstanceMethod(r, c, s, a, u, globalNameScope));
-        }
-
         private bool Validate(SmalltalkClass cls, IIntermediateCodeValidationErrorSink errorSink, Func<SmalltalkRuntime, SmalltalkClass, DynamicMetaObject, DynamicMetaObject[], Symbol, MethodCompilationResult> func)
         {
-            return AstIntermediateMethodCode.Validate(this.ParseTree, errorSink, delegate()
+            return RuntimeCompiledMethod.Validate(this.ParseTree, errorSink, delegate()
             {
                 DynamicMetaObject self = new DynamicMetaObject(Expression.Parameter(typeof(object), "self"), BindingRestrictions.Empty, null);
                 DynamicMetaObject[] args = new DynamicMetaObject[this.ParseTree.Arguments.Count];
@@ -116,7 +110,7 @@ namespace IronSmalltalk.AstJitCompiler.Runtime
             });
         }
 
-        public static bool Validate<TResult>(SemanticNode rootNode, IIntermediateCodeValidationErrorSink errorSink, Func<TResult> compileFunc)
+        internal static bool Validate<TResult>(SemanticNode rootNode, IIntermediateCodeValidationErrorSink errorSink, Func<TResult> compileFunc)
         {
             if (rootNode == null)
                 throw new ArgumentNullException("rootNode");
@@ -127,28 +121,28 @@ namespace IronSmalltalk.AstJitCompiler.Runtime
             {
                 TResult result = compileFunc();
                 if (result == null)
-                    return AstIntermediateMethodCode.ReportError(errorSink, rootNode, "Could not compile method");
+                    return RuntimeCompiledMethod.ReportError(errorSink, rootNode, "Could not compile method");
                 return true;
             }
             catch (IronSmalltalk.Runtime.Execution.Internals.Primitives.PrimitiveInvalidTypeException ex)
             {
-                return AstIntermediateMethodCode.ReportError(errorSink, ex.GetNode(), ex.Message);
+                return RuntimeCompiledMethod.ReportError(errorSink, ex.GetNode(), ex.Message);
             }
             catch (IronSmalltalk.Runtime.Execution.Internals.SemanticCodeGenerationException ex)
             {
-                return AstIntermediateMethodCode.ReportError(errorSink, ex.GetNode(), ex.Message);
+                return RuntimeCompiledMethod.ReportError(errorSink, ex.GetNode(), ex.Message);
             }
             catch (IronSmalltalk.Runtime.Internal.SmalltalkDefinitionException ex)
             {
-                return AstIntermediateMethodCode.ReportError(errorSink, rootNode, ex.Message);
+                return RuntimeCompiledMethod.ReportError(errorSink, rootNode, ex.Message);
             }
             catch (IronSmalltalk.Runtime.Internal.SmalltalkRuntimeException ex)
             {
-                return AstIntermediateMethodCode.ReportError(errorSink, rootNode, ex.Message);
+                return RuntimeCompiledMethod.ReportError(errorSink, rootNode, ex.Message);
             }
             catch (Exception ex)
             {
-                return AstIntermediateMethodCode.ReportError(errorSink, rootNode, ex.Message);
+                return RuntimeCompiledMethod.ReportError(errorSink, rootNode, ex.Message);
             }
         }
 
@@ -181,5 +175,6 @@ namespace IronSmalltalk.AstJitCompiler.Runtime
             }
             return false;
         }
+
     }
 }

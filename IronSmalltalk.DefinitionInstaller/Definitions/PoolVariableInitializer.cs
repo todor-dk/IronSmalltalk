@@ -25,7 +25,7 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         public SourceReference<string> PoolName { get; private set; }
         public SourceReference<string> VariableName { get; private set; }
 
-        public PoolVariableInitializer(SourceReference<string> poolName, SourceReference<string> variableName, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, IntermediateInitializerCode code)
+        public PoolVariableInitializer(SourceReference<string> poolName, SourceReference<string> variableName, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, CompiledInitializer code)
             : base(sourceCodeService, methodSourceCodeService, code)
         {
             if (poolName == null)
@@ -65,18 +65,17 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
             if (poolItemBinding.IsConstantBinding && poolItemBinding.HasBeenSet)
                 return installer.ReportError(this.VariableName, InstallerErrors.PoolItemIsConstant);
 
-            return this.IntermediateCode.ValidatePoolItemInitializer(installer.NameScope, poolBinding.Value,
+            return this.Code.Validate(installer.NameScope, 
                 new IntermediateCodeValidationErrorSink(this.MethodSourceCodeService, installer));
         }
 
-        protected internal override void Execute(SmalltalkRuntime runtime)
+        protected internal override void Execute(IInstallerContext installer)
         {
+            SmalltalkRuntime runtime = installer.Runtime;
             Pool pool = runtime.GetPool(this.PoolName.Value);
             PoolVariableOrConstantBinding poolItemBinding = pool[this.VariableName.Value];
 
-            var compilationResult = this.IntermediateCode.CompilePoolItemInitializer(runtime, pool);
-            var code = compilationResult.ExecutableCode.Compile();
-            var value = code(runtime, null);
+            object value = this.Code.Execute(runtime, null);
             poolItemBinding.SetValue(value);
         }
     }

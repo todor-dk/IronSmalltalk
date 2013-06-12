@@ -54,14 +54,14 @@
   <Class Name="IronSmalltalk.Runtime.Installer.Definitions.GlobalInitializer">
     <Position X="28.25" Y="8.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAQEAAAAAAAAAAEAAAAAAAAAACAAAAA=</HashCode>
       <FileName>Definitions\GlobalInitializer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Runtime.Installer.Definitions.InitializerDefinition">
     <Position X="30.5" Y="5.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAAACAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAQAAAAEAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
       <FileName>Definitions\InitializerDefinition.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -119,21 +119,29 @@
   <Class Name="IronSmalltalk.Runtime.Installer.Definitions.PoolVariableInitializer">
     <Position X="30.5" Y="8.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>gAAAAAAAAAAAAAAEAAEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>gAAAAAAAAAAAAAQEAAEAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
       <FileName>Definitions\PoolVariableInitializer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Runtime.Installer.Definitions.ProgramInitializer">
     <Position X="33" Y="8.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAQEAAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
       <FileName>Definitions\ProgramInitializer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Runtime.Installer.Definitions.CodeBasedDefinition&lt;TCode&gt;" Collapsed="true">
     <Position X="28" Y="3.75" Width="1.5" />
+    <NestedTypes>
+      <Class Name="IronSmalltalk.Runtime.Installer.Definitions.CodeBasedDefinition&lt;TCode&gt;.IntermediateCodeValidationErrorSink" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Definitions\CodeBasedDefinition.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAACAABAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAACACAAAAAAAAAAACAABAAAA=</HashCode>
       <FileName>Definitions\CodeBasedDefinition.cs</FileName>
     </TypeIdentifier>
   </Class>

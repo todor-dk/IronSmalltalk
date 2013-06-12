@@ -69,7 +69,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                     {
                         // A class method, special restrictions
                         restrictions = BindingRestrictions.GetInstanceRestriction(self.Expression, receiver);
-                        var compilationResult = mth.Code.CompileClassMethod(runtime, cls, self, arguments, superLookupScope);
+                        var compilationResult = mth.CompileClassMethod(runtime, cls, self, arguments, superLookupScope);
                         if (compilationResult == null)
                         {
                             executableCode = null;
@@ -99,7 +99,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             }
             else
             {
-                var compilationResult = method.Code.CompileInstanceMethod(runtime, cls, self, arguments, superLookupScope);
+                var compilationResult = method.CompileInstanceMethod(runtime, cls, self, arguments, superLookupScope);
                 if (compilationResult == null)
                 {
                     executableCode = null;

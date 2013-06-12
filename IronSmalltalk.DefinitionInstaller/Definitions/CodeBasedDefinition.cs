@@ -17,15 +17,17 @@
 using System;
 using IronSmalltalk.Common;
 using IronSmalltalk.Runtime.Behavior;
+using System.Linq;
 
 namespace IronSmalltalk.Runtime.Installer.Definitions
 {
     public abstract class CodeBasedDefinition<TCode> : DefinitionBase
+        where TCode : CompiledCode
     {
         /// <summary>
         /// Intermediate code that can be compiled into executable code.
         /// </summary>
-        public TCode IntermediateCode { get; private set; }
+        public TCode Code { get; private set; }
 
         /// <summary>
         /// Source code service for translating source code positions.
@@ -47,7 +49,25 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
                 throw new ArgumentNullException("code");
             this.SourceCodeService = sourceCodeService;
             this.MethodSourceCodeService = methodSourceCodeService;
-            this.IntermediateCode = code;
+            this.Code = code;
+        }
+
+        /// <summary>
+        /// Add annotations the the object being created.
+        /// </summary>
+        /// <param name="installer">Context which is performing the installation.</param>
+        /// <returns>Returns true if successful, otherwise false.</returns>
+        protected internal override bool AnnotateObject(IInstallerContext installer)
+        {
+            if (installer == null)
+                throw new ArgumentNullException();
+
+            if (!this.Annotations.Any())
+                return true;
+
+            installer.AnnotateObject(this.Code, this.Annotations);
+
+            return true;
         }
 
         protected class IntermediateCodeValidationErrorSink : IIntermediateCodeValidationErrorSink

@@ -10,15 +10,15 @@
   <Class Name="IronSmalltalk.Compiler.Interchange.ParseNodes.ClassDefinitionNode">
     <Position X="36.75" Y="6.75" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AICAAAQAAACAACAABAIAEAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <HashCode>AICAEAQAAACAACQABAIAEAIABAAAAAAAAAAAAAIAgAA=</HashCode>
       <FileName>Compiler\ParseNodes\ClassDefinitionNode.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Compiler.Interchange.ParseNodes.ClassMethodDefinitionNode">
-    <Position X="11" Y="9" Width="2.25" />
+    <Position X="11" Y="9.5" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAA=</HashCode>
-      <FileName>Compiler\ParseNodes\MethodDefinitionNode.cs</FileName>
+      <FileName>Compiler\Visiting\InterchangeParseTreeVisitorDispatching.cs</FileName>
       <NewMemberFileName>Compiler\Interchange\ParseNodes\ClassMethodDefinitionNode.cs</NewMemberFileName>
     </TypeIdentifier>
   </Class>
@@ -30,7 +30,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Compiler.Interchange.ParseNodes.GlobalInitializationNode">
-    <Position X="14" Y="6.5" Width="2" />
+    <Position X="14" Y="6.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAIAAAA=</HashCode>
       <FileName>Compiler\ParseNodes\GlobalInitializationNode.cs</FileName>
@@ -58,7 +58,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Compiler.Interchange.ParseNodes.MethodDefinitionNode">
-    <Position X="9.5" Y="6.5" Width="1.75" />
+    <Position X="9.5" Y="6.75" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAIIAAA=</HashCode>
       <FileName>Compiler\ParseNodes\MethodDefinitionNode.cs</FileName>
@@ -82,7 +82,7 @@
     <Position X="31" Y="6.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
-      <FileName>Compiler\ParseNodes\ProgramInitializationNode.cs</FileName>
+      <FileName>Compiler\Visiting\InterchangeParseTreeVisitorDispatching.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Compiler.Interchange.ParseNodes.GlobalVariableDefinitionNode">
@@ -100,28 +100,28 @@
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Compiler.Interchange.ParseNodes.InstanceMethodDefinitionNode">
-    <Position X="7.75" Y="9" Width="2.5" />
+    <Position X="7.75" Y="9.5" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAA=</HashCode>
-      <FileName>Compiler\ParseNodes\MethodDefinitionNode.cs</FileName>
+      <FileName>Compiler\Visiting\InterchangeParseTreeVisitorDispatching.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Compiler.Interchange.ParseNodes.PoolVariableDefinitionNode">
-    <Position X="19.75" Y="9.25" Width="2" />
+    <Position X="19.75" Y="9.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAA=</HashCode>
       <FileName>Compiler\ParseNodes\PoolItemDefinitionNode.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Compiler.Interchange.ParseNodes.PoolConstantDefinitionNode">
-    <Position X="16.75" Y="9.25" Width="2.25" />
+    <Position X="16.75" Y="9.5" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAA=</HashCode>
       <FileName>Compiler\ParseNodes\PoolItemDefinitionNode.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Compiler.Interchange.ParseNodes.PoolItemDefinitionNode">
-    <Position X="18.5" Y="6.5" Width="1.5" />
+    <Position X="18.5" Y="6.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEIIAAA=</HashCode>
       <FileName>Compiler\ParseNodes\PoolItemDefinitionNode.cs</FileName>

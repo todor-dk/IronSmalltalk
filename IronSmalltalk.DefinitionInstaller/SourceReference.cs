@@ -65,12 +65,10 @@ namespace IronSmalltalk.Runtime.Installer
         }
 
         /// <summary>
-        /// Returns the source (file-in object / source file) where this source location belongs to.
+        /// Return the source code service for this source code reference.
+        /// The service can translate the locations of source references from relative to absolute positions.
         /// </summary>
-        /// <remarks>
-        /// Due to the assembly dependencies, it's not possible to have this property strongly types.
-        /// </remarks>
-        public object SourceObject
+        public ISourceCodeReferenceService Service 
         {
             get { return this.SourceCodeReferenceService; }
         }

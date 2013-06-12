@@ -16,26 +16,23 @@
 
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
+using IronSmalltalk.Runtime.Bindings;
 using IronSmalltalk.Runtime.Internal;
 
 namespace IronSmalltalk.Runtime.Behavior
 {
-    public class CompiledMethod : IAnnotetable
+    public abstract class CompiledMethod : CompiledCode
     {
         public Symbol Selector { get; private set; }
 
-        public IntermediateMethodCode Code { get; private set; }
-
-        public CompiledMethod(Symbol selector, IntermediateMethodCode code)
+        protected CompiledMethod(Symbol selector)
         {
             if (selector == null)
                 throw new ArgumentNullException("selector");
-            if (code == null)
-                throw new ArgumentNullException("code");
 
             this.Selector = selector;
-            this.Code = code;
         }
 
         /// <summary>
@@ -83,49 +80,38 @@ namespace IronSmalltalk.Runtime.Behavior
             }
         }
 
-        #region Annotations
 
-        /// <summary>
-        /// Annotations that may be added to the binding.
-        /// </summary>
-        private Dictionary<string, string> _annotations;
+        public abstract MethodCompilationResult CompileInstanceMethod(SmalltalkRuntime runtime, SmalltalkClass cls, DynamicMetaObject self, DynamicMetaObject[] arguments, Symbol superScope);
+        public abstract MethodCompilationResult CompileClassMethod(SmalltalkRuntime runtime, SmalltalkClass cls, DynamicMetaObject self, DynamicMetaObject[] arguments, Symbol superScope);
+        public abstract bool ValidateInstanceMethod(SmalltalkClass cls, SmalltalkNameScope globalNameScope, IIntermediateCodeValidationErrorSink errorSink);
+        public abstract bool ValidateClassMethod(SmalltalkClass cls, SmalltalkNameScope globalNameScope, IIntermediateCodeValidationErrorSink errorSink);
+    }
 
-        /// <summary>
-        /// The annotation pairs associated with the annotetable object.
-        /// </summary>
-        public IEnumerable<KeyValuePair<string, string>> Annotations
+    public sealed class NativeCompiledMethod : CompiledMethod
+    {
+        public NativeCompiledMethod(Symbol selector)
+            : base(selector)
         {
-            get
-            {
-                if (this._annotations == null)
-                    return AnnotationsHelper.Empty;
-                return this._annotations;
-            }
         }
 
-        /// <summary>
-        /// Set (or overwrite) an annotation on the annotetable object.
-        /// </summary>
-        /// <param name="key">Key of the annotation.</param>
-        /// <param name="value">Value or null to remove the annotation.</param>
-        public void Annotate(string key, string value)
+        public override MethodCompilationResult CompileClassMethod(SmalltalkRuntime runtime, SmalltalkClass cls, DynamicMetaObject self, DynamicMetaObject[] arguments, Symbol superScope)
         {
-            if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException();
-            if (value == null)
-            {
-                if (this._annotations == null)
-                    return;
-                this._annotations.Remove(key);
-            }
-            else
-            {
-                if (this._annotations == null)
-                    this._annotations = new Dictionary<string, string>();
-                this._annotations[key] = value;
-            }
+            throw new NotImplementedException();
         }
 
-        #endregion
+        public override MethodCompilationResult CompileInstanceMethod(SmalltalkRuntime runtime, SmalltalkClass cls, DynamicMetaObject self, DynamicMetaObject[] arguments, Symbol superScope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool ValidateInstanceMethod(SmalltalkClass cls, SmalltalkNameScope globalNameScope, IIntermediateCodeValidationErrorSink errorSink)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool ValidateClassMethod(SmalltalkClass cls, SmalltalkNameScope globalNameScope, IIntermediateCodeValidationErrorSink errorSink)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

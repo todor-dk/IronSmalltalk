@@ -32,7 +32,8 @@ namespace IronSmalltalk.Runtime.Behavior
         IDictionary<Symbol, CompiledMethod>, IDictionary<string, CompiledMethod>, // IDictionary,
         IEnumerable<CompiledMethod>, IEnumerable, ICollection<CompiledMethod> //, ICollection
     {
-        private Dictionary<Symbol, CompiledMethod> _contents;
+        private volatile Dictionary<Symbol, CompiledMethod> _contents;
+        private Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>> _lazyInitializer;
         private SmalltalkRuntime _runtime;
         private bool _readOnly = false;
 
@@ -40,7 +41,7 @@ namespace IronSmalltalk.Runtime.Behavior
         /// Create a new method dictionary.
         /// </summary>
         /// <param name="runtime">Smalltalk runtime that the methods in the dictionary belong to.</param>
-        public MethodDictionary(SmalltalkRuntime runtime)
+        protected MethodDictionary(SmalltalkRuntime runtime)
         {
             if (runtime == null)
                 throw new ArgumentNullException("runtime");
@@ -48,7 +49,39 @@ namespace IronSmalltalk.Runtime.Behavior
             this._contents = new Dictionary<Symbol, CompiledMethod>();
         }
 
+        /// <summary>
+        /// Create a new method dictionary that's lazy initializable.
+        /// </summary>
+        /// <param name="runtime">Smalltalk runtime that the methods in the dictionary belong to.</param>
+        /// <param name="lazyInitializer">Callback function for lazy initializing of the contents of the method dictionary.</param>
+        /// <remarks
+        /// >In rare multi-threaded conditions the lazyInitializer function may be called more than once. 
+        /// Only one of the results will be stored, and the rest discarded! Therefore, the initializer 
+        /// function should be robust without side-effects if run more than once.
+        /// </remarks>
+        protected MethodDictionary(SmalltalkRuntime runtime, Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>> lazyInitializer)
+        {
+            if (runtime == null)
+                throw new ArgumentNullException("runtime");
+            if (lazyInitializer == null)
+                throw new ArgumentNullException("lazyInitializer");
+            this._runtime = runtime;
+            this._lazyInitializer = lazyInitializer;
+            this._contents = null;
+        }
+
         #region Accessing 
+
+        private Dictionary<Symbol, CompiledMethod> Contents
+        {
+            get
+            {
+                // Lazy initializing of method dictionary
+                if (this._contents == null)
+                    System.Threading.Interlocked.CompareExchange(ref this._contents, this._lazyInitializer(this._runtime), null);
+                return this._contents;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the method with the specified selector.
@@ -92,7 +125,7 @@ namespace IronSmalltalk.Runtime.Behavior
             {
                 if (selector == null)
                     throw new ArgumentNullException();
-                this._contents[selector] = value;
+                this.Contents[selector] = value;
             }
         }
 
@@ -125,7 +158,7 @@ namespace IronSmalltalk.Runtime.Behavior
         {
             if (selector == null)
                 throw new ArgumentNullException();
-            return this._contents.TryGetValue(selector, out method);
+            return this.Contents.TryGetValue(selector, out method);
         }
 
         /// <summary>
@@ -133,7 +166,7 @@ namespace IronSmalltalk.Runtime.Behavior
         /// </summary>
         public int Count
         {
-            get { return this._contents.Count; }
+            get { return this.Contents.Count; }
         }
 
         /// <summary>
@@ -141,7 +174,7 @@ namespace IronSmalltalk.Runtime.Behavior
         /// </summary>
         public ICollection<Symbol> Keys
         {
-            get { return this._contents.Keys; }
+            get { return this.Contents.Keys; }
         }
 
         /// <summary>
@@ -149,7 +182,7 @@ namespace IronSmalltalk.Runtime.Behavior
         /// </summary>
         public ICollection<CompiledMethod> Values
         {
-            get { return this._contents.Values; }
+            get { return this.Contents.Values; }
         }
 
         /// <summary>
@@ -158,7 +191,7 @@ namespace IronSmalltalk.Runtime.Behavior
         /// <returns></returns>
         public IEnumerator<CompiledMethod> GetEnumerator()
         {
-            return this._contents.Select(pair => pair.Value).GetEnumerator();
+            return this.Contents.Select(pair => pair.Value).GetEnumerator();
         }
 
         /// <summary>
@@ -216,7 +249,7 @@ namespace IronSmalltalk.Runtime.Behavior
                 throw new InvalidOperationException("Method selector belongs to a different SmalltalkRuntime.");
             //if (method. != this._runtime)
             //    throw new InvalidOperationException("Method selector belongs to a different SmalltalkRuntime.");
-            this._contents.Add(selector, method);
+            this.Contents.Add(selector, method);
             this._nativeMethodNameMap = null;
         }
 
@@ -258,7 +291,7 @@ namespace IronSmalltalk.Runtime.Behavior
                 throw new ArgumentNullException();
             if (this._readOnly)
                 throw new InvalidOperationException("Dictionary is in read-only state.");
-            return this._contents.Remove(selector);
+            return this.Contents.Remove(selector);
             this._nativeMethodNameMap = null;
         }
 
@@ -450,7 +483,7 @@ namespace IronSmalltalk.Runtime.Behavior
 
         IEnumerator<KeyValuePair<Symbol, CompiledMethod>> IEnumerable<KeyValuePair<Symbol, CompiledMethod>>.GetEnumerator()
         {
-            return this._contents.GetEnumerator();
+            return this.Contents.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -573,7 +606,7 @@ namespace IronSmalltalk.Runtime.Behavior
 
         IEnumerator<KeyValuePair<string, CompiledMethod>> IEnumerable<KeyValuePair<string, CompiledMethod>>.GetEnumerator()
         {
-            return this._contents.Select(pair => new KeyValuePair<string, CompiledMethod>(pair.Key.Value, pair.Value)).GetEnumerator();
+            return this.Contents.Select(pair => new KeyValuePair<string, CompiledMethod>(pair.Key.Value, pair.Value)).GetEnumerator();
         }
 
         #endregion
@@ -850,6 +883,21 @@ namespace IronSmalltalk.Runtime.Behavior
             : base(runtime)
         {
         }
+
+        /// <summary>
+        /// Create a new method dictionary that's lazy initializable.
+        /// </summary>
+        /// <param name="runtime">Smalltalk runtime that the methods in the dictionary belong to.</param>
+        /// <param name="lazyInitializer">Callback function for lazy initializing of the contents of the method dictionary.</param>
+        /// <remarks
+        /// >In rare multi-threaded conditions the lazyInitializer function may be called more than once. 
+        /// Only one of the results will be stored, and the rest discarded! Therefore, the initializer 
+        /// function should be robust without side-effects if run more than once.
+        /// </remarks>
+        public ClassMethodDictionary(SmalltalkRuntime runtime, Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>> lazyInitializer)
+            : base(runtime, lazyInitializer)
+        {
+        }
     }
 
     /// <summary>
@@ -863,6 +911,21 @@ namespace IronSmalltalk.Runtime.Behavior
         /// <param name="runtime">Smalltalk runtime that the methods in the dictionary belong to.</param>
         public InstanceMethodDictionary(SmalltalkRuntime runtime)
             : base(runtime)
+        {
+        }
+
+        /// <summary>
+        /// Create a new method dictionary that's lazy initializable.
+        /// </summary>
+        /// <param name="runtime">Smalltalk runtime that the methods in the dictionary belong to.</param>
+        /// <param name="lazyInitializer">Callback function for lazy initializing of the contents of the method dictionary.</param>
+        /// <remarks
+        /// >In rare multi-threaded conditions the lazyInitializer function may be called more than once. 
+        /// Only one of the results will be stored, and the rest discarded! Therefore, the initializer 
+        /// function should be robust without side-effects if run more than once.
+        /// </remarks>
+        public InstanceMethodDictionary(SmalltalkRuntime runtime, Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>> lazyInitializer)
+            : base(runtime, lazyInitializer)
         {
         }
     }

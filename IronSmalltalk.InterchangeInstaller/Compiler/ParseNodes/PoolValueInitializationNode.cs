@@ -15,11 +15,12 @@
 */
 
 using System;
-using IronSmalltalk.AstJitCompiler.Runtime;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Interchange;
+using IronSmalltalk.InterchangeInstaller.Runtime;
+using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Installer;
 using IronSmalltalk.Runtime.Installer.Definitions;
 
@@ -74,12 +75,14 @@ namespace IronSmalltalk.Compiler.Interchange.ParseNodes
                 return this;
             }
 
+            CompiledInitializer code = new RuntimePoolItemInitializer(initializer, null, this.PoolName.Value, this.PoolVariableName.Value);
+
             PoolVariableInitializer definition = new PoolVariableInitializer(
                 processor.CreateSourceReference(this.PoolName.Value, this.PoolName, sourceCodeService),
                 processor.CreateSourceReference(this.PoolVariableName.Value, this.PoolVariableName, sourceCodeService),
                 sourceCodeService, 
-                methodSourceCodeService, 
-                new AstIntermediateInitializerCode(initializer));
+                methodSourceCodeService,
+                code);
             this.Definfition = definition;
             // This may fail, but we don't care. If failed, it reported the error through its error sink.
             processor.FileInProcessor.FileInPoolVariableInitializer(definition);

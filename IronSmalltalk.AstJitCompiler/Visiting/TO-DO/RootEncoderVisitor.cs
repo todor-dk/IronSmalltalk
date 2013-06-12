@@ -20,7 +20,9 @@ using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using IronSmalltalk.AstJitCompiler.Internals;
+using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.SemanticNodes;
+using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.CodeGeneration.Bindings;
 using IronSmalltalk.Runtime.CodeGeneration.BindingScopes;
 using IronSmalltalk.Runtime.Execution.CallSiteBinders;
@@ -53,12 +55,12 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
         protected readonly List<TemporaryBinding> Temporaries = new List<TemporaryBinding>();
 
         /// <summary>
-        /// SymbolDocument needed for storing information necessary to emit 
+        /// Service providing information necessary to emit 
         /// debugging symbol information for a source file.
         /// 
         /// If this property is set, the generator will emit debug(able) code.
         /// </summary>
-        public SymbolDocumentInfo SymbolDocument { get; set; }
+        public IDebugInfoService DebugInfoService { get; private set; }
 
         /// <summary>
         /// Gets or sets binding restrictions to be applied together with the visited executable code.
@@ -71,7 +73,8 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
         /// <param name="runtime">Smalltalk runtime responsible for running the code.</param>
         /// <param name="globalScope">Binding lookup scope with global identifiers, e.g. globals, class variables, instance variables etc.</param>
         /// <param name="reservedScope">Binding lookup scope with reserved identifiers, e.g. "true", "false", "nil" etc.</param>
-        protected RootEncoderVisitor(SmalltalkRuntime runtime, BindingScope globalScope, BindingScope reservedScope)
+        /// <param name="debugInfoService">Optional debug info service if the generator is to emit debug symbols.</param>
+        protected RootEncoderVisitor(SmalltalkRuntime runtime, BindingScope globalScope, BindingScope reservedScope, IDebugInfoService debugInfoService)
         {
             if (runtime == null)
                 throw new ArgumentNullException("runtime");
@@ -83,6 +86,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
             this._runtime = runtime;
             this.GlobalScope = globalScope;
             this.ReservedScope = reservedScope;
+            this.DebugInfoService = debugInfoService; // Optional, null is OK
             this.LocalScope = new BindingScope();
             this._returnLabel = null; // Lazy init
             this._homeContext = null; // Lazy init
@@ -269,25 +273,21 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
             return Expression.Return(this.ReturnLabel, value, typeof(object));
         }
 
-        public Expression AddDebugInfo(Expression expression, int startLine, int startColumn, int endLine, int endColumn)
-        {
-            //if (this.SymbolDocument == null)
-            //    return expression;
-
-            //DebugInfoExpression debugInfo = Expression.DebugInfo(this.SymbolDocument, startLine, startColumn, endLine, endColumn);
-            //return Expression.Block(debugInfo, expression);
-
-            return Debugger.AddDebugInfo(this, expression, startLine, startColumn, endLine, endColumn);
-        }
-
         public Expression AddDebugInfo(Expression expression, IParseNode node)
         {
+            if (this.DebugInfoService == null)
+                return expression;
             //var tokens = node.GetTokens().Concat(node.GetChildNodes().SelectMany(n => n.GetTokens()));
             //SourceLocation start = tokens.Min(t => t.StartPosition);
             //SourceLocation end = tokens.Min(t => t.StopPosition);
-            //return this.AddDebugInfo(expression, start.Line, start.Column, end.Line, end.Column);
 
-            return Debugger.AddDebugInfo(this, expression, node);
+            //start = this.DebugInfoService.TranslateSourcePosition(start);
+            //end = this.DebugInfoService.TranslateSourcePosition(end);
+
+            //DebugInfoExpression debugInfo = Expression.DebugInfo(this.DebugInfoService.SymbolDocument, 
+            //    start.Line, start.Column, end.Line, end.Column);
+            //return Expression.Block(debugInfo, expression);
+            return expression;
         }
 
         #region Helpers 
@@ -327,7 +327,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
         Expression HomeContext { get; }
         BindingScope ReservedScope { get; }
         BindingRestrictions BindingRestrictions { get; set; }
-        Expression AddDebugInfo(Expression expression, int startLine, int startColumn, int endLine, int endColumn);
+        //Expression AddDebugInfo(Expression expression, int startLine, int startColumn, int endLine, int endColumn);
         Expression AddDebugInfo(Expression expression, IParseNode node);
     }
 

@@ -43,7 +43,7 @@ namespace IronSmalltalk.Runtime.Bindings
     /// <summary>
     /// Global binding to a class object. This is a constant binding.
     /// </summary>
-    public class ClassBinding : GlobalBinding<SmalltalkClass>
+    public sealed class ClassBinding : GlobalBinding<SmalltalkClass>
     {
         /// <summary>
         /// Create a new global class binding.
@@ -68,7 +68,7 @@ namespace IronSmalltalk.Runtime.Bindings
     /// <summary>
     /// Global binding to a pool object. This is a constant binding.
     /// </summary>
-    public class PoolBinding : GlobalBinding<Pool>
+    public sealed class PoolBinding : GlobalBinding<Pool>
     {
         /// <summary>
         /// Create a new global pool binding.
@@ -108,7 +108,7 @@ namespace IronSmalltalk.Runtime.Bindings
     /// <summary>
     /// Global binding to a global variable.
     /// </summary>
-    public class GlobalVariableBinding : GlobalVariableOrConstantBinding, IWritableBinding
+    public sealed class GlobalVariableBinding : GlobalVariableOrConstantBinding, IWritableBinding
     {
         /// <summary>
         /// Create a new global variable binding.
@@ -136,7 +136,7 @@ namespace IronSmalltalk.Runtime.Bindings
     /// <summary>
     /// Global binding to a global constant. This is a constant binding.
     /// </summary>
-    public class GlobalConstantBinding : GlobalVariableOrConstantBinding
+    public sealed class GlobalConstantBinding : GlobalVariableOrConstantBinding
     {
         /// <summary>
         /// Create a new global constant binding.

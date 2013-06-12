@@ -21,7 +21,7 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
 {
     public class InstanceMethodDefinition : MethodDefinition
     {
-        public InstanceMethodDefinition(SourceReference<string> className, SourceReference<string> selector, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, IntermediateMethodCode code)
+        public InstanceMethodDefinition(SourceReference<string> className, SourceReference<string> selector, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, CompiledMethod code)
             : base(className, selector, sourceCodeService, methodSourceCodeService, code)
         {
         }
@@ -33,21 +33,14 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
 
         protected override bool InternalAddMethod(IInstallerContext installer, SmalltalkClass cls)
         {
-            Symbol selector = installer.Runtime.GetSymbol(this.Selector.Value);
-            cls.InstanceBehavior[selector] = new CompiledMethod(selector, this.IntermediateCode);
+            System.Diagnostics.Debug.Assert(this.Selector.Value == this.Code.Selector.Value);
+            cls.InstanceBehavior[this.Code.Selector] = this.Code;
             return true;
         }
 
         protected override bool InternalValidateMethod(IInstallerContext installer, SmalltalkClass cls, IIntermediateCodeValidationErrorSink errorSink)
         {
-            return this.IntermediateCode.ValidateInstanceMethod(cls, installer.NameScope, errorSink);
-        }
-
-        protected override CompiledMethod GetMethod(SmalltalkClass cls)
-        {
-            CompiledMethod result;
-            cls.InstanceBehavior.TryGetValue(this.Selector.Value, out result);
-            return result;
+            return this.Code.ValidateInstanceMethod(cls, installer.NameScope, errorSink);
         }
     }
 }

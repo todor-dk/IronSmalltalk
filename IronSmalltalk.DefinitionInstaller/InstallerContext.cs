@@ -309,7 +309,7 @@ namespace IronSmalltalk.Runtime.Installer
         public void Initialize()
         {
             foreach (InitializerDefinition def in this._initializers)
-                def.Execute(this.Runtime);           
+                def.Execute(this);           
         }
 
         #region IInstallerContext interface implementation
