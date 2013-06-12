@@ -99,8 +99,8 @@ namespace IronSmalltalk.Runtime.Hosting
         {
             var startLocation = this.GetLocation(start);
             var endLocation = this.GetLocation(end);
-            if (!startLocation.IsValid || endLocation.IsValid)
-                return Microsoft.Scripting.SourceSpan.Invalid;
+            if (!startLocation.IsValid || !endLocation.IsValid)
+                return Microsoft.Scripting.SourceSpan.None; // Microsoft.Scripting.SourceSpan.Invalid;
             return new Microsoft.Scripting.SourceSpan(startLocation, endLocation);
         }
 

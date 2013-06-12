@@ -21,7 +21,7 @@ using IronSmalltalk.Runtime.Bindings;
 
 namespace IronSmalltalk.Runtime.Installer.Definitions
 {
-    public abstract class MethodDefinition : CodeBasedDefinition<IntermediateMethodCode>
+    public abstract class MethodDefinition : CodeBasedDefinition<CompiledMethod>
     {
         /// <summary>
         /// Name of the class that defines the method.
@@ -33,13 +33,15 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         /// </summary>
         public SourceReference<string> Selector { get; private set; }
 
-        public MethodDefinition(SourceReference<string> className, SourceReference<string> selector, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, IntermediateMethodCode code)
+        public MethodDefinition(SourceReference<string> className, SourceReference<string> selector, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, CompiledMethod code)
             : base(sourceCodeService, methodSourceCodeService, code)
         {
             if (className == null)
                 throw new ArgumentNullException("className");
             if (selector == null)
                 throw new ArgumentNullException("selector");
+            if (selector.Value != code.Selector.Value)
+                throw new ArgumentException("The 'selector' parameter and the selector of the 'code' parameter do not match.");
             this.ClassName = className;
             this.Selector = selector;
         }
@@ -86,35 +88,5 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         protected abstract bool InternalAddMethod(IInstallerContext installer, SmalltalkClass cls);
 
         protected abstract bool InternalValidateMethod(IInstallerContext installer, SmalltalkClass cls, IIntermediateCodeValidationErrorSink errorSink);
-
-        /// <summary>
-        /// Add annotations the the object being created.
-        /// </summary>
-        /// <param name="installer">Context which is performing the installation.</param>
-        /// <returns>Returns true if successful, otherwise false.</returns>
-        protected internal override bool AnnotateObject(IInstallerContext installer)
-        {
-            if (installer == null)
-                throw new ArgumentNullException();
-
-            if (!this.Annotations.Any())
-                return true;
-
-            Bindings.ClassBinding classlBinding = installer.GetClassBinding(this.ClassName.Value);
-            if ((classlBinding == null) || (classlBinding.Value == null))
-                return true; // An error, but we don't see the annotations as critical.
-
-            CompiledMethod mth = this.GetMethod(classlBinding.Value);
-            if (mth == null)
-                return true; // An error, but we don't see the annotations as critical.
-
-            installer.AnnotateObject(mth, this.Annotations);
-
-            return true;
-        }
-
-        protected abstract CompiledMethod GetMethod(SmalltalkClass cls);
     }
-
-
 }

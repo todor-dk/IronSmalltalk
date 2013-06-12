@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using IronSmalltalk.InterchangeInstaller;
 //using IronSmalltalk.Compiler;
 using IronSmalltalk.Internals;
 using IronSmalltalk.Runtime;
@@ -27,12 +28,12 @@ namespace IronSmalltalk
     {
         public SmalltalkRuntime Runtime { get; private set; }
 
-        public CompilerService CompilerService { get; private set; }
+        public FileInService CompilerService { get; private set; }
 
         public SmalltalkEnvironment()
         {
             this.Runtime = new SmalltalkRuntime();
-            this.CompilerService = new CompilerService(this.Runtime);
+            this.CompilerService = new FileInService(this.Runtime);
         }
 
         public Symbol GetSymbol(string value)

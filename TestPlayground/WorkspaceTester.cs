@@ -22,11 +22,11 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Windows.Forms;
 using IronSmalltalk;
-using IronSmalltalk.AstJitCompiler.Runtime;
 using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Interchange;
+using IronSmalltalk.InterchangeInstaller.Runtime;
 
 
 namespace TestPlayground
@@ -238,8 +238,8 @@ namespace TestPlayground
             if (errorSink.HadErrors)
                 return null;
 
-            AstIntermediateInitializerCode code = new AstIntermediateInitializerCode(node);
-            var compilationResult = code.CompileGlobalInitializer(this.Environment.Runtime);
+            RuntimeProgramInitializer code = new RuntimeProgramInitializer(node, null);
+            var compilationResult = code.Compile(this.Environment.Runtime);
             if (compilationResult == null)
                 return null;
             return compilationResult.ExecutableCode;

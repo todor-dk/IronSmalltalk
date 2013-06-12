@@ -310,5 +310,26 @@ namespace IronSmalltalk.Runtime.Bindings
                 this.AllPools.WriteProtect();
             }
         }
+
+        public void Accept(ISmalltalkNameScopeVisitor visitor)
+        {
+            if (visitor == null)
+                throw new ArgumentNullException();
+
+            foreach (Symbol name in this.ProtectedNames)
+                visitor.Visit(name);
+
+            foreach(ClassBinding binding in this.Classes.Values)
+                visitor.Visit(binding);
+
+            foreach(PoolBinding binding in this.Pools.Values)
+                visitor.Visit(binding);
+
+            foreach(GlobalVariableBinding binding in this.GlobalVariables.Values)
+                visitor.Visit(binding);
+
+            foreach(GlobalConstantBinding binding in this.GlobalConstants.Values)
+                visitor.Visit(binding);
+        }
     }
 }

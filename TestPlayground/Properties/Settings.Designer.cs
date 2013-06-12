@@ -58,5 +58,17 @@ namespace TestPlayground.Properties {
                 this["LastWorkspaceEvalSource"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastNativePaths {
+            get {
+                return ((string)(this["LastNativePaths"]));
+            }
+            set {
+                this["LastNativePaths"] = value;
+            }
+        }
     }
 }

@@ -20,11 +20,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq.Expressions;
 using System.Text;
-using IronSmalltalk.AstJitCompiler.Runtime;
 using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Interchange;
+using IronSmalltalk.InterchangeInstaller.Runtime;
 
 namespace IronSmalltalk.Tools.ClassLibraryBrowser.Testing
 {
@@ -82,8 +82,8 @@ namespace IronSmalltalk.Tools.ClassLibraryBrowser.Testing
             Expression<Func<SmalltalkRuntime, object, object>> lambda;
             try
             {
-                AstIntermediateInitializerCode code = new AstIntermediateInitializerCode(node);
-                var compilationResult = code.CompileGlobalInitializer(this.Environment.Runtime);
+                RuntimeProgramInitializer code = new RuntimeProgramInitializer(node, null);
+                var compilationResult = code.Compile(this.Environment.Runtime);
                 if (compilationResult == null)
                     return false;
                 lambda = compilationResult.ExecutableCode;

@@ -1,15 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="IronSmalltalk.Runtime.Behavior.CompiledMethod" BaseTypeListCollapsed="true">
-    <Position X="3.75" Y="5.25" Width="1.5" />
+    <Position X="2.5" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AIAAAAAAAAAAAQAAAAAgAAAAQAACAAAAAAAAAAACAAA=</HashCode>
+      <HashCode>BIAAAAAQAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
       <FileName>Behavior\CompiledMethod.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Code" />
-    </ShowAsAssociation>
-    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="IronSmalltalk.Runtime.Behavior.IntermediateCodeBase" Collapsed="true">
     <Position X="8.25" Y="5" Width="1.75" />
@@ -35,9 +31,9 @@
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Runtime.Behavior.MethodDictionary" Collapsed="true">
-    <Position X="8.5" Y="2.5" Width="1.5" />
+    <Position X="8.5" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CBsAEAAAQgAGDhobCQAABAQAAMAAAgEmCAMoaRXUb2A=</HashCode>
+      <HashCode>CBsAEAAAQgAGDhobCQAABEQAAMAAAgEmCAMoaRXUb2A=</HashCode>
       <FileName>Behavior\MethodDictionary.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -54,6 +50,28 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Behavior\MethodDictionary.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.Runtime.Behavior.CompiledCode" Collapsed="true">
+    <Position X="0.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAQAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Behavior\CompiledCode.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="IronSmalltalk.Runtime.Behavior.NativeCompiledMethod">
+    <Position X="0.75" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Behavior\CompiledMethod.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.Runtime.Behavior.RuntimeCompiledMethod">
+    <Position X="3.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAQAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Behavior\CompiledMethod.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Interface Name="IronSmalltalk.Runtime.Behavior.IIntermediateCodeValidationErrorSink" Collapsed="true">

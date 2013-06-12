@@ -52,6 +52,7 @@ namespace TestPlayground
             this.buttonInstallTester = new System.Windows.Forms.Button();
             this.buttonSimpleRuntimeTest = new System.Windows.Forms.Button();
             this.buttonWorkspaceTester = new System.Windows.Forms.Button();
+            this.buttonNativeCompileTest = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonLexTester
@@ -124,12 +125,23 @@ namespace TestPlayground
             this.buttonWorkspaceTester.UseVisualStyleBackColor = true;
             this.buttonWorkspaceTester.Click += new System.EventHandler(this.buttonWorkspaceTester_Click);
             // 
+            // buttonNativeCompileTest
+            // 
+            this.buttonNativeCompileTest.Location = new System.Drawing.Point(12, 278);
+            this.buttonNativeCompileTest.Name = "buttonNativeCompileTest";
+            this.buttonNativeCompileTest.Size = new System.Drawing.Size(260, 32);
+            this.buttonNativeCompileTest.TabIndex = 2;
+            this.buttonNativeCompileTest.Text = "Native Compiler - Tester";
+            this.buttonNativeCompileTest.UseVisualStyleBackColor = true;
+            this.buttonNativeCompileTest.Click += new System.EventHandler(this.buttonNativeCompileTest_Click);
+            // 
             // TestTools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 299);
+            this.ClientSize = new System.Drawing.Size(284, 340);
             this.Controls.Add(this.buttonWorkspaceTester);
+            this.Controls.Add(this.buttonNativeCompileTest);
             this.Controls.Add(this.buttonSimpleRuntimeTest);
             this.Controls.Add(this.buttonInstallTester);
             this.Controls.Add(this.buttonProcessInterchangeFiles);
@@ -153,5 +165,6 @@ namespace TestPlayground
         private System.Windows.Forms.Button buttonInstallTester;
         private System.Windows.Forms.Button buttonSimpleRuntimeTest;
         private System.Windows.Forms.Button buttonWorkspaceTester;
+        private System.Windows.Forms.Button buttonNativeCompileTest;
     }
 }

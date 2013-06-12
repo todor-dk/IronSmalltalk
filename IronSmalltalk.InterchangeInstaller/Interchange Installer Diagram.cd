@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="">
+    <Position X="16.862" Y="4.708" Height="0.75" Width="1.7" />
+  </Comment>
+  <Class Name="IronSmalltalk.Interchange.FileInInformation" Collapsed="true">
+    <Position X="5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAgAAAAAAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FileInInformation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.Interchange.StringFileInInformation">
+    <Position X="4.25" Y="2.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FileInInformation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.Interchange.PathFileInInformation">
+    <Position X="0.75" Y="2.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAIAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FileInInformation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.Interchange.DelegateFileInInformation">
+    <Position X="7.75" Y="2.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FileInInformation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.Interchange.InterchangeFormatProcessor">
+    <Position X="11.25" Y="1" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>IACQAAQAAAAAAAAiAAAAAAAAEABAAACkABgCgQAAAAA=</HashCode>
+      <FileName>InterchangeFormatProcessor.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="FileInProcessor" />
+      <Property Name="FileInInformation" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="IronSmalltalk.Interchange.InterchangeInstallerContext">
+    <Position X="19.25" Y="6.25" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>IAAAAgAAABAAAAAAAIAAAAAAAAAAAAAIAAAAQECAAAA=</HashCode>
+      <FileName>InterchangeInstallerContext.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="IronSmalltalk.Interchange.InterchangeVersionService">
+    <Position X="5.25" Y="5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAgACAAAAAAABEAAIAIAAAAgAgAAAAAA=</HashCode>
+      <FileName>InterchangeVersionService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.Interchange.InterchangeVersionService10">
+    <Position X="3.5" Y="8.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>InterchangeVersionService10.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.Interchange.InterchangeVersionServiceIST10">
+    <Position X="6.5" Y="8.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>InterchangeVersionServiceIST10.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.Interchange.InternalInstallerContext">
+    <Position X="19.75" Y="9.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAABAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>InternalInstallerContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.Runtime.Installer.InstallerContext">
+    <Position X="19.75" Y="1" Width="2.75" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="IronSmalltalk.InterchangeInstaller.FileInService">
+    <Position X="24" Y="1" Width="2" />
+    <NestedTypes>
+      <Class Name="IronSmalltalk.InterchangeInstaller.FileInService.InstallErrorSink" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>FileInService.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAEAAAECAAAAgAgAABAAAAAAAAAABAAAIA=</HashCode>
+      <FileName>FileInService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="IronSmalltalk.Interchange.IFileInErrorSink">
+    <Position X="0.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IFileInErrorSink.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IronSmalltalk.Interchange.IInterchangeErrorSink">
+    <Position X="0.5" Y="7.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>IInterchangeErrorSink.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IronSmalltalk.Interchange.IInterchangeFileInProcessor">
+    <Position X="16.5" Y="1" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAACIACAAAAEAAAAAAAAAAAAAIABAAAAACAAA=</HashCode>
+      <FileName>IInterchangeFileInProcessor.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IronSmalltalk.Compiler.SemanticAnalysis.IParseErrorSink" Collapsed="true">
+    <Position X="0.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="IronSmalltalk.Compiler.LexicalAnalysis.IScanErrorSink" Collapsed="true">
+    <Position X="0.5" Y="5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

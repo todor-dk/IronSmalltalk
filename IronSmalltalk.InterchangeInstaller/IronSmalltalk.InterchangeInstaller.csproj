@@ -73,9 +73,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Compiler\DebugInfoService.cs" />
     <Compile Include="Compiler\InterchangeFormatParserIST10.cs" />
     <Compile Include="Compiler\Visiting\InterchangeParseTreeValidatingVisitor.cs" />
     <Compile Include="FileInInformation.cs" />
+    <Compile Include="FileInService.cs" />
     <Compile Include="IFileInErrorSink.cs" />
     <Compile Include="IInterchangeErrorSink.cs" />
     <Compile Include="IInterchangeFileInProcessor.cs" />
@@ -109,6 +111,7 @@
   <ItemGroup>
     <None Include="Compiler\Interchange Diagram.cd" />
     <None Include="Compiler\ParseNodes\Interchange Nodes Diagram.cd" />
+    <None Include="Interchange Installer Diagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Compiler\ParseNodes\Read Me.htm" />

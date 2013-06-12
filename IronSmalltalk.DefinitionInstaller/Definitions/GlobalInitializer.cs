@@ -30,7 +30,7 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
     {
         public SourceReference<string> GlobalName { get; private set; }
 
-        public GlobalInitializer(SourceReference<string> globalName, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, IntermediateInitializerCode code)
+        public GlobalInitializer(SourceReference<string> globalName, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, CompiledInitializer code)
             : base(sourceCodeService, methodSourceCodeService, code)
         {
             if (globalName == null)
@@ -58,33 +58,30 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
                 throw new InvalidOperationException("Should have been set in ClassDefinition.CreataGlobalObject().");
 
             if (classBinding != null)
-                return this.IntermediateCode.ValidateClassInitializer(installer.NameScope, classBinding.Value,
+                return this.Code.Validate(installer.NameScope, 
                     new IntermediateCodeValidationErrorSink(this.MethodSourceCodeService, installer));
 
             if (globalBinding.IsConstantBinding && globalBinding.HasBeenSet)
                 return installer.ReportError(this.GlobalName, InstallerErrors.GlobalIsConstant);
 
-            return this.IntermediateCode.ValidateGlobalInitializer(installer.NameScope,
+            return this.Code.Validate(installer.NameScope,
                     new IntermediateCodeValidationErrorSink(this.MethodSourceCodeService, installer));
         }
 
-        protected internal override void Execute(SmalltalkRuntime runtime)
+        protected internal override void Execute(IInstallerContext installer)
         {
+            SmalltalkRuntime runtime = installer.Runtime;
             GlobalVariableOrConstantBinding globalBinding = runtime.GlobalScope.GetGlobalVariableOrConstantBinding(this.GlobalName.Value);
             if (globalBinding != null)
             {
-                var compilationResult = this.IntermediateCode.CompileGlobalInitializer(runtime);
-                var code = compilationResult.ExecutableCode.Compile();
-                var value = code(runtime, null);
+                object value = this.Code.Execute(runtime, null);
                 globalBinding.SetValue(value);
                 return;
             }
             SmalltalkClass cls = runtime.GetClass(this.GlobalName.Value);
             if (cls != null)
             {
-                var compilationResult = this.IntermediateCode.CompileClassInitializer(runtime, cls);
-                var code = compilationResult.ExecutableCode.Compile();
-                code(runtime, cls);
+                this.Code.Execute(runtime, cls);
                 return;
             }
             throw new InvalidOperationException(); // Should not get here

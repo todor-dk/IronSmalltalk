@@ -78,8 +78,8 @@
     <Compile Include="Internals\Debugger.cs" />
     <Compile Include="Internals\ExceptionHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Runtime\AstIntermediateInitializerCode.cs" />
-    <Compile Include="Runtime\AstIntermediateMethodCode.cs" />
+    <Compile Include="Runtime\RuntimeCompiledInitializer.cs" />
+    <Compile Include="Runtime\RuntimeCompiledMethod.cs" />
     <Compile Include="Visiting\LiteralVisitor.cs" />
     <Compile Include="Visiting\PrimaryVisitor.cs" />
     <Compile Include="Visiting\StatementVisitor.cs" />
@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Internals\Exceptions Diagram.cd" />
+    <None Include="Runtime\Runtime Diagram.cd" />
     <None Include="Visiting\Visitors Diagram.cd" />
   </ItemGroup>
   <ItemGroup>

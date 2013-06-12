@@ -16,11 +16,14 @@
 
 using System;
 using System.Linq;
-using IronSmalltalk.AstJitCompiler.Runtime;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Interchange;
+using IronSmalltalk.InterchangeInstaller.Compiler;
+using IronSmalltalk.InterchangeInstaller.Runtime;
+using IronSmalltalk.Runtime;
+using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Installer;
 using IronSmalltalk.Runtime.Installer.Definitions;
 
@@ -62,6 +65,10 @@ namespace IronSmalltalk.Compiler.Interchange.ParseNodes
             // <classMethodDefinition> ::= <className> ’classMethod’ <elementSeparator>
             //      <method definition> <elementSeparator>
 
+            // The methodSourceCodeService is used for translation positions inside the method body,
+            // while the sourceCodeService is used for the method declaraion (e.g. "Integer method").
+            // In reality, most bugs will be in the method source code and therefore report errors
+            // via the methodSourceCodeService.
             ISourceCodeReferenceService methodSourceCodeService;
             MethodNode method = processor.ParseMethod(out methodSourceCodeService);
             if (method == null)
@@ -95,12 +102,20 @@ namespace IronSmalltalk.Compiler.Interchange.ParseNodes
 
         protected override MethodDefinition CreateDefinition(InterchangeFormatProcessor processor, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, MethodNode parseTree)
         {
+            // The methodSourceCodeService is used for translation positions inside the method body,
+            // while the sourceCodeService is used for the method declaraion (e.g. "Integer method").
+            // In reality, most bugs will be in the method source code and therefore report errors
+            // via the methodSourceCodeService.
+
+            Symbol selector = processor.Installer.Runtime.GetSymbol(parseTree.Selector);
+            CompiledMethod method = new RuntimeCompiledMethod(selector, parseTree, new DebugInfoService(methodSourceCodeService));
+
             return new InstanceMethodDefinition(
                 processor.CreateSourceReference(this.ClassName.Value, this.ClassName, sourceCodeService),
                 processor.CreateSourceReference(parseTree.Selector, parseTree.SelectorParts[0].StartPosition, parseTree.SelectorParts.Last().StopPosition, sourceCodeService),
                 sourceCodeService,
                 methodSourceCodeService,
-                new AstIntermediateMethodCode(parseTree));
+                method);
         }
     }
 
@@ -113,12 +128,20 @@ namespace IronSmalltalk.Compiler.Interchange.ParseNodes
 
         protected override MethodDefinition CreateDefinition(InterchangeFormatProcessor processor, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, MethodNode parseTree)
         {
+            // The methodSourceCodeService is used for translation positions inside the method body,
+            // while the sourceCodeService is used for the method declaraion (e.g. "Integer method").
+            // In reality, most bugs will be in the method source code and therefore report errors
+            // via the methodSourceCodeService.
+
+            Symbol selector = processor.Installer.Runtime.GetSymbol(parseTree.Selector);
+            CompiledMethod method = new RuntimeCompiledMethod(selector, parseTree, new DebugInfoService(methodSourceCodeService));
+
             return new ClassMethodDefinition(
                 processor.CreateSourceReference(this.ClassName.Value, this.ClassName, sourceCodeService),
                 processor.CreateSourceReference(parseTree.Selector, parseTree.SelectorParts[0].StartPosition, parseTree.SelectorParts.Last().StopPosition, sourceCodeService),
                 sourceCodeService,
                 methodSourceCodeService,
-                new AstIntermediateMethodCode(parseTree));
+                method);
         }
     }
 }

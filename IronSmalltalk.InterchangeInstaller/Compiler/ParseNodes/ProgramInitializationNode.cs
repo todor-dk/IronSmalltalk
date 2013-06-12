@@ -15,10 +15,11 @@
 */
 
 using System;
-using IronSmalltalk.AstJitCompiler.Runtime;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Interchange;
+using IronSmalltalk.InterchangeInstaller.Runtime;
+using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Installer;
 using IronSmalltalk.Runtime.Installer.Definitions;
 
@@ -59,7 +60,9 @@ namespace IronSmalltalk.Compiler.Interchange.ParseNodes
                 return this;
             }
 
-            ProgramInitializer definition = new ProgramInitializer(sourceCodeService, methodSourceCodeService, new AstIntermediateInitializerCode(initializer));
+            CompiledInitializer code = new RuntimeProgramInitializer(initializer, null);
+
+            ProgramInitializer definition = new ProgramInitializer(sourceCodeService, methodSourceCodeService, code);
             this.Definfition = definition;
             // This may fail, but we don't care. If failed, it reported the error through its error sink.
             processor.FileInProcessor.FileInProgramInitializer(definition);

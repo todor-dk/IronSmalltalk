@@ -1,40 +1,19 @@
-/*
- * **************************************************************************
- *
- * Copyright (c) The IronSmalltalk Project. 
- *
- * This source code is subject to terms and conditions of the 
- * license agreement found in the solution directory. 
- * See: $(SolutionDir)\License.htm ... in the root of this distribution.
- * By using this source code in any fashion, you are agreeing 
- * to be bound by the terms of the license agreement.
- *
- * You must not remove this notice, or any other, from this software.
- *
- * **************************************************************************
-*/
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
 using System.Linq.Expressions;
-using IronSmalltalk.Common;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace IronSmalltalk.Runtime.Behavior
 {
-    /// <summary>
-    /// Abstract class that represents the intermediate (byte) code in a Smalltalk method.
-    /// </summary>
-    public abstract class IntermediateCodeBase
-    {  
-    }
-
     /// <summary>
     /// Compilation result returned when compiling an IntermediateCode. 
     /// </summary>
     /// <typeparam name="TExpression">Type of the executable code expression.</typeparam>
     public abstract class CompilationResult<TExpression>
-        where TExpression : Expression 
+        where TExpression : Expression
     {
         /// <summary>
         /// The Expression for the executable code.
@@ -106,20 +85,5 @@ namespace IronSmalltalk.Runtime.Behavior
         {
             return new DynamicMetaObject(this.ExecutableCode, this.MergeRestrictions(restrictions));
         }
-    }
-
-    /// <summary>
-    /// Error sink for reporting errors while validating intermediate code.
-    /// </summary>
-    public interface IIntermediateCodeValidationErrorSink
-    {
-        /// <summary>
-        /// Report an intermediate code validation error.
-        /// </summary>
-        /// <param name="errorMessage">Error message</param>
-        /// <param name="start">Start location in the source code where the error occured.</param>
-        /// <param name="stop">Stop location in the source code where the error occured.</param>
-        // <returns></returns>
-        void ReportError(string errorMessage, SourceLocation start, SourceLocation stop);
     }
 }

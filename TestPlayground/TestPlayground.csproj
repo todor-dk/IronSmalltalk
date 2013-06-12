@@ -82,6 +82,12 @@
     <Compile Include="BulkParseTester.Designer.cs">
       <DependentUpon>BulkParseTester.cs</DependentUpon>
     </Compile>
+    <Compile Include="NativeCompileTester.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NativeCompileTester.Designer.cs">
+      <DependentUpon>NativeCompileTester.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tester.cs" />
     <Compile Include="WorkspaceTester.cs">
       <SubType>Form</SubType>
@@ -119,6 +125,9 @@
     <EmbeddedResource Include="BulkParseTester.resx">
       <DependentUpon>BulkParseTester.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NativeCompileTester.resx">
+      <DependentUpon>NativeCompileTester.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WorkspaceTester.resx">
       <DependentUpon>WorkspaceTester.cs</DependentUpon>
@@ -165,8 +174,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DLR\Microsoft.Scripting\Microsoft.Scripting.csproj">
@@ -200,6 +211,10 @@
     <ProjectReference Include="..\IronSmalltalk.InterchangeInstaller\IronSmalltalk.InterchangeInstaller.csproj">
       <Project>{33cc4f2a-e078-4130-89e1-f48752acab38}</Project>
       <Name>IronSmalltalk.InterchangeInstaller</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IronSmalltalk.NativeCompiler\IronSmalltalk.NativeCompiler.csproj">
+      <Project>{4de504d2-9e38-4eed-b1c6-9c6e04186b2d}</Project>
+      <Name>IronSmalltalk.NativeCompiler</Name>
     </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk.VSECompatibility\IronSmalltalk.VSECompatibility.csproj">
       <Project>{164cb761-f466-4c76-b3f1-31537bd787e7}</Project>
