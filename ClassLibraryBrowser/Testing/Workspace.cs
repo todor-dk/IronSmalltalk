@@ -20,11 +20,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq.Expressions;
 using System.Text;
+using IronSmalltalk.AstJitCompiler.Runtime;
 using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Interchange;
 using IronSmalltalk.InterchangeInstaller.Runtime;
+using IronSmalltalk.Runtime.Execution;
 
 namespace IronSmalltalk.Tools.ClassLibraryBrowser.Testing
 {
@@ -79,16 +81,12 @@ namespace IronSmalltalk.Tools.ClassLibraryBrowser.Testing
             if (errorSink.HadErrors)
                 return false;
 
-            Expression<Func<SmalltalkRuntime, object, object>> lambda;
             try
             {
                 RuntimeProgramInitializer code = new RuntimeProgramInitializer(node, null);
-                var compilationResult = code.Compile(this.Environment.Runtime);
-                if (compilationResult == null)
+                if (!code.Validate(this.Environment.Runtime.GlobalScope, errorSink))
                     return false;
-                lambda = compilationResult.ExecutableCode;
-                if (lambda == null)
-                    return false;
+                this.LastResult = code.Execute(null, new ExecutionContext(this.Environment.Runtime));
             }
             catch (IronSmalltalk.Runtime.Internal.SmalltalkDefinitionException ex)
             {
@@ -101,12 +99,6 @@ namespace IronSmalltalk.Tools.ClassLibraryBrowser.Testing
                 if (this.Client != null)
                     this.Client.ReportError(ex.Message, SourceLocation.Invalid, SourceLocation.Invalid);
                 return false;
-            }
-
-            try
-            {
-                var function = lambda.Compile();
-                this.LastResult = function(this.Environment.Runtime, null);
             }
             catch (Exception ex)
             {
@@ -129,7 +121,7 @@ namespace IronSmalltalk.Tools.ClassLibraryBrowser.Testing
 
         #region Reporting
 
-        private class ErrorSink : IronSmalltalk.Internals.ErrorSinkBase
+        private class ErrorSink : IronSmalltalk.Internals.ErrorSinkBase, IRuntimeCodeValidationErrorSink
         {
             public bool HadErrors;
             private IWorkspaceClient Client;
@@ -144,6 +136,13 @@ namespace IronSmalltalk.Tools.ClassLibraryBrowser.Testing
                 this.HadErrors = true;
                 if (this.Client != null)
                     this.Client.ReportError(message, start, end);
+            }
+
+            void IRuntimeCodeValidationErrorSink.ReportError(string errorMessage, SourceLocation start, SourceLocation stop)
+            {
+                this.HadErrors = true;
+                if (this.Client != null)
+                    this.Client.ReportError(errorMessage, start, stop);
             }
         }
 

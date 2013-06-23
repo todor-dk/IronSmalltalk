@@ -85,8 +85,10 @@
     <Compile Include="Definitions\GlobalInitializer.cs" />
     <Compile Include="Definitions\GlobalVariableDefinition.cs" />
     <Compile Include="Definitions\InitializerDefinition.cs" />
+    <Compile Include="Definitions\IInitializerFactory.cs" />
     <Compile Include="Definitions\InstanceMethodDefinition.cs" />
     <Compile Include="Definitions\MethodDefinition.cs" />
+    <Compile Include="Definitions\IMethodFactory.cs" />
     <Compile Include="Definitions\PoolConstantDefinition.cs" />
     <Compile Include="Definitions\PoolDefinition.cs" />
     <Compile Include="Definitions\PoolValueDefinition.cs" />

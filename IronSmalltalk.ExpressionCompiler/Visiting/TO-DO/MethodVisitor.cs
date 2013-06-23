@@ -20,6 +20,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using IronSmalltalk.Compiler.SemanticNodes;
+using IronSmalltalk.ExpressionCompiler;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.CodeGeneration.Bindings;
 using IronSmalltalk.Runtime.CodeGeneration.BindingScopes;

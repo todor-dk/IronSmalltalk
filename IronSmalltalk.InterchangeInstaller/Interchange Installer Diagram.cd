@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Comment CommentText="">
-    <Position X="16.862" Y="4.708" Height="0.75" Width="1.7" />
+    <Position X="15.916" Y="4.444" Height="0.75" Width="1.7" />
   </Comment>
   <Class Name="IronSmalltalk.Interchange.FileInInformation" Collapsed="true">
     <Position X="5" Y="1" Width="1.5" />
@@ -9,6 +9,7 @@
       <HashCode>AAAAAAAAAQAAAAAgAAAAAAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
       <FileName>FileInInformation.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="IronSmalltalk.Interchange.StringFileInInformation">
     <Position X="4.25" Y="2.25" Width="2.75" />
@@ -34,7 +35,7 @@
   <Class Name="IronSmalltalk.Interchange.InterchangeFormatProcessor">
     <Position X="11.25" Y="1" Width="3.25" />
     <TypeIdentifier>
-      <HashCode>IACQAAQAAAAAAAAiAAAAAAAAEABAAACkABgCgQAAAAA=</HashCode>
+      <HashCode>IACQAAQAAAAAAAAiAAAAAAAAEABAAAAkABgCgQAAAAA=</HashCode>
       <FileName>InterchangeFormatProcessor.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>

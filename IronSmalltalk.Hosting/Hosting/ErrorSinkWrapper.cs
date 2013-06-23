@@ -18,6 +18,7 @@
 
 
 using System;
+using IronSmalltalk.AstJitCompiler.Runtime;
 using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticNodes;
@@ -31,7 +32,7 @@ namespace IronSmalltalk.Runtime.Hosting
     /// 
     /// It forwards the error to the external ErrorSink provided by the DLR.
     /// </summary>
-    public class ErrorSinkWrapper : IFileInErrorSink
+    public class ErrorSinkWrapper : IFileInErrorSink, IRuntimeCodeValidationErrorSink
     {
         public const int ScanErrorCode = 100;
         public const int ParseErrorCode = 200;
@@ -233,6 +234,15 @@ namespace IronSmalltalk.Runtime.Hosting
         //    //    return new SourceLocation(position, info.LineIndex, position - info.StartIndex + 1);
         //    //}
         //}
+
+        void IRuntimeCodeValidationErrorSink.ReportError(string errorMessage, SourceLocation start, SourceLocation stop)
+        {
+            this.ErrorSink.Add(this.SourceUnit,
+                errorMessage,
+                this.GetSpan(start, stop),
+                ErrorSinkWrapper.InstallErrorCode,
+                Microsoft.Scripting.Severity.Error);
+        }
     }
 
 }

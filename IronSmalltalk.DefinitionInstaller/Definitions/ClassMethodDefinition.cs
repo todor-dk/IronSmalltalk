@@ -16,13 +16,14 @@
 
 using System;
 using IronSmalltalk.Runtime.Behavior;
+using IronSmalltalk.DefinitionInstaller.Definitions;
 
 namespace IronSmalltalk.Runtime.Installer.Definitions
 {
     public class ClassMethodDefinition : MethodDefinition
     {
-        public ClassMethodDefinition(SourceReference<string> className, SourceReference<string> selector, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, CompiledMethod code)
-            : base(className, selector, sourceCodeService, methodSourceCodeService, code)
+        public ClassMethodDefinition(SourceReference<string> className, SourceReference<string> selector, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, IMethodFactory factory)
+            : base(className, selector, sourceCodeService, methodSourceCodeService, factory)
         {
         }
 
@@ -33,14 +34,18 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
 
         protected override bool InternalAddMethod(IInstallerContext installer, SmalltalkClass cls)
         {
-            System.Diagnostics.Debug.Assert(this.Selector.Value == this.Code.Selector.Value);
-            cls.ClassBehavior[this.Code.Selector] = this.Code;
+            CompiledMethod method = this.Factory.CreateMethod(this, installer, cls);
+            if (method == null)
+                return false;
+            System.Diagnostics.Debug.Assert(this.Selector.Value == method.Selector.Value);
+            cls.ClassBehavior[method.Selector] = method;
+            this.CompiledCode = method;
             return true;
         }
 
-        protected override bool InternalValidateMethod(IInstallerContext installer, SmalltalkClass cls, IIntermediateCodeValidationErrorSink errorSink)
+        protected override bool InternalValidateMethod(IInstallerContext installer, SmalltalkClass cls, ICodeValidationErrorSink errorSink)
         {
-            return this.Code.ValidateClassMethod(cls, installer.NameScope, errorSink);
+            return this.Factory.ValidateClassMethod(this, installer, cls, errorSink);
         }
     }
 }

@@ -21,7 +21,7 @@ using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Interchange;
 using IronSmalltalk.InterchangeInstaller.Compiler;
-using IronSmalltalk.InterchangeInstaller.Runtime;
+using IronSmalltalk.InterchangeInstaller.Compiler.DefinitionInstaller;
 using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Installer;
@@ -107,15 +107,14 @@ namespace IronSmalltalk.Compiler.Interchange.ParseNodes
             // In reality, most bugs will be in the method source code and therefore report errors
             // via the methodSourceCodeService.
 
-            Symbol selector = processor.Installer.Runtime.GetSymbol(parseTree.Selector);
-            CompiledMethod method = new RuntimeCompiledMethod(selector, parseTree, new DebugInfoService(methodSourceCodeService));
+            RuntimeCompiledMethodFactory factory = new RuntimeCompiledMethodFactory(parseTree, methodSourceCodeService);
 
             return new InstanceMethodDefinition(
                 processor.CreateSourceReference(this.ClassName.Value, this.ClassName, sourceCodeService),
                 processor.CreateSourceReference(parseTree.Selector, parseTree.SelectorParts[0].StartPosition, parseTree.SelectorParts.Last().StopPosition, sourceCodeService),
                 sourceCodeService,
                 methodSourceCodeService,
-                method);
+                factory);
         }
     }
 
@@ -133,15 +132,14 @@ namespace IronSmalltalk.Compiler.Interchange.ParseNodes
             // In reality, most bugs will be in the method source code and therefore report errors
             // via the methodSourceCodeService.
 
-            Symbol selector = processor.Installer.Runtime.GetSymbol(parseTree.Selector);
-            CompiledMethod method = new RuntimeCompiledMethod(selector, parseTree, new DebugInfoService(methodSourceCodeService));
+            RuntimeCompiledMethodFactory factory = new RuntimeCompiledMethodFactory(parseTree, methodSourceCodeService);
 
             return new ClassMethodDefinition(
                 processor.CreateSourceReference(this.ClassName.Value, this.ClassName, sourceCodeService),
                 processor.CreateSourceReference(parseTree.Selector, parseTree.SelectorParts[0].StartPosition, parseTree.SelectorParts.Last().StopPosition, sourceCodeService),
                 sourceCodeService,
                 methodSourceCodeService,
-                method);
+                factory);
         }
     }
 }

@@ -78,12 +78,14 @@
     <Compile Include="Behavior\CompilationResult.cs" />
     <Compile Include="Behavior\CompiledCode.cs" />
     <Compile Include="Behavior\CompiledInitializer.cs" />
-    <Compile Include="Behavior\InitializerCompilationResult.cs" />
     <Compile Include="Behavior\MethodCompilationResult.cs" />
+    <Compile Include="Behavior\NativeCompiledInitializer.cs" />
+    <Compile Include="Bindings\InitializerList.cs" />
     <Compile Include="Bindings\ISmalltalkNameScopeVisitor.cs" />
     <Compile Include="Execution\CallSiteBinders\MessageSendCallSiteBinderBase.cs" />
     <Compile Include="Execution\CallSiteBinders\SmalltalkDynamicMetaObjectBinder.cs" />
     <Compile Include="Execution\Dynamic\SmalltalkRuntimeDynamicMetaObject.cs" />
+    <Compile Include="Execution\ExecutionContext.cs" />
     <Compile Include="Execution\Internals\Primitives\BuiltInPrimitives.cs" />
     <Compile Include="Execution\Internals\Primitives\BuiltInPrimitiveHelper.cs" />
     <Compile Include="Execution\Internals\Primitives\BuiltInPrimitivesEnum.cs" />

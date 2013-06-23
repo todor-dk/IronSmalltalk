@@ -76,12 +76,6 @@ namespace IronSmalltalk.Interchange
         public FileInInformation FileInInformation { get; private set; }
 
         /// <summary>
-        /// Installer context encapsulates and represents the transaction that is
-        /// associated with installing definitions (sources) into the smalltalk context.
-        /// </summary>
-        public IInstallerContext Installer { get; private set; }
-
-        /// <summary>
         /// The text reader containing the source code.
         /// </summary>
         private readonly TextReader Reader;
@@ -118,7 +112,7 @@ namespace IronSmalltalk.Interchange
         /// <param name="fileInProcessor">File-in processor that will be notified about each filed-in element.</param>
         /// <param name="versionServicesMap">Map between interchange versions and interchange-version-services.</param>
         public InterchangeFormatProcessor(FileInInformation fileInInfo, TextReader sourceCodeReader, IInterchangeFileInProcessor fileInProcessor, 
-            IInstallerContext installer, IDictionary<string, InterchangeVersionService> versionServicesMap)
+            IDictionary<string, InterchangeVersionService> versionServicesMap)
         {
             if (fileInInfo == null)
                 throw new ArgumentNullException("fileInInfo");
@@ -126,15 +120,12 @@ namespace IronSmalltalk.Interchange
                 throw new ArgumentNullException("sourceCodeReader");
             if (fileInProcessor == null)
                 throw new ArgumentNullException("fileInProcessor");
-            if (installer == null)
-                throw new ArgumentNullException("installer");
             if (versionServicesMap == null)
                 throw new ArgumentNullException("versionServicesMap");
             this.FileInInformation = fileInInfo;
             this.ErrorSink = fileInInfo.ErrorSink;
             this.Reader = sourceCodeReader;
             this.FileInProcessor = fileInProcessor;
-            this.Installer = installer;
             this.VersionServicesMap = versionServicesMap;
             this.SourcePosition = SourceLocation.Invalid;
         }

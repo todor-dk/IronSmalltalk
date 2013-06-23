@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
+using IronSmalltalk.Runtime.Execution;
 
 namespace IronSmalltalk.Runtime.Internal
 {
@@ -178,6 +180,13 @@ namespace IronSmalltalk.Runtime.Internal
             binding.Annotate(key, value);
         }
 
+        public static void AnnotateObject(CompiledInitializer initializer, string key, string value)
+        {
+            if (initializer == null)
+                throw new ArgumentNullException("initializer");
+            initializer.Annotate(key, value);
+        }
+
         public static PoolVariableBinding CreatePoolVariableBinding(SmalltalkRuntime runtime, PoolBinding poolBinding, string name)
         {
             if (runtime == null)
@@ -202,6 +211,117 @@ namespace IronSmalltalk.Runtime.Internal
             PoolConstantBinding binding = new PoolConstantBinding(varName);
             poolBinding.Value.Add(binding);
             return binding;
+        }
+
+        public static SmalltalkRuntime CreateRuntime(bool initialize, Action<SmalltalkRuntime, SmalltalkNameScope> extensionScopeInitializer, Action<SmalltalkRuntime, SmalltalkNameScope> globalScopeInitializer)
+        {
+            if (extensionScopeInitializer == null)
+                throw new ArgumentNullException("extensionScopeInitializer");
+            if (globalScopeInitializer == null)
+                throw new ArgumentNullException("globalScopeInitializer");
+
+            SmalltalkRuntime runtime = new SmalltalkRuntime();
+
+            ExecutionContext executionContext = new ExecutionContext(runtime);
+    
+            // Extension scope
+            SmalltalkNameScope scope = runtime.ExtensionScope.Copy();
+            extensionScopeInitializer(runtime, scope);
+            runtime.SetExtensionScope(scope);
+            NativeLoadHelper.RecompileClasses(scope);
+            if (initialize)
+                scope.ExecuteInitializers(executionContext);
+
+            // Global scope
+            scope = runtime.GlobalScope.Copy();
+            globalScopeInitializer(runtime, scope);
+            runtime.SetGlobalScope(scope);
+            NativeLoadHelper.RecompileClasses(scope);
+            if (initialize)
+                scope.ExecuteInitializers(executionContext);
+
+            return runtime;
+        }
+
+        private static void RecompileClasses(SmalltalkNameScope scope)
+        {
+            List<SmalltalkClass> toRecompile = new List<SmalltalkClass>();
+            foreach (ClassBinding cls in scope.Classes)
+            {
+                // Do not recompile classes that we are going to recompile anyway
+                bool subclassOfRecompiled = false;
+                foreach (ClassBinding c in scope.Classes)
+                {
+                    if (NativeLoadHelper.InheritsFrom(cls.Value, c.Value))
+                    {
+                        subclassOfRecompiled = true;
+                        break;
+                    }
+                }
+                if (!subclassOfRecompiled)
+                    toRecompile.Add(cls.Value);
+            }
+
+            foreach (SmalltalkClass cls in toRecompile)
+            {
+                cls.Recompile();
+            }
+        }
+
+        private static bool InheritsFrom(SmalltalkClass self, SmalltalkClass cls)
+        {
+            while (self != null)
+            {
+                if (self.Superclass == cls)
+                    return true;
+                self = self.Superclass;
+            }
+            return false;
+        }
+
+        private static Type[] InitializerDelegateTypes = new Type[] { typeof(object), typeof(ExecutionContext) };
+
+        public static CompiledInitializer AddProgramInitializer(SmalltalkRuntime runtime, SmalltalkNameScope scope, Type delegateType, string delegateName)
+        {
+            return NativeLoadHelper.AddInitializer(scope, InitializerType.ProgramInitializer, null, delegateType, delegateName);
+        }
+
+        public static CompiledInitializer AddClassInitializer(SmalltalkRuntime runtime, SmalltalkNameScope scope, Type delegateType, string delegateName, string className)
+        {
+            ClassBinding binding = scope.GetClassBinding(className);
+            if (binding == null)
+                throw new ArgumentException(String.Format("Class named {0} does not exist.", className));
+            return NativeLoadHelper.AddInitializer(scope, InitializerType.ClassInitializer, binding, delegateType, delegateName);
+        }
+
+        public static CompiledInitializer AddGlobalInitializer(SmalltalkRuntime runtime, SmalltalkNameScope scope, Type delegateType, string delegateName, string globalName)
+        {
+            GlobalVariableOrConstantBinding binding = scope.GetGlobalVariableOrConstantBinding(globalName);
+            if (binding == null)
+                throw new ArgumentException(String.Format("Global variable or constant named {0} does not exist.", globalName));
+            return NativeLoadHelper.AddInitializer(scope, InitializerType.GlobalInitializer, binding, delegateType, delegateName);
+        }
+
+        public static CompiledInitializer AddPoolInitializer(SmalltalkRuntime runtime, SmalltalkNameScope scope, Type delegateType, string delegateName, string poolName, string poolItemName)
+        {
+            PoolBinding poolBinding = scope.GetPoolBinding(poolName);
+            if ((poolBinding == null) || (poolBinding.Value == null))
+                throw new ArgumentException(String.Format("Pool named {0} does not exist.", poolName));
+            PoolVariableOrConstantBinding binding = poolBinding.Value[poolItemName];
+            if (binding == null)
+                throw new ArgumentException(String.Format("Pool variable or constant named {0} does not exist in pool {1}.", poolItemName, poolName));
+            return NativeLoadHelper.AddInitializer(scope, InitializerType.PoolVariableInitializer, binding, delegateType, delegateName);
+        }
+
+        private static CompiledInitializer AddInitializer(SmalltalkNameScope scope, InitializerType type, IDiscreteBinding binding, Type delegateType, string delegateName)
+        {
+
+            MethodInfo method = delegateType.GetMethod(delegateName, BindingFlags.Public | BindingFlags.Static, null, NativeLoadHelper.InitializerDelegateTypes, null);
+            Func<object, ExecutionContext, object> functionDelegate = (Func<object, ExecutionContext, object>) method.CreateDelegate(typeof(Func<object, ExecutionContext, object>));
+
+            NativeCompiledInitializer initializer = new NativeCompiledInitializer(type, binding, functionDelegate);
+            scope.Initializers.Add(initializer);
+            return initializer;
         }
     }
 }

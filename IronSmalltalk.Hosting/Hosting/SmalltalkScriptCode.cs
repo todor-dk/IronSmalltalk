@@ -16,7 +16,8 @@
 
 using System;
 using System.Linq.Expressions;
-using System.Threading;
+using IronSmalltalk.Runtime.Behavior;
+using IronSmalltalk.Runtime.Execution;
 using Microsoft.Scripting;
 
 namespace IronSmalltalk.Runtime.Hosting
@@ -32,10 +33,10 @@ namespace IronSmalltalk.Runtime.Hosting
         /// <summary>
         /// Create a new SmalltalkScriptCode.
         /// </summary>
-        /// <param name="code">Expression/Expression Tree code representing the code to be execution.</param>
+        /// <param name="code">Initializer code representing the code to be execution.</param>
         /// <param name="runtime">The IronSmalltalk Runtime this source is bound to.</param>
         /// <param name="sourceUnit">SourceUnit that resulted in the generated code.</param>
-        public SmalltalkScriptCode(Expression<Func<SmalltalkRuntime, object, object>> code, SmalltalkRuntime runtime, SourceUnit sourceUnit)
+        public SmalltalkScriptCode(CompiledInitializer code, SmalltalkRuntime runtime, SourceUnit sourceUnit)
             : base(sourceUnit)
         {
             if (code == null)
@@ -54,34 +55,9 @@ namespace IronSmalltalk.Runtime.Hosting
         public SmalltalkRuntime Runtime { get; private set; }
 
         /// <summary>
-        /// This is the Expression/Expression Tree code representing the code to be execution.
+        /// This is the initializer code representing the code to be execution.
         /// </summary>
-        /// <remarks>
-        /// This is equivelent to metadata for the actual IL code to be generated.
-        /// </remarks>
-        public Expression<Func<SmalltalkRuntime, object, object>> Code { get; private set; }
-
-        /// <summary>
-        /// Private variable being lazy-initialized and that holds the compiled executable code.
-        /// </summary>
-        private Func<SmalltalkRuntime, object, object> _target;
-
-        /// <summary>
-        /// This is the compiled code (delegate) that can be executed.
-        /// </summary>
-        public Func<SmalltalkRuntime, object, object> Target
-        {
-            get
-            {
-                // If not compiled, compile the metadata to IL code (delegate).
-                if (this._target == null)
-                {
-                    Func<SmalltalkRuntime, object, object> compiled = this.Code.Compile();
-                    Interlocked.CompareExchange(ref this._target, compiled, null);
-                }
-                return this._target;
-            }
-        }
+        public CompiledInitializer Code { get; private set; }
 
         /// <summary>
         /// Run the code in the given scope.
@@ -95,7 +71,7 @@ namespace IronSmalltalk.Runtime.Hosting
             // 2. We execute it with:
             //      - The SmalltalkEnvironment (that is bound to the LanguageContext)
             //      - The receiver ... which is currently set to nil (null).
-            return this.Target(this.Runtime, null);
+            return this.Code.Execute(null, new ExecutionContext(this.Runtime));
         }
     }
 }

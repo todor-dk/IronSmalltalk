@@ -16,6 +16,8 @@
 
 using System;
 using System.Collections.Generic;
+using IronSmalltalk.Runtime.Behavior;
+using IronSmalltalk.Runtime.Execution;
 
 namespace IronSmalltalk.Runtime.Bindings
 {
@@ -57,6 +59,7 @@ namespace IronSmalltalk.Runtime.Bindings
         public DiscreteBindingDictionary<PoolBinding> Pools { get; private set; }
         public DiscreteBindingDictionary<GlobalVariableBinding> GlobalVariables { get; private set; }
         public DiscreteBindingDictionary<GlobalConstantBinding> GlobalConstants { get; private set; }
+        public InitializerList Initializers { get; private set; }
 
         public DiscreteBindingDictionary<ClassBinding> AllClasses { get; private set; }
         public DiscreteBindingDictionary<PoolBinding> AllPools { get; private set; }
@@ -77,6 +80,7 @@ namespace IronSmalltalk.Runtime.Bindings
             this.GlobalConstants = new DiscreteBindingDictionary<GlobalConstantBinding>(runtime, 20);
             this.GlobalVariables = new DiscreteBindingDictionary<GlobalVariableBinding>(runtime, 20);
             this.Pools = new DiscreteBindingDictionary<PoolBinding>(runtime, 20);
+            this.Initializers = new InitializerList();
             this.ProtectedNames = new List<Symbol>();
             this.OuterScope = outerScope;
         }
@@ -89,6 +93,7 @@ namespace IronSmalltalk.Runtime.Bindings
             result.GlobalVariables.AddRange(this.GlobalVariables);
             result.Pools.AddRange(this.Pools);
             result.ProtectedNames.AddRange(this.ProtectedNames);
+            result.Initializers.AddRange(this.Initializers);
             return result; // NB: Result IS NOT write-protected.
         }
 
@@ -243,6 +248,7 @@ namespace IronSmalltalk.Runtime.Bindings
                 this.GlobalConstants.WriteProtect();
                 this.GlobalVariables.WriteProtect();
                 this.Pools.WriteProtect();
+                this.Initializers.WriteProtect();
 
                 this.AllClasses = new DiscreteBindingDictionary<ClassBinding>(this.Runtime,
                     this.Classes.Count + ((this.OuterScope == null) ? 0 : this.OuterScope.AllClasses.Count));
@@ -311,6 +317,12 @@ namespace IronSmalltalk.Runtime.Bindings
             }
         }
 
+        public void ExecuteInitializers(ExecutionContext executionContext)
+        {
+            foreach (CompiledInitializer initializer in this.Initializers)
+                initializer.ExecuteInitializer(executionContext);
+        }
+
         public void Accept(ISmalltalkNameScopeVisitor visitor)
         {
             if (visitor == null)
@@ -330,6 +342,9 @@ namespace IronSmalltalk.Runtime.Bindings
 
             foreach(GlobalConstantBinding binding in this.GlobalConstants.Values)
                 visitor.Visit(binding);
+
+            foreach (CompiledInitializer initializer in this.Initializers)
+                visitor.Visit(initializer);
         }
     }
 }

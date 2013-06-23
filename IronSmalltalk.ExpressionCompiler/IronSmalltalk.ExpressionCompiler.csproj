@@ -43,6 +43,11 @@
     <Compile Include="Internals\CodeGenerationErrors.cs" />
     <Compile Include="Internals\ExceptionHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Runtime\IDebugInfoService.cs" />
+    <Compile Include="Runtime\InitializerCompilationResult.cs" />
+    <Compile Include="Runtime\IRuntimeCodeValidationErrorSink.cs" />
+    <Compile Include="Runtime\RuntimeCompiledInitializer.cs" />
+    <Compile Include="Runtime\RuntimeCompiledMethod.cs" />
     <Compile Include="Visiting\ExpressionVisitor.cs" />
     <Compile Include="Visiting\LiteralVisitor.cs" />
     <Compile Include="Visiting\PrimaryVisitor.cs" />

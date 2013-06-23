@@ -83,8 +83,6 @@ namespace IronSmalltalk.Runtime.Behavior
 
         public abstract MethodCompilationResult CompileInstanceMethod(SmalltalkRuntime runtime, SmalltalkClass cls, DynamicMetaObject self, DynamicMetaObject[] arguments, Symbol superScope);
         public abstract MethodCompilationResult CompileClassMethod(SmalltalkRuntime runtime, SmalltalkClass cls, DynamicMetaObject self, DynamicMetaObject[] arguments, Symbol superScope);
-        public abstract bool ValidateInstanceMethod(SmalltalkClass cls, SmalltalkNameScope globalNameScope, IIntermediateCodeValidationErrorSink errorSink);
-        public abstract bool ValidateClassMethod(SmalltalkClass cls, SmalltalkNameScope globalNameScope, IIntermediateCodeValidationErrorSink errorSink);
     }
 
     public sealed class NativeCompiledMethod : CompiledMethod
@@ -100,16 +98,6 @@ namespace IronSmalltalk.Runtime.Behavior
         }
 
         public override MethodCompilationResult CompileInstanceMethod(SmalltalkRuntime runtime, SmalltalkClass cls, DynamicMetaObject self, DynamicMetaObject[] arguments, Symbol superScope)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool ValidateInstanceMethod(SmalltalkClass cls, SmalltalkNameScope globalNameScope, IIntermediateCodeValidationErrorSink errorSink)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool ValidateClassMethod(SmalltalkClass cls, SmalltalkNameScope globalNameScope, IIntermediateCodeValidationErrorSink errorSink)
         {
             throw new NotImplementedException();
         }

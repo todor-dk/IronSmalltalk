@@ -18,10 +18,11 @@ using System;
 using System.Linq;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
+using IronSmalltalk.DefinitionInstaller.Definitions;
 
 namespace IronSmalltalk.Runtime.Installer.Definitions
 {
-    public abstract class MethodDefinition : CodeBasedDefinition<CompiledMethod>
+    public abstract class MethodDefinition : CodeBasedDefinition<IMethodFactory, CompiledMethod>
     {
         /// <summary>
         /// Name of the class that defines the method.
@@ -33,15 +34,13 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         /// </summary>
         public SourceReference<string> Selector { get; private set; }
 
-        public MethodDefinition(SourceReference<string> className, SourceReference<string> selector, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, CompiledMethod code)
+        public MethodDefinition(SourceReference<string> className, SourceReference<string> selector, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, IMethodFactory code)
             : base(sourceCodeService, methodSourceCodeService, code)
         {
             if (className == null)
                 throw new ArgumentNullException("className");
             if (selector == null)
                 throw new ArgumentNullException("selector");
-            if (selector.Value != code.Selector.Value)
-                throw new ArgumentException("The 'selector' parameter and the selector of the 'code' parameter do not match.");
             this.ClassName = className;
             this.Selector = selector;
         }
@@ -87,6 +86,6 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
 
         protected abstract bool InternalAddMethod(IInstallerContext installer, SmalltalkClass cls);
 
-        protected abstract bool InternalValidateMethod(IInstallerContext installer, SmalltalkClass cls, IIntermediateCodeValidationErrorSink errorSink);
+        protected abstract bool InternalValidateMethod(IInstallerContext installer, SmalltalkClass cls, ICodeValidationErrorSink errorSink);
     }
 }

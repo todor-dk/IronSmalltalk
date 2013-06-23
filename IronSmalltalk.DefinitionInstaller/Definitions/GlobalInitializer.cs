@@ -17,6 +17,8 @@
 using System;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
+using IronSmalltalk.DefinitionInstaller.Definitions;
+using IronSmalltalk.Runtime.Execution;
 
 namespace IronSmalltalk.Runtime.Installer.Definitions
 {
@@ -26,12 +28,12 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
     /// <remarks>
     /// This class handles initialization for both classes and global variables / constants
     /// </remarks>
-    public class GlobalInitializer : InitializerDefinition
+    public class GlobalInitializer : InitializerDefinition<IGlobalInitializerFactory>
     {
         public SourceReference<string> GlobalName { get; private set; }
 
-        public GlobalInitializer(SourceReference<string> globalName, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, CompiledInitializer code)
-            : base(sourceCodeService, methodSourceCodeService, code)
+        public GlobalInitializer(SourceReference<string> globalName, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, IGlobalInitializerFactory factory)
+            : base(sourceCodeService, methodSourceCodeService, factory)
         {
             if (globalName == null)
                 throw new ArgumentNullException("globalName");
@@ -58,34 +60,14 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
                 throw new InvalidOperationException("Should have been set in ClassDefinition.CreataGlobalObject().");
 
             if (classBinding != null)
-                return this.Code.Validate(installer.NameScope, 
+                return this.Factory.ValidateClassInitializer(this, classBinding.Value, installer, 
                     new IntermediateCodeValidationErrorSink(this.MethodSourceCodeService, installer));
 
             if (globalBinding.IsConstantBinding && globalBinding.HasBeenSet)
                 return installer.ReportError(this.GlobalName, InstallerErrors.GlobalIsConstant);
 
-            return this.Code.Validate(installer.NameScope,
+            return this.Factory.ValidateGlobalInitializer(this, installer,
                     new IntermediateCodeValidationErrorSink(this.MethodSourceCodeService, installer));
         }
-
-        protected internal override void Execute(IInstallerContext installer)
-        {
-            SmalltalkRuntime runtime = installer.Runtime;
-            GlobalVariableOrConstantBinding globalBinding = runtime.GlobalScope.GetGlobalVariableOrConstantBinding(this.GlobalName.Value);
-            if (globalBinding != null)
-            {
-                object value = this.Code.Execute(runtime, null);
-                globalBinding.SetValue(value);
-                return;
-            }
-            SmalltalkClass cls = runtime.GetClass(this.GlobalName.Value);
-            if (cls != null)
-            {
-                this.Code.Execute(runtime, cls);
-                return;
-            }
-            throw new InvalidOperationException(); // Should not get here
-        }
-
     }
 }

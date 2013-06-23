@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -26,8 +27,16 @@ namespace TestPlayground
             InitializeComponent();
         }
 
+        private Type XXX()
+        {
+            Type type = typeof(BulkParseTester);
+            return type;
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
+            
+
             ErrorSink errorSink = new ErrorSink(this);
 
             var paths = this.textSourceFiles.Text.Split('\n').Concat(this.openFileDialog.FileNames);
@@ -57,15 +66,68 @@ namespace TestPlayground
             //}
 
             var runtime = new SmalltalkRuntime();
-            var compilerService = new FileInService(runtime, true, null);
+            var compilerService = new FileInService(runtime, true, fis => new NativeCompilerInterchangeInstallerContext(fis.Runtime));
 
-            compilerService.Install(fileIns);
+            NativeCompilerInterchangeInstallerContext installer = (NativeCompilerInterchangeInstallerContext) compilerService.Read(fileIns);
 
-            IronSmalltalk.NativeCompiler.NativeCompiler.GenerateNativeAssembly(runtime,
-                "IronSmalltalk.Test", "C:\\Temp", "IronSt", "dll", true,
-                "Iron Smalltalk Product", "1.2.3.4", "Iron Company", "Copy(right)", "Iron(tm)");
+            installer.ErrorSink = new InstallErrorSink();
+            installer.InstallMetaAnnotations = compilerService.InstallMetaAnnotations;
+            if (!installer.Install())
+                return;
+
+            IronSmalltalk.NativeCompiler.NativeCompilerParameters parameters = new IronSmalltalk.NativeCompiler.NativeCompilerParameters();
+            parameters.AssemblyName = "IronSt";
+            parameters.Company = "Iron Company";
+            parameters.Copyright = "Copy(right)";
+            parameters.EmitDebugSymbols = true;
+            parameters.FileExtension = "dll";
+            parameters.OutputDirectory = "c:\\temp";
+            parameters.Product = "Iron Smalltalk Product";
+            parameters.ProductVersion = "1.2.3.4";
+            parameters.RootNamespace = "IronSmalltalk.Test";
+            parameters.Runtime = runtime;
+            parameters.Trademark = "Iron(tm)";
+
+            IronSmalltalk.NativeCompiler.NativeCompiler.GenerateNativeAssembly(parameters);
 
             MessageBox.Show("SUCCESS!");
+        }
+
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Assembly assembly = Assembly.LoadFile("c:\\temp\\IronSt.dll");
+            Type type = assembly.GetType("IronSmalltalk.Test.Smalltalk");
+            MethodInfo method = type.GetMethod("CreateRuntime", new Type[0]);
+            object runtime = method.Invoke(null, null);
+
+            MessageBox.Show("SUCCESS!");
+        }
+
+        public class NativeCompilerInterchangeInstallerContext : InterchangeInstallerContext
+        {
+            public NativeCompilerInterchangeInstallerContext(SmalltalkRuntime runtime)
+                : base(runtime)
+            {
+            }
+        }
+
+        private class InstallErrorSink : IInstallErrorSink
+        {
+            public void AddInstallError(string installErrorMessage, ISourceReference sourceReference)
+            {
+                if (sourceReference == null)
+                    throw new ArgumentNullException("sourceReference");
+                FileInInformation sourceObject = sourceReference.Service.SourceObject as FileInInformation;
+#if DEBUG
+                System.Diagnostics.Debug.Assert(sourceObject != null);
+#endif
+                if (sourceObject == null)
+                    return; // This is like having no error sink
+                if (sourceObject.ErrorSink == null)
+                    return;
+                sourceObject.ErrorSink.AddInstallError(sourceReference.StartPosition, sourceReference.StopPosition, installErrorMessage);
+            }
         }
 
         private void AddError(string type, SourceLocation startPosition, SourceLocation stopPosition, string errorMessage)
@@ -162,5 +224,6 @@ namespace TestPlayground
         {
             this.textSourceFiles.Text = Properties.Settings.Default.LastNativePaths;
         }
+
     }
 }

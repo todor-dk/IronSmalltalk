@@ -27,6 +27,7 @@ using IronSmalltalk.Hosting.Hosting;
 using IronSmalltalk.Interchange;
 using IronSmalltalk.InterchangeInstaller.Runtime;
 using IronSmalltalk.Internals;
+using IronSmalltalk.Runtime.Execution;
 using IronSmalltalk.Runtime.Hosting;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Runtime;
@@ -205,22 +206,18 @@ namespace IronSmalltalk.Hosting.Hosting
             // THE CODE BELOW NEEDS CLEAN-UP !!!
             // 1. Parse the code to an AST
             Parser parser = new Parser();
-            parser.ErrorSink = new ErrorSinkWrapper(sourceUnit, errorSink); ;
+            parser.ErrorSink = new ErrorSinkWrapper(sourceUnit, errorSink); 
             InitializerNode node = parser.ParseInitializer(sourceUnit.GetReader());
             if ((node == null) || !node.Accept(ParseTreeValidatingVisitor.Current))
                 return null; // Failed to compile the code, return null
 
-            // 2. Compile the AST to Expression
+            // 2. Compile the AST to RuntimeProgramInitializer
             RuntimeProgramInitializer code = new RuntimeProgramInitializer(node, null);
-            IronSmalltalk.Runtime.Behavior.InitializerCompilationResult compilationResult = code.Compile(this.SmalltalkEnvironment.Runtime);
-            if (compilationResult == null)
+            if (code.Validate(this.SmalltalkEnvironment.Runtime.GlobalScope, new ErrorSinkWrapper(sourceUnit, errorSink)))
                 return null; // Failed to compile the code, return null
-            Expression<Func<SmalltalkRuntime, object, object>> lambda = compilationResult.ExecutableCode;
-            if (lambda == null)
-                return null;
 
             // 3. Create a script-source that wraps the Lambda Expression and compiles it to a delegate
-            return new SmalltalkScriptCode(lambda, this.SmalltalkEnvironment.Runtime, sourceUnit);
+            return new SmalltalkScriptCode(code, this.SmalltalkEnvironment.Runtime, sourceUnit);
         }
 
         #region Stuff that we can potentially override

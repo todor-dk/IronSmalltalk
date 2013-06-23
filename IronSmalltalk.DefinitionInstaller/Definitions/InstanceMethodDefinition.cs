@@ -16,12 +16,13 @@
 
 using System;
 using IronSmalltalk.Runtime.Behavior;
+using IronSmalltalk.DefinitionInstaller.Definitions;
 
 namespace IronSmalltalk.Runtime.Installer.Definitions
 {
     public class InstanceMethodDefinition : MethodDefinition
     {
-        public InstanceMethodDefinition(SourceReference<string> className, SourceReference<string> selector, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, CompiledMethod code)
+        public InstanceMethodDefinition(SourceReference<string> className, SourceReference<string> selector, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, IMethodFactory code)
             : base(className, selector, sourceCodeService, methodSourceCodeService, code)
         {
         }
@@ -33,14 +34,18 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
 
         protected override bool InternalAddMethod(IInstallerContext installer, SmalltalkClass cls)
         {
-            System.Diagnostics.Debug.Assert(this.Selector.Value == this.Code.Selector.Value);
-            cls.InstanceBehavior[this.Code.Selector] = this.Code;
+            CompiledMethod method = this.Factory.CreateMethod(this, installer, cls);
+            if (method == null)
+                return false;
+            System.Diagnostics.Debug.Assert(this.Selector.Value == method.Selector.Value);
+            cls.InstanceBehavior[method.Selector] = method;
+            this.CompiledCode = method;
             return true;
         }
 
-        protected override bool InternalValidateMethod(IInstallerContext installer, SmalltalkClass cls, IIntermediateCodeValidationErrorSink errorSink)
+        protected override bool InternalValidateMethod(IInstallerContext installer, SmalltalkClass cls, ICodeValidationErrorSink errorSink)
         {
-            return this.Code.ValidateInstanceMethod(cls, installer.NameScope, errorSink);
+            return this.Factory.ValidateInstanceMethod(this, installer, cls, errorSink);         
         }
     }
 }

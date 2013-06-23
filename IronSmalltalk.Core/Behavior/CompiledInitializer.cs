@@ -7,50 +7,93 @@ using System.Threading.Tasks;
 using IronSmalltalk.Common;
 using IronSmalltalk.Runtime.Bindings;
 using IronSmalltalk.Runtime.CodeGeneration.BindingScopes;
+using IronSmalltalk.Runtime.Execution;
 
 namespace IronSmalltalk.Runtime.Behavior
 {
     public abstract class CompiledInitializer : CompiledCode
     {
-        public InitializerCompilationResult Compile(SmalltalkRuntime runtime)
+        /// <summary>
+        /// Type of the initializer.
+        /// </summary>
+        public InitializerType Type { get; private set; }
+
+        /// <summary>
+        /// Optional binding to the object that this initializer sets.
+        /// This is set for GlobalInitializer, ClassInitializer and PoolVariableInitializer.
+        /// It is null for ProgramInitializer.
+        /// </summary>
+        public IDiscreteBinding Binding { get; private set; }
+
+        protected CompiledInitializer(InitializerType type, IDiscreteBinding binding)
         {
-            return this.Compile(runtime, runtime.GlobalScope);
+            if (type == InitializerType.ProgramInitializer)
+            {
+                if (binding != null)
+                    throw new ArgumentException("ProgramInitializers must have null binding.");
+            }
+            else if (type == InitializerType.ClassInitializer)
+            {
+                if (binding == null)
+                    throw new ArgumentNullException("binding");
+                if (!(binding is ClassBinding))
+                    throw new ArgumentException("ClassInitializers must have binding of type ClassBinding.");
+            }
+            else if (type == InitializerType.GlobalInitializer)
+            {
+                if (binding == null)
+                    throw new ArgumentNullException("binding");
+                if (!(binding is GlobalVariableOrConstantBinding))
+                    throw new ArgumentException("ClassInitializers must have binding of type GlobalVariableOrConstantBinding.");
+            }
+            else if (type == InitializerType.PoolVariableInitializer)
+            {
+                if (binding == null)
+                    throw new ArgumentNullException("binding");
+                if (!(binding is PoolVariableOrConstantBinding))
+                    throw new ArgumentException("ClassInitializers must have binding of type PoolVariableOrConstantBinding.");
+            }
+            else 
+            {
+                throw new ArgumentOutOfRangeException("type");
+            }
+
+            this.Type = type;
+            this.Binding = binding;
         }
 
-        protected abstract InitializerCompilationResult Compile(SmalltalkRuntime runtime, SmalltalkNameScope globalScope);
+        public abstract object Execute(object self, ExecutionContext executionContext);
 
-        public abstract bool Validate(SmalltalkNameScope globalNameScope, IIntermediateCodeValidationErrorSink errorSink);
-
-        public abstract object Execute(SmalltalkRuntime runtime, object self);
+        public void ExecuteInitializer(ExecutionContext executionContext)
+        {
+            object value;
+            switch (this.Type)
+            {
+                case InitializerType.ProgramInitializer:
+                    this.Execute(null, executionContext);
+                    break;
+                case InitializerType.GlobalInitializer:
+                    value = this.Execute(null, executionContext);
+                    ((GlobalVariableOrConstantBinding)this.Binding).SetValue(value);
+                    break;
+                case InitializerType.ClassInitializer:
+                    this.Execute(this.Binding.Value, executionContext);
+                    break;
+                case InitializerType.PoolVariableInitializer:
+                    value = this.Execute(null, executionContext);
+                    ((PoolVariableOrConstantBinding)this.Binding).SetValue(value);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
-    /// <summary>
-    /// Error sink for reporting errors while validating intermediate code.
-    /// </summary>
-    public interface IIntermediateCodeValidationErrorSink
+    public enum InitializerType
     {
-        /// <summary>
-        /// Report an intermediate code validation error.
-        /// </summary>
-        /// <param name="errorMessage">Error message</param>
-        /// <param name="start">Start location in the source code where the error occured.</param>
-        /// <param name="stop">Stop location in the source code where the error occured.</param>
-        // <returns></returns>
-        void ReportError(string errorMessage, SourceLocation start, SourceLocation stop);
-    }
-
-    public interface IDebugInfoService
-    {
-        /// <summary>
-        /// Translate the locations of source references from relative to absolute positions.
-        /// </summary>
-        /// <param name="position">Relative source location.</param>
-        /// <returns>Absolute source location.</returns>
-        SourceLocation TranslateSourcePosition(SourceLocation position);
-
-        /// <summary>
-        /// Get or set the document containing the debug symbols.
-        /// </summary>
-        SymbolDocumentInfo SymbolDocument { get; }
+        ProgramInitializer,
+        GlobalInitializer,
+        ClassInitializer,
+        PoolVariableInitializer
     }
 }
