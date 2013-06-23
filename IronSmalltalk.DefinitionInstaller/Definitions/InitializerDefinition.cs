@@ -14,19 +14,43 @@
  * **************************************************************************
 */
 
+using IronSmalltalk.DefinitionInstaller.Definitions;
 using IronSmalltalk.Runtime.Behavior;
+using IronSmalltalk.Runtime.Execution;
 
 namespace IronSmalltalk.Runtime.Installer.Definitions
 {
-    public abstract class InitializerDefinition : CodeBasedDefinition<CompiledInitializer>
+    public abstract class InitializerDefinition: CodeBasedDefinition<IInitializerFactory, CompiledInitializer>
     {
-        public InitializerDefinition(ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, CompiledInitializer code)
-            : base(sourceCodeService, methodSourceCodeService, code)
+        public InitializerDefinition(ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, IInitializerFactory factory)
+            : base(sourceCodeService, methodSourceCodeService, factory)
         {
         }
 
         protected internal abstract bool ValidateInitializer(IInstallerContext installer);
 
-        protected internal abstract void Execute(IInstallerContext installer);
+        protected internal bool CreateInitializer(IInstallerContext installer)
+        {
+            CompiledInitializer initializer = this.Factory.CreateInitializer(this, installer);
+            if (initializer == null)
+                return false;
+            installer.AddInitializer(initializer);
+            this.CompiledCode = initializer;
+            return true;
+        }
+    }
+
+    public abstract class InitializerDefinition<TFactory> : InitializerDefinition
+        where TFactory : IInitializerFactory
+    {
+        public InitializerDefinition(ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, TFactory factory)
+            : base(sourceCodeService, methodSourceCodeService, factory)
+        {
+        }
+
+        public new TFactory Factory
+        {
+            get { return (TFactory)base.Factory; }
+        }
     }
 }

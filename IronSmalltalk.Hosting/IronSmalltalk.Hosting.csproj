@@ -100,10 +100,6 @@
       <Project>{d4a87b34-2a94-4da7-ae80-a3be7e0b519a}</Project>
       <Name>Microsoft.Scripting</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IronSmalltalk.AstJitCompiler\IronSmalltalk.AstJitCompiler.csproj">
-      <Project>{a5c3f31c-dd5f-44bc-9d8f-103e136a13f7}</Project>
-      <Name>IronSmalltalk.AstJitCompiler</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk.Common\IronSmalltalk.Common.csproj">
       <Project>{cbbba006-546a-4dff-95a9-d7b1544205ad}</Project>
       <Name>IronSmalltalk.Common</Name>
@@ -115,6 +111,10 @@
     <ProjectReference Include="..\IronSmalltalk.Core\IronSmalltalk.Runtime.csproj">
       <Project>{876ab5db-133a-47dc-b912-62511e312ed6}</Project>
       <Name>IronSmalltalk.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IronSmalltalk.ExpressionCompiler\IronSmalltalk.ExpressionCompiler.csproj">
+      <Project>{fca7dd48-2d8d-44e3-bc00-9446fc793392}</Project>
+      <Name>IronSmalltalk.ExpressionCompiler</Name>
     </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk.InterchangeInstaller\IronSmalltalk.InterchangeInstaller.csproj">
       <Project>{33cc4f2a-e078-4130-89e1-f48752acab38}</Project>

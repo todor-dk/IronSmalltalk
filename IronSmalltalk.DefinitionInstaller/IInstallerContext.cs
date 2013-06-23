@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
 using IronSmalltalk.Runtime.Internal;
 
@@ -32,6 +33,7 @@ namespace IronSmalltalk.Runtime.Installer
         void AddGlobalConstantBinding(GlobalConstantBinding binding);
         void AddGlobalVariableBinding(GlobalVariableBinding binding);
         void AddPoolBinding(PoolBinding binding);
+        void AddInitializer(CompiledInitializer initializer);
         IDiscreteGlobalBinding GetLocalGlobalBinding(Symbol name);
         ClassBinding GetLocalClassBinding(Symbol name);
         ClassBinding GetClassBinding(Symbol name);

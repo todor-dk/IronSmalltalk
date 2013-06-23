@@ -17,13 +17,15 @@
 using System;
 using IronSmalltalk.Runtime.Behavior;
 using Microsoft.Scripting.Generation;
+using IronSmalltalk.DefinitionInstaller.Definitions;
+using IronSmalltalk.Runtime.Execution;
 
 namespace IronSmalltalk.Runtime.Installer.Definitions
 {
-    public class ProgramInitializer : InitializerDefinition
+    public class ProgramInitializer : InitializerDefinition<IProgramInitializerFactory>
     {
-        public ProgramInitializer(ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, CompiledInitializer code)
-            : base(sourceCodeService, methodSourceCodeService, code)
+        public ProgramInitializer(ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, IProgramInitializerFactory factory)
+            : base(sourceCodeService, methodSourceCodeService, factory)
         {
         }
 
@@ -38,13 +40,8 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
             if (installer == null)
                 throw new ArgumentNullException();
 
-            return this.Code.Validate(installer.NameScope,
+            return this.Factory.ValidateProgramInitializer(this, installer,
                 new IntermediateCodeValidationErrorSink(this.MethodSourceCodeService, installer));
-        }
-
-        protected internal override void Execute(IInstallerContext installer)
-        {
-            this.Code.Execute(installer.Runtime, null);
         }
     }
 }

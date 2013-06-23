@@ -12,27 +12,22 @@ namespace IronSmalltalk.NativeCompiler.Internals
 {
     internal class NativeGenerator
     {
-        internal readonly string OutputDirectory;
-        internal readonly string FileExtension;
         internal readonly string OutputPath;
+        internal readonly NativeCompilerParameters Parameters;
         internal readonly AssemblyName AssemblyName;
         internal readonly AssemblyBuilder AssemblyBuilder;
         internal readonly ModuleBuilder ModuleBuilder;
-        internal readonly bool EmitDebugSymbols;
         internal readonly List<TypeBuilder> DefinedTypes = new List<TypeBuilder>();
         internal readonly DebugInfoGenerator DebugInfoGenerator;
 
-        internal NativeGenerator(string outputDirectory, string assemblyName, string fileExtension, bool emitDebugSymbols, 
-            string product, string productVersion, string company, string copyright, string trademark)
+        internal NativeGenerator(NativeCompilerParameters parameters)
         {
-            this.OutputDirectory = outputDirectory;
-            this.FileExtension = FileExtension;
-            this.AssemblyName = new AssemblyName(assemblyName);
-            this.EmitDebugSymbols = emitDebugSymbols;
-            string filename = String.Format("{0}.{1}", this.AssemblyName.Name, fileExtension);
-            this.OutputPath = System.IO.Path.Combine(outputDirectory, filename);
+            this.Parameters = parameters;
+            this.AssemblyName = new AssemblyName(parameters.AssemblyName);
+            string filename = String.Format("{0}.{1}", this.AssemblyName.Name, parameters.FileExtension);
+            this.OutputPath = System.IO.Path.Combine(parameters.OutputDirectory, filename);
 
-            if (this.EmitDebugSymbols)
+            if (this.Parameters.EmitDebugSymbols)
                 this.DebugInfoGenerator = DebugInfoGenerator.CreatePdbGenerator();
 
             CustomAttributeBuilder[] attributes = new CustomAttributeBuilder[] {};
@@ -40,16 +35,17 @@ namespace IronSmalltalk.NativeCompiler.Internals
             this.AssemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
                 this.AssemblyName,
                 AssemblyBuilderAccess.Save,
-                this.OutputDirectory,
+                this.Parameters.OutputDirectory,
                 false,
                 attributes);
 
-            if (this.EmitDebugSymbols)
+            if (this.Parameters.EmitDebugSymbols)
                 this.SetDebuggableAttributes();
 
-            this.AssemblyBuilder.DefineVersionInfoResource(product, productVersion, company, copyright, trademark);
+            this.AssemblyBuilder.DefineVersionInfoResource(parameters.Product, parameters.ProductVersion, parameters.Company, 
+                parameters.Copyright, parameters.Trademark);
 
-            this.ModuleBuilder = this.AssemblyBuilder.DefineDynamicModule(this.AssemblyName.Name,  filename, this.EmitDebugSymbols);
+            this.ModuleBuilder = this.AssemblyBuilder.DefineDynamicModule(this.AssemblyName.Name,  filename, this.Parameters.EmitDebugSymbols);
 
             var a = this.AssemblyBuilder.ManifestModule;
         }

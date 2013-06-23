@@ -9,7 +9,7 @@ using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Compiler.Visiting;
 using IronSmalltalk.Interchange;
-using IronSmalltalk.InterchangeInstaller.Runtime;
+using IronSmalltalk.Runtime.Execution;
 using IronSmalltalk.Runtime.Installer;
 
 namespace IronSmalltalk.InterchangeInstaller
@@ -89,7 +89,7 @@ namespace IronSmalltalk.InterchangeInstaller
             {
                 using (TextReader souceCodeReader = info.GetTextReader())
                 {
-                    InterchangeFormatProcessor processor = new InterchangeFormatProcessor(info, souceCodeReader, installer, installer, this.VersionServicesMap);
+                    InterchangeFormatProcessor processor = new InterchangeFormatProcessor(info, souceCodeReader, installer, this.VersionServicesMap);
                     processor.ProcessInterchangeFile();
                 }
             }
@@ -97,62 +97,65 @@ namespace IronSmalltalk.InterchangeInstaller
             return installer;
         }
 
-        public object Evaluate(string initializerCode)
-        {
-            object result;
-            if (this.Evaluate(initializerCode, null, out result))
-                return result;
-            return null;
-        }
+        //public object Evaluate(string initializerCode)
+        //{
+        //    object result;
+        //    if (this.Evaluate(initializerCode, null, out result))
+        //        return result;
+        //    return null;
+        //}
 
-        public object Evaluate(TextReader initializerCode)
-        {
-            object result;
-            if (this.Evaluate(initializerCode, null, out result))
-                return result;
-            return null;
-        }
+        //public object Evaluate(TextReader initializerCode)
+        //{
+        //    object result;
+        //    if (this.Evaluate(initializerCode, null, out result))
+        //        return result;
+        //    return null;
+        //}
 
-        public bool Evaluate(string initializerCode, IParseErrorSink errorSink, out object result)
-        {
-            if (initializerCode == null)
-                throw new ArgumentNullException("initializerCode");
+        //public bool Evaluate(string initializerCode, IParseErrorSink errorSink, out object result)
+        //{
+        //    if (initializerCode == null)
+        //        throw new ArgumentNullException("initializerCode");
 
-            return this.Evaluate(new StringReader(initializerCode), errorSink, out result);
-        }
+        //    return this.Evaluate(new StringReader(initializerCode), errorSink, out result);
+        //}
 
-        public bool Evaluate(TextReader initializerCode, IParseErrorSink errorSink, out object result)
-        {
-            if (initializerCode == null)
-                throw new ArgumentNullException("initializerCode");
+        //public bool Evaluate(TextReader initializerCode, IParseErrorSink errorSink, out object result)
+        //{
+        //    if (initializerCode == null)
+        //        throw new ArgumentNullException("initializerCode");
 
-            result = null;
-            Parser parser = new Parser();
-            parser.ErrorSink = errorSink;
-            InitializerNode node = parser.ParseInitializer(initializerCode);
-            if ((node == null) || !node.Accept(ParseTreeValidatingVisitor.Current))
-                return false;
+        //    result = null;
+        //    Parser parser = new Parser();
+        //    parser.ErrorSink = errorSink;
+        //    InitializerNode node = parser.ParseInitializer(initializerCode);
+        //    if ((node == null) || !node.Accept(ParseTreeValidatingVisitor.Current))
+        //        return false;
 
-            Expression<Func<SmalltalkRuntime, object, object>> lambda;
-            RuntimeProgramInitializer code = new RuntimeProgramInitializer(node, null);
-            var compilationResult = code.Compile(this.Runtime);
-            if (compilationResult == null)
-                return false;
-            lambda = compilationResult.ExecutableCode;
-            if (lambda == null)
-                return false;
+        //    Expression<Func<SmalltalkRuntime, object, object>> lambda;
+        //    RuntimeProgramInitializer code = new RuntimeProgramInitializer(node, null);
+        //    var compilationResult = code.Compile(this.Runtime);
+        //    if (compilationResult == null)
+        //        return false;
+        //    lambda = compilationResult.ExecutableCode;
+        //    if (lambda == null)
+        //        return false;
 
-            var function = lambda.Compile();
-            result = function(this.Runtime, null);
-            return true;
-        }
+        //    var function = lambda.Compile();
+        //    result = function(this.Runtime, null);
+        //    return true;
+        //}
 
         private void CompleteInstall(InterchangeInstallerContext installer)
         {
             installer.ErrorSink = new InstallErrorSink();
             installer.InstallMetaAnnotations = this.InstallMetaAnnotations;
             if (installer.Install())
-                installer.Initialize();
+            {
+                ExecutionContext executionContext = new ExecutionContext(this.Runtime);
+                installer.NameScope.ExecuteInitializers(executionContext);
+            }
         }
 
         private InterchangeInstallerContext CreateInstallerContext()

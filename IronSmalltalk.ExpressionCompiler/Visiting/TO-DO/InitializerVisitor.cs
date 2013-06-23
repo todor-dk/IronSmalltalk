@@ -18,13 +18,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using IronSmalltalk.Compiler.SemanticNodes;
+using IronSmalltalk.ExpressionCompiler;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.CodeGeneration.Bindings;
 using IronSmalltalk.Runtime.CodeGeneration.BindingScopes;
+using IronSmalltalk.Runtime.Execution;
 
 namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
 {
-    public class InitializerVisitor : RootEncoderVisitor<Expression<Func<SmalltalkRuntime, object, object>>, InitializerNode>
+    public class InitializerVisitor : RootEncoderVisitor<Expression<Func<object, ExecutionContext, object>>, InitializerNode>
     {
         public string InitializerName { get; private set; }
 
@@ -59,9 +61,9 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
         }
 
 
-        public override Expression<Func<SmalltalkRuntime, object, object>> VisitInitializer(InitializerNode node)
+        public override Expression<Func<object, ExecutionContext, object>> VisitInitializer(InitializerNode node)
         {
-            ParameterExpression envParam = Expression.Parameter(typeof(SmalltalkRuntime), "Runtime");
+            ParameterExpression envParam = Expression.Parameter(typeof(ExecutionContext), "executionContext");
             ParameterExpression selfParam = null;
             NameBinding binding = this.GetBinding(SemanticConstants.Self);
             if ((binding != null) && !binding.IsErrorBinding)
@@ -70,8 +72,8 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
                 selfParam = Expression.Parameter(typeof(object), "self");
             Expression body = this.InternalVisitFunction(node);
 
-            return Expression.Lambda<Func<SmalltalkRuntime, object, object>>(body, this.InitializerName, 
-                new ParameterExpression[] { envParam, selfParam} );
+            return Expression.Lambda<Func<object, ExecutionContext, object>>(body, this.InitializerName, 
+                new ParameterExpression[] { selfParam, envParam } );
         }
     }
 }

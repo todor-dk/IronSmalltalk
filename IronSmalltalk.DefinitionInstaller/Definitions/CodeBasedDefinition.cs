@@ -18,16 +18,19 @@ using System;
 using IronSmalltalk.Common;
 using IronSmalltalk.Runtime.Behavior;
 using System.Linq;
+using IronSmalltalk.DefinitionInstaller.Definitions;
 
 namespace IronSmalltalk.Runtime.Installer.Definitions
 {
-    public abstract class CodeBasedDefinition<TCode> : DefinitionBase
-        where TCode : CompiledCode
+    public abstract class CodeBasedDefinition<TFactory, TCompiledCode> : DefinitionBase
+        where TCompiledCode : CompiledCode
     {
         /// <summary>
-        /// Intermediate code that can be compiled into executable code.
+        /// Factory object that will be used to compiled the executable code.
         /// </summary>
-        public TCode Code { get; private set; }
+        public TFactory Factory { get; private set; }
+
+        protected TCompiledCode CompiledCode { get; set; }
 
         /// <summary>
         /// Source code service for translating source code positions.
@@ -39,17 +42,17 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         /// </summary>
         public ISourceCodeReferenceService MethodSourceCodeService { get; private set; }
 
-        public CodeBasedDefinition(ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, TCode code)
+        public CodeBasedDefinition(ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, TFactory factory)
         {
             if (sourceCodeService == null)
                 throw new ArgumentNullException("sourceCodeService");
             if (methodSourceCodeService == null)
                 throw new ArgumentNullException("methodSourceCodeService");
-            if (code == null)
-                throw new ArgumentNullException("code");
+            if (factory == null)
+                throw new ArgumentNullException("factory");
             this.SourceCodeService = sourceCodeService;
             this.MethodSourceCodeService = methodSourceCodeService;
-            this.Code = code;
+            this.Factory = factory;
         }
 
         /// <summary>
@@ -65,12 +68,15 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
             if (!this.Annotations.Any())
                 return true;
 
-            installer.AnnotateObject(this.Code, this.Annotations);
+            if (this.CompiledCode == null)
+                return false;
+
+            installer.AnnotateObject(this.CompiledCode, this.Annotations);
 
             return true;
         }
 
-        protected class IntermediateCodeValidationErrorSink : IIntermediateCodeValidationErrorSink
+        protected class IntermediateCodeValidationErrorSink : ICodeValidationErrorSink
         {
             private ISourceCodeReferenceService SourceCodeService;
             private IInstallerContext Installer;

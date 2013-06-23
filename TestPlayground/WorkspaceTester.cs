@@ -27,6 +27,7 @@ using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Interchange;
 using IronSmalltalk.InterchangeInstaller.Runtime;
+using IronSmalltalk.Runtime.Execution;
 
 
 namespace TestPlayground
@@ -208,11 +209,11 @@ namespace TestPlayground
           // // myAsmBuilder.Save("c:\\temp\\MyDynamicAsm.dll");
 
             var function = lambda.Compile();
-            this.LastResult = function(this.Environment.Runtime, receiver);
+            this.LastResult = function(receiver, new ExecutionContext(this.Environment.Runtime));
             this.PrintResult(this.LastResult);
         }
 
-        private Expression<Func<SmalltalkRuntime, object, object>> JitExpression()
+        private Expression<Func<object, ExecutionContext, object>> JitExpression()
         {
             if (this.Environment == null)
             {

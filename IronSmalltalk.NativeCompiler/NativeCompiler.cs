@@ -9,43 +9,42 @@ namespace IronSmalltalk.NativeCompiler
 {
     public class NativeCompiler
     {
-        public static void GenerateNativeAssembly(SmalltalkRuntime runtime, string rootNamespace, string outputDirectory, string assemblyName, string fileExtension, bool emitDebugSymbols, 
-            string product, string productVersion, string company, string copyright, string trademark)
+        public static void GenerateNativeAssembly(NativeCompilerParameters parameters)
         {
-            if (runtime == null)
-                throw new ArgumentNullException("runtime");
-            if (String.IsNullOrWhiteSpace(rootNamespace))
-                throw new ArgumentNullException("rootNamespace");
-            if (String.IsNullOrWhiteSpace(outputDirectory))
-                throw new ArgumentNullException("outputDirectory");
-            if (String.IsNullOrWhiteSpace(assemblyName))
-                throw new ArgumentNullException("assemblyName");
-            if (String.IsNullOrWhiteSpace(fileExtension))
-                throw new ArgumentNullException("fileExtension");
+            if (parameters == null)
+                throw new ArgumentNullException("parameters");
 
-            NativeCompiler compiler = new NativeCompiler(rootNamespace, outputDirectory, assemblyName, fileExtension, emitDebugSymbols,
-                product, productVersion, company, copyright, trademark);
-            compiler.Generate(runtime);
+            if (parameters.Runtime == null)
+                throw new ArgumentNullException("parameters.Runtime");
+            if (String.IsNullOrWhiteSpace(parameters.RootNamespace))
+                throw new ArgumentNullException("parameters.RootNamespace");
+            if (String.IsNullOrWhiteSpace(parameters.OutputDirectory))
+                throw new ArgumentNullException("parameters.OutputDirectory");
+            if (String.IsNullOrWhiteSpace(parameters.AssemblyName))
+                throw new ArgumentNullException("parameters.AssemblyName");
+            if (String.IsNullOrWhiteSpace(parameters.FileExtension))
+                throw new ArgumentNullException("parameters.FileExtension");
+
+            NativeCompiler compiler = new NativeCompiler(parameters);
+            compiler.Generate();
         }
 
-        internal readonly string RootNamespace;
 
-        internal NativeGenerator NativeGenerator { get; private set; }
+        internal readonly NativeCompilerParameters Parameters;
+        internal readonly NativeGenerator NativeGenerator;
 
-        private NativeCompiler(string rootNamespace, string outputDirectory, string assemblyName, string fileExtension, bool emitDebugSymbols, 
-            string product, string productVersion, string company, string copyright, string trademark)
+        private NativeCompiler(NativeCompilerParameters parameters)
         {
-            this.RootNamespace = rootNamespace;
+            this.Parameters = parameters.Copy();
 
-            this.NativeGenerator = new NativeGenerator(outputDirectory, assemblyName, fileExtension, emitDebugSymbols,
-                product, productVersion, company, copyright, trademark);
+            this.NativeGenerator = new NativeGenerator(parameters);
         }
 
         internal string GetTypeName(string partialName)
         {
             if (String.IsNullOrWhiteSpace(partialName))
                 throw new ArgumentNullException();
-            return String.Format("{0}.{1}", this.RootNamespace, partialName);
+            return String.Format("{0}.{1}", this.Parameters.RootNamespace, partialName);
         }
 
         internal string GetTypeName(string subNamespace, string typeName)
@@ -65,19 +64,21 @@ namespace IronSmalltalk.NativeCompiler
             return this.GetTypeName(String.Join(".", names));
         }
 
-        private void Generate(SmalltalkRuntime runtime)
+        private void Generate()
         {
-            NameScopeGenerator extensionScope = new NameScopeGenerator(this, "ExtensionScope");
-            runtime.ExtensionScope.Accept(extensionScope);
-            NameScopeGenerator globalScope = new NameScopeGenerator(this, "GlobalScope");
-            runtime.GlobalScope.Accept(globalScope);
+            NameScopeGenerator extensionScope = new NameScopeGenerator(this, "ExtensionScope", true);
+            this.Parameters.Runtime.ExtensionScope.Accept(extensionScope);
+            NameScopeGenerator globalScope = new NameScopeGenerator(this, "GlobalScope", false);
+            this.Parameters.Runtime.GlobalScope.Accept(globalScope);
 
             //RuntimeGenerator runtimeGen = new RuntimeGenerator(this);
             //runtimeGen.GenerateTypes();
             extensionScope.Generate();
             globalScope.Generate();
 
-
+            RuntimeGenerator runtime = new RuntimeGenerator(this, extensionScope, globalScope);
+            runtime.Generate();
+            
 
             /* Order should be:
              * 1. Create Global Bindings
@@ -86,7 +87,7 @@ namespace IronSmalltalk.NativeCompiler
              * 
              * 
              *             
-             this.CreateTemporaryNameSpace();
+                this.CreateTemporaryNameSpace();
                 
                 if (!this.CreateGlobalBindings())
                     return false;
@@ -96,17 +97,19 @@ namespace IronSmalltalk.NativeCompiler
                     return false;
                 if (!this.CreatePoolVariableBindings())
                     return false;
-            if (!this.ValidateMethods())
-                return false;
-            if (!this.ValidateInitializers())
-                return false;
+                if (!this.ValidateMethods())
+                    return false;
+                if (!this.ValidateInitializers())
+                    return false;
             if (!this.CreateMethods())
+                return false;
+            if (!this.CreateInitializers())
                 return false;
             if (!this.AddAnnotation())      ** Methods + Initializers
                 return false;
 
-            this.ReplaceSmalltalkContextNameSpace();
-            return this.RecompileClasses(); // Must be after ReplaceSmalltalkContextNameSpace(), otherwise class cannot find subclasses.
+                this.ReplaceSmalltalkContextNameSpace();
+                return this.RecompileClasses(); // Must be after ReplaceSmalltalkContextNameSpace(), otherwise class cannot find subclasses.
              * 
              * 
              * 

@@ -21,6 +21,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.SemanticNodes;
+using IronSmalltalk.ExpressionCompiler;
 using IronSmalltalk.ExpressionCompiler.Internals;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.CodeGeneration.Bindings;

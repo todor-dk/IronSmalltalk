@@ -44,11 +44,13 @@
     <Compile Include="Internals\GlobalConstantGenerator.cs" />
     <Compile Include="Internals\GlobalGenerator.cs" />
     <Compile Include="Internals\GlobalVariableGenerator.cs" />
+    <Compile Include="Internals\InitializerGenerator.cs" />
     <Compile Include="Internals\NameScopeGenerator.cs" />
     <Compile Include="Internals\NativeGenerator.cs" />
     <Compile Include="Internals\PoolGenerator.cs" />
     <Compile Include="Internals\RuntimeGenerator.cs" />
     <Compile Include="NativeCompiler.cs" />
+    <Compile Include="NativeCompilerParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

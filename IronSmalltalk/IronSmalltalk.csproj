@@ -83,10 +83,6 @@
     <Folder Include="Runtime\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IronSmalltalk.AstJitCompiler\IronSmalltalk.AstJitCompiler.csproj">
-      <Project>{a5c3f31c-dd5f-44bc-9d8f-103e136a13f7}</Project>
-      <Name>IronSmalltalk.AstJitCompiler</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk.Common\IronSmalltalk.Common.csproj">
       <Project>{cbbba006-546a-4dff-95a9-d7b1544205ad}</Project>
       <Name>IronSmalltalk.Common</Name>

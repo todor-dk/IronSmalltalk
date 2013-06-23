@@ -16,7 +16,9 @@
 
 using System;
 using System.Collections.Generic;
+using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
+using IronSmalltalk.Runtime.Execution;
 using IronSmalltalk.Runtime.Installer.Definitions;
 using IronSmalltalk.Runtime.Internal;
 
@@ -166,6 +168,8 @@ namespace IronSmalltalk.Runtime.Installer
                 return false;
             if (!this.CreateMethods())
                 return false;
+            if (!this.CreateInitializers())
+                return false;
             if (!this.AddAnnotation())
                 return false;
 
@@ -233,6 +237,14 @@ namespace IronSmalltalk.Runtime.Installer
             bool result = true;
             foreach (MethodDefinition def in this._methods)
                 result = (result & def.CreateMethod(this));
+            return result;
+        }
+
+        private bool CreateInitializers()
+        {
+            bool result = true;
+            foreach (InitializerDefinition def in this._initializers)
+                result = (result & def.CreateInitializer(this));
             return result;
         }
 
@@ -306,12 +318,6 @@ namespace IronSmalltalk.Runtime.Installer
 
         #endregion
 
-        public void Initialize()
-        {
-            foreach (InitializerDefinition def in this._initializers)
-                def.Execute(this);           
-        }
-
         #region IInstallerContext interface implementation
 
         bool IInstallerContext.ReportError(ISourceReference sourceReference, string errorMessage)
@@ -350,6 +356,11 @@ namespace IronSmalltalk.Runtime.Installer
         void IInstallerContext.AddPoolBinding(PoolBinding binding)
         {
             this.NameScope.Pools.Add(binding);
+        }
+
+        void IInstallerContext.AddInitializer(CompiledInitializer initializer)
+        {
+            this.NameScope.Initializers.Add(initializer);
         }
 
         PoolBinding IInstallerContext.GetPoolBinding(Symbol name)

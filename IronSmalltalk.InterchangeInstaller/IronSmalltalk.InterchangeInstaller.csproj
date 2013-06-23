@@ -74,6 +74,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Compiler\DebugInfoService.cs" />
+    <Compile Include="Compiler\DefinitionInstaller\RuntimeCodeFactory.cs" />
+    <Compile Include="Compiler\DefinitionInstaller\RuntimeCompiledMethodFactory.cs" />
+    <Compile Include="Compiler\DefinitionInstaller\RuntimeGlobalInitializerFactory.cs" />
+    <Compile Include="Compiler\DefinitionInstaller\RuntimePoolVariableInitializerFactory.cs" />
+    <Compile Include="Compiler\DefinitionInstaller\RuntimeProgramInitializerFactory.cs" />
     <Compile Include="Compiler\InterchangeFormatParserIST10.cs" />
     <Compile Include="Compiler\Visiting\InterchangeParseTreeValidatingVisitor.cs" />
     <Compile Include="FileInInformation.cs" />
@@ -124,10 +129,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IronSmalltalk.AstJitCompiler\IronSmalltalk.AstJitCompiler.csproj">
-      <Project>{a5c3f31c-dd5f-44bc-9d8f-103e136a13f7}</Project>
-      <Name>IronSmalltalk.AstJitCompiler</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk.Common\IronSmalltalk.Common.csproj">
       <Project>{cbbba006-546a-4dff-95a9-d7b1544205ad}</Project>
       <Name>IronSmalltalk.Common</Name>
@@ -143,6 +144,10 @@
     <ProjectReference Include="..\IronSmalltalk.DefinitionInstaller\IronSmalltalk.DefinitionInstaller.csproj">
       <Project>{0bf739ef-002c-4b90-a06b-5e6639fad2cf}</Project>
       <Name>IronSmalltalk.DefinitionInstaller</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IronSmalltalk.ExpressionCompiler\IronSmalltalk.ExpressionCompiler.csproj">
+      <Project>{fca7dd48-2d8d-44e3-bc00-9446fc793392}</Project>
+      <Name>IronSmalltalk.ExpressionCompiler</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

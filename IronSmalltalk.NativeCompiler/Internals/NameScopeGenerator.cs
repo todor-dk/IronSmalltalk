@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
 
 namespace IronSmalltalk.NativeCompiler.Internals
@@ -17,15 +18,19 @@ namespace IronSmalltalk.NativeCompiler.Internals
         internal readonly List<string> ProtectedNames = new List<string>();
 
         internal readonly List<GlobalBindingGenerator> Generators = new List<GlobalBindingGenerator>();
+        internal readonly List<InitializerGenerator> Initializers = new List<InitializerGenerator>();
 
         internal readonly NativeCompiler Compiler;
 
         internal readonly string ScopeName;
 
-        internal NameScopeGenerator(NativeCompiler compiler, string name)
+        private bool IgnoreSmalltalk;
+
+        internal NameScopeGenerator(NativeCompiler compiler, string name, bool ignoreSmalltalk)
         {
             this.Compiler = compiler;
             this.ScopeName = name;
+            this.IgnoreSmalltalk = ignoreSmalltalk;
         }
 
         void ISmalltalkNameScopeVisitor.Visit(Runtime.Symbol protectedName)
@@ -50,17 +55,35 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
         void ISmalltalkNameScopeVisitor.Visit(GlobalConstantBinding binding)
         {
+            if (this.IgnoreSmalltalk && (binding.Name.Value == "Smalltalk"))
+                return;
             this.Generators.Add(new GlobalConstantGenerator(this.Compiler, binding));
+        }
+
+        void ISmalltalkNameScopeVisitor.Visit(CompiledInitializer initializer)
+        {
+            this.Initializers.Add(new InitializerGenerator(this.Compiler, initializer));
         }
 
         #endregion
 
+        private TypeBuilder InitializersTypeBuilder;
         private TypeBuilder MethodsInitializerTypeBuilder;
         private TypeBuilder PoolsInitializerTypeBuilder;
-        private TypeBuilder InitializerTypeBuilder;
+        private TypeBuilder ScopeInitializerTypeBuilder;
+        private Type _InitializersType;
         private Type _MethodsInitializerType;
         private Type _PoolsInitializerType;
-        private Type _InitializerType;
+        private Type _ScopeInitializerType;
+        internal Type InitializersType
+        {
+            get
+            {
+                if (this._InitializersType == null)
+                    this._InitializersType = this.InitializersTypeBuilder.CreateType();
+                return this._InitializersType;
+            }
+        }
         internal Type MethodsInitializerType
         {
             get
@@ -79,19 +102,20 @@ namespace IronSmalltalk.NativeCompiler.Internals
                 return this._PoolsInitializerType;
             }
         }
-        internal Type InitializerType
+        internal Type ScopeInitializerType
         {
             get
             {
-                if (this._InitializerType == null)
-                    this._InitializerType = this.InitializerTypeBuilder.CreateType();
-                return this._InitializerType;
+                if (this._ScopeInitializerType == null)
+                    this._ScopeInitializerType = this.ScopeInitializerTypeBuilder.CreateType();
+                return this._ScopeInitializerType;
             }
         }
 
         internal void Generate()
         {
             this.GenerateItemTypes();
+            this.GenerateInitializers();
             this.GeneratePoolInitializers();
             this.GenerateMethodDictionaryInitializers();
             this.GenerateNameScopeInitializer();
@@ -138,7 +162,7 @@ namespace IronSmalltalk.NativeCompiler.Internals
             this.PoolsInitializerTypeBuilder = this.Compiler.NativeGenerator.DefineType(
                 this.Compiler.GetTypeName("Initializers", String.Format("{0}_PoolInitializers", this.ScopeName)),
                 typeof(Object),
-                TypeAttributes.Class | TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.Abstract);
+                TypeAttributes.Class | TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.Abstract);
 
             foreach (GlobalBindingGenerator generator in this.Generators)
             {
@@ -153,7 +177,7 @@ namespace IronSmalltalk.NativeCompiler.Internals
             this.MethodsInitializerTypeBuilder = this.Compiler.NativeGenerator.DefineType(
                 this.Compiler.GetTypeName("Initializers", String.Format("{0}_MethodInitializers", this.ScopeName)),
                 typeof(Object),
-                TypeAttributes.Class | TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.Abstract);
+                TypeAttributes.Class | TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.Abstract);
 
             foreach (GlobalBindingGenerator generator in this.Generators)
             {
@@ -163,16 +187,28 @@ namespace IronSmalltalk.NativeCompiler.Internals
             }
         }
 
+        private void GenerateInitializers()
+        {
+            this.InitializersTypeBuilder = this.Compiler.NativeGenerator.DefineType(
+                this.Compiler.GetTypeName("Initializers", String.Format("{0}_Initializers", this.ScopeName)),
+                typeof(Object),
+                TypeAttributes.Class | TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.Abstract);
+
+            HashSet<string> names = new HashSet<string>();
+            foreach (InitializerGenerator generator in this.Initializers)
+                generator.GenerateInitializerMethod(this.InitializersTypeBuilder, names);
+        }
+
         internal const string InitializerMethodName = "InitializeScope";
 
         private void GenerateNameScopeInitializer()
         {
-            this.InitializerTypeBuilder = this.Compiler.NativeGenerator.DefineType(
-                this.Compiler.GetTypeName("Initializers", String.Format("{0}_Initializers", this.ScopeName)),
+            this.ScopeInitializerTypeBuilder = this.Compiler.NativeGenerator.DefineType(
+                this.Compiler.GetTypeName("Initializers", String.Format("{0}_ScopeInitializer", this.ScopeName)),
                 typeof(Object),
-                TypeAttributes.Class | TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.Abstract);
+                TypeAttributes.Class | TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.Abstract);
 
-            MethodBuilder method = this.InitializerTypeBuilder.DefineMethod(NameScopeGenerator.InitializerMethodName, MethodAttributes.Assembly | MethodAttributes.Static);
+            MethodBuilder method = this.ScopeInitializerTypeBuilder.DefineMethod(NameScopeGenerator.InitializerMethodName, MethodAttributes.Assembly | MethodAttributes.Static);
 
             var lambda = this.GenerateLambda(NameScopeGenerator.InitializerMethodName);
             lambda.CompileToMethod(method, this.Compiler.NativeGenerator.DebugInfoGenerator);
@@ -203,6 +239,18 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
             expressions.AddRange(createObjects);
 
+            ParameterExpression initializersType = Expression.Parameter(typeof(Type), "initializersType");
+            variables.Add(initializersType);
+            ParameterExpression initializer = Expression.Parameter(typeof(CompiledInitializer), "initializer");
+            variables.Add(initializer);
+            expressions.Add(Expression.Assign(initializersType, Expression.Constant(this.InitializersTypeBuilder, typeof(Type))));
+            foreach (InitializerGenerator generator in this.Initializers)
+            {
+                IEnumerable<Expression> expression = generator.GenerateCreateInitializer(initializer, runtime, scope, initializersType);
+                if (expression != null)
+                    expressions.AddRange(expression);
+            }
+
             if (expressions.Count == 0)
                 expressions.Add(Expression.Constant(null, typeof(object)));
 
@@ -223,5 +271,18 @@ namespace IronSmalltalk.NativeCompiler.Internals
                 throw new Exception(String.Format("Could not find static method AddProtectedName in class {0}.", helperType.FullName));
             return Expression.Call(method, runtime, scope, Expression.Constant(name, typeof(String)));
         }
+
+        internal Expression<Action<SmalltalkRuntime, SmalltalkNameScope>> GetInitializerDelegate()
+        {
+            Type initializerType = this.ScopeInitializerType;
+            MethodInfo initializer = initializerType.GetMethod(NameScopeGenerator.InitializerMethodName, 
+                BindingFlags.Static | BindingFlags.NonPublic, null, new Type[] { typeof(SmalltalkRuntime), typeof(SmalltalkNameScope) }, null);
+
+            // NB: This will create helper methods, but too much work to get around this ...
+            ParameterExpression runtime = Expression.Parameter(typeof(SmalltalkRuntime), "runtime");
+            ParameterExpression scope = Expression.Parameter(typeof(SmalltalkNameScope), "scope");
+            return Expression.Lambda<Action<SmalltalkRuntime, SmalltalkNameScope>>(Expression.Call(initializer, runtime, scope), runtime, scope);
+        }
+
     }
 }

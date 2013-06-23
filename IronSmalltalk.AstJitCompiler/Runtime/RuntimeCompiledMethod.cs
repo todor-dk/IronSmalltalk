@@ -13,6 +13,7 @@ using IronSmalltalk.Runtime.CodeGeneration.BindingScopes;
 using IronSmalltalk.Runtime.CodeGeneration.Visiting;
 using IronSmalltalk.AstJitCompiler.Internals;
 using IronSmalltalk.Common;
+using IronSmalltalk.AstJitCompiler.Runtime;
 
 namespace IronSmalltalk.InterchangeInstaller.Runtime
 {
@@ -87,17 +88,17 @@ namespace IronSmalltalk.InterchangeInstaller.Runtime
         }
 
 
-        public override bool ValidateInstanceMethod(SmalltalkClass cls, SmalltalkNameScope globalNameScope, IIntermediateCodeValidationErrorSink errorSink)
+        public bool ValidateInstanceMethod(SmalltalkClass cls, SmalltalkNameScope globalNameScope, IRuntimeCodeValidationErrorSink errorSink)
         {
             return this.Validate(cls, errorSink, (r, c, s, a, u) => this.CompileInstanceMethod(r, c, s, a, u, globalNameScope));
         }
 
-        public override bool ValidateClassMethod(SmalltalkClass cls, SmalltalkNameScope globalNameScope, IIntermediateCodeValidationErrorSink errorSink)
+        public bool ValidateClassMethod(SmalltalkClass cls, SmalltalkNameScope globalNameScope, IRuntimeCodeValidationErrorSink errorSink)
         {
             return this.Validate(cls, errorSink, (r, c, s, a, u) => this.CompileClassMethod(r, c, s, a, u, globalNameScope));
         }
 
-        private bool Validate(SmalltalkClass cls, IIntermediateCodeValidationErrorSink errorSink, Func<SmalltalkRuntime, SmalltalkClass, DynamicMetaObject, DynamicMetaObject[], Symbol, MethodCompilationResult> func)
+        private bool Validate(SmalltalkClass cls, IRuntimeCodeValidationErrorSink errorSink, Func<SmalltalkRuntime, SmalltalkClass, DynamicMetaObject, DynamicMetaObject[], Symbol, MethodCompilationResult> func)
         {
             return RuntimeCompiledMethod.Validate(this.ParseTree, errorSink, delegate()
             {
@@ -110,7 +111,7 @@ namespace IronSmalltalk.InterchangeInstaller.Runtime
             });
         }
 
-        internal static bool Validate<TResult>(SemanticNode rootNode, IIntermediateCodeValidationErrorSink errorSink, Func<TResult> compileFunc)
+        internal static bool Validate<TResult>(SemanticNode rootNode, IRuntimeCodeValidationErrorSink errorSink, Func<TResult> compileFunc)
         {
             if (rootNode == null)
                 throw new ArgumentNullException("rootNode");
@@ -146,7 +147,7 @@ namespace IronSmalltalk.InterchangeInstaller.Runtime
             }
         }
 
-        private static bool ReportError(IIntermediateCodeValidationErrorSink errorSink, SemanticNode node, string errorMessage)
+        private static bool ReportError(IRuntimeCodeValidationErrorSink errorSink, SemanticNode node, string errorMessage)
         {
             if (errorSink != null)
             {

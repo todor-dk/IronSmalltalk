@@ -17,16 +17,18 @@
 using System;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
+using IronSmalltalk.DefinitionInstaller.Definitions;
+using IronSmalltalk.Runtime.Execution;
 
 namespace IronSmalltalk.Runtime.Installer.Definitions
 {
-    public class PoolVariableInitializer : InitializerDefinition
+    public class PoolVariableInitializer : InitializerDefinition<IPoolVariableInitializerFactory>
     {
         public SourceReference<string> PoolName { get; private set; }
         public SourceReference<string> VariableName { get; private set; }
 
-        public PoolVariableInitializer(SourceReference<string> poolName, SourceReference<string> variableName, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, CompiledInitializer code)
-            : base(sourceCodeService, methodSourceCodeService, code)
+        public PoolVariableInitializer(SourceReference<string> poolName, SourceReference<string> variableName, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, IPoolVariableInitializerFactory factory)
+            : base(sourceCodeService, methodSourceCodeService, factory)
         {
             if (poolName == null)
                 throw new ArgumentNullException("poolName");
@@ -65,18 +67,8 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
             if (poolItemBinding.IsConstantBinding && poolItemBinding.HasBeenSet)
                 return installer.ReportError(this.VariableName, InstallerErrors.PoolItemIsConstant);
 
-            return this.Code.Validate(installer.NameScope, 
+            return this.Factory.ValidatePoolVariableInitializer(this, poolBinding.Value, installer, 
                 new IntermediateCodeValidationErrorSink(this.MethodSourceCodeService, installer));
-        }
-
-        protected internal override void Execute(IInstallerContext installer)
-        {
-            SmalltalkRuntime runtime = installer.Runtime;
-            Pool pool = runtime.GetPool(this.PoolName.Value);
-            PoolVariableOrConstantBinding poolItemBinding = pool[this.VariableName.Value];
-
-            object value = this.Code.Execute(runtime, null);
-            poolItemBinding.SetValue(value);
         }
     }
 }

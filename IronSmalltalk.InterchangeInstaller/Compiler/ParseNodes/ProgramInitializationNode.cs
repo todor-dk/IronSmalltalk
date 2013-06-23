@@ -18,7 +18,7 @@ using System;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Interchange;
-using IronSmalltalk.InterchangeInstaller.Runtime;
+using IronSmalltalk.InterchangeInstaller.Compiler.DefinitionInstaller;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Installer;
 using IronSmalltalk.Runtime.Installer.Definitions;
@@ -60,9 +60,9 @@ namespace IronSmalltalk.Compiler.Interchange.ParseNodes
                 return this;
             }
 
-            CompiledInitializer code = new RuntimeProgramInitializer(initializer, null);
+            RuntimeProgramInitializerFactory factory = new RuntimeProgramInitializerFactory(initializer, methodSourceCodeService);
 
-            ProgramInitializer definition = new ProgramInitializer(sourceCodeService, methodSourceCodeService, code);
+            ProgramInitializer definition = new ProgramInitializer(sourceCodeService, methodSourceCodeService, factory);
             this.Definfition = definition;
             // This may fail, but we don't care. If failed, it reported the error through its error sink.
             processor.FileInProcessor.FileInProgramInitializer(definition);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.Runtime.Behavior;
 
 namespace IronSmalltalk.Runtime.Bindings
 {
@@ -13,5 +14,6 @@ namespace IronSmalltalk.Runtime.Bindings
         void Visit(PoolBinding binding);
         void Visit(GlobalVariableBinding binding);
         void Visit(GlobalConstantBinding binding);
+        void Visit(CompiledInitializer initializer);
     }
 }

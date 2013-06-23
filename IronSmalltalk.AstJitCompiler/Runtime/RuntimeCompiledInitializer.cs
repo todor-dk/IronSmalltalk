@@ -4,12 +4,14 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.AstJitCompiler.Runtime;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
 using IronSmalltalk.Runtime.CodeGeneration.BindingScopes;
 using IronSmalltalk.Runtime.CodeGeneration.Visiting;
+using IronSmalltalk.Runtime.Execution;
 using IronSmalltalk.Runtime.Execution.Internals;
 
 namespace IronSmalltalk.InterchangeInstaller.Runtime
@@ -20,8 +22,8 @@ namespace IronSmalltalk.InterchangeInstaller.Runtime
 
         public IDebugInfoService DebugInfoService { get; private set; }
 
-        protected RuntimeCompiledInitializer(InitializerNode parseTree, IDebugInfoService debugInfoService)
-            : base()
+        protected RuntimeCompiledInitializer(InitializerType type, IDiscreteBinding binding, InitializerNode parseTree, IDebugInfoService debugInfoService)
+            : base(type, binding)
         {
             if (parseTree == null)
                 throw new ArgumentNullException();
@@ -29,6 +31,13 @@ namespace IronSmalltalk.InterchangeInstaller.Runtime
             this.DebugInfoService = debugInfoService;
         }
 
+        public InitializerCompilationResult Compile(SmalltalkRuntime runtime)
+        {
+            return this.Compile(runtime, runtime.GlobalScope);
+        }
+
+        protected abstract InitializerCompilationResult Compile(SmalltalkRuntime runtime, SmalltalkNameScope globalScope);
+            
         protected InitializerCompilationResult Compile(SmalltalkRuntime runtime, BindingScope globalScope, BindingScope reservedScope, string initializerName)
         {
             InitializerVisitor visitor = new InitializerVisitor(runtime, globalScope, reservedScope, initializerName, this.DebugInfoService);
@@ -36,7 +45,7 @@ namespace IronSmalltalk.InterchangeInstaller.Runtime
             return new InitializerCompilationResult(code, visitor.BindingRestrictions);
         }
 
-        public override bool Validate(SmalltalkNameScope globalNameScope, IIntermediateCodeValidationErrorSink errorSink)
+        public bool Validate(SmalltalkNameScope globalNameScope, IRuntimeCodeValidationErrorSink errorSink)
         {
             return IronSmalltalk.InterchangeInstaller.Runtime.RuntimeCompiledMethod.Validate(this.ParseTree, errorSink, () =>
             {
@@ -44,16 +53,16 @@ namespace IronSmalltalk.InterchangeInstaller.Runtime
             });
         }
 
-        private volatile Func<SmalltalkRuntime, object, object> _Delegate = null;
+        private volatile Func<object, ExecutionContext, object> _Delegate = null;
 
-        public override object Execute(SmalltalkRuntime runtime, object self)
+        public override object Execute(object self, ExecutionContext executionContext)
         {
             if (this._Delegate == null)
-                System.Threading.Interlocked.CompareExchange(ref this._Delegate, this.NativeCompile(runtime), null);
-            return this._Delegate(runtime, self);
+                System.Threading.Interlocked.CompareExchange(ref this._Delegate, this.NativeCompile(executionContext.Runtime), null);
+            return this._Delegate(self, executionContext);
         }
 
-        private Func<SmalltalkRuntime, object, object> NativeCompile(SmalltalkRuntime runtime)
+        private Func<object, ExecutionContext, object> NativeCompile(SmalltalkRuntime runtime)
         {
             return this.Compile(runtime).ExecutableCode.Compile();
         }
@@ -62,7 +71,7 @@ namespace IronSmalltalk.InterchangeInstaller.Runtime
     public class RuntimeProgramInitializer : RuntimeCompiledInitializer
     {
         public RuntimeProgramInitializer(InitializerNode parseTree, IDebugInfoService debugInfoService)
-            : base(parseTree, debugInfoService)
+            : base(InitializerType.ProgramInitializer, null, parseTree, debugInfoService)
         {
         }
 
@@ -77,21 +86,22 @@ namespace IronSmalltalk.InterchangeInstaller.Runtime
 
     public class RuntimeGlobalInitializer : RuntimeCompiledInitializer
     {
-        public string GlobalName { get; private set; }
 
-        public RuntimeGlobalInitializer(InitializerNode parseTree, IDebugInfoService debugInfoService, string globalName)
-            : base(parseTree, debugInfoService)
+        public RuntimeGlobalInitializer(InitializerNode parseTree, IDebugInfoService debugInfoService, GlobalVariableOrConstantBinding binding)
+            : base(InitializerType.GlobalInitializer, binding, parseTree, debugInfoService)
         {
-            if (String.IsNullOrWhiteSpace(globalName))
-                throw new ArgumentNullException("globalName");
-            this.GlobalName = globalName;
+        }
+
+
+        public RuntimeGlobalInitializer(InitializerNode parseTree, IDebugInfoService debugInfoService, ClassBinding binding)
+            : base(InitializerType.ClassInitializer, binding, parseTree, debugInfoService)
+        {
         }
 
         protected override InitializerCompilationResult Compile(SmalltalkRuntime runtime, SmalltalkNameScope globalScope)
         {
-            ClassBinding cls = globalScope.GetClassBinding(this.GlobalName);
-            if ((cls != null) && (cls.Value != null))
-                return this.CompileClassInitializer(runtime, globalScope, cls.Value);
+            if (this.Type == InitializerType.ClassInitializer)
+                return this.CompileClassInitializer(runtime, globalScope, (SmalltalkClass)this.Binding.Value);
             else
                 return this.CompileGlobalInitializer(runtime, globalScope);
         }
@@ -101,7 +111,7 @@ namespace IronSmalltalk.InterchangeInstaller.Runtime
             return this.Compile(runtime,
                 BindingScope.ForGlobalInitializer(globalNameScope),
                 ReservedScope.ForGlobalInitializer(),
-                String.Format("{0} initializer", this.GlobalName));
+                String.Format("{0} initializer", this.Binding.Name.Value));
         }
 
         private InitializerCompilationResult CompileClassInitializer(SmalltalkRuntime runtime, SmalltalkNameScope globalNameScope, SmalltalkClass cls)
@@ -109,24 +119,20 @@ namespace IronSmalltalk.InterchangeInstaller.Runtime
             return this.Compile(runtime,
                 BindingScope.ForClassInitializer(cls, globalNameScope),
                 ReservedScope.ForClassInitializer(),
-                String.Format("{0} initializer", this.GlobalName));
+                String.Format("{0} initializer", this.Binding.Name.Value));
         }
     }
 
     public class RuntimePoolItemInitializer : RuntimeCompiledInitializer
     {
         public string PoolName { get; private set; }
-        public string PoolItemName { get; private set; }
 
-        public RuntimePoolItemInitializer(InitializerNode parseTree, IDebugInfoService debugInfoService, string poolName, string poolItemName)
-            : base(parseTree, debugInfoService)
+        public RuntimePoolItemInitializer(InitializerNode parseTree, IDebugInfoService debugInfoService, PoolVariableOrConstantBinding binding, string poolName)
+            : base(InitializerType.PoolVariableInitializer, binding, parseTree, debugInfoService)
         {
             if (String.IsNullOrWhiteSpace(poolName))
                 throw new ArgumentNullException("poolName");
-            if (String.IsNullOrWhiteSpace(poolItemName))
-                throw new ArgumentNullException("poolItemName");
             this.PoolName = poolName;
-            this.PoolItemName = poolItemName;
         }
 
         protected override InitializerCompilationResult Compile(SmalltalkRuntime runtime, SmalltalkNameScope globalScope)
@@ -138,7 +144,7 @@ namespace IronSmalltalk.InterchangeInstaller.Runtime
             return this.Compile(runtime,
                 BindingScope.ForPoolInitializer(poolBinding.Value, globalScope),
                 ReservedScope.ForPoolInitializer(),
-                String.Format("{0} initializerFor: {1}", this.PoolName, this.PoolItemName));
+                String.Format("{0} initializerFor: {1}", this.PoolName, this.Binding.Name.Value));
         }
     }
 }

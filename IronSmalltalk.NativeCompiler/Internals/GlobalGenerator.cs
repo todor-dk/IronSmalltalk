@@ -21,10 +21,10 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
         internal override void GenerateTypes()
         {
-            this.Type = this.Compiler.NativeGenerator.DefineType(
-                this.Compiler.GetTypeName(this.SubNamespace, this.Binding.Name),
-                typeof(Object),
-                TypeAttributes.Class | TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.Abstract);
+            //this.Type = this.Compiler.NativeGenerator.DefineType(
+            //    this.Compiler.GetTypeName(this.SubNamespace, this.Binding.Name),
+            //    typeof(Object),
+            //    TypeAttributes.Class | TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.Abstract);
         }
 
         protected abstract string SubNamespace { get; }
