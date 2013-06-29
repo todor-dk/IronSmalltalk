@@ -192,7 +192,7 @@ namespace IronSmalltalk.Runtime.Internal
             if (runtime == null)
                 throw new ArgumentNullException("runtime");
             if (poolBinding == null)
-                throw new ArgumentNullException("binding");
+                throw new ArgumentNullException("poolBinding");
 
             Symbol varName = runtime.GetSymbol(name);
             PoolVariableBinding binding = new PoolVariableBinding(varName);
@@ -205,7 +205,7 @@ namespace IronSmalltalk.Runtime.Internal
             if (runtime == null)
                 throw new ArgumentNullException("runtime");
             if (poolBinding == null)
-                throw new ArgumentNullException("binding");
+                throw new ArgumentNullException("poolBinding");
 
             Symbol varName = runtime.GetSymbol(name);
             PoolConstantBinding binding = new PoolConstantBinding(varName);

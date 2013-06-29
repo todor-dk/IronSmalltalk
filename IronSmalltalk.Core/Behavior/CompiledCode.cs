@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IronSmalltalk.Runtime.Internal;
 
 namespace IronSmalltalk.Runtime.Behavior
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract class CompiledCode : IAnnotetable
     {
         #region Annotations
@@ -14,7 +14,7 @@ namespace IronSmalltalk.Runtime.Behavior
         /// <summary>
         /// Annotations that may be added to the binding.
         /// </summary>
-        protected Dictionary<string, string> _annotations;
+        protected Dictionary<string, string> _Annotations;
 
         /// <summary>
         /// The annotation pairs associated with the annotetable object.
@@ -23,9 +23,9 @@ namespace IronSmalltalk.Runtime.Behavior
         {
             get
             {
-                if (this._annotations == null)
+                if (this._Annotations == null)
                     return AnnotationsHelper.Empty;
-                return this._annotations;
+                return this._Annotations;
             }
         }
 
@@ -40,15 +40,15 @@ namespace IronSmalltalk.Runtime.Behavior
                 throw new ArgumentNullException();
             if (value == null)
             {
-                if (this._annotations == null)
+                if (this._Annotations == null)
                     return;
-                this._annotations.Remove(key);
+                this._Annotations.Remove(key);
             }
             else
             {
-                if (this._annotations == null)
-                    this._annotations = new Dictionary<string, string>();
-                this._annotations[key] = value;
+                if (this._Annotations == null)
+                    this._Annotations = new Dictionary<string, string>();
+                this._Annotations[key] = value;
             }
         }
 

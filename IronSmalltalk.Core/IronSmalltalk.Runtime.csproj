@@ -27,7 +27,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\IronSmalltalk.Runtime.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -83,6 +84,7 @@
     <Compile Include="Bindings\InitializerList.cs" />
     <Compile Include="Bindings\ISmalltalkNameScopeVisitor.cs" />
     <Compile Include="Execution\CallSiteBinders\MessageSendCallSiteBinderBase.cs" />
+    <Compile Include="Execution\CallSiteBinders\RuntimeHelpers.cs" />
     <Compile Include="Execution\CallSiteBinders\SmalltalkDynamicMetaObjectBinder.cs" />
     <Compile Include="Execution\Dynamic\SmalltalkRuntimeDynamicMetaObject.cs" />
     <Compile Include="Execution\ExecutionContext.cs" />
@@ -106,22 +108,6 @@
     <Compile Include="Execution\CallSiteBinders\SuperSendCallSiteBinder.cs" />
     <Compile Include="Execution\Dynamic\SmalltalkDynamicMetaObject.cs" />
     <Compile Include="Execution\Dynamic\SmalltalkObjectDynamicMetaObject.cs" />
-    <Compile Include="CodeGeneration\BindingScopes\BindingScope.cs" />
-    <Compile Include="CodeGeneration\BindingScopes\ClassRelatedBindingScope.cs" />
-    <Compile Include="CodeGeneration\BindingScopes\ClassScope.cs" />
-    <Compile Include="CodeGeneration\BindingScopes\ComposableBindingScope.cs" />
-    <Compile Include="CodeGeneration\BindingScopes\FunctionScope.cs" />
-    <Compile Include="CodeGeneration\BindingScopes\GlobalScope.cs" />
-    <Compile Include="CodeGeneration\BindingScopes\PoolScope.cs" />
-    <Compile Include="CodeGeneration\BindingScopes\PoolVariableScope.cs" />
-    <Compile Include="CodeGeneration\BindingScopes\ReservedScope.cs" />
-    <Compile Include="CodeGeneration\BindingScopes\SemanticConstants.cs" />
-    <Compile Include="CodeGeneration\Bindings\ClassElementBindings.cs" />
-    <Compile Include="CodeGeneration\Bindings\DiscreteBinding.cs" />
-    <Compile Include="CodeGeneration\Bindings\ExpressionBindings.cs" />
-    <Compile Include="CodeGeneration\Bindings\GlobalBindings.cs" />
-    <Compile Include="CodeGeneration\Bindings\NameBindings.cs" />
-    <Compile Include="CodeGeneration\Bindings\PoolElementBindings.cs" />
     <Compile Include="Execution\Internals\RuntimeCodeGenerationErrors.cs" />
     <Compile Include="Execution\CallSiteBinders\CallSiteBinderCacheTable.cs" />
     <Compile Include="Execution\Internals\CodeGenerationException.cs" />
@@ -157,8 +143,6 @@
   <ItemGroup>
     <None Include="Behavior\Behavior Diagram.cd" />
     <None Include="Bindings\Bindings Diagram.cd" />
-    <None Include="CodeGeneration\BindingScopes\BindingScopes Diagram.cd" />
-    <None Include="CodeGeneration\Bindings\NameBindings Diagram.cd" />
     <None Include="Execution\CallSiteBinders\CallSiteBinders Diagram.cd" />
     <None Include="Execution\Dynamic\Dynamic Objects Diagram.cd" />
     <None Include="Execution\Internals\Exceptions Diagram.cd" />

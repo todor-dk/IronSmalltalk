@@ -81,7 +81,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 expression = Expression.Dynamic(binder, typeof(Object),
                     target.Expression,
                     Expression.Constant(this.Selector, typeof(object)),
-                    Expression.NewArrayInit(typeof(object), args.Select(d => Expression.Convert(d.Expression, typeof(object))).ToArray()));
+                    Expression.NewArrayInit(typeof(object), args.Select(d => Expression.Convert(d.Expression, typeof(object)))));
             }
 
             // Return a DynamicMetaObject with the generated code.

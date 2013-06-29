@@ -33,11 +33,11 @@ namespace IronSmalltalk.Runtime.Bindings
         /// <summary>
         /// Internal variable holding the name of the binding.
         /// </summary>
-        protected readonly Symbol _name;
+        protected readonly Symbol _Name;
         /// <summary>
         /// Internal variable holding the value of the binding.
         /// </summary>
-        protected TValue _value;
+        protected TValue _Value;
 
         /// <summary>
         /// Tells if the value has actually been set.
@@ -53,7 +53,7 @@ namespace IronSmalltalk.Runtime.Bindings
         {
             if (name == null)
                 throw new ArgumentNullException();
-            this._name = name;
+            this._Name = name;
             this.HasBeenSet = false;
         }
 
@@ -69,7 +69,7 @@ namespace IronSmalltalk.Runtime.Bindings
         /// </summary>
         public Symbol Name
         {
-            get { return this._name; }
+            get { return this._Name; }
         }
 
         /// <summary>
@@ -77,12 +77,12 @@ namespace IronSmalltalk.Runtime.Bindings
         /// </summary>
         public TValue Value
         {
-            get { return this._value; }
+            get { return this._Value; }
         }
 
         object IBinding.Value
         {
-            get { return this._value; }
+            get { return this._Value; }
         }
     }
 

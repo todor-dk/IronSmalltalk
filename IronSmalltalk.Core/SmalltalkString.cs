@@ -147,7 +147,6 @@ namespace IronSmalltalk.Runtime
         /// <returns>A System.String that represents the current SmalltalkString.</returns>
         public override string ToString()
         {
-            base.ToString();
             return (string)this;
         }
 

@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -363,6 +364,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             }
             else
             {
+                Debug.Assert(receiver != null, "receiver != null");
                 Type type = receiver.GetType();
                 cls = runtime.NativeTypeClassMap.GetSmalltalkClass(type);
                 // If not explicitely mapped to a ST Class, fallback to the generic .Net mapping class.

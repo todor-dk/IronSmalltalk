@@ -103,10 +103,10 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             ReadOnlyCollectionBuilder<Expression> expressions = new ReadOnlyCollectionBuilder<Expression>(3) {
                 binding
             };
-            ParameterExpression[] source = signature.Parameters.AddFirst<ParameterExpression>(expression = Expression.Parameter(typeof(CallSite), "$site"));
+            ParameterExpression[] source = signature.Parameters.AddFirst(expression = Expression.Parameter(typeof(CallSite), "$site"));
             Expression item = Expression.Label(UpdateLabel);
             expressions.Add(item);
-            expressions.Add(Expression.Label(signature.ReturnLabel, Expression.Condition(Expression.Call(typeof(CallSiteOps).GetMethod("SetNotMatched"), source.First<ParameterExpression>()), Expression.Default(signature.ReturnLabel.Type), Expression.Invoke(Expression.Property(Expression.Convert(expression, type), typeof(CallSite<T>).GetProperty("Update")), new ReadOnlyCollection<Expression>(source)))));
+            expressions.Add(Expression.Label(signature.ReturnLabel, Expression.Condition(Expression.Call(typeof(CallSiteOps).GetMethod("SetNotMatched"), source.First()), Expression.Default(signature.ReturnLabel.Type), Expression.Invoke(Expression.Property(Expression.Convert(expression, type), typeof(CallSite<T>).GetProperty("Update")), new ReadOnlyCollection<Expression>(source)))));
             return Expression.Lambda<T>(Expression.Block(expressions)
                 , "CallSite.Target", 
                 true, new ReadOnlyCollection<ParameterExpression>(source));
@@ -153,34 +153,34 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 
     internal static class HackExtensions
     {
-        private static readonly CacheDict<MethodBase, ParameterInfo[]> _ParamInfoCache;
-        private static readonly Assembly _mscorlib;
-        private static readonly Assembly _systemCore;
+        private static readonly CacheDict<MethodBase, ParameterInfo[]> ParamInfoCache;
+        private static readonly Assembly Mscorlib;
+        private static readonly Assembly SystemCore;
 
         static HackExtensions()
         {
-            _mscorlib = typeof(object).Assembly;
-            _systemCore = typeof(Expression).Assembly;
-            _ParamInfoCache = new CacheDict<MethodBase, ParameterInfo[]>(0x4b);
+            Mscorlib = typeof(object).Assembly;
+            SystemCore = typeof(Expression).Assembly;
+            ParamInfoCache = new CacheDict<MethodBase, ParameterInfo[]>(0x4b);
         }
 
         internal class CacheDict<TKey, TValue>
         {
             // Fields
-            private readonly Dictionary<TKey, KeyInfo<TKey, TValue>> _dict;
+            private readonly Dictionary<TKey, KeyInfo> _dict;
             private readonly LinkedList<TKey> _list;
             private readonly int _maxSize;
 
             internal CacheDict(int maxSize)
             {
-                this._dict = new Dictionary<TKey, KeyInfo<TKey, TValue>>();
+                this._dict = new Dictionary<TKey, KeyInfo>();
                 this._list = new LinkedList<TKey>();
                 this._maxSize = maxSize;
             }
 
             internal void Add(TKey key, TValue value)
             {
-                KeyInfo<TKey, TValue> info;
+                KeyInfo info;
                 if (this._dict.TryGetValue(key, out info))
                 {
                     this._list.Remove(info.List);
@@ -193,12 +193,12 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 }
                 LinkedListNode<TKey> node2 = new LinkedListNode<TKey>(key);
                 this._list.AddFirst(node2);
-                this._dict[key] = new KeyInfo<TKey, TValue>(value, node2);
+                this._dict[key] = new KeyInfo(value, node2);
             }
 
             internal bool TryGetValue(TKey key, out TValue value)
             {
-                KeyInfo<TKey, TValue> info;
+                KeyInfo info;
                 if (this._dict.TryGetValue(key, out info))
                 {
                     LinkedListNode<TKey> list = info.List;
@@ -236,7 +236,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 
             // Nested Types
             [StructLayout(LayoutKind.Sequential)]
-            private struct KeyInfo<Tkey, TValue>
+            private struct KeyInfo
             {
                 internal readonly TValue Value;
                 internal readonly LinkedListNode<TKey> List;
@@ -256,7 +256,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         internal static bool CanCache(this Type t)
         {
             Assembly assembly = t.Assembly;
-            if ((assembly != _mscorlib) && (assembly != _systemCore))
+            if ((assembly != Mscorlib) && (assembly != SystemCore))
             {
                 return false;
             }
@@ -276,15 +276,15 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         internal static ParameterInfo[] GetParametersCached(this MethodBase method)
         {
             ParameterInfo[] parameters = null;
-            lock (_ParamInfoCache)
+            lock (ParamInfoCache)
             {
-                if (!_ParamInfoCache.TryGetValue(method, out parameters))
+                if (!ParamInfoCache.TryGetValue(method, out parameters))
                 {
                     parameters = method.GetParameters();
                     Type declaringType = method.DeclaringType;
                     if ((declaringType != null) && declaringType.CanCache())
                     {
-                        _ParamInfoCache[method] = parameters;
+                        ParamInfoCache[method] = parameters;
                     }
                 }
             }

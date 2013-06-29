@@ -346,7 +346,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                         Expression.LessThan(value, zero),
                             Expression.Throw(overflow, type),
                             leftShift);
-            };
+            }
 
             // C# semantics:
             //  if (shift > 0)
