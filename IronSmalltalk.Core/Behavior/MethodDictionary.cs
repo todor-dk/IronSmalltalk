@@ -30,11 +30,11 @@ namespace IronSmalltalk.Runtime.Behavior
     /// </remarks>
     public abstract class MethodDictionary :
         IDictionary<Symbol, CompiledMethod>, IDictionary<string, CompiledMethod>, // IDictionary,
-        IEnumerable<CompiledMethod>, IEnumerable, ICollection<CompiledMethod> //, ICollection
+        ICollection<CompiledMethod> //, ICollection // Also implements IEnumerable<CompiledMethod>, IEnumerable
     {
         private volatile Dictionary<Symbol, CompiledMethod> _contents;
-        private Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>> _lazyInitializer;
-        private SmalltalkRuntime _runtime;
+        private readonly Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>> _LazyInitializer;
+        private readonly SmalltalkRuntime _Runtime;
         private bool _readOnly = false;
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace IronSmalltalk.Runtime.Behavior
         {
             if (runtime == null)
                 throw new ArgumentNullException("runtime");
-            this._runtime = runtime;
+            this._Runtime = runtime;
             this._contents = new Dictionary<Symbol, CompiledMethod>();
         }
 
@@ -65,8 +65,8 @@ namespace IronSmalltalk.Runtime.Behavior
                 throw new ArgumentNullException("runtime");
             if (lazyInitializer == null)
                 throw new ArgumentNullException("lazyInitializer");
-            this._runtime = runtime;
-            this._lazyInitializer = lazyInitializer;
+            this._Runtime = runtime;
+            this._LazyInitializer = lazyInitializer;
             this._contents = null;
         }
 
@@ -78,7 +78,7 @@ namespace IronSmalltalk.Runtime.Behavior
             {
                 // Lazy initializing of method dictionary
                 if (this._contents == null)
-                    System.Threading.Interlocked.CompareExchange(ref this._contents, this._lazyInitializer(this._runtime), null);
+                    System.Threading.Interlocked.CompareExchange(ref this._contents, this._LazyInitializer(this._Runtime), null);
                 return this._contents;
             }
         }
@@ -245,9 +245,9 @@ namespace IronSmalltalk.Runtime.Behavior
                 throw new ArgumentNullException("selector");
             if (this._readOnly)
                 throw new InvalidOperationException("Dictionary is in read-only state.");
-            if (selector.Manager.Runtime != this._runtime)
+            if (selector.Manager.Runtime != this._Runtime)
                 throw new InvalidOperationException("Method selector belongs to a different SmalltalkRuntime.");
-            //if (method. != this._runtime)
+            //if (method. != this._Runtime)
             //    throw new InvalidOperationException("Method selector belongs to a different SmalltalkRuntime.");
             this.Contents.Add(selector, method);
             this._nativeMethodNameMap = null;
@@ -291,8 +291,10 @@ namespace IronSmalltalk.Runtime.Behavior
                 throw new ArgumentNullException();
             if (this._readOnly)
                 throw new InvalidOperationException("Dictionary is in read-only state.");
-            return this.Contents.Remove(selector);
-            this._nativeMethodNameMap = null;
+            bool removed = this.Contents.Remove(selector);
+            if (removed)
+                this._nativeMethodNameMap = null;
+            return removed;
         }
 
         /// <summary>
@@ -361,7 +363,7 @@ namespace IronSmalltalk.Runtime.Behavior
 
         private Symbol ToSymbol(string selector)
         {
-            return this._runtime.GetSymbol(selector);
+            return this._Runtime.GetSymbol(selector);
         }
 
         private CompiledMethod ElementMissing(string selector)
@@ -450,7 +452,7 @@ namespace IronSmalltalk.Runtime.Behavior
             if (array == null)
                 throw new ArgumentNullException("array");
             if (arrayIndex < 0)
-                throw new ArgumentOutOfRangeException("arrayIndex is less than 0.");
+                throw new ArgumentOutOfRangeException("arrayIndex", arrayIndex, "arrayIndex is less than 0.");
             if (array.Length < (this.Count + arrayIndex))
                 throw new ArgumentException("The number of elements in the source ICollection <T> is greater than the available space from arrayIndex to the end of the destination array.");
 
@@ -573,7 +575,7 @@ namespace IronSmalltalk.Runtime.Behavior
             if (array == null)
                 throw new ArgumentNullException("array");
             if (arrayIndex < 0)
-                throw new ArgumentOutOfRangeException("arrayIndex is less than 0.");
+                throw new ArgumentOutOfRangeException("arrayIndex", arrayIndex, "arrayIndex is less than 0.");
             if (array.Length < (this.Count + arrayIndex))
                 throw new ArgumentException("The number of elements in the source ICollection <T> is greater than the available space from arrayIndex to the end of the destination array.");
 
@@ -811,6 +813,8 @@ namespace IronSmalltalk.Runtime.Behavior
         /// </summary>
         /// <param name="name">Native name of the method, as defined in the "ist.runtime.native-name" annotation.</param>
         /// <param name="numberOfParameters">Number of arguments expected by the method.</param>
+        /// <param name="ignoreCase">Determines if the method lookup is performed case-insensitively.</param>
+        /// <param name="caseConflict">For case-insensitive method lookups, tells if multiple matches were fould.</param>
         /// <returns></returns>
         public CompiledMethod GetMethodByNativeName(string name, int numberOfParameters, bool ignoreCase, out bool caseConflict)
         {

@@ -23,6 +23,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         /// <param name="definingType"></param>
         /// <param name="memberName"></param>
         /// <param name="parameters"></param>
+        /// <param name="self"></param>
         /// <returns></returns>
         public static Expression GeneratePrimitive(IPrimitiveClient client, PrimitivesEnum primitive, Type definingType, string memberName, IEnumerable<string> parameters, DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions)
         {
@@ -138,6 +139,10 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         /// <param name="type">Type that is expected to define the method we are looking for.</param>
         /// <param name="methodName">Name of the method to invoke.</param>
         /// <param name="argumentTypes">Types of arguments that we are to pass to the method.</param>
+        /// <param name="bindingFlags"></param>
+        /// <param name="self"></param>
+        /// <param name="arguments"></param>
+        /// <param name="restrictions"></param>
         /// <returns>Expression for the call</returns>
         public static Expression GenerateInvokeStaticMethod(Type type, string methodName, Type[] argumentTypes, BindingFlags bindingFlags, DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions)
         {
@@ -156,6 +161,10 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         /// <param name="type">Type that is expected to define the method we are looking for.</param>
         /// <param name="methodName">Name of the method to invoke.</param>
         /// <param name="argumentTypes">Types of arguments that we are to pass to the method.</param>
+        /// <param name="bindingFlags"></param>
+        /// <param name="self"></param>
+        /// <param name="arguments"></param>
+        /// <param name="restrictions"></param>
         /// <returns>Expression for the call</returns>
         public static Expression GenerateInvokeInstanceMethod(Type type, string methodName, Type[] argumentTypes, BindingFlags bindingFlags, DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions)
         {
@@ -177,8 +186,9 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         /// Get the expression needed to perform a constructor call.
         /// </summary>
         /// <param name="type">Type that is expected to define the method we are looking for.</param>
-        /// <param name="methodName">Name of the method to invoke.</param>
         /// <param name="argumentTypes">Types of arguments that we are to pass to the method.</param>
+        /// <param name="self"></param>
+        /// <param name="arguments"></param>
         /// <returns>Expression for the call</returns>
         public static Expression GenerateInvokeConstructor(Type type, Type[] argumentTypes, DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions)
         {
@@ -196,8 +206,11 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         /// Get the expression needed to perform a property get or set operation.
         /// </summary>
         /// <param name="type">Type that is expected to define the method we are looking for.</param>
-        /// <param name="methodName">Name of the method to invoke.</param>
+        /// <param name="propertyName">Name of the property to invoke.</param>
+        /// <param name="returnType"></param>
         /// <param name="argumentTypes">Types of arguments that we are to pass to the method.</param>
+        /// <param name="bindingFlags"></param>
+        /// <param name="self"></param>
         /// <returns>Expression for the call</returns>
         public static Expression GenerateInvokeProperty(Type type, string propertyName, Type returnType, Type[] argumentTypes, BindingFlags bindingFlags, DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions)
         {
@@ -278,8 +291,10 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         /// Get the expression needed to perform a field get or set operation.
         /// </summary>
         /// <param name="type">Type that is expected to define the method we are looking for.</param>
-        /// <param name="methodName">Name of the method to invoke.</param>
-        /// <param name="argumentTypes">Types of arguments that we are to pass to the method.</param>
+        /// <param name="fieldName">Name of the field to invoke.</param>
+        /// <param name="bindingFlags"></param>
+        /// <param name="self"></param>
+        /// <param name="arguments"></param>
         /// <returns>Expression for the call</returns>
         public static Expression GenerateInvokeField(Type type, string fieldName, BindingFlags bindingFlags, DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions)
         {

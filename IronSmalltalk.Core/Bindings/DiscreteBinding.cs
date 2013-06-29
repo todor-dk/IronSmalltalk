@@ -51,7 +51,7 @@ namespace IronSmalltalk.Runtime.Bindings
         {
             if (this.IsConstantBinding && this.HasBeenSet)
                 throw new InvalidOperationException("Cannot change value of a constant binding. Value is already set.");
-            this._value = value;
+            this._Value = value;
             if (this.RequiresValue)
                 this.HasBeenSet = (value != null);
             else
@@ -145,7 +145,7 @@ namespace IronSmalltalk.Runtime.Bindings
         /// </remarks>
         public new object Value
         {
-            get { return this._value; }
+            get { return this._Value; }
             set { this.SetValue(value); }
         }
     }

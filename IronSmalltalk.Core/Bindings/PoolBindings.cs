@@ -55,7 +55,7 @@ namespace IronSmalltalk.Runtime.Bindings
         /// </remarks>
         public new object Value
         {
-            get { return this._value; }
+            get { return this._Value; }
             set { this.SetValue(value); }
         }
     }

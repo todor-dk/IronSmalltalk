@@ -68,7 +68,7 @@ namespace IronSmalltalk.Runtime
                 : base(cls)
             {
                 if (cls.InstanceState != SmalltalkClass.InstanceStateEnum.ByteIndexable)
-                    throw new ArgumentOutOfRangeException("Expected a ByteIndexable class");
+                    throw new ArgumentOutOfRangeException("cls", cls.InstanceState, "Expected a ByteIndexable class");
                 if (objectSize < 0)
                     throw new ArgumentOutOfRangeException("objectSize");
                 this.Contents = new byte[objectSize];
@@ -94,7 +94,7 @@ namespace IronSmalltalk.Runtime
                 : base(cls)
             {
                 if (cls.InstanceState != SmalltalkClass.InstanceStateEnum.ObjectIndexable)
-                    throw new ArgumentOutOfRangeException("Expected an ObjectIndexable class");
+                    throw new ArgumentOutOfRangeException("cls", cls.InstanceState, "Expected an ObjectIndexable class");
                 if (objectSize < 0)
                     throw new ArgumentOutOfRangeException("objectSize");
                 this.Contents = new object[objectSize];

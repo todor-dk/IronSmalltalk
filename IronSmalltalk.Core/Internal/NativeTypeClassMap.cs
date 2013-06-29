@@ -340,6 +340,9 @@ namespace IronSmalltalk.Runtime.Internal
         /// <returns>Returns System.Type with the given name or null of a type did not exist (could not be loaded).</returns>
         public static Type GetType(string name)
         {
+            if (name == null)
+                throw new ArgumentNullException("name");
+
             if(name == "bool") 
                 return typeof(bool);	
             if(name == "byte") 
@@ -370,12 +373,12 @@ namespace IronSmalltalk.Runtime.Internal
                 return typeof(ushort);	
             if(name == "string") 
                 return typeof(string);
-            if ((name != null) && name.StartsWith(NativeTypeClassMap.IstTypenamePrefix))
+            if (name.StartsWith(NativeTypeClassMap.IstTypenamePrefix))
                 return NativeTypeClassMap.GetIstType(name);
             return Type.GetType(name, false, false);
         }
 
-        private static readonly string IstTypenamePrefix = "_";
+        private const string IstTypenamePrefix = "_";
 
         private static readonly Dictionary<string, Type> IstTypes = new Dictionary<string, Type>();
 

@@ -16,7 +16,12 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         /// <summary>
         /// This converts the arguments that were passed in to expressions with the correct types.
         /// </summary>
+        /// <param name="arguments"></param>
         /// <param name="argumentTypes">Collection of types to convert to.</param>
+        /// <param name="self"></param>
+        /// <param name="explicitConversion"></param>
+        /// <param name="checkedConversion"></param>
+        /// <param name="restrictions"></param>
         /// <returns>Collection of argument expressions that can be passed to the member call.</returns>
         public static IList<Expression> GetArguments(DynamicMetaObject self, DynamicMetaObject[] arguments, Type[] argumentTypes, bool explicitConversion, bool checkedConversion, ref BindingRestrictions restrictions)
         {
@@ -167,7 +172,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                 if (first && (typeName == "this"))
                 {
                     if (thisType == null)
-                        throw new ArgumentNullException("this");
+                        throw new ArgumentNullException("thisType");
                     argumentTypes.Add(thisType);
                 }
                 else
@@ -178,6 +183,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                         throw new PrimitiveInvalidTypeException(String.Format(RuntimeCodeGenerationErrors.WrongTypeName, typeName));
                     argumentTypes.Add(type);
                 }
+                first = false;
             }
 
             return argumentTypes.ToArray();

@@ -98,7 +98,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Runtime.Bindings.BindingDictionary&lt;TItem&gt;" Collapsed="true">
-    <Position X="19.75" Y="1.5" Width="1.5" />
+    <Position X="19.75" Y="1.5" Width="3" />
     <TypeIdentifier>
       <HashCode>GCKQDICAAAIUEBBBSSAABAQOIAWACSEGBEQiAAJUKFA=</HashCode>
       <FileName>Bindings\BindingDictionary.cs</FileName>
@@ -106,7 +106,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="IronSmalltalk.Runtime.Bindings.DiscreteBindingDictionary&lt;TItem&gt;" Collapsed="true">
-    <Position X="19.75" Y="3.75" Width="1.5" />
+    <Position X="19.75" Y="3.75" Width="3" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Bindings\DiscreteBindingDictionary.cs</FileName>
@@ -119,10 +119,10 @@
       <FileName>Bindings\InstanceStateBindings.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="IronSmalltalk.Runtime.Bindings.SmalltalkNameScope" Collapsed="true">
+  <Class Name="IronSmalltalk.Runtime.Bindings.SmalltalkNameScope">
     <Position X="19.5" Y="6" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AKAQAAIAgAEABABQCAAgAIAAAhAAAkBGBgAAAAAAQAA=</HashCode>
+      <HashCode>AKAQAAIAiAEABABQCAAgAIAAAhAAAkBGBgAAAAAARAA=</HashCode>
       <FileName>Bindings\SmalltalkNameScope.cs</FileName>
     </TypeIdentifier>
   </Class>

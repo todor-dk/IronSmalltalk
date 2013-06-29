@@ -113,7 +113,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             /// <summary>
             /// Get a Call-Site-Binder that represent a message send with the given selector.
             /// </summary>
-            /// <param name="value">String value of the selector.</param>
+            /// <param name="selector">String value of the selector.</param>
             /// <returns>An existing Call-Site-Binder or null if none.</returns>
             public MessageSendCallSiteBinder GetItem(string selector)
             {
@@ -150,7 +150,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             /// <summary>
             /// A Call-Site-Binder was GC'ed. Remove the Call-Site-Binder info from the internal string-CSB dictionary.
             /// </summary>
-            /// <param name="key">String value of the Call-Site-Binder that was GC'ed.</param>
+            /// <param name="selector">String value of the Call-Site-Binder that was GC'ed.</param>
             internal void InternalRemoveItem(string selector)
             {
                 WeakReference reference;

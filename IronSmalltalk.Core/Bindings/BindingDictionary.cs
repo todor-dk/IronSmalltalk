@@ -36,10 +36,10 @@ namespace IronSmalltalk.Runtime.Bindings
     /// </remarks>
     public class BindingDictionary<TItem> :
         IDictionary<Symbol, TItem>, IDictionary<string, TItem>, // IDictionary,
-        IEnumerable<TItem>, IEnumerable, ICollection<TItem> //, ICollection
+        ICollection<TItem> //, ICollection, also implements IEnumerable<TItem>, IEnumerable, 
         where TItem : IBinding
     {
-        private Dictionary<Symbol, TItem> _contents;
+        private readonly Dictionary<Symbol, TItem> _Contents;
         public SmalltalkRuntime Runtime { get; private set; }
         private bool _readOnly = false;
 
@@ -53,7 +53,7 @@ namespace IronSmalltalk.Runtime.Bindings
             if (runtime == null)
                 throw new ArgumentNullException("runtime");
             this.Runtime = runtime;
-            this._contents = new Dictionary<Symbol, TItem>(initialCapacity);
+            this._Contents = new Dictionary<Symbol, TItem>(initialCapacity);
         }
 
         #region Accessing 
@@ -93,12 +93,12 @@ namespace IronSmalltalk.Runtime.Bindings
         {
             if (key == null)
                 throw new ArgumentNullException();
-            return this._contents.TryGetValue(key, out binding);
+            return this._Contents.TryGetValue(key, out binding);
         }
 
         public int Count
         {
-            get { return this._contents.Count; }
+            get { return this._Contents.Count; }
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace IronSmalltalk.Runtime.Bindings
         /// </summary>
         public ICollection<Symbol> Keys
         {
-            get { return this._contents.Keys; }
+            get { return this._Contents.Keys; }
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace IronSmalltalk.Runtime.Bindings
         /// </summary>
         public ICollection<TItem> Values
         {
-            get { return this._contents.Values; }
+            get { return this._Contents.Values; }
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace IronSmalltalk.Runtime.Bindings
         /// <returns>An IEnumerator that can be used to iterate through the binding dictionary.</returns>
         public IEnumerator<TItem> GetEnumerator()
         {
-            return this._contents.Select(pair => pair.Value).GetEnumerator();
+            return this._Contents.Select(pair => pair.Value).GetEnumerator();
         }
 
         public void CopyTo(TItem[] array, int arrayIndex)
@@ -141,7 +141,7 @@ namespace IronSmalltalk.Runtime.Bindings
                 throw new ArgumentNullException();
             if (this._readOnly)
                 throw new InvalidOperationException("Dictionary is in read-only state.");
-            this._contents.Add(binding.Name, binding);
+            this._Contents.Add(binding.Name, binding);
         }
 
         public void AddRange(IEnumerable<TItem> items)
@@ -151,7 +151,7 @@ namespace IronSmalltalk.Runtime.Bindings
             if (this._readOnly)
                 throw new InvalidOperationException("Dictionary is in read-only state.");
             foreach (TItem item in items)
-                this._contents.Add(item.Name, item);
+                this._Contents.Add(item.Name, item);
         }
 
         public bool Remove(string key)
@@ -167,7 +167,7 @@ namespace IronSmalltalk.Runtime.Bindings
                 throw new ArgumentNullException();
             if (this._readOnly)
                 throw new InvalidOperationException("Dictionary is in read-only state.");
-            return this._contents.Remove(key);
+            return this._Contents.Remove(key);
         }
 
         public bool Remove(TItem binding)
@@ -181,7 +181,7 @@ namespace IronSmalltalk.Runtime.Bindings
         {
             if (this._readOnly)
                 throw new InvalidOperationException("Dictionary is in read-only state.");
-            this._contents.Clear();
+            this._Contents.Clear();
         }
 
         #endregion
@@ -312,7 +312,7 @@ namespace IronSmalltalk.Runtime.Bindings
             if (array == null)
                 throw new ArgumentNullException("array");
             if (arrayIndex < 0)
-                throw new ArgumentOutOfRangeException("arrayIndex is less than 0.");
+                throw new ArgumentOutOfRangeException("arrayIndex", arrayIndex, "arrayIndex is less than 0.");
             if (array.Length < (this.Count + arrayIndex))
                 throw new ArgumentException("The number of elements in the source ICollection <T> is greater than the available space from arrayIndex to the end of the destination array.");
 
@@ -345,7 +345,7 @@ namespace IronSmalltalk.Runtime.Bindings
 
         IEnumerator<KeyValuePair<Symbol, TItem>> IEnumerable<KeyValuePair<Symbol, TItem>>.GetEnumerator()
         {
-            return this._contents.GetEnumerator();
+            return this._Contents.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -435,7 +435,7 @@ namespace IronSmalltalk.Runtime.Bindings
             if (array == null)
                 throw new ArgumentNullException("array");
             if (arrayIndex < 0)
-                throw new ArgumentOutOfRangeException("arrayIndex is less than 0.");
+                throw new ArgumentOutOfRangeException("arrayIndex", arrayIndex, "arrayIndex is less than 0.");
             if (array.Length < (this.Count + arrayIndex))
                 throw new ArgumentException("The number of elements in the source ICollection <T> is greater than the available space from arrayIndex to the end of the destination array.");
 
@@ -468,7 +468,7 @@ namespace IronSmalltalk.Runtime.Bindings
 
         IEnumerator<KeyValuePair<string, TItem>> IEnumerable<KeyValuePair<string, TItem>>.GetEnumerator()
         {
-            return this._contents.Select(pair => new KeyValuePair<string, TItem>(pair.Key.Value, pair.Value)).GetEnumerator();
+            return this._Contents.Select(pair => new KeyValuePair<string, TItem>(pair.Key.Value, pair.Value)).GetEnumerator();
         }
 
         #endregion

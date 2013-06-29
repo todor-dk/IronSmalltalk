@@ -15,11 +15,8 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using IronSmalltalk.Runtime.Bindings;
-using IronSmalltalk.Runtime.Internal;
 
 namespace IronSmalltalk.Runtime.Behavior
 {
@@ -43,9 +40,9 @@ namespace IronSmalltalk.Runtime.Behavior
             get
             {
                 string name = null;
-                if (this._annotations == null)
+                if (this._Annotations == null)
                     return null;
-                this._annotations.TryGetValue("ist.runtime.native-name", out name);
+                this._Annotations.TryGetValue("ist.runtime.native-name", out name);
                 if (String.IsNullOrWhiteSpace(name))
                     return null;
                 return name;

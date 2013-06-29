@@ -23,17 +23,17 @@ namespace IronSmalltalk.Runtime.Bindings
     /// int the instance variables array that is attached to each object and that
     /// contains the actual values.
     /// </summary>
-    public class InstanceVariableBinding : Binding<int>
+    public sealed class InstanceVariableBinding : Binding<int>
     {
         public InstanceVariableBinding(Symbol name)
             : base(name)
         {
-            this._value = -1;
+            this._Value = -1;
         }
 
         internal void SetValue(int value)
         {
-            this._value = value;
+            this._Value = value;
         }
     }
 
@@ -43,17 +43,17 @@ namespace IronSmalltalk.Runtime.Bindings
     /// int the instance variables array that is attached to each object and that
     /// contains the actual values.
     /// </summary>
-    public class ClassInstanceVariableBinding : Binding<int>
+    public sealed class ClassInstanceVariableBinding : Binding<int>
     {
         public ClassInstanceVariableBinding(Symbol name)
             : base(name)
         {
-            this._value = -1;
+            this._Value = -1;
         }
 
         internal void SetValue(int value)
         {
-            this._value = value;
+            this._Value = value;
         }
     }
 }

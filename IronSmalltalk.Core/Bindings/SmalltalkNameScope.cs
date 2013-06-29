@@ -50,7 +50,7 @@ namespace IronSmalltalk.Runtime.Bindings
     /// A SmalltalkNameScope is read-only and cannot normally be modified.
     /// Only the Definition-Installer can create and modify scopes.
     /// </remarks>
-    public class SmalltalkNameScope
+    public sealed class SmalltalkNameScope
     {
         public SmalltalkNameScope OuterScope { get; private set; }
         public SmalltalkRuntime Runtime { get; private set; }
