@@ -17,9 +17,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Bindings;
 
-namespace IronSmalltalk.Runtime.Installer.Definitions
+namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
     /// <summary>
     /// Definition description of a Smalltalk class.
@@ -108,7 +109,6 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
             sb.AppendFormat("\tclassVariableNames: '{0}' \n", String.Join(" ", this.ClassVariableNames.Select(sr => sr.Value)));
             sb.AppendFormat("\tsharedPools: '{0}' \n", String.Join(" ", this.ImportedPoolNames.Select(sr => sr.Value)));
             sb.AppendFormat("\tclassInstanceVariableNames: '{0}'", String.Join(" ", this.ClassInstanceVariableNames.Select(sr => sr.Value)));
-            base.ToString();
             return sb.ToString();
         }
 
@@ -117,7 +117,7 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         /// </summary>
         /// <param name="installer">Context within which the binding is to be created.</param>
         /// <returns>Returns true if successful, otherwise false.</returns>
-        protected internal override bool CreateGlobalBinding(IInstallerContext installer)
+        protected internal override bool CreateGlobalBinding(IDefinitionInstallerContext installer)
         {
             if (installer == null)
                 throw new ArgumentNullException();
@@ -145,7 +145,7 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         /// </summary>
         /// <param name="installer">Context within which the class is to be created.</param>
         /// <returns>Returns true if successful, otherwise false.</returns>
-        protected internal override bool CreateGlobalObject(IInstallerContext installer)
+        protected internal override bool CreateGlobalObject(IDefinitionInstallerContext installer)
         {
             if (installer == null)
                 throw new ArgumentNullException();
@@ -236,7 +236,7 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         /// </summary>
         /// <param name="installer">Context within which the validation is to be performed.</param>
         /// <returns>Returns true if successful, otherwise false.</returns>
-        protected internal override bool ValidateObject(IInstallerContext installer)
+        protected internal override bool ValidateObject(IDefinitionInstallerContext installer)
         {
             if (installer == null)
                 throw new ArgumentNullException();

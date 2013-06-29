@@ -17,24 +17,24 @@
 using System;
 using IronSmalltalk.Common;
 
-namespace IronSmalltalk.Runtime.Installer
+namespace IronSmalltalk.DefinitionInstaller
 {
     /// <summary>
     /// Reference to a location in a source code.
     /// </summary>
     public class SourceReference : ISourceReference
     {
-        private SourceLocation _startPosition;
-        private SourceLocation _stopPosition;
-        private ISourceCodeReferenceService SourceCodeReferenceService;
+        private readonly SourceLocation _StartPosition;
+        private readonly SourceLocation _StopPosition;
+        private readonly ISourceCodeReferenceService SourceCodeReferenceService;
 
         public SourceReference(SourceLocation startPosition, SourceLocation stopPosition, ISourceCodeReferenceService service)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            this._startPosition = startPosition;
-            this._stopPosition = stopPosition;
+            this._StartPosition = startPosition;
+            this._StopPosition = stopPosition;
             this.SourceCodeReferenceService = service;
         }
 
@@ -47,7 +47,7 @@ namespace IronSmalltalk.Runtime.Installer
             {
                 if (this.SourceCodeReferenceService == null)
                     return SourceLocation.Invalid;
-                return this.SourceCodeReferenceService.TranslateSourcePosition(this._startPosition);
+                return this.SourceCodeReferenceService.TranslateSourcePosition(this._StartPosition);
             }
         }
 
@@ -60,7 +60,7 @@ namespace IronSmalltalk.Runtime.Installer
             {
                 if (this.SourceCodeReferenceService == null)
                     return SourceLocation.Invalid;
-                return this.SourceCodeReferenceService.TranslateSourcePosition(this._stopPosition);
+                return this.SourceCodeReferenceService.TranslateSourcePosition(this._StopPosition);
             }
         }
 
@@ -94,17 +94,6 @@ namespace IronSmalltalk.Runtime.Installer
         /// Value being wrapped in the source reference.
         /// </summary>
         public TValue Value { get; private set; }
-
-        /// <summary>
-        /// Create a new source reference wrapped value without setting the source locations.
-        /// </summary>
-        /// <param name="value">Value being wrapped.</param>
-        //public SourceReference(TValue value)
-        //{
-        //    if (value == null)
-        //        throw new ArgumentNullException("value");
-        //    this.Value = value;
-        //}
 
         /// <summary>
         /// Create a new source reference wrapped value and set the source locations.

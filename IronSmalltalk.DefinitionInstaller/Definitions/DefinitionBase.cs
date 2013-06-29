@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace IronSmalltalk.Runtime.Installer.Definitions
+namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
     /// <summary>
     /// Definition that contains the description of an entity that is being installed.
@@ -59,6 +59,6 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         /// </summary>
         /// <param name="installer">Context which is performing the installation.</param>
         /// <returns>Returns true if successful, otherwise false.</returns>
-        protected internal abstract bool AnnotateObject(IInstallerContext installer);
+        protected internal abstract bool AnnotateObject(IDefinitionInstallerContext installer);
     }
 }

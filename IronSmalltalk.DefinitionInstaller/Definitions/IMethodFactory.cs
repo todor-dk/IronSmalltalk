@@ -1,23 +1,17 @@
-﻿using IronSmalltalk.Runtime;
-using IronSmalltalk.Runtime.Behavior;
-using IronSmalltalk.Runtime.Installer;
-using IronSmalltalk.Runtime.Installer.Definitions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using IronSmalltalk.Common;
+using IronSmalltalk.Runtime;
+using IronSmalltalk.Runtime.Behavior;
 
 namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
     public interface IMethodFactory
     {
-        CompiledMethod CreateMethod(MethodDefinition definition, IInstallerContext installer, SmalltalkClass cls);
+        CompiledMethod CreateMethod(MethodDefinition definition, IDefinitionInstallerContext installer, SmalltalkClass cls);
 
-        bool ValidateClassMethod(ClassMethodDefinition definition, IInstallerContext installer, SmalltalkClass cls, ICodeValidationErrorSink errorSink);
+        bool ValidateClassMethod(ClassMethodDefinition definition, IDefinitionInstallerContext installer, SmalltalkClass cls, ICodeValidationErrorSink errorSink);
 
-        bool ValidateInstanceMethod(InstanceMethodDefinition definition, IInstallerContext installer, SmalltalkClass cls, ICodeValidationErrorSink errorSink);
+        bool ValidateInstanceMethod(InstanceMethodDefinition definition, IDefinitionInstallerContext installer, SmalltalkClass cls, ICodeValidationErrorSink errorSink);
     }
 
     /// <summary>

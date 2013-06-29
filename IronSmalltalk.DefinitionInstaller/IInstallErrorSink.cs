@@ -14,8 +14,7 @@
  * **************************************************************************
 */
 
-
-namespace IronSmalltalk.Runtime.Installer
+namespace IronSmalltalk.DefinitionInstaller
 {
     /// <summary>
     /// Interface used for reporting errors during definition installation.

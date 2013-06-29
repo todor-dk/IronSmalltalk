@@ -15,7 +15,7 @@
 */
 
 
-namespace IronSmalltalk.Runtime.Installer.Definitions
+namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
     /// <summary>
     /// Base class for definition that are bindable (to a variable within a given scope).

@@ -16,13 +16,13 @@
 
 using System;
 using System.Collections.Generic;
+using IronSmalltalk.DefinitionInstaller.Definitions;
+using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
-using IronSmalltalk.Runtime.Execution;
-using IronSmalltalk.Runtime.Installer.Definitions;
 using IronSmalltalk.Runtime.Internal;
 
-namespace IronSmalltalk.Runtime.Installer
+namespace IronSmalltalk.DefinitionInstaller
 {
     /// <summary>
     /// Installer context encapsulates and represents the transaction that is
@@ -37,7 +37,7 @@ namespace IronSmalltalk.Runtime.Installer
     /// 4. Modify the running SmalltalkContext with the newly created objects.
     /// 5. Run Initializers to initialize stuff (this is done outside the transaction).
     /// </remarks>
-    public class InstallerContext : IInstallerContext
+    public class DefinitionInstallerContext : IDefinitionInstallerContext
     {
         private List<GlobalBase> _globals = new List<GlobalBase>();
         private List<PoolValueDefinition> _poolVariables = new List<PoolValueDefinition>();
@@ -61,7 +61,7 @@ namespace IronSmalltalk.Runtime.Installer
         /// </summary>
         public bool InstallMetaAnnotations { get; set; }
 
-        public InstallerContext(SmalltalkRuntime runtime)
+        public DefinitionInstallerContext(SmalltalkRuntime runtime)
         {
             if (runtime == null)
                 throw new ArgumentNullException("runtime");
@@ -93,7 +93,7 @@ namespace IronSmalltalk.Runtime.Installer
         /// <summary>
         /// Add a global initializer definition to the installation context.
         /// </summary>
-        /// <param name="definition">Definition of the global initializer to be added.</param>
+        /// <param name="initializer">Definition of the global initializer to be added.</param>
         public void AddGlobalInitializer(GlobalInitializer initializer)
         {
             this._initializers.Add(initializer);
@@ -129,7 +129,7 @@ namespace IronSmalltalk.Runtime.Installer
         /// <summary>
         /// Add a pool variable or pool constant initializer definition to the installation context.
         /// </summary>
-        /// <param name="definition">Definition of the initializer to be added.</param>
+        /// <param name="initializer">Definition of the initializer to be added.</param>
         public void AddPoolVariableInitializer(PoolVariableInitializer initializer)
         {
             this._initializers.Add(initializer);
@@ -138,7 +138,7 @@ namespace IronSmalltalk.Runtime.Installer
         /// <summary>
         /// Add a program initializer definition to the installation context.
         /// </summary>
-        /// <param name="definition">Definition of the initializer to be added.</param>
+        /// <param name="initializer">Definition of the initializer to be added.</param>
         public void AddProgramInitializer(ProgramInitializer initializer)
         {
             this._initializers.Add(initializer);
@@ -320,7 +320,7 @@ namespace IronSmalltalk.Runtime.Installer
 
         #region IInstallerContext interface implementation
 
-        bool IInstallerContext.ReportError(ISourceReference sourceReference, string errorMessage)
+        bool IDefinitionInstallerContext.ReportError(ISourceReference sourceReference, string errorMessage)
         {
             
             if (this.ErrorSink != null)
@@ -329,7 +329,7 @@ namespace IronSmalltalk.Runtime.Installer
             return false; 
         }
 
-        void IInstallerContext.RegisterNewClass(SmalltalkClass cls, ISourceReference sourceReference)
+        void IDefinitionInstallerContext.RegisterNewClass(SmalltalkClass cls, ISourceReference sourceReference)
         {
             if (cls == null)
                 throw new ArgumentNullException("cls");
@@ -338,86 +338,86 @@ namespace IronSmalltalk.Runtime.Installer
             this._newClasses.Add(new Tuple<SmalltalkClass, ISourceReference>(cls, sourceReference));
         }
 
-        void IInstallerContext.AddClassBinding(ClassBinding binding)
+        void IDefinitionInstallerContext.AddClassBinding(ClassBinding binding)
         {
             this.NameScope.Classes.Add(binding);
         }
 
-        void IInstallerContext.AddGlobalConstantBinding(GlobalConstantBinding binding)
+        void IDefinitionInstallerContext.AddGlobalConstantBinding(GlobalConstantBinding binding)
         {
             this.NameScope.GlobalConstants.Add(binding);
         }
 
-        void IInstallerContext.AddGlobalVariableBinding(GlobalVariableBinding binding)
+        void IDefinitionInstallerContext.AddGlobalVariableBinding(GlobalVariableBinding binding)
         {
             this.NameScope.GlobalVariables.Add(binding);
         }
 
-        void IInstallerContext.AddPoolBinding(PoolBinding binding)
+        void IDefinitionInstallerContext.AddPoolBinding(PoolBinding binding)
         {
             this.NameScope.Pools.Add(binding);
         }
 
-        void IInstallerContext.AddInitializer(CompiledInitializer initializer)
+        void IDefinitionInstallerContext.AddInitializer(CompiledInitializer initializer)
         {
             this.NameScope.Initializers.Add(initializer);
         }
 
-        PoolBinding IInstallerContext.GetPoolBinding(Symbol name)
+        PoolBinding IDefinitionInstallerContext.GetPoolBinding(Symbol name)
         {
             return this.NameScope.GetPoolBinding(name);
         }
 
-        PoolBinding IInstallerContext.GetPoolBinding(string name)
+        PoolBinding IDefinitionInstallerContext.GetPoolBinding(string name)
         {
             return this.NameScope.GetPoolBinding(name);
         }
 
-        GlobalVariableOrConstantBinding IInstallerContext.GetGlobalVariableOrConstantBinding(Symbol name)
+        GlobalVariableOrConstantBinding IDefinitionInstallerContext.GetGlobalVariableOrConstantBinding(Symbol name)
         {
             return this.NameScope.GetGlobalVariableOrConstantBinding(name);
         }
 
-        GlobalVariableOrConstantBinding IInstallerContext.GetGlobalVariableOrConstantBinding(string name)
+        GlobalVariableOrConstantBinding IDefinitionInstallerContext.GetGlobalVariableOrConstantBinding(string name)
         {
             return this.NameScope.GetGlobalVariableOrConstantBinding(name);
         }
 
-        IDiscreteGlobalBinding IInstallerContext.GetLocalGlobalBinding(Symbol name)
+        IDiscreteGlobalBinding IDefinitionInstallerContext.GetLocalGlobalBinding(Symbol name)
         {
             return this.NameScope.GetLocalGlobalBinding(name);
         }
 
-        PoolBinding IInstallerContext.GetLocalPoolBinding(Symbol name)
+        PoolBinding IDefinitionInstallerContext.GetLocalPoolBinding(Symbol name)
         {
             PoolBinding binding;
             this.NameScope.Pools.TryGetValue(name, out binding);
             return binding;
         }
 
-        ClassBinding IInstallerContext.GetLocalClassBinding(Symbol name)
+        ClassBinding IDefinitionInstallerContext.GetLocalClassBinding(Symbol name)
         {
             ClassBinding binding;
             this.NameScope.Classes.TryGetValue(name, out binding);
             return binding;
         }
 
-        ClassBinding IInstallerContext.GetClassBinding(Symbol name)
+        ClassBinding IDefinitionInstallerContext.GetClassBinding(Symbol name)
         {
             return this.NameScope.GetClassBinding(name);
         }
 
-        ClassBinding IInstallerContext.GetClassBinding(string name)
+        ClassBinding IDefinitionInstallerContext.GetClassBinding(string name)
         {
             return this.NameScope.GetClassBinding(name);
         }
 
-        bool IInstallerContext.IsProtectedName(Symbol name)
+        bool IDefinitionInstallerContext.IsProtectedName(Symbol name)
         {
             return this.NameScope.IsProtectedName(name);
         }
 
-        bool IInstallerContext.AnnotateObject(IAnnotetable annotetableObject, IEnumerable<KeyValuePair<string, string>> annotations)
+        bool IDefinitionInstallerContext.AnnotateObject(IAnnotetable annotetableObject, IEnumerable<KeyValuePair<string, string>> annotations)
         {
             if (annotetableObject == null)
                 return false;

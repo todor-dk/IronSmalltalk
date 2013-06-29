@@ -16,9 +16,10 @@
 
 using System;
 using System.Linq;
+using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Bindings;
 
-namespace IronSmalltalk.Runtime.Installer.Definitions
+namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
     /// <summary>
     /// Definition description of a global variable or a global constant.
@@ -46,7 +47,7 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         /// </summary>
         /// <param name="installer">Context within which the binding is to be created.</param>
         /// <returns>Returns true if successful, otherwise false.</returns>
-        protected internal override bool CreateGlobalBinding(IInstallerContext installer)
+        protected internal override bool CreateGlobalBinding(IDefinitionInstallerContext installer)
         {
             if (installer == null)
                 throw new ArgumentNullException();
@@ -74,14 +75,14 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         /// <param name="installer">Context within which the binding is to be created.</param>
         /// <param name="name">Name of the global.</param>
         /// <returns>Returns true if successful, otherwise false.</returns>
-        protected abstract bool InternalCreateBinding(IInstallerContext installer, Symbol name);
+        protected abstract bool InternalCreateBinding(IDefinitionInstallerContext installer, Symbol name);
 
         /// <summary>
         /// Create the global object (and sets the value of the binding).
         /// </summary>
         /// <param name="installer">Context within which the global is to be created.</param>
         /// <returns>Returns true if successful, otherwise false.</returns>
-        protected internal override bool CreateGlobalObject(IInstallerContext installer)
+        protected internal override bool CreateGlobalObject(IDefinitionInstallerContext installer)
         {
             return true; // Do nothing - global variables/constants have initial value of null.
         }
@@ -91,7 +92,7 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         /// </summary>
         /// <param name="installer">Context within which the validation is to be performed.</param>
         /// <returns>Returns true if successful, otherwise false.</returns>
-        protected internal override bool ValidateObject(IInstallerContext installer)
+        protected internal override bool ValidateObject(IDefinitionInstallerContext installer)
         {
             return true; // We did validate whatever is validatable when the global binding was created.
         }

@@ -14,11 +14,9 @@
  * **************************************************************************
 */
 
-using IronSmalltalk.DefinitionInstaller.Definitions;
 using IronSmalltalk.Runtime.Behavior;
-using IronSmalltalk.Runtime.Execution;
 
-namespace IronSmalltalk.Runtime.Installer.Definitions
+namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
     public abstract class InitializerDefinition: CodeBasedDefinition<IInitializerFactory, CompiledInitializer>
     {
@@ -27,9 +25,9 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         {
         }
 
-        protected internal abstract bool ValidateInitializer(IInstallerContext installer);
+        protected internal abstract bool ValidateInitializer(IDefinitionInstallerContext installer);
 
-        protected internal bool CreateInitializer(IInstallerContext installer)
+        protected internal bool CreateInitializer(IDefinitionInstallerContext installer)
         {
             CompiledInitializer initializer = this.Factory.CreateInitializer(this, installer);
             if (initializer == null)

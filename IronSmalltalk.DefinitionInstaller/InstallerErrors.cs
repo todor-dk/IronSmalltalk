@@ -15,7 +15,7 @@
 */
 
 
-namespace IronSmalltalk.Runtime.Installer
+namespace IronSmalltalk.DefinitionInstaller
 {
     public static class InstallerErrors
     {

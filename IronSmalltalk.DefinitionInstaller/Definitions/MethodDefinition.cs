@@ -15,12 +15,11 @@
 */
 
 using System;
-using System.Linq;
+using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
-using IronSmalltalk.DefinitionInstaller.Definitions;
 
-namespace IronSmalltalk.Runtime.Installer.Definitions
+namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
     public abstract class MethodDefinition : CodeBasedDefinition<IMethodFactory, CompiledMethod>
     {
@@ -45,7 +44,7 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
             this.Selector = selector;
         }
 
-        protected internal bool CreateMethod(IInstallerContext installer)
+        protected internal bool CreateMethod(IDefinitionInstallerContext installer)
         {
             if (installer == null)
                 throw new ArgumentNullException();
@@ -64,7 +63,7 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
             return this.InternalAddMethod(installer, classBinding.Value);
         }
 
-        protected internal bool ValidateMethod(IInstallerContext installer)
+        protected internal bool ValidateMethod(IDefinitionInstallerContext installer)
         {
             if (installer == null)
                 throw new ArgumentNullException();
@@ -84,8 +83,8 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
                 new IntermediateCodeValidationErrorSink(this.MethodSourceCodeService, installer));
         }
 
-        protected abstract bool InternalAddMethod(IInstallerContext installer, SmalltalkClass cls);
+        protected abstract bool InternalAddMethod(IDefinitionInstallerContext installer, SmalltalkClass cls);
 
-        protected abstract bool InternalValidateMethod(IInstallerContext installer, SmalltalkClass cls, ICodeValidationErrorSink errorSink);
+        protected abstract bool InternalValidateMethod(IDefinitionInstallerContext installer, SmalltalkClass cls, ICodeValidationErrorSink errorSink);
     }
 }
