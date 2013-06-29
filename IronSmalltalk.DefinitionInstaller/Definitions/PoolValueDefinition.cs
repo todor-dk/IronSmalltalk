@@ -17,7 +17,7 @@
 using System;
 using System.Linq;
 
-namespace IronSmalltalk.Runtime.Installer.Definitions
+namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
     /// <summary>
     /// Definition description of a pool variable or pool constant.
@@ -53,14 +53,14 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         /// </summary>
         /// <param name="installer">Context within which the binding is to be created.</param>
         /// <returns>Returns true if successful, otherwise false.</returns>
-        protected internal abstract bool CreatePoolVariableBinding(IInstallerContext installer);
+        protected internal abstract bool CreatePoolVariableBinding(IDefinitionInstallerContext installer);
 
         /// <summary>
         /// Add annotations the the object being created.
         /// </summary>
         /// <param name="installer">Context which is performing the installation.</param>
         /// <returns>Returns true if successful, otherwise false.</returns>
-        protected internal override bool AnnotateObject(IInstallerContext installer)
+        protected internal override bool AnnotateObject(IDefinitionInstallerContext installer)
         {
             if (installer == null)
                 throw new ArgumentNullException();
@@ -68,11 +68,11 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
             if (!this.Annotations.Any())
                 return true;
 
-            Bindings.PoolBinding poolBinding = installer.GetPoolBinding(this.PoolName.Value);
+            Runtime.Bindings.PoolBinding poolBinding = installer.GetPoolBinding(this.PoolName.Value);
             if ((poolBinding == null) || (poolBinding.Value == null))
                 return true; // An error, but we don't see the annotations as critical.
 
-            Bindings.PoolVariableOrConstantBinding binding;
+            Runtime.Bindings.PoolVariableOrConstantBinding binding;
             poolBinding.Value.TryGetValue(this.VariableName.Value, out binding);
             if (binding == null)
                 return true; // An error, but we don't see the annotations as critical.

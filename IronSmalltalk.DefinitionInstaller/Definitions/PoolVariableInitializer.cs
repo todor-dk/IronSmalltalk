@@ -15,12 +15,10 @@
 */
 
 using System;
-using IronSmalltalk.Runtime.Behavior;
+using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Bindings;
-using IronSmalltalk.DefinitionInstaller.Definitions;
-using IronSmalltalk.Runtime.Execution;
 
-namespace IronSmalltalk.Runtime.Installer.Definitions
+namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
     public class PoolVariableInitializer : InitializerDefinition<IPoolVariableInitializerFactory>
     {
@@ -43,7 +41,7 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
             return String.Format("{0} initializerFor: '{1}'", this.PoolName.Value, this.VariableName.Value);
         }
 
-        protected internal override bool ValidateInitializer(IInstallerContext installer)
+        protected internal override bool ValidateInitializer(IDefinitionInstallerContext installer)
         {
             if (installer == null)
                 throw new ArgumentNullException();

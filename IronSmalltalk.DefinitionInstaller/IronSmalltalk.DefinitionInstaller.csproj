@@ -95,9 +95,9 @@
     <Compile Include="Definitions\PoolVariableDefinition.cs" />
     <Compile Include="Definitions\PoolVariableInitializer.cs" />
     <Compile Include="Definitions\ProgramInitializer.cs" />
-    <Compile Include="IInstallerContext.cs" />
+    <Compile Include="IDefinitionInstallerContext.cs" />
     <Compile Include="IInstallErrorSink.cs" />
-    <Compile Include="InstallerContext.cs" />
+    <Compile Include="DefinitionInstallerContext.cs" />
     <Compile Include="InstallerErrors.cs" />
     <Compile Include="ISourceCodeReferenceService.cs" />
     <Compile Include="ISourceReference.cs" />

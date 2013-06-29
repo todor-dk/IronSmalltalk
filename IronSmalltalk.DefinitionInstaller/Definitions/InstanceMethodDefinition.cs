@@ -15,10 +15,10 @@
 */
 
 using System;
+using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Behavior;
-using IronSmalltalk.DefinitionInstaller.Definitions;
 
-namespace IronSmalltalk.Runtime.Installer.Definitions
+namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
     public class InstanceMethodDefinition : MethodDefinition
     {
@@ -32,7 +32,7 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
             return String.Format("{0} method", this.ClassName.Value);
         }
 
-        protected override bool InternalAddMethod(IInstallerContext installer, SmalltalkClass cls)
+        protected override bool InternalAddMethod(IDefinitionInstallerContext installer, SmalltalkClass cls)
         {
             CompiledMethod method = this.Factory.CreateMethod(this, installer, cls);
             if (method == null)
@@ -43,7 +43,7 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
             return true;
         }
 
-        protected override bool InternalValidateMethod(IInstallerContext installer, SmalltalkClass cls, ICodeValidationErrorSink errorSink)
+        protected override bool InternalValidateMethod(IDefinitionInstallerContext installer, SmalltalkClass cls, ICodeValidationErrorSink errorSink)
         {
             return this.Factory.ValidateInstanceMethod(this, installer, cls, errorSink);         
         }

@@ -15,12 +15,11 @@
 */
 
 using System;
+using System.Linq;
 using IronSmalltalk.Common;
 using IronSmalltalk.Runtime.Behavior;
-using System.Linq;
-using IronSmalltalk.DefinitionInstaller.Definitions;
 
-namespace IronSmalltalk.Runtime.Installer.Definitions
+namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
     public abstract class CodeBasedDefinition<TFactory, TCompiledCode> : DefinitionBase
         where TCompiledCode : CompiledCode
@@ -60,7 +59,7 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         /// </summary>
         /// <param name="installer">Context which is performing the installation.</param>
         /// <returns>Returns true if successful, otherwise false.</returns>
-        protected internal override bool AnnotateObject(IInstallerContext installer)
+        protected internal override bool AnnotateObject(IDefinitionInstallerContext installer)
         {
             if (installer == null)
                 throw new ArgumentNullException();
@@ -79,9 +78,9 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         protected class IntermediateCodeValidationErrorSink : ICodeValidationErrorSink
         {
             private ISourceCodeReferenceService SourceCodeService;
-            private IInstallerContext Installer;
+            private IDefinitionInstallerContext Installer;
 
-            public IntermediateCodeValidationErrorSink(ISourceCodeReferenceService sourceCodeService, IInstallerContext installer)
+            public IntermediateCodeValidationErrorSink(ISourceCodeReferenceService sourceCodeService, IDefinitionInstallerContext installer)
             {
                 if (installer == null)
                     throw new ArgumentNullException();

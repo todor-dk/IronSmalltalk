@@ -16,8 +16,9 @@
 
 using System;
 using System.Linq;
+using IronSmalltalk.Runtime;
 
-namespace IronSmalltalk.Runtime.Installer.Definitions
+namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
     /// <summary>
     /// Base class for definition describing objects that live in the Global / Smalltalk name scope.
@@ -42,28 +43,28 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         /// </summary>
         /// <param name="installer">Context within which the binding is to be created.</param>
         /// <returns>Returns true if successful, otherwise false.</returns>
-        protected internal abstract bool CreateGlobalBinding(IInstallerContext installer);
+        protected internal abstract bool CreateGlobalBinding(IDefinitionInstallerContext installer);
 
         /// <summary>
         /// Create the global object (and sets the value of the binding).
         /// </summary>
         /// <param name="installer">Context within which the global is to be created.</param>
         /// <returns>Returns true if successful, otherwise false.</returns>
-        protected internal abstract bool CreateGlobalObject(IInstallerContext installer);
+        protected internal abstract bool CreateGlobalObject(IDefinitionInstallerContext installer);
 
         /// <summary>
         /// Validate that the definition of the global object does not break any rules set by the Smalltalk standard.
         /// </summary>
         /// <param name="installer">Context within which the validation is to be performed.</param>
         /// <returns>Returns true if successful, otherwise false.</returns>
-        protected internal abstract bool ValidateObject(IInstallerContext installer);
+        protected internal abstract bool ValidateObject(IDefinitionInstallerContext installer);
 
         /// <summary>
         /// Add annotations the the object being created.
         /// </summary>
         /// <param name="installer">Context which is performing the installation.</param>
         /// <returns>Returns true if successful, otherwise false.</returns>
-        protected internal override bool AnnotateObject(IInstallerContext installer)
+        protected internal override bool AnnotateObject(IDefinitionInstallerContext installer)
         {
             if (installer == null)
                 throw new ArgumentNullException();
@@ -72,7 +73,7 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
                 return true;
 
             Symbol name = installer.Runtime.GetSymbol(this.Name.Value);
-            Bindings.IDiscreteGlobalBinding binding = installer.GetLocalGlobalBinding(name);
+            Runtime.Bindings.IDiscreteGlobalBinding binding = installer.GetLocalGlobalBinding(name);
             if (binding == null)
                 return true; // An error, but we don't see the annotations as critical.
 

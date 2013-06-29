@@ -14,14 +14,9 @@
  * **************************************************************************
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IronSmalltalk.Common;
 
-namespace IronSmalltalk.Runtime.Installer
+namespace IronSmalltalk.DefinitionInstaller
 {
     /// <summary>
     /// Represents a reference to a source code.

@@ -16,9 +16,10 @@
 
 using System;
 using System.Linq;
+using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Bindings;
 
-namespace IronSmalltalk.Runtime.Installer.Definitions
+namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
     /// <summary>
     /// Definition description of a pool variable.
@@ -49,7 +50,7 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         /// </summary>
         /// <param name="installer">Context within which the binding is to be created.</param>
         /// <returns>Returns true if successful, otherwise false.</returns>
-        protected internal override bool CreatePoolVariableBinding(IInstallerContext installer)
+        protected internal override bool CreatePoolVariableBinding(IDefinitionInstallerContext installer)
         {
             if (installer == null)
                 throw new ArgumentNullException();

@@ -14,14 +14,9 @@
  * **************************************************************************
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IronSmalltalk.Common;
 
-namespace IronSmalltalk.Runtime.Installer
+namespace IronSmalltalk.DefinitionInstaller
 {
     /// <summary>
     /// Service that can translate the locations of source references from relative to absolute positions.

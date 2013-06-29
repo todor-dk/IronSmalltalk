@@ -15,9 +15,10 @@
 */
 
 using System;
+using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Bindings;
 
-namespace IronSmalltalk.Runtime.Installer.Definitions
+namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
     /// <summary>
     /// Definition description of a global variable.
@@ -48,7 +49,7 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
         /// <param name="installer">Context within which the binding is to be created.</param>
         /// <param name="name">Name of the global.</param>
         /// <returns>Returns true if successful, otherwise false.</returns>
-        protected override bool InternalCreateBinding(IInstallerContext installer, Symbol name)
+        protected override bool InternalCreateBinding(IDefinitionInstallerContext installer, Symbol name)
         {
             // Everything else has been validate, so create a binding - so far pointing to null.
             installer.AddGlobalVariableBinding(new GlobalVariableBinding(name));

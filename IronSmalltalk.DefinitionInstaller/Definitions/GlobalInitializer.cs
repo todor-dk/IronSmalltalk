@@ -15,12 +15,9 @@
 */
 
 using System;
-using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
-using IronSmalltalk.DefinitionInstaller.Definitions;
-using IronSmalltalk.Runtime.Execution;
 
-namespace IronSmalltalk.Runtime.Installer.Definitions
+namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
     /// <summary>
     /// 
@@ -45,7 +42,7 @@ namespace IronSmalltalk.Runtime.Installer.Definitions
             return String.Format("{0} initializer", this.GlobalName.Value);
         }
 
-        protected internal override bool ValidateInitializer(IInstallerContext installer)
+        protected internal override bool ValidateInitializer(IDefinitionInstallerContext installer)
         {
             if (installer == null)
                 throw new ArgumentNullException();

@@ -14,18 +14,15 @@
  * **************************************************************************
 */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
 using IronSmalltalk.Runtime.Internal;
 
-namespace IronSmalltalk.Runtime.Installer
+namespace IronSmalltalk.DefinitionInstaller
 {
-    public interface IInstallerContext
+    public interface IDefinitionInstallerContext
     {
         SmalltalkRuntime Runtime { get; }
         void RegisterNewClass(SmalltalkClass cls, ISourceReference sourceReference);
