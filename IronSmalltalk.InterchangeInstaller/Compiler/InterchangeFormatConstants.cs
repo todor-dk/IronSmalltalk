@@ -15,7 +15,7 @@
 */
 
 
-namespace IronSmalltalk.Compiler.Interchange
+namespace IronSmalltalk.InterchangeInstaller.Compiler
 {
     public class InterchangeFormatConstants
     {

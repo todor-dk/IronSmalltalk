@@ -39,10 +39,8 @@ namespace IronSmalltalk.Runtime
             SmalltalkClass cls = this;
             Symbol na = null;
             bool localCaseConflict = false;
-            CompiledMethod method = MethodLookupHelper.LookupMethod(ref cls, ref na, delegate(SmalltalkClass c)
-            {
-                return c.ClassBehavior.GetMethodByNativeName(name, argumentCount, ignoreCase, out localCaseConflict);
-            });
+            CompiledMethod method = MethodLookupHelper.LookupMethod(ref cls, ref na, 
+                c => c.ClassBehavior.GetMethodByNativeName(name, argumentCount, ignoreCase, out localCaseConflict));
 
             caseConflict = localCaseConflict;
             if (localCaseConflict)
@@ -58,10 +56,8 @@ namespace IronSmalltalk.Runtime
             cls = this.Runtime.NativeTypeClassMap.Class;
             if (cls == null)
                 cls = this.Runtime.NativeTypeClassMap.Object;
-            method = MethodLookupHelper.LookupMethod(ref cls, ref na, delegate(SmalltalkClass c)
-            {
-                return c.InstanceBehavior.GetMethodByNativeName(name, argumentCount, ignoreCase, out localCaseConflict);
-            });
+            method = MethodLookupHelper.LookupMethod(ref cls, ref na, 
+                c => c.InstanceBehavior.GetMethodByNativeName(name, argumentCount, ignoreCase, out localCaseConflict));
 
             caseConflict = localCaseConflict;
             if (localCaseConflict)

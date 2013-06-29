@@ -19,14 +19,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using IronSmalltalk.Common;
-using IronSmalltalk.Compiler.Interchange;
-using IronSmalltalk.Compiler.Interchange.ParseNodes;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
-using IronSmalltalk.Runtime.Installer;
+using IronSmalltalk.DefinitionInstaller;
+using IronSmalltalk.InterchangeInstaller.Compiler;
+using IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes;
 
-namespace IronSmalltalk.Interchange
+namespace IronSmalltalk.InterchangeInstaller
 {
     /// <summary>
     /// The InterchangeFormatProcessor is the entry point to the interchange installer.
@@ -226,23 +226,6 @@ namespace IronSmalltalk.Interchange
                 throw new InvalidOperationException("Processor cannor be used if version service is not set.");
             return this.VersionService.ParseInitializer(this, out sourceCodeService);
         }
-
-        /// <summary>
-        /// Creates an empty reference to a source code for the given value.
-        /// This empty source-reference is used when we cannot exactly determine 
-        /// which source code created the value.
-        /// </summary>
-        /// <remarks>
-        /// Usage if this method is discouraged, because it doesn't give the user 
-        /// the necessary information about the location of an error in the source code.
-        /// </remarks>
-        /// <typeparam name="TValue">Type of the value.</typeparam>
-        /// <param name="value">Value that was created based on the source code.</param>
-        /// <returns>Source code reference for the given value.</returns>
-        //public SourceReference<TValue> CreateSourceReference<TValue>(TValue value)
-        //{
-        //    return new SourceReference<TValue>(value);
-        //}
 
         /// <summary>
         /// Creates a reference to a source code for the given value.

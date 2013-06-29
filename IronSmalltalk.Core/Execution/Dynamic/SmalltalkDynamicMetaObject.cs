@@ -29,7 +29,7 @@ namespace IronSmalltalk.Runtime.Execution.Dynamic
 
     public class SmalltalkDynamicMetaObject : DynamicMetaObject
     {
-        private ISmalltalkDynamicMetaObjectProvider Self;
+        private readonly ISmalltalkDynamicMetaObjectProvider Self;
 
         public SmalltalkDynamicMetaObject(Expression expression, BindingRestrictions restrictions, ISmalltalkDynamicMetaObjectProvider self)
             : base(expression, restrictions, self)

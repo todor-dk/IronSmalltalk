@@ -19,12 +19,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using IronSmalltalk.Compiler.SemanticNodes;
-using IronSmalltalk.Runtime.CodeGeneration.Bindings;
-using IronSmalltalk.Runtime.CodeGeneration.BindingScopes;
+using IronSmalltalk.ExpressionCompiler.Bindings;
+using IronSmalltalk.ExpressionCompiler.BindingScopes;
 using IronSmalltalk.Runtime.Execution.Internals;
 using IronSmalltalk.Runtime.Internal;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
+namespace IronSmalltalk.ExpressionCompiler.Visiting
 {
 
     public abstract class BlockVisitorBase : NestedEncoderVisitor<Expression>
@@ -62,7 +62,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
         protected internal override NameBinding GetBinding(string name)
         {
             NameBinding result;
-            result = this.RootVisitor.ReservedScope.GetBinding(name);
+            result = this.Context.Compiler.ReservedScope.GetBinding(name);
             if (result != null)
                 return result;
 
@@ -133,7 +133,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
 
         protected internal override Expression Return(Expression value)
         {
-            return Expression.Throw(Expression.New(BlockResult.ConstructorInfo, this.RootVisitor.HomeContext, value), typeof(object));
+            return Expression.Throw(Expression.New(BlockResult.ConstructorInfo, this.Context.HomeContext, value), typeof(object));
         }
     }
 

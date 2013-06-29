@@ -217,7 +217,8 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
             BinarySelectorToken apitoken = token as BinarySelectorToken;
             if (apitoken == null)
                 return false;
-            return (apitoken.Value == SemanticConstants.PrimitiveOpeningDelimiter);
+            return (apitoken.Value == SemanticConstants.PrimitiveOpeningDelimiter) ||
+                (apitoken.Value == SemanticConstants.AlternativePrimitiveOpeningDelimiter);
         }
 
         /// <summary>
@@ -231,7 +232,8 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
             BinarySelectorToken apitoken = token as BinarySelectorToken;
             if (apitoken == null)
                 return false;
-            return (apitoken.Value == SemanticConstants.PrimitiveClosingDelimiter);
+            return (apitoken.Value == SemanticConstants.PrimitiveClosingDelimiter) ||
+                   (apitoken.Value == SemanticConstants.AlternativePrimitiveClosingDelimiter);
         }
     }
 }

@@ -14,11 +14,12 @@
  * **************************************************************************
 */
 
-using IronSmalltalk.Runtime.CodeGeneration.Bindings;
+using IronSmalltalk.ExpressionCompiler.Bindings;
+using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Execution.Internals;
-using RTB = IronSmalltalk.Runtime.Bindings;
+using RTB = IronSmalltalk.Runtime.Bindings; 
 
-namespace IronSmalltalk.Runtime.CodeGeneration.BindingScopes
+namespace IronSmalltalk.ExpressionCompiler.BindingScopes
 {
     /*
     See full description in BindingScope.cs     
@@ -47,7 +48,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.BindingScopes
     *** BEHAVIOR  ***   
     class_scope := (global_scope + pool_variable_scope) + inheritable_class_variable_scope      // X3J20:3.3.2.3
      */
-    public class PoolVariableScope : ClassRelatedBindingScope
+    public sealed class PoolVariableScope : ClassRelatedBindingScope
     {
         public PoolVariableScope(SmalltalkClass cls, GlobalScope outerScope)
             : base(cls, outerScope)
@@ -68,9 +69,9 @@ namespace IronSmalltalk.Runtime.CodeGeneration.BindingScopes
                         if (result != null)
                             return new ErrorBinding(name, RuntimeCodeGenerationErrors.PoolVariableNotUnique);
                         if (binding is RTB.PoolConstantBinding)
-                            result = new PoolConstantBinding(name, (RTB.PoolConstantBinding) binding);
-                        else 
-                            result = new PoolVariableBinding(name, (RTB.PoolVariableBinding) binding);
+                            result = new PoolConstantBinding(name, (RTB.PoolConstantBinding)binding);
+                        else
+                            result = new PoolVariableBinding(name, (RTB.PoolVariableBinding)binding);
                     }
                 }
             }

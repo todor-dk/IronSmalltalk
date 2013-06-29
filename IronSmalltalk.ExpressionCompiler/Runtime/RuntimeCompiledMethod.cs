@@ -1,21 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*
+ * **************************************************************************
+ *
+ * Copyright (c) The IronSmalltalk Project. 
+ *
+ * This source code is subject to terms and conditions of the 
+ * license agreement found in the solution directory. 
+ * See: $(SolutionDir)\License.htm ... in the root of this distribution.
+ * By using this source code in any fashion, you are agreeing 
+ * to be bound by the terms of the license agreement.
+ *
+ * You must not remove this notice, or any other, from this software.
+ *
+ * **************************************************************************
+*/
+
+using System;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.SemanticNodes;
+using IronSmalltalk.ExpressionCompiler.BindingScopes;
+using IronSmalltalk.ExpressionCompiler.Internals;
+using IronSmalltalk.ExpressionCompiler.Visiting;
 using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
-using IronSmalltalk.Runtime.CodeGeneration.BindingScopes;
-using IronSmalltalk.Runtime.CodeGeneration.Visiting;
-using IronSmalltalk.Common;
-using IronSmalltalk.ExpressionCompiler.Internals;
-using IronSmalltalk.AstJitCompiler.Runtime;
 
-namespace IronSmalltalk.InterchangeInstaller.Runtime
+namespace IronSmalltalk.ExpressionCompiler.Runtime
 {
     public sealed class RuntimeCompiledMethod : CompiledMethod
     {
@@ -47,16 +59,24 @@ namespace IronSmalltalk.InterchangeInstaller.Runtime
                 throw new ArgumentNullException("self");
             if (arguments == null)
                 throw new ArgumentNullException("arguments");
-            MethodVisitor visitor = new MethodVisitor(runtime,
-                BindingScope.ForClassMethod(cls, globalNameScope),
-                ReservedScope.ForClassMethod(self.Expression),
-                self,
-                arguments,
-                cls.Name,
-                this.GetDebugInfoService());
-            //visitor.SymbolDocument = Expression.SymbolDocument("<mod>", new Guid("{E1A254E3-FD2E-4D82-BAB3-D4E9B115154E}"), new Guid("{6A28E03C-E404-4190-A012-72B2CCE48DD5}"));
-            Expression code = this.ParseTree.Accept(visitor);
-            return new MethodCompilationResult(code, visitor.BindingRestrictions);
+
+            BindingScope globalScope = BindingScope.ForClassMethod(cls, globalNameScope);
+            BindingScope reservedScope = ReservedScope.ForClassMethod(self.Expression);
+            ClassMethodCompiler compiler = new ClassMethodCompiler(runtime, globalScope, reservedScope, this.GetDebugInfoService());
+
+            return compiler.CompileMethod(this.ParseTree, cls, self, arguments);
+
+
+            //MethodVisitor visitor = new MethodVisitor(runtime,
+            //    BindingScope.ForClassMethod(cls, globalNameScope),
+            //    ReservedScope.ForClassMethod(self.Expression),
+            //    self,
+            //    arguments,
+            //    cls.Name,
+            //    this.GetDebugInfoService());
+            ////visitor.SymbolDocument = Expression.SymbolDocument("<mod>", new Guid("{E1A254E3-FD2E-4D82-BAB3-D4E9B115154E}"), new Guid("{6A28E03C-E404-4190-A012-72B2CCE48DD5}"));
+            //Expression code = this.ParseTree.Accept(visitor);
+            //return new MethodCompilationResult(code, visitor.BindingRestrictions);
         }
 
         public IDebugInfoService GetDebugInfoService()
@@ -83,17 +103,25 @@ namespace IronSmalltalk.InterchangeInstaller.Runtime
                 throw new ArgumentNullException("self");
             if (arguments == null)
                 throw new ArgumentNullException("arguments");
-            MethodVisitor visitor = new MethodVisitor(runtime,
-                BindingScope.ForInstanceMethod(cls, globalNameScope),
-                (cls.Superclass == null) ?
-                    ReservedScope.ForRootClassInstanceMethod(self.Expression) :
-                    ReservedScope.ForInstanceMethod(self.Expression),
-                self,
-                arguments,
-                cls.Name,
-                this.GetDebugInfoService());
-            Expression code = this.ParseTree.Accept(visitor);
-            return new MethodCompilationResult(code, visitor.BindingRestrictions);
+
+            BindingScope globalScope = BindingScope.ForInstanceMethod(cls, globalNameScope);
+            BindingScope reservedScope = (cls.Superclass == null) ?
+                ReservedScope.ForRootClassInstanceMethod(self.Expression) :
+                ReservedScope.ForInstanceMethod(self.Expression);
+            InstanceMethodCompiler compiler = new InstanceMethodCompiler(runtime, globalScope, reservedScope, this.GetDebugInfoService());
+
+            return compiler.CompileMethod(this.ParseTree, cls, self, arguments);
+            //MethodVisitor visitor = new MethodVisitor(runtime,
+            //    BindingScope.ForInstanceMethod(cls, globalNameScope),
+            //    (cls.Superclass == null) ?
+            //        ReservedScope.ForRootClassInstanceMethod(self.Expression) :
+            //        ReservedScope.ForInstanceMethod(self.Expression),
+            //    self,
+            //    arguments,
+            //    cls.Name,
+            //    this.GetDebugInfoService());
+            //Expression code = this.ParseTree.Accept(visitor);
+            //return new MethodCompilationResult(code, visitor.BindingRestrictions);
         }
 
 
@@ -112,7 +140,7 @@ namespace IronSmalltalk.InterchangeInstaller.Runtime
             return RuntimeCompiledMethod.Validate(this.ParseTree, errorSink, delegate()
             {
                 DynamicMetaObject self = new DynamicMetaObject(Expression.Parameter(typeof(object), "self"), BindingRestrictions.Empty, null);
-                DynamicMetaObject[] args = new DynamicMetaObject[this.ParseTree.Arguments.Count];
+                DynamicMetaObject[] args = new DynamicMetaObject[this.ParseTree.Arguments.Count+1];
                 for (int i = 0; i < args.Length; i++)
                     args[i] = new DynamicMetaObject(Expression.Parameter(typeof(object), String.Format("arg{0}", i)), BindingRestrictions.Empty, null);
 
@@ -150,10 +178,10 @@ namespace IronSmalltalk.InterchangeInstaller.Runtime
             {
                 return RuntimeCompiledMethod.ReportError(errorSink, rootNode, ex.Message);
             }
-            catch (Exception ex)
-            {
-                return RuntimeCompiledMethod.ReportError(errorSink, rootNode, ex.Message);
-            }
+            //catch (Exception ex)
+            //{
+            //    return RuntimeCompiledMethod.ReportError(errorSink, rootNode, ex.Message);
+            //}
         }
 
         private static bool ReportError(IRuntimeCodeValidationErrorSink errorSink, SemanticNode node, string errorMessage)

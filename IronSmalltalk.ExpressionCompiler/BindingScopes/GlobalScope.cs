@@ -15,10 +15,14 @@
 */
 
 using System;
-using IronSmalltalk.Runtime.CodeGeneration.Bindings;
+using IronSmalltalk.ExpressionCompiler.Bindings;
 using RTB = IronSmalltalk.Runtime.Bindings;
+using ClassBinding = IronSmalltalk.ExpressionCompiler.Bindings.ClassBinding;
+using GlobalConstantBinding = IronSmalltalk.ExpressionCompiler.Bindings.GlobalConstantBinding;
+using GlobalVariableBinding = IronSmalltalk.ExpressionCompiler.Bindings.GlobalVariableBinding;
+using PoolBinding = IronSmalltalk.ExpressionCompiler.Bindings.PoolBinding;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.BindingScopes
+namespace IronSmalltalk.ExpressionCompiler.BindingScopes
 {
     /*
     See full description in BindingScope.cs
@@ -34,7 +38,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.BindingScopes
     /// <summary>
     /// 
     /// </summary>
-    public class GlobalScope : ComposableBindingScope
+    public sealed class GlobalScope : ComposableBindingScope
     {
         public RTB.SmalltalkNameScope NameScope { get; private set; }
 

@@ -3,7 +3,7 @@
   <Class Name="IronSmalltalk.Runtime.Bindings.Binding&lt;TValue&gt;">
     <Position X="11.25" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ABAAIAAAAAAAAAAAIAACAAQAAAAAgAAAAAAgAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAABAAIAACIAQAAAAAgAAAAAAgAAAAAAA=</HashCode>
       <FileName>Bindings\Binding.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -100,7 +100,7 @@
   <Class Name="IronSmalltalk.Runtime.Bindings.BindingDictionary&lt;TItem&gt;" Collapsed="true">
     <Position X="19.75" Y="1.5" Width="3" />
     <TypeIdentifier>
-      <HashCode>GCKQDICAAAIUEBBBSSAABAQOIAWACSEGBEQiAAJUKFA=</HashCode>
+      <HashCode>GCOQDICAAAIUEBBASSAABAQOIAWACSEGBEQiAAJUKFA=</HashCode>
       <FileName>Bindings\BindingDictionary.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />

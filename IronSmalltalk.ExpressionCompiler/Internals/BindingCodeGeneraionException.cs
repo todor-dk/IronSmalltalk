@@ -17,7 +17,7 @@
 using System;
 using System.Runtime.Serialization;
 using IronSmalltalk.Compiler.SemanticNodes;
-using IronSmalltalk.Runtime.CodeGeneration.Bindings;
+using IronSmalltalk.ExpressionCompiler.Bindings;
 
 namespace IronSmalltalk.ExpressionCompiler.Internals
 {

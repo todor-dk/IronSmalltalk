@@ -1,4 +1,4 @@
-/*
+﻿/*
  * **************************************************************************
  *
  * Copyright (c) The IronSmalltalk Project. 
@@ -20,14 +20,14 @@ using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using IronSmalltalk.Compiler.SemanticAnalysis;
+using IronSmalltalk.ExpressionCompiler.Bindings;
 using IronSmalltalk.ExpressionCompiler.Internals;
-using IronSmalltalk.Runtime.CodeGeneration.Bindings;
 using IronSmalltalk.Runtime.Execution.CallSiteBinders;
 using IronSmalltalk.Runtime.Execution.Internals;
 using IronSmalltalk.Runtime.Execution.Internals.Primitives;
 using IronSmalltalk.Runtime.Internal;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
+namespace IronSmalltalk.ExpressionCompiler.Visiting
 {
     /// <summary>
     /// Encoder visitor for visiting and generating primitive calls.
@@ -137,14 +137,14 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
         ///     Primitive ::= BuiltInPrimitive | InvokeStaticMethod | InvokeInstanceMethod | 
         ///         InvokeConstructor | InvokeGetProperty | InvokeSetProperty | GetFieldValue | SetFieldValue
         ///         
-        ///     BuiltInPrimitive        ::= '<' 'primitive'     Primitive_Name              Prim_Arg*               '>'
-        ///     InvokeStaticMethod      ::= '<' 'static'    	Defining_Type	Method_Name Arg_Type*	            '>'
-        ///     InvokeInstanceMethod    ::= '<' 'call'	        Defining_Type	Method_Name	This_Type	Arg_Type*   '>'
-        ///     InvokeConstructor       ::= '<' 'ctor'	        Defining_Type		        Arg_Type*	            '>'
-        ///     InvokeGetProperty       ::= '<' 'get_property'	Defining_Type	Prop_Name	Arg_Type*	Return_Type '>'
-        ///     InvokeSetProperty       ::= '<' 'set_property'	Defining_Type	Prop_Name	Arg_Type*	Return_Type '>'
-        ///     GetFieldValue           ::= '<' 'get_field'	    Defining_Type	Field_Name	Arg_Type*	            '>'
-        ///     SetFieldValue           ::= '<' 'set_field'	    Defining_Type	Field_Name	Arg_Type*	            '>'
+        ///     BuiltInPrimitive        ::= '˂' 'primitive'     Primitive_Name              Prim_Arg*               '˃'
+        ///     InvokeStaticMethod      ::= '˂' 'static'    	Defining_Type	Method_Name Arg_Type*	            '˃'
+        ///     InvokeInstanceMethod    ::= '˂' 'call'	        Defining_Type	Method_Name	This_Type	Arg_Type*   '˃'
+        ///     InvokeConstructor       ::= '˂' 'ctor'	        Defining_Type		        Arg_Type*	            '˃'
+        ///     InvokeGetProperty       ::= '˂' 'get_property'	Defining_Type	Prop_Name	Arg_Type*	Return_Type '˃'
+        ///     InvokeSetProperty       ::= '˂' 'set_property'	Defining_Type	Prop_Name	Arg_Type*	Return_Type '˃'
+        ///     GetFieldValue           ::= '˂' 'get_field'	    Defining_Type	Field_Name	Arg_Type*	            '˃'
+        ///     SetFieldValue           ::= '˂' 'set_field'	    Defining_Type	Field_Name	Arg_Type*	            '˃'
         ///
         ///     Primitive_Name  ::= "See BuiltInPrimitivesEnum"
         ///     Prim_Arg        ::= "Argument, depending on the value of Primitive_Name"
@@ -222,8 +222,8 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
             IEnumerable<string> parameters = node.ApiParameters.Skip(parametersStartIndex).Select(token => token.Value);
 
             // Have the helper do the heavy wotk!
-            BindingRestrictions restrictions = this.RootVisitor.BindingRestrictions;
-            Expression primitiveCall = PrimitiveBuilder.GeneratePrimitive(this,
+            BindingRestrictions restrictions = this.Context.BindingRestrictions;
+            Expression primitiveCall = PrimitiveInterface.GeneratePrimitive(this,
                 primitive,
                 definingType,
                 memberName,
@@ -231,7 +231,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
                 this.MethodVisitor.SelfArgument,
                 this.MethodVisitor.PassedArguments,
                 ref restrictions);
-            this.RootVisitor.BindingRestrictions = restrictions;
+            this.Context.BindingRestrictions = restrictions;
             if (primitiveCall == null)
                 throw new PrimitiveSemanticException(CodeGenerationErrors.UnexpectedCallingconvention);
             return primitiveCall;
@@ -240,13 +240,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
 
         ObjectClassCallSiteBinder IPrimitiveClient.GetClassBinder()
         {
-            ObjectClassCallSiteBinder binder = this.RootVisitor.BinderCache.CachedObjectClassCallSiteBinder;
-            if (binder == null)
-            {
-                binder = new ObjectClassCallSiteBinder(this.RootVisitor.Runtime);
-                this.RootVisitor.BinderCache.CachedObjectClassCallSiteBinder = binder;
-            }
-            return binder;
+            return this.Context.Compiler.GetClassBinder();
         }
 
         /// <summary>

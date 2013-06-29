@@ -20,12 +20,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq.Expressions;
 using System.Text;
-using IronSmalltalk.AstJitCompiler.Runtime;
 using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
-using IronSmalltalk.Interchange;
-using IronSmalltalk.InterchangeInstaller.Runtime;
+using IronSmalltalk.ExpressionCompiler.Runtime;
+using IronSmalltalk.InterchangeInstaller;
 using IronSmalltalk.Runtime.Execution;
 
 namespace IronSmalltalk.Tools.ClassLibraryBrowser.Testing

@@ -108,7 +108,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 
             #region Helpers
 
-            private static CallInfo[] CachedCallInfos = new CallInfo[16];
+            private static readonly CallInfo[] CachedCallInfos = new CallInfo[16];
 
             public static CallInfo GetCallInfo(int args)
             {

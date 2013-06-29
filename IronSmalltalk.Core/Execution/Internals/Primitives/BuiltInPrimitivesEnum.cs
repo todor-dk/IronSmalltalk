@@ -1,4 +1,19 @@
-﻿
+﻿/*
+ * **************************************************************************
+ *
+ * Copyright (c) The IronSmalltalk Project. 
+ *
+ * This source code is subject to terms and conditions of the 
+ * license agreement found in the solution directory. 
+ * See: $(SolutionDir)\License.htm ... in the root of this distribution.
+ * By using this source code in any fashion, you are agreeing 
+ * to be bound by the terms of the license agreement.
+ *
+ * You must not remove this notice, or any other, from this software.
+ *
+ * **************************************************************************
+*/
+
 namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
 {
     /// <summary>
@@ -18,11 +33,11 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
     /// <example>
     /// Smalltalk code primitive usage:
     /// + operand
-    ///     <primitive: IntegerAdd 'System.Int32' 'System.Int32'>
+    ///     ˂primitive: IntegerAdd 'System.Int32' 'System.Int32'˃
     ///     
     ///     self error: 'Addition failed'.
     /// </example>
-    public enum BuiltInPrimitivesEnum
+    internal enum BuiltInPrimitivesEnum
     {
         #region **** Very Common ****
 

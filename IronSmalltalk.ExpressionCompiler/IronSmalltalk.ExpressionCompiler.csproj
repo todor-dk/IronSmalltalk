@@ -39,9 +39,29 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BindingScopes\BindingScope.cs" />
+    <Compile Include="BindingScopes\ClassRelatedBindingScope.cs" />
+    <Compile Include="BindingScopes\ClassScope.cs" />
+    <Compile Include="BindingScopes\ComposableBindingScope.cs" />
+    <Compile Include="BindingScopes\FunctionScope.cs" />
+    <Compile Include="BindingScopes\GlobalScope.cs" />
+    <Compile Include="BindingScopes\PoolScope.cs" />
+    <Compile Include="BindingScopes\PoolVariableScope.cs" />
+    <Compile Include="BindingScopes\ReservedScope.cs" />
+    <Compile Include="BindingScopes\SemanticConstants.cs" />
+    <Compile Include="Bindings\ClassElementBindings.cs" />
+    <Compile Include="Bindings\DiscreteBinding.cs" />
+    <Compile Include="Bindings\ExpressionBindings.cs" />
+    <Compile Include="Bindings\GlobalBindings.cs" />
+    <Compile Include="Bindings\NameBindings.cs" />
+    <Compile Include="Bindings\PoolElementBindings.cs" />
+    <Compile Include="ExpressionCompiler.cs" />
+    <Compile Include="InitializerCompiler.cs" />
     <Compile Include="Internals\BindingCodeGeneraionException.cs" />
     <Compile Include="Internals\CodeGenerationErrors.cs" />
     <Compile Include="Internals\ExceptionHelper.cs" />
+    <Compile Include="Internals\LiteralEncodingStrategy.cs" />
+    <Compile Include="MethodCompiler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runtime\IDebugInfoService.cs" />
     <Compile Include="Runtime\InitializerCompilationResult.cs" />
@@ -49,7 +69,8 @@
     <Compile Include="Runtime\RuntimeCompiledInitializer.cs" />
     <Compile Include="Runtime\RuntimeCompiledMethod.cs" />
     <Compile Include="Visiting\ExpressionVisitor.cs" />
-    <Compile Include="Visiting\LiteralVisitor.cs" />
+    <Compile Include="Visiting\LiteralVisitorConstantValue.cs" />
+    <Compile Include="Visiting\LiteralVisitorExpressionValue.cs" />
     <Compile Include="Visiting\PrimaryVisitor.cs" />
     <Compile Include="Visiting\PrimitiveCallVisitor.cs" />
     <Compile Include="Visiting\StatementVisitor.cs" />
@@ -59,8 +80,13 @@
     <Compile Include="Visiting\TO-DO\MessageVisitor.cs" />
     <Compile Include="Visiting\TO-DO\MethodVisitor.cs" />
     <Compile Include="Visiting\TO-DO\RootEncoderVisitor.cs" />
+    <Compile Include="Visiting\VisitingContext.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="BindingScopes\BindingScopes Diagram.cd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Bindings\NameBindings Diagram.cd" />
     <None Include="Visiting\Full Diagram.cd" />
     <None Include="Visiting\Simple Diagram.cd" />
   </ItemGroup>
@@ -77,6 +103,9 @@
       <Project>{876ab5db-133a-47dc-b912-62511e312ed6}</Project>
       <Name>IronSmalltalk.Runtime</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="BindingScopes\Read Me.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

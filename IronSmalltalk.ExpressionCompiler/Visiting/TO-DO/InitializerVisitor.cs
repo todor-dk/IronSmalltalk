@@ -19,30 +19,27 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.ExpressionCompiler;
+using IronSmalltalk.ExpressionCompiler.Bindings;
+using IronSmalltalk.ExpressionCompiler.BindingScopes;
+using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Behavior;
-using IronSmalltalk.Runtime.CodeGeneration.Bindings;
-using IronSmalltalk.Runtime.CodeGeneration.BindingScopes;
 using IronSmalltalk.Runtime.Execution;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
+namespace IronSmalltalk.ExpressionCompiler.Visiting
 {
     public class InitializerVisitor : RootEncoderVisitor<Expression<Func<object, ExecutionContext, object>>, InitializerNode>
     {
         public string InitializerName { get; private set; }
 
-        public InitializerVisitor(SmalltalkRuntime runtime, BindingScope globalScope, BindingScope reservedScope, string initializerName, IDebugInfoService debugInfoService)
-            : base(runtime, globalScope, reservedScope, debugInfoService)
+        public InitializerVisitor(VisitingContext context, string initializerName)
+            : base(context)
         {
             this.InitializerName = initializerName;
         }
 
-        public override Symbol SuperLookupScope
-        {
-            get { return null; }
-        }
-
         protected override void DefineArguments(InitializerNode node)
         {
+            // Initializers have no arguments
         }
 
         protected override List<Expression> GenerateExpressions(InitializerNode node, out StatementVisitor visitor)

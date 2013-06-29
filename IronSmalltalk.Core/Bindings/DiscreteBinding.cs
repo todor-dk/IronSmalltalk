@@ -31,7 +31,7 @@ namespace IronSmalltalk.Runtime.Bindings
         /// Creates a new discrete binding with the given name.
         /// </summary>
         /// <param name="name">Name of the binding.</param>
-        public DiscreteBinding(Symbol name)
+        protected DiscreteBinding(Symbol name)
             : base(name)
         {
         }

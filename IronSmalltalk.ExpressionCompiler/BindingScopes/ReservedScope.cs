@@ -15,9 +15,9 @@
 */
 
 using System.Linq.Expressions;
-using IronSmalltalk.Runtime.CodeGeneration.Bindings;
+using IronSmalltalk.ExpressionCompiler.Bindings;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.BindingScopes
+namespace IronSmalltalk.ExpressionCompiler.BindingScopes
 {
     public static class ReservedScope
     {

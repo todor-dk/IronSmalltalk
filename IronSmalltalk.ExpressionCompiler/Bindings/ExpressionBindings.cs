@@ -16,9 +16,8 @@
 
 using System;
 using System.Linq.Expressions;
-using AST = System.Linq.Expressions;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
+namespace IronSmalltalk.ExpressionCompiler.Bindings
 {
     public abstract class ExpressionBinding<TExpression> : NameBinding
         where TExpression : Expression
@@ -36,7 +35,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
         }
     }
 
-    public class ConstantBinding : ExpressionBinding<ConstantExpression>
+    public sealed class ConstantBinding : ExpressionBinding<ConstantExpression>
     {
         public ConstantBinding(string name, object value)
             : base(name)
@@ -44,7 +43,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
             if (value == null)
                 throw new ArgumentNullException();
 
-            this.Expression = AST.Expression.Constant(value);
+            this.Expression = System.Linq.Expressions.Expression.Constant(value);
         }
 
         public ConstantBinding(string name, object value, Type type)
@@ -53,7 +52,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
             if (type == null)
                 throw new ArgumentNullException("type");
             // It's OK for value to be null, as long as type is given
-            this.Expression = AST.Expression.Constant(value, type);
+            this.Expression = System.Linq.Expressions.Expression.Constant(value, type);
         }
 
         /// <summary>
@@ -66,12 +65,12 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
         }
     }
 
-    public class ArgumentBinding : ExpressionBinding<Expression>
+    public sealed class ArgumentBinding : ExpressionBinding<Expression>
     {
         public ArgumentBinding(string name)
             : base(name)
         {
-            this.Expression = AST.Expression.Parameter(typeof(object), name);
+            this.Expression = System.Linq.Expressions.Expression.Parameter(typeof(object), name);
         }
 
         public ArgumentBinding(string name, Expression expression)
@@ -83,17 +82,17 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
         }
     }
 
-    public class TemporaryBinding : ExpressionBinding<ParameterExpression>, IAssignableBinding
+    public sealed class TemporaryBinding : ExpressionBinding<ParameterExpression>, IAssignableBinding
     {
         public TemporaryBinding(string name)
             : base(name)
         {
-            this.Expression = AST.Expression.Variable(typeof(object), name);
+            this.Expression = System.Linq.Expressions.Expression.Variable(typeof(object), name);
         }
 
         public Expression GenerateAssignExpression(Expression value, IBindingClient client)
         {
-            return AST.Expression.Assign(this.Expression, value);
+            return System.Linq.Expressions.Expression.Assign(this.Expression, value);
         }
     }
 }

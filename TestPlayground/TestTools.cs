@@ -18,7 +18,6 @@ using System;
 using System.Windows.Forms;
 using IronSmalltalk;
 using IronSmalltalk.Hosting.Hosting;
-using IronSmalltalk.Interchange;
 using IronSmalltalk.InterchangeInstaller;
 using IronSmalltalk.Internals;
 using IronSmalltalk.Runtime.Hosting;

@@ -17,9 +17,9 @@
 using System.Linq.Expressions;
 using RTB = IronSmalltalk.Runtime.Bindings;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
+namespace IronSmalltalk.ExpressionCompiler.Bindings
 {
-    public class PoolVariableBinding : DiscreteBinding<RTB.PoolVariableBinding>, IAssignableBinding
+    public sealed class PoolVariableBinding : DiscreteBinding<RTB.PoolVariableBinding>, IAssignableBinding
     {
         public PoolVariableBinding(string name, RTB.PoolVariableBinding binding)
             : base(name, binding)
@@ -36,7 +36,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
         }
     }
 
-    public class PoolConstantBinding : DiscreteBinding<RTB.PoolConstantBinding>
+    public sealed class PoolConstantBinding : DiscreteBinding<RTB.PoolConstantBinding>
     {
         public PoolConstantBinding(string name, RTB.PoolConstantBinding binding)
             : base(name, binding)

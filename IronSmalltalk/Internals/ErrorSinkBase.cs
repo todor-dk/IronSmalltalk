@@ -17,8 +17,8 @@
 using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
-using IronSmalltalk.Interchange;
-using IronSmalltalk.Runtime.Installer;
+using IronSmalltalk.DefinitionInstaller;
+using IronSmalltalk.InterchangeInstaller;
 
 namespace IronSmalltalk.Internals
 {

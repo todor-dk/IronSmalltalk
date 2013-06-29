@@ -18,15 +18,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using IronSmalltalk.Common;
-using IronSmalltalk.Compiler.Interchange;
-using IronSmalltalk.Compiler.Interchange.ParseNodes;
 using IronSmalltalk.Compiler.LexicalAnalysis;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
-using IronSmalltalk.Runtime.Installer;
+using IronSmalltalk.DefinitionInstaller;
+using IronSmalltalk.InterchangeInstaller.Compiler;
+using IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes;
 
-namespace IronSmalltalk.Interchange
+namespace IronSmalltalk.InterchangeInstaller
 {
     /// <summary>
     /// 
@@ -96,6 +96,7 @@ namespace IronSmalltalk.Interchange
         /// Retereive the next interchange chunk from the processor and parse it as a method.
         /// </summary>
         /// <param name="processor">Interchange format processor that can provide the interchange chunk for parsing.</param>
+        /// <param name="sourceCodeService"></param>
         /// <remarks>
         /// The parser used here is capable of parsing interchange chunks containg methods that follow the 
         /// interchange version standard that this version service is supporting.
@@ -120,6 +121,7 @@ namespace IronSmalltalk.Interchange
         /// Retereive the next interchange chunk from the processor and parse it as an initializer.
         /// </summary>
         /// <param name="processor">Interchange format processor that can provide the interchange chunk for parsing.</param>
+        /// <param name="sourceCodeService"></param>
         /// <remarks>
         /// The parser used here is capable of parsing interchange chunks containg initializers that follow the 
         /// interchange version standard that this version service is supporting.

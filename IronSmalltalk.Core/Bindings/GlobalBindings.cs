@@ -27,7 +27,7 @@ namespace IronSmalltalk.Runtime.Bindings
         /// Create a new global binding.
         /// </summary>
         /// <param name="name">Name of the binding.</param>
-        public GlobalBinding(Symbol name)
+        protected GlobalBinding(Symbol name)
             : base(name)
         {
         }
@@ -99,7 +99,7 @@ namespace IronSmalltalk.Runtime.Bindings
         /// Create a new global variable or constant binding.
         /// </summary>
         /// <param name="name">Name of the binding.</param>
-        public GlobalVariableOrConstantBinding(Symbol name)
+        protected GlobalVariableOrConstantBinding(Symbol name)
             : base(name)
         {
         }

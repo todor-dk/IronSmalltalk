@@ -1,12 +1,29 @@
-﻿using System;
+﻿/*
+ * **************************************************************************
+ *
+ * Copyright (c) The IronSmalltalk Project. 
+ *
+ * This source code is subject to terms and conditions of the 
+ * license agreement found in the solution directory. 
+ * See: $(SolutionDir)\License.htm ... in the root of this distribution.
+ * By using this source code in any fashion, you are agreeing 
+ * to be bound by the terms of the license agreement.
+ *
+ * You must not remove this notice, or any other, from this software.
+ *
+ * **************************************************************************
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
 using System.Linq.Expressions;
 using IronSmalltalk.Runtime.Internal;
 
 namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
 {
-    public static class PrimitiveHelper
+    internal static class PrimitiveHelper
     {
         /// <summary>
         /// An array of DynamicMetaObjects representing empty (no) arguments. For convenience.
@@ -16,21 +33,23 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         /// <summary>
         /// This converts the arguments that were passed in to expressions with the correct types.
         /// </summary>
-        /// <param name="arguments"></param>
+        /// <param name="builder"></param>
         /// <param name="argumentTypes">Collection of types to convert to.</param>
-        /// <param name="self"></param>
-        /// <param name="explicitConversion"></param>
-        /// <param name="checkedConversion"></param>
-        /// <param name="restrictions"></param>
+        /// <param name="conversion">Type of conversion to perform on each argument.</param>
         /// <returns>Collection of argument expressions that can be passed to the member call.</returns>
-        public static IList<Expression> GetArguments(DynamicMetaObject self, DynamicMetaObject[] arguments, Type[] argumentTypes, bool explicitConversion, bool checkedConversion, ref BindingRestrictions restrictions)
+        public static IList<Expression> GetArguments(PrimitiveBuilder builder, Type[] argumentTypes, Conversion conversion)
         {
-            if (self == null)
-                throw new ArgumentNullException("self"); // This is "self", or the first argument of a method.
+            if (builder == null)
+                throw new ArgumentNullException();
+
+            DynamicMetaObject[] arguments = builder.Arguments;
             if (arguments == null)
                 arguments = PrimitiveHelper.EmptyArguments;
             if (argumentTypes == null)
                 throw new ArgumentNullException("argumentTypes");
+
+            if (builder.IgnoreExecutionContextArgument)
+                arguments = arguments.Skip(1).ToArray();
 
             List<Expression> args = new List<Expression>(argumentTypes.Length);
 
@@ -39,8 +58,10 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
             {
                 // 1. Defined exactly the same number of arguments as there were passed to the method,
                 //      then simply convert and map each argument passed to us to an argument that we are passing to the method.
+                BindingRestrictions restrictions = builder.Restrictions;
                 for (int i = 0; i < argumentTypes.Length; i++)
-                    args.Add(PrimitiveHelper.Convert(arguments[i], argumentTypes[i], explicitConversion, checkedConversion, ref restrictions));
+                    args.Add(PrimitiveHelper.Convert(arguments[i], argumentTypes[i], conversion, ref restrictions));
+                builder.Restrictions = restrictions;
                 return args;
             }
             if (argumentTypes.Length == (arguments.Length + 1))
@@ -48,17 +69,19 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                 // 2. Exactly one more argument was defined than passed to the method,
                 //      implying that the first defined argument is mapped to the receiver (self),
                 //      and the remaining arguments are mapped to the arguments passed to the method.
-                args.Add(PrimitiveHelper.Convert(self, argumentTypes[0], explicitConversion, checkedConversion, ref restrictions));
+                BindingRestrictions restrictions = builder.Restrictions;
+                args.Add(PrimitiveHelper.Convert(builder.Self, argumentTypes[0], conversion, ref restrictions));
 
                 for (int i = 1; i < argumentTypes.Length; i++)
-                    args.Add(PrimitiveHelper.Convert(arguments[i - 1], argumentTypes[i], explicitConversion, checkedConversion, ref restrictions));
+                    args.Add(PrimitiveHelper.Convert(arguments[i - 1], argumentTypes[i], conversion, ref restrictions));
+                builder.Restrictions = restrictions;
                 return args;
             }
             // Some mismatch :-/
             throw new PrimitiveInternalException(RuntimeCodeGenerationErrors.WrongNumberOfParameters);
         }
 
-        public static Expression Convert(DynamicMetaObject parameter, Type type, bool explicitConversion, bool checkedConversion, ref BindingRestrictions restrictions)
+        public static Expression Convert(DynamicMetaObject parameter, Type type, Conversion conversion, ref BindingRestrictions restrictions)
         {
             if (type == null)
                 return parameter.Expression;
@@ -68,7 +91,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
             Type limitingType = (parameter.Value != null) ? parameter.Value.GetType() : parameter.LimitType;
             if ((limitingType == null) || (limitingType == typeof(object)))
             {
-                if (checkedConversion)
+                if ((conversion & Conversion.Checked) == Conversion.Checked)
                     return Expression.ConvertChecked(parameter.Expression, type);
                 else
                     return Expression.Convert(parameter.Expression, type);
@@ -101,7 +124,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                 if (limitingType == type)
                 {
                     // No need for double cast ... the argument is already in the given type.
-                    if(checkedConversion)
+                    if ((conversion & Conversion.Checked) == Conversion.Checked)
                         return Expression.ConvertChecked(parameter.Expression, type);
                     else
                         return Expression.Convert(parameter.Expression, type);
@@ -115,9 +138,9 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                     //  2. Use the C# binder to do the work. We actually WANT the same semantics as C#, so that's OK. But we depend on them :-/
 
                     Microsoft.CSharp.RuntimeBinder.CSharpBinderFlags flags = Microsoft.CSharp.RuntimeBinder.CSharpBinderFlags.None;
-                    if (checkedConversion)
+                    if ((conversion & Conversion.Checked) == Conversion.Checked)
                         flags = flags | Microsoft.CSharp.RuntimeBinder.CSharpBinderFlags.CheckedContext;
-                    if (explicitConversion)
+                    if ((conversion & Conversion.Explicit) == Conversion.Explicit)
                         flags = flags | Microsoft.CSharp.RuntimeBinder.CSharpBinderFlags.ConvertExplicit;
                     // Create a C# convert binder. Currently, this is not cached, but we could do this in the future.
                     ConvertBinder bndr = (ConvertBinder)Microsoft.CSharp.RuntimeBinder.Binder.Convert(flags, type, typeof(PrimitiveHelper));
@@ -152,7 +175,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         {
             foreach (var member in type.GetDefaultMembers())
             {
-                if (memberType.IsAssignableFrom(member.GetType()))
+                if (memberType.IsInstanceOfType(member))
                     return member.Name;
             }
             return null;
@@ -189,5 +212,20 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
             return argumentTypes.ToArray();
         }
 
+    }
+
+    [Flags]
+    public enum Conversion
+    {
+        /// <summary>
+        /// The conversion happens in a checked context. 
+        /// The conversion throws an exception if the target type is overflowed.
+        /// </summary>
+        Checked = 1, 
+
+        /// <summary>
+        /// The conversion is explicit, contrary to an implicit conversion.
+        /// </summary>
+        Explicit = 2
     }
 }

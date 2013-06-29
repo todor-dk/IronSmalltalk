@@ -130,7 +130,7 @@ namespace IronSmalltalk
             {
                 IBinding result = null;
                 caseConflict = true;
-                foreach (IDiscreteBinding binding in runtime.Globals.Values)
+                foreach (IDiscreteGlobalBinding binding in runtime.Globals.Values)
                 {
                     if (binding.Name.Value.Equals(name, StringComparison.InvariantCultureIgnoreCase))
                     {
@@ -170,10 +170,8 @@ namespace IronSmalltalk
             if (cls == null)
                 cls = this.Runtime.NativeTypeClassMap.Object;
             Symbol na = null;
-            CompiledMethod method = MethodLookupHelper.LookupMethod(ref cls, ref na, delegate(SmalltalkClass c)
-            {
-                return c.InstanceBehavior.GetMethodByNativeName(name, argumentCount, ignoreCase, out caseConflict);
-            });
+            CompiledMethod method = MethodLookupHelper.LookupMethod(ref cls, ref na, 
+                c => c.InstanceBehavior.GetMethodByNativeName(name, argumentCount, ignoreCase, out caseConflict));
 
             if (!caseConflict)
             {

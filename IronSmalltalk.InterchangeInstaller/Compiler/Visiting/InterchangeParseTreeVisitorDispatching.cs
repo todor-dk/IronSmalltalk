@@ -15,9 +15,9 @@
 */
 
 using System;
-using IronSmalltalk.Compiler.Interchange.Visiting;
+using IronSmalltalk.InterchangeInstaller.Compiler.Visiting;
 
-namespace IronSmalltalk.Compiler.Interchange.ParseNodes
+namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
 {
     // ********************************************
     // *** File with partial classes that implement

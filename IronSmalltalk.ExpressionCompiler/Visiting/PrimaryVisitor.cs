@@ -17,10 +17,10 @@
 using System.Linq.Expressions;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
+using IronSmalltalk.ExpressionCompiler.Bindings;
 using IronSmalltalk.ExpressionCompiler.Internals;
-using IronSmalltalk.Runtime.CodeGeneration.Bindings;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
+namespace IronSmalltalk.ExpressionCompiler.Visiting
 {
     public class PrimaryVisitor : NestedEncoderVisitor<Expression>
     {
@@ -58,36 +58,32 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
 
         public override Expression VisitArrayLiteral(ArrayLiteralNode node)
         {
-            LiteralVisitor visitor = new LiteralVisitor(this);
-            object[] result = new object[node.Elements.Count];
-            for (int i = 0; i < result.Length; i++)
-                result[i] = node.Elements[i].Accept(visitor);
             this.IsConstant = true;
-            return Expression.Constant(result, typeof(object));
+            return this.Context.Compiler.LiteralEncoding.Array(this, node.Elements);
         }
 
         public override Expression VisitCharacterLiteral(CharacterLiteralNode node)
         {
             this.IsConstant = true;
-            return Expression.Constant(node.Token.Value, typeof(object));
+            return this.Context.Compiler.LiteralEncoding.Character(this, node.Token.Value);
         }
 
         public override Expression VisitFloatELiteral(FloatELiteralNode node)
         {
             this.IsConstant = true;
             if (node.NegativeSignToken == null)
-                return Expression.Constant(node.Token.Value, typeof(object));
+                return this.Context.Compiler.LiteralEncoding.FloatE(this, node.Token.Value);
             else
-                return Expression.Constant(-node.Token.Value, typeof(object));
+                return this.Context.Compiler.LiteralEncoding.FloatE(this, -node.Token.Value);
         }
 
         public override Expression VisitFloatDLiteral(FloatDLiteralNode node)
         {
             this.IsConstant = true;
             if (node.NegativeSignToken == null)
-                return Expression.Constant(node.Token.Value, typeof(object));
+                return this.Context.Compiler.LiteralEncoding.FloatD(this, node.Token.Value);
             else
-                return Expression.Constant(-node.Token.Value, typeof(object));
+                return this.Context.Compiler.LiteralEncoding.FloatD(this, -node.Token.Value);
         }
 
         public override Expression VisitIdentifierLiteral(IdentifierLiteralNode node)
@@ -100,47 +96,47 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
         {
             this.IsConstant = true;
             if (node.NegativeSignToken == null)
-                return Expression.Constant(node.Token.Value, typeof(object));
+                return this.Context.Compiler.LiteralEncoding.LargeInteger(this, node.Token.Value);
             else
-                return Expression.Constant(-node.Token.Value, typeof(object));
+                return this.Context.Compiler.LiteralEncoding.LargeInteger(this, -node.Token.Value);
         }
 
         public override Expression VisitScaledDecimalLiteral(ScaledDecimalLiteralNode node)
         {
             this.IsConstant = true;
             if (node.NegativeSignToken == null)
-                return Expression.Constant(node.Token.Value, typeof(object));
+                return this.Context.Compiler.LiteralEncoding.ScaledDecimal(this, node.Token.Value);
             else
-                return Expression.Constant(-node.Token.Value, typeof(object));
+                return this.Context.Compiler.LiteralEncoding.ScaledDecimal(this, -node.Token.Value);
         }
 
         public override Expression VisitSelectorLiteral(SelectorLiteralNode node)
         {
             // #asUppercase or #with:with: 
             this.IsConstant = true;
-            return Expression.Constant(this.RootVisitor.Runtime.GetSymbol(node.Token.Value), typeof(object));
+            return this.Context.Compiler.LiteralEncoding.Symbol(this, node.Token.Value);
         }
 
         public override Expression VisitSmallIntegerLiteral(SmallIntegerLiteralNode node)
         {
             this.IsConstant = true;
             if (node.NegativeSignToken == null)
-                return Expression.Constant(node.Token.Value, typeof(object));
+                return this.Context.Compiler.LiteralEncoding.SmallInteger(this, node.Token.Value);
             else
-                return Expression.Constant(-node.Token.Value, typeof(object));
+                return this.Context.Compiler.LiteralEncoding.SmallInteger(this, -node.Token.Value);
         }
 
         public override Expression VisitStringLiteral(StringLiteralNode node)
         {
             this.IsConstant = true;
-            return Expression.Constant(node.Token.Value, typeof(object));
+            return this.Context.Compiler.LiteralEncoding.String(this, node.Token.Value);
         }
 
         public override Expression VisitSymbolLiteral(SymbolLiteralNode node)
         {
             // #'asUppercase' or #'this is a test'
             this.IsConstant = true;
-            return Expression.Constant(this.RootVisitor.Runtime.GetSymbol(node.Token.Value), typeof(object));
+            return this.Context.Compiler.LiteralEncoding.Symbol(this, node.Token.Value);
         }
 
         #endregion

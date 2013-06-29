@@ -46,7 +46,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// Create a new SmalltalkDynamicMetaObjectBinder.
         /// </summary>
         /// <param name="runtime">SmalltalkRuntine that this binder belongs to.</param>
-        public SmalltalkDynamicMetaObjectBinder(SmalltalkRuntime runtime)
+        protected SmalltalkDynamicMetaObjectBinder(SmalltalkRuntime runtime)
         {
             if (runtime == null)
                 throw new ArgumentNullException("runtime");

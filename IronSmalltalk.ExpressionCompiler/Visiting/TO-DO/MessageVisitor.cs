@@ -19,13 +19,12 @@ using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Text;
 using IronSmalltalk.Compiler.SemanticAnalysis;
+using IronSmalltalk.ExpressionCompiler.Bindings;
 using IronSmalltalk.ExpressionCompiler.Internals;
-using IronSmalltalk.Runtime.CodeGeneration.Bindings;
-using IronSmalltalk.Runtime.CodeGeneration.Visiting;
 using IronSmalltalk.Runtime.Execution.CallSiteBinders;
 using IronSmalltalk.Runtime.Execution.Internals.Primitives;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
+namespace IronSmalltalk.ExpressionCompiler.Visiting
 {
     /// <summary>
     /// 
@@ -143,20 +142,20 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
 
         public override Expression VisitUnaryMessage(Compiler.SemanticNodes.UnaryMessageNode node)
         {
-            
-            
-            CallSiteBinder binder = this.GetBinder(node.SelectorToken.Value, node.SelectorToken.Value, 0);
-            return Expression.Dynamic(binder, typeof(Object), this.Receiver);
+            return this.Context.Compiler.CompileDynamicCall(node.SelectorToken.Value, node.SelectorToken.Value,
+                this.IsSuperSend, this.IsConstantReceiver, this.Context.SuperLookupScope,
+                this.Receiver, this.Context.ExecutionContext);
         }
 
         public override Expression VisitBinaryMessage(Compiler.SemanticNodes.BinaryMessageNode node)
         {
-            CallSiteBinder binder = this.GetBinder(node.SelectorToken.Value, node.SelectorToken.Value, 1);
             Expression argument = node.Argument.Accept(this);
             if (node.SelectorToken.Value == "==")
                 return this.InlineIdentityTest(this.Receiver, argument);
             else
-                return Expression.Dynamic(binder, typeof(Object), this.Receiver, argument);
+                return this.Context.Compiler.CompileDynamicCall(node.SelectorToken.Value, node.SelectorToken.Value,
+                    this.IsSuperSend, this.IsConstantReceiver, this.Context.SuperLookupScope,
+                    this.Receiver, this.Context.ExecutionContext, argument);
         }
 
         public override Expression VisitKeywordMessage(Compiler.SemanticNodes.KeywordMessageNode node)
@@ -165,17 +164,20 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
             foreach (var token in node.SelectorTokens)
                 selector.Append(token.Value);
 
-            CallSiteBinder binder = this.GetBinder(
-                selector.ToString(),
-                node.SelectorTokens[0].Value.Substring(0, node.SelectorTokens[0].Value.Length - 1),
-                node.Arguments.Count);
-
-            Expression[] arguments = new Expression[node.Arguments.Count + 1];
-            arguments[0] = this.Receiver;
+            Expression[] arguments = new Expression[node.Arguments.Count];
             for (int i = 0; i < node.Arguments.Count; i++)
-                arguments[i + 1] = node.Arguments[i].Accept(this);
+                arguments[i] = node.Arguments[i].Accept(this);
 
-            return Expression.Dynamic(binder, typeof(Object), arguments);
+            return this.Context.Compiler.CompileDynamicCall(
+                selector.ToString(), 
+                node.SelectorTokens[0].Value.Substring(0, node.SelectorTokens[0].Value.Length - 1),
+                node.Arguments.Count,
+                this.IsSuperSend, 
+                this.IsConstantReceiver, 
+                this.Context.SuperLookupScope, 
+                this.Receiver, 
+                this.Context.ExecutionContext, 
+                arguments);
         }
 
         #endregion
@@ -212,48 +214,9 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
 
         #region Helpers
 
-        private CallSiteBinder GetBinder(string selector, string nativeName, int argumentCount)
-        {
-            CallSiteBinder binder;
-            if (this.IsSuperSend)
-            {
-                binder = new SuperSendCallSiteBinder(this.RootVisitor.Runtime,
-                    this.RootVisitor.Runtime.GetSymbol(selector),
-                    this.RootVisitor.SuperLookupScope);
-            }
-            else if (this.IsConstantReceiver)
-            {
-                binder = this.RootVisitor.BinderCache.ConstantSendCache.GetBinder(selector);
-                if (binder == null)
-                    binder = this.RootVisitor.BinderCache.ConstantSendCache.AddBinder(
-                        this.CreateConstantCallSiteBinder(selector, nativeName, argumentCount));
-            }
-            else
-            {
-                binder = this.RootVisitor.BinderCache.MessageSendCache.GetBinder(selector);
-                if (binder == null)
-                    binder = this.RootVisitor.BinderCache.MessageSendCache.AddBinder(
-                        this.CreateCallSiteBinder(selector, nativeName, argumentCount));
-            }
 
-            return binder;
-        }
 
-        private MessageSendCallSiteBinder CreateCallSiteBinder(string selector, string nativeName, int argumentCount)
-        {
-            return new MessageSendCallSiteBinder(this.RootVisitor.Runtime,
-                this.RootVisitor.Runtime.GetSymbol(selector),
-                nativeName,
-                argumentCount); 
-        }
 
-        private MessageSendCallSiteBinder CreateConstantCallSiteBinder(string selector, string nativeName, int argumentCount)
-        {
-            return new ConstantSendCallSiteBinder(this.RootVisitor.Runtime,
-                this.RootVisitor.Runtime.GetSymbol(selector),
-                nativeName,
-                argumentCount);
-        }
 
         private void SetResult(Expression receiver)
         {
@@ -277,7 +240,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
 
         private Expression InlineIdentityTest(Expression a, Expression b)
         {
-            return BuiltInPrimitiveHelper.EncodeReferenceEquals(a, b, Expression.Constant(true), Expression.Constant(false));
+            return PrimitiveInterface.EncodeReferenceEquals(a, b, Expression.Constant(true), Expression.Constant(false));
         }
 
         private Expression InlineMessageSend(Compiler.SemanticNodes.KeywordMessageSequenceNode node)
@@ -523,19 +486,6 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
                                 integerOperation,
                                 Expression.AddAssign(iStart, iStep))))));
 
-            CallSiteBinder eqBinder = this.RootVisitor.BinderCache.MessageSendCache.GetBinder("=");
-            if (eqBinder == null)
-                eqBinder = this.RootVisitor.BinderCache.MessageSendCache.AddBinder(
-                    this.CreateCallSiteBinder("=", "=", 1));
-            CallSiteBinder gtBinder = this.RootVisitor.BinderCache.MessageSendCache.GetBinder(">");
-            if (gtBinder == null)
-                gtBinder = this.RootVisitor.BinderCache.MessageSendCache.AddBinder(
-                    this.CreateCallSiteBinder(">", ">", 1));
-            CallSiteBinder addBinder = this.RootVisitor.BinderCache.MessageSendCache.GetBinder("+");
-            if (addBinder == null)
-                addBinder = this.RootVisitor.BinderCache.MessageSendCache.AddBinder(
-                    this.CreateCallSiteBinder("+", "+", 1));
-
             ParameterExpression dStart = Expression.Variable(typeof(object), "dStart");
             visitor = new InlineBlockVisitor(this);
             if (block.Arguments.Count > 0)
@@ -545,39 +495,33 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
             Expression dynamicBlock = Expression.Block(
                 Expression.Assign(dStart, start),
                 Expression.IfThen(
-                    Expression.IsTrue(Expression.Convert(Expression.Dynamic(eqBinder, typeof(object), step, Expression.Constant(0)), typeof(bool))),
+                    Expression.IsTrue(Expression.Convert(this.Context.CompileDynamicCall("=", step, Expression.Constant(0)), typeof(bool))),
                     Expression.Throw(Expression.New(typeof(ArgumentOutOfRangeException)), typeof(object))),
                 Expression.IfThenElse(
-                    Expression.IsTrue(Expression.Convert(Expression.Dynamic(gtBinder, typeof(object), step, Expression.Constant(0)), typeof(bool))),
+                    Expression.IsTrue(Expression.Convert(this.Context.CompileDynamicCall(">", step, Expression.Constant(0)), typeof(bool))),
                     Expression.Loop(
                         Expression.IfThenElse(
-                            Expression.IsTrue(Expression.Convert(Expression.Dynamic(gtBinder, typeof(object), dStart, stop), typeof(bool))),
+                            Expression.IsTrue(Expression.Convert(this.Context.CompileDynamicCall(">", dStart, stop), typeof(bool))),
                             Expression.Break(exitLabel, nilBinding.GenerateReadExpression(this)),
                             Expression.Block(
                                 dynamicOperation,
-                                Expression.Assign(dStart, Expression.Dynamic(addBinder, typeof(object), dStart, step))))),
+                                Expression.Assign(dStart, this.Context.CompileDynamicCall("+", dStart, step))))),
                     Expression.Loop(
                         Expression.IfThenElse(
-                            Expression.IsTrue(Expression.Convert(Expression.Dynamic(gtBinder, typeof(object), stop, dStart), typeof(bool))),
+                            Expression.IsTrue(Expression.Convert(this.Context.CompileDynamicCall(">", stop, dStart), typeof(bool))),
                             Expression.Break(exitLabel, nilBinding.GenerateReadExpression(this)),
                             Expression.Block(
                                 dynamicOperation,
-                                Expression.Assign(dStart, Expression.Dynamic(addBinder, typeof(object), dStart, step)))))));
+                                Expression.Assign(dStart, this.Context.CompileDynamicCall("+", dStart, step)))))));
 
             return Expression.Block(
                 new ParameterExpression[] { iStart, iStop, iStep, iNA, dStart },
                 integerBlock,
                 Expression.Label(overflowLabel),
-                Expression.Call(MessageVisitor.WriteLine, Expression.Constant("In Dynamic")),
                 dynamicBlock,
                 Expression.Label(exitLabel),
-                Expression.Call(MessageVisitor.WriteLine, Expression.Constant("In Exit")),
                 nilBinding.GenerateReadExpression(this));
         }
-
-        private static System.Reflection.MethodInfo WriteLine = typeof(Console).GetMethod("WriteLine",
-             System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.InvokeMethod,
-             null, new Type[] { typeof(string) }, null);
 
         #endregion
     }

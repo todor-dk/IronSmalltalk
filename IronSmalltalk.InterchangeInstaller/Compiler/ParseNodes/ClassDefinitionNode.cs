@@ -18,12 +18,11 @@ using System;
 using System.Collections.Generic;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
-using IronSmalltalk.Interchange;
+using IronSmalltalk.DefinitionInstaller;
+using IronSmalltalk.DefinitionInstaller.Definitions;
 using IronSmalltalk.Runtime;
-using IronSmalltalk.Runtime.Installer;
-using IronSmalltalk.Runtime.Installer.Definitions;
 
-namespace IronSmalltalk.Compiler.Interchange.ParseNodes
+namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
 {
     public partial class ClassDefinitionNode : InterchangeElementNode
     {

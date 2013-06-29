@@ -14,9 +14,9 @@
  * **************************************************************************
 */
 
-using IronSmalltalk.Runtime.Installer.Definitions;
+using IronSmalltalk.DefinitionInstaller.Definitions;
 
-namespace IronSmalltalk.Interchange
+namespace IronSmalltalk.InterchangeInstaller
 {
     /// <summary>
     /// Interface describing an object that will be notified for each element found in the source code.
@@ -42,7 +42,7 @@ namespace IronSmalltalk.Interchange
         /// <summary>
         /// Process and file-in a global initializer definition.
         /// </summary>
-        /// <param name="definition">Meta-object describing the definition of the initializer.</param>
+        /// <param name="initializer">Meta-object describing the definition of the initializer.</param>
         /// <returns></returns>
         bool FileInGlobalInitializer(GlobalInitializer initializer);
 
@@ -70,14 +70,14 @@ namespace IronSmalltalk.Interchange
         /// <summary>
         /// Process and file-in a pool variable or pool constant initializer definition.
         /// </summary>
-        /// <param name="definition">Meta-object describing the definition of the initializer.</param>
+        /// <param name="initializer">Meta-object describing the definition of the initializer.</param>
         /// <returns></returns>
         bool FileInPoolVariableInitializer(PoolVariableInitializer initializer);
 
         /// <summary>
         /// Process and file-in a program initializer definition.
         /// </summary>
-        /// <param name="definition">Meta-object describing the definition of the initializer.</param>
+        /// <param name="initializer">Meta-object describing the definition of the initializer.</param>
         /// <returns></returns>
         bool FileInProgramInitializer(ProgramInitializer initializer);
     }

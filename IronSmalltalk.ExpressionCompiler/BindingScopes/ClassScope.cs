@@ -14,10 +14,11 @@
  * **************************************************************************
 */
 
-using IronSmalltalk.Runtime.CodeGeneration.Bindings;
+using IronSmalltalk.ExpressionCompiler.Bindings;
+using IronSmalltalk.Runtime;
 using RTB = IronSmalltalk.Runtime.Bindings;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.BindingScopes
+namespace IronSmalltalk.ExpressionCompiler.BindingScopes
 {
     /// <summary>
     /// 
@@ -38,7 +39,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.BindingScopes
     class_scope := (global_scope + pool_variable_scope) + inheritable_class_variable_scope      // X3J20:3.3.2.3
      */
 
-    public class ClassScope : ClassRelatedBindingScope
+    public sealed class ClassScope : ClassRelatedBindingScope
     {
         public ClassScope(SmalltalkClass cls, PoolVariableScope outerScope)
             : base(cls, outerScope)

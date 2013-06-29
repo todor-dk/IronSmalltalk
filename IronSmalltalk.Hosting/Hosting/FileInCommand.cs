@@ -21,7 +21,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IronSmalltalk.Hosting.Hosting;
-using IronSmalltalk.Interchange;
 using Microsoft.Scripting;
 
 namespace IronSmalltalk.Runtime.Hosting

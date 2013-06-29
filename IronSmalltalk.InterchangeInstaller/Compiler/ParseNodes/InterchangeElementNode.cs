@@ -16,11 +16,10 @@
 
 using IronSmalltalk.Compiler.LexicalAnalysis;
 using IronSmalltalk.Compiler.SemanticAnalysis;
-using IronSmalltalk.Interchange;
-using IronSmalltalk.Runtime.Installer;
-using IronSmalltalk.Runtime.Installer.Definitions;
+using IronSmalltalk.DefinitionInstaller;
+using IronSmalltalk.DefinitionInstaller.Definitions;
 
-namespace IronSmalltalk.Compiler.Interchange.ParseNodes
+namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
 {
     public abstract class InterchangeUnitNode : InterchangeParseNode
     {

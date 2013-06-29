@@ -17,13 +17,13 @@
 using System;
 using System.IO;
 using IronSmalltalk.Common;
-using IronSmalltalk.Compiler.Interchange.ParseNodes;
 using IronSmalltalk.Compiler.LexicalAnalysis;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
+using IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes;
 
-namespace IronSmalltalk.Compiler.Interchange
+namespace IronSmalltalk.InterchangeInstaller.Compiler
 {
     public class InterchangeFormatParser : ParserBase
     {
@@ -234,7 +234,7 @@ namespace IronSmalltalk.Compiler.Interchange
             str = token as StringToken;
             if (str == null)
                 this.ReportParserError(result, "Missing superclass name.", token);
-            if (str.Value.Length != 0) // It's OK to have empry superclass .... Object does
+            else if (str.Value.Length != 0) // It's OK to have empry superclass .... Object does
                 str = this.VerifyIdentifierString(str, "Superclass name not an identifier");
             result.SuperclassName = str;
 
@@ -512,7 +512,7 @@ namespace IronSmalltalk.Compiler.Interchange
 
         protected virtual Token GetNextTokenxx()
         {
-            return this.GetNextTokenxx(LexicalAnalysis.Preference.Default);
+            return this.GetNextTokenxx(IronSmalltalk.Compiler.LexicalAnalysis.Preference.Default);
         }
 
         protected virtual StringToken VerifyIdentifierString(StringToken token, string errorMessage)

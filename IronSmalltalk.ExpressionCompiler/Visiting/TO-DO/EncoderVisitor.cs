@@ -19,13 +19,13 @@ using System.Linq.Expressions;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Compiler.Visiting;
-using IronSmalltalk.Runtime.CodeGeneration.Bindings;
+using IronSmalltalk.ExpressionCompiler.Bindings;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
+namespace IronSmalltalk.ExpressionCompiler.Visiting
 {
     public abstract class EncoderVisitor : IBindingClient
     {
-        protected internal abstract IRootFunctionVisitor RootVisitor { get; }
+        public abstract VisitingContext Context { get; }
 
         protected internal abstract NameBinding GetBinding(string name);
 
@@ -46,13 +46,6 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
 
     public abstract class EncoderVisitor<TResult> : EncoderVisitor, IParseTreeVisitor<TResult>
     {
-
-        public TFuncResult NotYetImplemented<TFuncResult>()
-        {
-            throw new NotImplementedException();
-        }
-
-
         #region IParseTreeVisitor interface implementation 
 
         /// <summary>
@@ -274,9 +267,9 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
             this.EnclosingVisitor = enclosingVisitor;
         }
 
-        protected internal override IRootFunctionVisitor RootVisitor
+        public override VisitingContext Context
         {
-            get { return this.EnclosingVisitor.RootVisitor; }
+            get { return this.EnclosingVisitor.Context; }
         }
 
         protected internal override NameBinding GetBinding(string name)

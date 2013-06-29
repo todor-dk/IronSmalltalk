@@ -26,9 +26,9 @@ namespace IronSmalltalk.Runtime.Execution.Internals
     [Serializable]
     public abstract class CodeGenerationException : SmalltalkDefinitionException
     {
-        public CodeGenerationException() { }
-        public CodeGenerationException(string message) : base(message) { }
-        public CodeGenerationException(string message, Exception inner) : base(message, inner) { }
+        protected CodeGenerationException() { }
+        protected CodeGenerationException(string message) : base(message) { }
+        protected CodeGenerationException(string message, Exception inner) : base(message, inner) { }
 #if !SILVERLIGHT
         protected CodeGenerationException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 #endif

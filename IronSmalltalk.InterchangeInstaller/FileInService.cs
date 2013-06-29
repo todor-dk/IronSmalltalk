@@ -1,4 +1,20 @@
-﻿using System;
+﻿/*
+ * **************************************************************************
+ *
+ * Copyright (c) The IronSmalltalk Project. 
+ *
+ * This source code is subject to terms and conditions of the 
+ * license agreement found in the solution directory. 
+ * See: $(SolutionDir)\License.htm ... in the root of this distribution.
+ * By using this source code in any fashion, you are agreeing 
+ * to be bound by the terms of the license agreement.
+ *
+ * You must not remove this notice, or any other, from this software.
+ *
+ * **************************************************************************
+*/
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,9 +24,8 @@ using System.Threading.Tasks;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Compiler.Visiting;
-using IronSmalltalk.Interchange;
+using IronSmalltalk.DefinitionInstaller;
 using IronSmalltalk.Runtime.Execution;
-using IronSmalltalk.Runtime.Installer;
 
 namespace IronSmalltalk.InterchangeInstaller
 {
@@ -176,8 +191,6 @@ namespace IronSmalltalk.InterchangeInstaller
 #if DEBUG
                 System.Diagnostics.Debug.Assert(sourceObject != null);
 #endif
-                if (sourceObject == null)
-                    return; // This is like having no error sink
                 if (sourceObject.ErrorSink == null)
                     return;
                 sourceObject.ErrorSink.AddInstallError(sourceReference.StartPosition, sourceReference.StopPosition, installErrorMessage);

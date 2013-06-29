@@ -1,20 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using IronSmalltalk.AstJitCompiler.Runtime;
+﻿/*
+ * **************************************************************************
+ *
+ * Copyright (c) The IronSmalltalk Project. 
+ *
+ * This source code is subject to terms and conditions of the 
+ * license agreement found in the solution directory. 
+ * See: $(SolutionDir)\License.htm ... in the root of this distribution.
+ * By using this source code in any fashion, you are agreeing 
+ * to be bound by the terms of the license agreement.
+ *
+ * You must not remove this notice, or any other, from this software.
+ *
+ * **************************************************************************
+*/
+
+using System;
+using System.Globalization;
 using IronSmalltalk.Compiler.SemanticNodes;
+using IronSmalltalk.ExpressionCompiler.BindingScopes;
+using IronSmalltalk.ExpressionCompiler.Visiting;
 using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
-using IronSmalltalk.Runtime.CodeGeneration.BindingScopes;
-using IronSmalltalk.Runtime.CodeGeneration.Visiting;
 using IronSmalltalk.Runtime.Execution;
 using IronSmalltalk.Runtime.Execution.Internals;
 
-namespace IronSmalltalk.InterchangeInstaller.Runtime
+namespace IronSmalltalk.ExpressionCompiler.Runtime
 {
     public abstract class RuntimeCompiledInitializer : CompiledInitializer
     {
@@ -42,17 +53,13 @@ namespace IronSmalltalk.InterchangeInstaller.Runtime
         {
             IDebugInfoService dis = ((this.DebugInfoService == null) || (this.DebugInfoService.SymbolDocument == null)) ? null : this.DebugInfoService;
 
-            InitializerVisitor visitor = new InitializerVisitor(runtime, globalScope, reservedScope, initializerName, dis);
-            var code = this.ParseTree.Accept(visitor);
-            return new InitializerCompilationResult(code, visitor.BindingRestrictions);
+            InitializerCompiler compiler = new InitializerCompiler(runtime, globalScope, reservedScope, dis);
+            return compiler.CompileInitializer(this.ParseTree, initializerName);
         }
 
         public bool Validate(SmalltalkNameScope globalNameScope, IRuntimeCodeValidationErrorSink errorSink)
         {
-            return IronSmalltalk.InterchangeInstaller.Runtime.RuntimeCompiledMethod.Validate(this.ParseTree, errorSink, () =>
-            {
-                return this.Compile(globalNameScope.Runtime, globalNameScope);
-            });
+            return RuntimeCompiledMethod.Validate(this.ParseTree, errorSink, () => this.Compile(globalNameScope.Runtime, globalNameScope));
         }
 
         private volatile Func<object, ExecutionContext, object> _Delegate = null;

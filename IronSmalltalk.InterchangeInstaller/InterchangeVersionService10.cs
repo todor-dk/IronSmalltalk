@@ -15,7 +15,7 @@
 */
 
 
-namespace IronSmalltalk.Interchange
+namespace IronSmalltalk.InterchangeInstaller
 {
     /// <summary>
     /// Interchange Format Version Service for clean X3J20 version 1.0.

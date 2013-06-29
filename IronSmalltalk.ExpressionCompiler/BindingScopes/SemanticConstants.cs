@@ -14,20 +14,19 @@
  * **************************************************************************
 */
 
-using System;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.BindingScopes
+namespace IronSmalltalk.ExpressionCompiler.BindingScopes
 {
-    public abstract class ClassRelatedBindingScope : ComposableBindingScope
+    /// <summary>
+    /// Semantic constants, such as reserved identifiers, statement delimiters etc.,
+    /// mostly defined in X3J20 "3.4 Method Grammar".
+    /// </summary>
+    public static class SemanticConstants
     {
-        public SmalltalkClass Class { get; private set; }
-
-        public ClassRelatedBindingScope(SmalltalkClass cls, BindingScope outerScope)
-            : base(outerScope)
-        {
-            if (cls == null)
-                throw new ArgumentNullException();
-            this.Class = cls;
-        }
+        public const string Self = "self";
+        public const string Super = "super";
+        public const string Nil = "nil";
+        public const string True = "true";
+        public const string False = "false";
     }
 }

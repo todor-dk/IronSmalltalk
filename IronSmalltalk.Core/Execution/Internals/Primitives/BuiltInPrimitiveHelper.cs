@@ -1,4 +1,20 @@
-﻿using System;
+﻿/*
+ * **************************************************************************
+ *
+ * Copyright (c) The IronSmalltalk Project. 
+ *
+ * This source code is subject to terms and conditions of the 
+ * license agreement found in the solution directory. 
+ * See: $(SolutionDir)\License.htm ... in the root of this distribution.
+ * By using this source code in any fashion, you are agreeing 
+ * to be bound by the terms of the license agreement.
+ *
+ * You must not remove this notice, or any other, from this software.
+ *
+ * **************************************************************************
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq.Expressions;
@@ -6,50 +22,56 @@ using IronSmalltalk.Runtime.Internal;
 
 namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
 {
-    public static class BuiltInPrimitiveHelper
+    internal static class BuiltInPrimitiveHelper
     {
-        public static Expression UnaryOperation(DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions, IList<string> parameters, Func<Expression, Expression> func)
+        public static Expression UnaryOperation(PrimitiveBuilder builder, Func<Expression, Expression> func)
         {
-            return BuiltInPrimitiveHelper.UnaryOperation(self, arguments, ref restrictions, parameters, (arg, type) => func(arg));
+            return BuiltInPrimitiveHelper.UnaryOperation(builder, (arg, type) => func(arg));
         }
 
-        public static Expression UnaryOperation(DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions, IList<string> parameters, Func<Expression, Type, Expression> func)
+        public static Expression UnaryOperation(PrimitiveBuilder builder, Func<Expression, Type, Expression> func)
         {
-            return BuiltInPrimitiveHelper.UnaryOperation(self, arguments, ref restrictions, parameters, false, true, func);
+            return BuiltInPrimitiveHelper.UnaryOperation(builder, Conversion.Checked, func);
         }
 
-        public static Expression UnaryOperation(DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions, IList<string> parameters, bool explicitConversion, bool checkedConversion, Func<Expression, Type, Expression> func)
+        public static Expression UnaryOperation(PrimitiveBuilder builder, Conversion conversion, Func<Expression, Type, Expression> func)
         {
-            if (parameters == null)
+            if (builder == null)
+                throw new ArgumentNullException();
+
+            if (builder.Parameters == null)
                 return null;
-            if (parameters.Count != 1)
+            if (builder.Parameters.Count != 1)
                 return null;
-            Type type = (parameters[0] == "self") ? null : NativeTypeClassMap.GetType(parameters[0]);
+            Type type = (builder.Parameters[0] == "self") ? null : NativeTypeClassMap.GetType(builder.Parameters[0]);
             Type[] types = new Type[] { type };
-            IList<Expression> args = PrimitiveHelper.GetArguments(self, arguments, types, explicitConversion, checkedConversion, ref restrictions);
+            IList<Expression> args = PrimitiveHelper.GetArguments(builder, types, conversion);
             return func(args[0], type);
         }
 
-        public static Expression BinaryOperation(DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions, IList<string> parameters, Func<Expression, Expression, Expression> func)
+        public static Expression BinaryOperation(PrimitiveBuilder builder, Func<Expression, Expression, Expression> func)
         {
-            return BuiltInPrimitiveHelper.BinaryOperation(self, arguments, ref restrictions, parameters, (arg1, arg2, type1, type2) => func(arg1, arg2));
+            return BuiltInPrimitiveHelper.BinaryOperation(builder, (arg1, arg2, type1, type2) => func(arg1, arg2));
         }
 
-        public static Expression BinaryOperation(DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions, IList<string> parameters, Func<Expression, Expression, Type, Type, Expression> func)
+        public static Expression BinaryOperation(PrimitiveBuilder builder, Func<Expression, Expression, Type, Type, Expression> func)
         {
-            return BuiltInPrimitiveHelper.BinaryOperation(self, arguments, ref restrictions, parameters, false, true, func);
+            return BuiltInPrimitiveHelper.BinaryOperation(builder, Conversion.Checked, func);
         }
 
-        public static Expression BinaryOperation(DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions, IList<string> parameters, bool explicitConversion, bool checkedConversion, Func<Expression, Expression, Type, Type, Expression> func)
+        public static Expression BinaryOperation(PrimitiveBuilder builder, Conversion conversion, Func<Expression, Expression, Type, Type, Expression> func)
         {
-            if (parameters == null)
+            if (builder == null)
+                throw new ArgumentNullException();
+
+            if (builder.Parameters == null)
                 return null;
-            if (parameters.Count != 2)
+            if (builder.Parameters.Count != 2)
                 return null;
-            Type type0 = (parameters[0] == "self") ? null : NativeTypeClassMap.GetType(parameters[0]);
-            Type type1 = (parameters[1] == "self") ? null : NativeTypeClassMap.GetType(parameters[1]);
+            Type type0 = (builder.Parameters[0] == "self") ? null : NativeTypeClassMap.GetType(builder.Parameters[0]);
+            Type type1 = (builder.Parameters[1] == "self") ? null : NativeTypeClassMap.GetType(builder.Parameters[1]);
             Type[] types = new Type[] { type0, type1 };
-            IList<Expression> args = PrimitiveHelper.GetArguments(self, arguments, types, explicitConversion, checkedConversion, ref restrictions);
+            IList<Expression> args = PrimitiveHelper.GetArguments(builder, types, conversion);
             return func(args[0], args[1], type0, type1);
         }
 
@@ -69,16 +91,16 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         ///     5.1.3 Axioms
         /// Defined as:
         ///     divI-t(x,y): tr(x/y)
-        ///     tr(x):      [x]     if (x >= 0)
-        ///                 -[-x]   if (x < 0)
+        ///     tr(x):      [x]     if (x ˃= 0)
+        ///                 -[-x]   if (x ˂ 0)
         /// Example:
-        ///     divI-t( -3, 2) => -1
-        ///     divI-t( -2, 2) => -1
-        ///     divI-t( -1, 2) => 0
-        ///     divI-t(  0, 2) => 0
-        ///     divI-t(  1, 2) => 0
-        ///     divI-t(  2, 2) => 1
-        ///     divI-t(  3, 2) => 1
+        ///     divI-t( -3, 2) =˃ -1
+        ///     divI-t( -2, 2) =˃ -1
+        ///     divI-t( -1, 2) =˃ 0
+        ///     divI-t(  0, 2) =˃ 0
+        ///     divI-t(  1, 2) =˃ 0
+        ///     divI-t(  2, 2) =˃ 1
+        ///     divI-t(  3, 2) =˃ 1
         /// </remarks>
         public static Expression DivideIntT(Expression arg1, Expression arg2, Type type1, Type type2)
         {
@@ -95,15 +117,15 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         ///     5.1.3 Axioms
         /// Defined as:
         ///     divI-f(x,y): [x/y]
-        ///     [x]:    Largest integer where:  x-1 < [x] <= x
+        ///     [x]:    Largest integer where:  x-1 ˂ [x] ˂= x
         /// Example:
-        ///     divI-f( -3, 2) => -2
-        ///     divI-f( -2, 2) => -1
-        ///     divI-f( -1, 2) => -1
-        ///     divI-f(  0, 2) => 0
-        ///     divI-f(  1, 2) => 0
-        ///     divI-f(  2, 2) => 1
-        ///     divI-f(  3, 2) => 1
+        ///     divI-f( -3, 2) =˃ -2
+        ///     divI-f( -2, 2) =˃ -1
+        ///     divI-f( -1, 2) =˃ -1
+        ///     divI-f(  0, 2) =˃ 0
+        ///     divI-f(  1, 2) =˃ 0
+        ///     divI-f(  2, 2) =˃ 1
+        ///     divI-f(  3, 2) =˃ 1
         /// </remarks>
         public static Expression DivideIntF(Expression arg1, Expression arg2, Type type1, Type type2)
         {
@@ -249,16 +271,19 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                     falseValue));
         }
 
-        public static Expression Shift(DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions, IList<string> parameters)
+        public static Expression Shift(PrimitiveBuilder builder)
         {
-            if (parameters == null)
+            if (builder == null)
+                throw new ArgumentNullException();
+
+            if (builder.Parameters == null)
                 return null;
-            if (parameters.Count != 2)
+            if (builder.Parameters.Count != 2)
                 return null;
             // We don't support if the shift parameter is other than int
-            if (NativeTypeClassMap.GetType(parameters[1]) != typeof(int))
-                throw new PrimitiveInvalidTypeException(String.Format(RuntimeCodeGenerationErrors.WrongShiftTypeName, parameters[1]));
-            Type type = NativeTypeClassMap.GetType(parameters[0]);
+            if (NativeTypeClassMap.GetType(builder.Parameters[1]) != typeof(int))
+                throw new PrimitiveInvalidTypeException(String.Format(RuntimeCodeGenerationErrors.WrongShiftTypeName, builder.Parameters[1]));
+            Type type = NativeTypeClassMap.GetType(builder.Parameters[0]);
 
             int bits;
             object zeroValue;
@@ -281,10 +306,10 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
             else if (type == typeof(byte))
             { bits = 8; zeroValue = (byte)0; }
             else
-                throw new PrimitiveInvalidTypeException(String.Format(RuntimeCodeGenerationErrors.WrongShiftTypeName, parameters[0]));
+                throw new PrimitiveInvalidTypeException(String.Format(RuntimeCodeGenerationErrors.WrongShiftTypeName, builder.Parameters[0]));
 
 
-            IList<Expression> args = PrimitiveHelper.GetArguments(self, arguments, new Type[] { type, typeof(int) }, false, true, ref restrictions);
+            IList<Expression> args = PrimitiveHelper.GetArguments(builder, new Type[] { type, typeof(int) }, Conversion.Checked);
             Expression value = args[0];
             Expression shift = args[1];
 

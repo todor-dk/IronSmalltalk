@@ -37,7 +37,7 @@ namespace IronSmalltalk.Runtime.Internal
     /// </remarks>
     public class SymbolTable
     {
-        private ConcurrentDictionary<string, WeakReference> _contents;
+        private readonly ConcurrentDictionary<string, WeakReference> _Contents;
 
         /// <summary>
         /// The SmalltalkRuntime that owns this symbol table.
@@ -55,7 +55,7 @@ namespace IronSmalltalk.Runtime.Internal
             // We expect very low concurrency on writing ... we use Environment.ProcessorCount
             // Pre-allocate 4000 objects ... we expect some symbols.
             // Use StringComparer.InvariantCulture ... because symbols are case-sensitive etc.
-            this._contents = new ConcurrentDictionary<string, WeakReference>(
+            this._Contents = new ConcurrentDictionary<string, WeakReference>(
                 Environment.ProcessorCount, 4000, StringComparer.InvariantCulture);
         }
 
@@ -72,7 +72,7 @@ namespace IronSmalltalk.Runtime.Internal
             // 1. Try to get the symbol from the dictionary. There are good changes that:
             //      a. It's not there, then create it ... new WeakReference(new Symbol(value, this), false)
             //      b. It's already there, so return the weak reference holding it ... but ...
-            WeakReference reference = this._contents.GetOrAdd(value, key => new WeakReference(new Symbol(value, this), false));
+            WeakReference reference = this._Contents.GetOrAdd(value, key => new WeakReference(new Symbol(value, this), false));
             // 2. Get the symbol from the weak reference holding it
             //      NB: We will ALWAYS get weak reference, because GetOrAdd() creates one if one doesn't exist.
             Symbol result = reference.Target as Symbol;
@@ -89,11 +89,11 @@ namespace IronSmalltalk.Runtime.Internal
             {
                 // 4. Lock the whole thing and go into single-thread mode. Symbols are expected to be long-lived
                 //    objects, and this will happen very seldom, so performance is not considered a problem.
-                lock (this._contents)
+                lock (this._Contents)
                 {
                     // 5. In case that GC occured between 2. and 4. and the reference was 
                     //    removed by InternalRemoveSymbol(), get it one more time.
-                    reference = this._contents.GetOrAdd(value, key => new WeakReference(new Symbol(value, this), false));
+                    reference = this._Contents.GetOrAdd(value, key => new WeakReference(new Symbol(value, this), false));
                     // 6. As previously, check that the weak reference holds a symbol. If:
                     //      a. There was a symbol, then InternalRemoveSymbol() managed to remove the original weak 
                     //         reference, and we create a new one in 5. ... new WeakReference(new Symbol(value, this), false)
@@ -122,13 +122,13 @@ namespace IronSmalltalk.Runtime.Internal
             //      a. WeakReference.Target is null, because we use short lived weak references and the symbol was GC'ed,
             //         i.e. the GC set the Target property to null. Only the GC may/will set the Target to null.
             //      b. WeakReference.Target is not null, because a symbol with the same string value got re-created.
-            WeakReference reference;
             // 2. Lock the contents, because we are going to bring it in inconsistent state.
             //    NB: GetSymbol() 5., 6. and 7. expect consistent state, therefore they also lock.
-            lock (this._contents)
+            lock (this._Contents)
             {
                 // 3. Get the weak reference from the contents dictionary.
-                this._contents.TryGetValue(key, out reference);
+                WeakReference reference;
+                this._Contents.TryGetValue(key, out reference);
                 // 4. Check if the weak reference's Target reference a symbol. It may:
                 //      a. Symbol is null ... 1.a. ... symbol was GC'ed and GC set Target to null.
                 //      b. Symbol is NOT null ... 1.b. ... symbol was GC'ed and GC set Target to null,
@@ -138,7 +138,7 @@ namespace IronSmalltalk.Runtime.Internal
                 Symbol symbol = (reference != null) ? reference.Target as Symbol : null;
                 if (symbol == null)
                     // 5. Remove the weak reference from the contents dictionary ... this is case 4.a.
-                    this._contents.TryRemove(key, out reference);
+                    this._Contents.TryRemove(key, out reference);
             }
         }
     }

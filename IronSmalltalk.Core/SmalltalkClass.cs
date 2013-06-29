@@ -180,19 +180,13 @@ namespace IronSmalltalk.Runtime
             if (!SmalltalkClass.CheckDuplicates<ClassInstanceVariableBinding, ClassVariableBinding>(classInstanceVariables, classVariables))
                 throw new ArgumentException("Duplicate class-instance or class variable name. Class-instance and class variable names must be unique.");
             this.Runtime = runtime;
-            this.ClassInstanceVariableBindings = (classInstanceVariables == null) ? 
-                new BindingDictionary<ClassInstanceVariableBinding>(this.Runtime, 1) : classInstanceVariables;
-            this.ClassBehavior = (classMethods == null) ?
-                new ClassMethodDictionary(this.Runtime) : classMethods;
-            this.ClassVariableBindings = (classVariables == null) ?
-                new DiscreteBindingDictionary<ClassVariableBinding>(this.Runtime, 1) : classVariables;
-            this.ImportedPoolBindings = (importedPools == null) ?
-                new DiscreteBindingDictionary<PoolBinding>(this.Runtime, 1) : importedPools;
-            this.InstanceBehavior = (instanceMethods == null) ?
-                new InstanceMethodDictionary(this.Runtime) : instanceMethods;
+            this.ClassInstanceVariableBindings = classInstanceVariables ?? new BindingDictionary<ClassInstanceVariableBinding>(this.Runtime, 1);
+            this.ClassBehavior = classMethods ?? new ClassMethodDictionary(this.Runtime);
+            this.ClassVariableBindings = classVariables ?? new DiscreteBindingDictionary<ClassVariableBinding>(this.Runtime, 1);
+            this.ImportedPoolBindings = importedPools ?? new DiscreteBindingDictionary<PoolBinding>(this.Runtime, 1);
+            this.InstanceBehavior = instanceMethods ?? new InstanceMethodDictionary(this.Runtime);
             this.InstanceState = instanceState;
-            this.InstanceVariableBindings = (instanceVariables == null) ?
-                new BindingDictionary<InstanceVariableBinding>(this.Runtime, 1) : instanceVariables;
+            this.InstanceVariableBindings = instanceVariables ?? new BindingDictionary<InstanceVariableBinding>(this.Runtime, 1);
             this.Name = name;
             this.SuperclassBinding = superclass; // Null is OK .... Object has null
             this.InstanceSize = 0;
