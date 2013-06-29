@@ -97,7 +97,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// </remarks>
         internal class WeakCallSiteBinderCache
         {
-            private ConcurrentDictionary<string, WeakReference> _contents;
+            private ConcurrentDictionary<string, WeakReference> _Contents;
 
             /// <summary>
             /// Create and initialize an empty weak table.
@@ -106,7 +106,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             {
                 // We expect very low concurrency on writing ... 
                 // Use StringComparer.InvariantCulture ... because keys are case-sensitive etc.
-                this._contents = new ConcurrentDictionary<string, WeakReference>(
+                this._Contents = new ConcurrentDictionary<string, WeakReference>(
                     Environment.ProcessorCount, 250, StringComparer.InvariantCulture);
             }
 
@@ -122,7 +122,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 
                 // 1. Try to get the CSB from the dictionary. There are good changes that:
                 WeakReference reference;
-                this._contents.TryGetValue(selector, out reference);
+                this._Contents.TryGetValue(selector, out reference);
                 if (reference == null)
                     return null;
                 // 2. Get the CSB from the weak reference holding it
@@ -136,7 +136,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 
                 // 1. Try to get the CSB from the dictionary. 
                 binder.FinalizationManager = this;
-                WeakReference reference = this._contents.GetOrAdd(binder.Selector.Value, na => new WeakReference(binder, false));
+                WeakReference reference = this._Contents.GetOrAdd(binder.Selector.Value, na => new WeakReference(binder, false));
                 // 2. Get the CSB from the weak reference holding it
                 MessageSendCallSiteBinder result = reference.Target as MessageSendCallSiteBinder;
                 // Once here, it can't be GC'ed.
@@ -154,7 +154,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             internal void InternalRemoveItem(string selector)
             {
                 WeakReference reference;
-                this._contents.TryGetValue(selector, out reference);
+                this._Contents.TryGetValue(selector, out reference);
                 if (reference == null)
                     return;
 
@@ -167,7 +167,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 MessageSendCallSiteBinder csb = reference.Target as MessageSendCallSiteBinder;
                 if (csb == null)
                     // Remove the weak reference from the contents dictionary ... this is case a).
-                    this._contents.TryRemove(selector, out reference);
+                    this._Contents.TryRemove(selector, out reference);
             }
         }
     }

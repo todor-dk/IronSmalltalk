@@ -24,6 +24,7 @@ namespace IronSmalltalk.Common
     /// <summary>
     /// Represents an arbitrarily large signed decimal.
     /// </summary>
+    [Serializable]
     public struct BigDecimal: IComparable, IComparable<BigDecimal>, IEquatable<BigDecimal>
     {
         /// <summary>
@@ -868,8 +869,8 @@ namespace IronSmalltalk.Common
         /// <returns>A decimal that contains the value of the value parameter.</returns>
         public static explicit operator decimal(BigDecimal value)
         {
-            BigInteger i, r;
-            i = BigInteger.DivRem(value.Numerator, value.Denominator, out r);
+            BigInteger r;
+            BigInteger i = BigInteger.DivRem(value.Numerator, value.Denominator, out r);
             // IntegerPart + FractionPart  ... FractionPart = Remainder / Denominator ... (rounding division)
             return ((decimal)i) + ((decimal)r) / ((decimal)value.Denominator);            
         }
@@ -881,8 +882,8 @@ namespace IronSmalltalk.Common
         /// <returns>A double that contains the value of the value parameter.</returns>
         public static explicit operator double(BigDecimal value)
         {
-            BigInteger i, r;
-            i = BigInteger.DivRem(value.Numerator, value.Denominator, out r);
+            BigInteger r;
+            BigInteger i = BigInteger.DivRem(value.Numerator, value.Denominator, out r);
             // IntegerPart + FractionPart  ... FractionPart = Remainder / Denominator ... (rounding division)
             return ((double)i) + ((double)r) / ((double)value.Denominator);
         }

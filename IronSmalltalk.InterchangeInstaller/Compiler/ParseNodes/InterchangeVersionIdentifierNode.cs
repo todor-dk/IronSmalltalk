@@ -16,7 +16,7 @@
 
 using IronSmalltalk.Compiler.LexicalTokens;
 
-namespace IronSmalltalk.Compiler.Interchange.ParseNodes
+namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
 {
     public partial class InterchangeVersionIdentifierNode : InterchangeParseNode
     {

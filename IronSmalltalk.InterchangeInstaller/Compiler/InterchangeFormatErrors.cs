@@ -15,7 +15,7 @@
 */
 
 
-namespace IronSmalltalk.Compiler.Interchange
+namespace IronSmalltalk.InterchangeInstaller.Compiler
 {
     /// <summary>
     /// Error messages the interchange format reader may report if it encounters illegal source code.

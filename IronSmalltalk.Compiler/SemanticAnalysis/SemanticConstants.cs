@@ -1,4 +1,4 @@
-/*
+﻿/*
  * **************************************************************************
  *
  * Copyright (c) The IronSmalltalk Project. 
@@ -41,5 +41,10 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
         // IronSmalltalk extensions to the grammer.
         public const string PrimitiveOpeningDelimiter = "<";
         public const string PrimitiveClosingDelimiter = ">";
+        // Those are alternative primitve delimiters, because we use the special unicode 
+        // characters in the inline documentation (to avoid HTML encode '<' and '>')
+        // and if somebody accidently copied some documentation, we want things to work.
+        public const string AlternativePrimitiveOpeningDelimiter = "\u02C2"; // U+02C2 ˂ Modifier Letter Left Arrowhead 
+        public const string AlternativePrimitiveClosingDelimiter = "\u02C3"; // U+02C3 ˃ Modifier Letter Right Arrowhead 
     }
 }

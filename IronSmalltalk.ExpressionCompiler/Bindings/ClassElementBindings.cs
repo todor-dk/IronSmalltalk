@@ -17,11 +17,14 @@
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using IronSmalltalk.Runtime;
 using RTB = IronSmalltalk.Runtime.Bindings;
+using GlobalVariableBinding = IronSmalltalk.ExpressionCompiler.Bindings.GlobalVariableBinding;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
+
+namespace IronSmalltalk.ExpressionCompiler.Bindings
 {
-    public class ClassVariableBinding : DiscreteBinding<RTB.ClassVariableBinding>, IAssignableBinding
+    public sealed class ClassVariableBinding : DiscreteBinding<RTB.ClassVariableBinding>, IAssignableBinding
     {
         public ClassVariableBinding(string name, RTB.ClassVariableBinding binding)
             : base(name, binding)
@@ -32,7 +35,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
         {
             return Expression.Assign(
                 Expression.Property(
-                    Expression.Constant(this.Binding, typeof(RTB.GlobalVariableBinding)),
+                    Expression.Constant(this.Binding, typeof(GlobalVariableBinding)),
                     GlobalVariableBinding.SetPropertyInfo),
                 value);
         }
@@ -66,20 +69,20 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
     }
 
 
-    public class InstanceVariableBinding : ArrayBasedVariableBinding<SmalltalkObject>
+    public sealed class InstanceVariableBinding : ArrayBasedVariableBinding<SmalltalkObject>
     {
-        private static readonly FieldInfo _InstanceVariablesField;
+        private static readonly FieldInfo InstanceVariablesField;
 
         static InstanceVariableBinding()
         {
-            InstanceVariableBinding._InstanceVariablesField = InstanceVariableBinding.GetField("InstanceVariables");
+            InstanceVariableBinding.InstanceVariablesField = InstanceVariableBinding.GetField("InstanceVariables");
         }
 
-        protected static FieldInfo GetField(string name)
+        private static FieldInfo GetField(string name)
         {
             FieldInfo field = typeof(SmalltalkObject).GetField(name, BindingFlags.GetField | BindingFlags.Instance | BindingFlags.Public);
             if (field == null)
-                throw new InvalidOperationException(String.Format("Could not find the SmalltalkObject.{1} field!", name));
+                throw new InvalidOperationException(String.Format("Could not find the SmalltalkObject.{0} field!", name));
             return field;
         }
 
@@ -94,24 +97,24 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
             Expression self = client.SelfExpression;
             return Expression.Field(
                     Expression.Convert(self, typeof(SmalltalkObject)),
-                    InstanceVariableBinding._InstanceVariablesField);
+                    InstanceVariableBinding.InstanceVariablesField);
         }
     }
 
-    public class ClassInstanceVariableBinding : ArrayBasedVariableBinding<SmalltalkClass>
+    public sealed class ClassInstanceVariableBinding : ArrayBasedVariableBinding<SmalltalkClass>
     {
-        private static readonly PropertyInfo _InstanceVariablesProperty;
+        private static readonly PropertyInfo InstanceVariablesProperty;
 
         static ClassInstanceVariableBinding()
         {
-            ClassInstanceVariableBinding._InstanceVariablesProperty = ClassInstanceVariableBinding.GetProperty("ClassInstanceVariables");
+            ClassInstanceVariableBinding.InstanceVariablesProperty = ClassInstanceVariableBinding.GetProperty("ClassInstanceVariables");
         }
 
-        protected static PropertyInfo GetProperty(string name)
+        private static PropertyInfo GetProperty(string name)
         {
             PropertyInfo prop = typeof(SmalltalkClass).GetProperty(name, BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public);
             if (prop == null)
-                throw new InvalidOperationException(String.Format("Could not find the SmalltalkClass.{1} field!", name));
+                throw new InvalidOperationException(String.Format("Could not find the SmalltalkClass.{0} field!", name));
             return prop;
         }
 
@@ -126,7 +129,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
             Expression self = client.SelfExpression;
             return Expression.Property(
                     Expression.Convert(self, typeof(SmalltalkClass)),
-                    ClassInstanceVariableBinding._InstanceVariablesProperty);
+                    ClassInstanceVariableBinding.InstanceVariablesProperty);
         }
     }
 }

@@ -1,4 +1,20 @@
-﻿using System;
+﻿/*
+ * **************************************************************************
+ *
+ * Copyright (c) The IronSmalltalk Project. 
+ *
+ * This source code is subject to terms and conditions of the 
+ * license agreement found in the solution directory. 
+ * See: $(SolutionDir)\License.htm ... in the root of this distribution.
+ * By using this source code in any fashion, you are agreeing 
+ * to be bound by the terms of the license agreement.
+ *
+ * You must not remove this notice, or any other, from this software.
+ *
+ * **************************************************************************
+*/
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,12 +27,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using IronSmalltalk;
 using IronSmalltalk.Common;
-using IronSmalltalk.Interchange;
+using IronSmalltalk.DefinitionInstaller;
+using IronSmalltalk.DefinitionInstaller.Definitions;
 using IronSmalltalk.InterchangeInstaller;
 using IronSmalltalk.Internals;
 using IronSmalltalk.Runtime;
-using IronSmalltalk.Runtime.Installer;
-using IronSmalltalk.Runtime.Installer.Definitions;
 
 namespace TestPlayground
 {
@@ -163,47 +178,47 @@ namespace TestPlayground
             private List<InitializerDefinition> _initializers = new List<InitializerDefinition>();
             private List<Tuple<SmalltalkClass, ISourceReference>> _newClasses = new List<Tuple<SmalltalkClass, ISourceReference>>();
 
-            public bool FileInClass(IronSmalltalk.Runtime.Installer.Definitions.ClassDefinition definition)
+            public bool FileInClass(ClassDefinition definition)
             {
                 this._classes.Add(definition);
                 return true;
             }
 
-            public bool FileInGlobal(IronSmalltalk.Runtime.Installer.Definitions.GlobalDefinition definition)
+            public bool FileInGlobal(GlobalDefinition definition)
             {
                 this._globals.Add(definition);
                 return true;
             }
 
-            public bool FileInGlobalInitializer(IronSmalltalk.Runtime.Installer.Definitions.GlobalInitializer initializer)
+            public bool FileInGlobalInitializer(GlobalInitializer initializer)
             {
                 return true;
             }
 
-            public bool FileInMethod(IronSmalltalk.Runtime.Installer.Definitions.MethodDefinition definition)
+            public bool FileInMethod(MethodDefinition definition)
             {
                 this._methods.Add(definition);
                 return true;
             }
 
-            public bool FileInPool(IronSmalltalk.Runtime.Installer.Definitions.PoolDefinition definition)
+            public bool FileInPool(PoolDefinition definition)
             {
                 this._pools.Add(definition);
                 return true;
             }
 
-            public bool FileInPoolVariable(IronSmalltalk.Runtime.Installer.Definitions.PoolValueDefinition definition)
+            public bool FileInPoolVariable(PoolValueDefinition definition)
             {
                 this._poolVariables.Add(definition);
                 return true;
             }
 
-            public bool FileInPoolVariableInitializer(IronSmalltalk.Runtime.Installer.Definitions.PoolVariableInitializer initializer)
+            public bool FileInPoolVariableInitializer(PoolVariableInitializer initializer)
             {
                 return true;
             }
 
-            public bool FileInProgramInitializer(IronSmalltalk.Runtime.Installer.Definitions.ProgramInitializer initializer)
+            public bool FileInProgramInitializer(ProgramInitializer initializer)
             {
                 return true;
             }

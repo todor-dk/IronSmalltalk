@@ -18,7 +18,7 @@ using System;
 using System.Windows.Forms;
 using IronSmalltalk;
 using IronSmalltalk.Common;
-using IronSmalltalk.Interchange;
+using IronSmalltalk.InterchangeInstaller;
 
 
 namespace TestPlayground

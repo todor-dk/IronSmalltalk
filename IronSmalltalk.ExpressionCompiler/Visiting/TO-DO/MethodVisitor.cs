@@ -21,35 +21,27 @@ using System.Linq;
 using System.Linq.Expressions;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.ExpressionCompiler;
+using IronSmalltalk.ExpressionCompiler.Bindings;
+using IronSmalltalk.ExpressionCompiler.BindingScopes;
+using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Behavior;
-using IronSmalltalk.Runtime.CodeGeneration.Bindings;
-using IronSmalltalk.Runtime.CodeGeneration.BindingScopes;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
+namespace IronSmalltalk.ExpressionCompiler.Visiting
 {
     public class MethodVisitor : RootEncoderVisitor<Expression, MethodNode>
     {
         internal readonly DynamicMetaObject[] PassedArguments;
         internal readonly DynamicMetaObject SelfArgument;
 
-        public MethodVisitor(SmalltalkRuntime runtime, BindingScope globalScope, BindingScope reservedScope, DynamicMetaObject self, DynamicMetaObject[] arguments, Symbol superScope, IDebugInfoService debugInfoService)
-            : base(runtime, globalScope, reservedScope, debugInfoService)
+        public MethodVisitor(VisitingContext context, DynamicMetaObject self, DynamicMetaObject[] arguments)
+            : base(context)
         {
             if (self == null)
                 throw new ArgumentNullException("self");
             if (arguments == null)
                 throw new ArgumentNullException("arguments");
-            if (superScope == null)
-                throw new ArgumentNullException("superScope");
             this.SelfArgument = self;
             this.PassedArguments = arguments;
-            this._superLookupScope = superScope;
-        }
-
-        private readonly Symbol _superLookupScope;
-        public override Symbol SuperLookupScope
-        {
-            get { return this._superLookupScope; }
         }
 
         protected override void DefineArguments(MethodNode node)

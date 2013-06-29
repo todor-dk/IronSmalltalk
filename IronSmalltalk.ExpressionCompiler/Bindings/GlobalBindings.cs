@@ -17,7 +17,7 @@
 using System.Linq.Expressions;
 using RTB = IronSmalltalk.Runtime.Bindings;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
+namespace IronSmalltalk.ExpressionCompiler.Bindings
 {
     public abstract class GlobalBinding<TBinding> : DiscreteBinding<TBinding>
         where TBinding : IronSmalltalk.Runtime.Bindings.IDiscreteGlobalBinding
@@ -28,8 +28,8 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
         }
     }
 
-    public class GlobalVariableBinding : GlobalBinding<RTB.GlobalVariableBinding>, IAssignableBinding
-    {        
+    public sealed class GlobalVariableBinding : GlobalBinding<RTB.GlobalVariableBinding>, IAssignableBinding
+    {
         public GlobalVariableBinding(string name, RTB.GlobalVariableBinding binding)
             : base(name, binding)
         {
@@ -46,7 +46,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
         }
     }
 
-    public class GlobalConstantBinding : GlobalBinding<RTB.GlobalConstantBinding>
+    public sealed class GlobalConstantBinding : GlobalBinding<RTB.GlobalConstantBinding>
     {
         public GlobalConstantBinding(string name, RTB.GlobalConstantBinding binding)
             : base(name, binding)
@@ -63,7 +63,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
         }
     }
 
-    public class ClassBinding : GlobalBinding<RTB.ClassBinding>
+    public sealed class ClassBinding : GlobalBinding<RTB.ClassBinding>
     {
         public ClassBinding(string name, RTB.ClassBinding binding)
             : base(name, binding)
@@ -80,7 +80,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
         }
     }
 
-    public class PoolBinding : GlobalBinding<RTB.PoolBinding>
+    public sealed class PoolBinding : GlobalBinding<RTB.PoolBinding>
     {
         public PoolBinding(string name, RTB.PoolBinding binding)
             : base(name, binding)

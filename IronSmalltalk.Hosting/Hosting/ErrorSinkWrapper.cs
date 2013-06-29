@@ -18,11 +18,11 @@
 
 
 using System;
-using IronSmalltalk.AstJitCompiler.Runtime;
 using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticNodes;
-using IronSmalltalk.Interchange;
+using IronSmalltalk.ExpressionCompiler.Runtime;
+using IronSmalltalk.InterchangeInstaller;
 
 namespace IronSmalltalk.Runtime.Hosting
 {

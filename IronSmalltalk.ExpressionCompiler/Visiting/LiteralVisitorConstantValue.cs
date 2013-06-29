@@ -17,11 +17,11 @@
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
+namespace IronSmalltalk.ExpressionCompiler.Visiting
 {
-    public class LiteralVisitor : NestedEncoderVisitor<object>
+    public class LiteralVisitorConstantValue : NestedEncoderVisitor<object>
     {
-        public LiteralVisitor(EncoderVisitor enclosingVisitor)
+        public LiteralVisitorConstantValue(EncoderVisitor enclosingVisitor)
             : base(enclosingVisitor)
         {
         }
@@ -63,8 +63,8 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
             if (node.Token.Value == SemanticConstants.False)
                 return false;
             if (node.Token.Value == SemanticConstants.Nil)
-                return false;
-            return this.RootVisitor.Runtime.GetSymbol(node.Token.Value);
+                return null;
+            return this.Context.Compiler.GetSymbol(node.Token.Value);
         }
 
         public override object VisitLargeIntegerLiteral(LargeIntegerLiteralNode node)
@@ -86,7 +86,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
         public override object VisitSelectorLiteral(SelectorLiteralNode node)
         {
             // #asUppercase or #with:with: 
-            return this.RootVisitor.Runtime.GetSymbol(node.Token.Value);
+            return this.Context.Compiler.GetSymbol(node.Token.Value);
         }
 
         public override object VisitSmallIntegerLiteral(SmallIntegerLiteralNode node)
@@ -105,7 +105,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
         public override object VisitSymbolLiteral(SymbolLiteralNode node)
         {
             // #'asUppercase' or #'this is a test'
-            return this.RootVisitor.Runtime.GetSymbol(node.Token.Value);
+            return this.Context.Compiler.GetSymbol(node.Token.Value);
         }
 
     }

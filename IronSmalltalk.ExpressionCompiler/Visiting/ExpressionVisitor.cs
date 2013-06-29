@@ -18,10 +18,10 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
+using IronSmalltalk.ExpressionCompiler.Bindings;
 using IronSmalltalk.ExpressionCompiler.Internals;
-using IronSmalltalk.Runtime.CodeGeneration.Bindings;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
+namespace IronSmalltalk.ExpressionCompiler.Visiting
 {
     public class ExpressionVisitor : NestedEncoderVisitor<Expression>
     {
@@ -100,7 +100,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Visiting
             }
             else if (visitor.IsSuperSend)
             {
-                throw (new Execution.Internals.SemanticCodeGenerationException(CodeGenerationErrors.SuperNotFollowedByMessage)).SetNode(node);
+                throw (new IronSmalltalk.Runtime.Execution.Internals.SemanticCodeGenerationException(CodeGenerationErrors.SuperNotFollowedByMessage)).SetNode(node);
             }
 
             return result;

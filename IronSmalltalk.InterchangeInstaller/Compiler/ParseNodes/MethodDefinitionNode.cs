@@ -19,15 +19,11 @@ using System.Linq;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
-using IronSmalltalk.Interchange;
-using IronSmalltalk.InterchangeInstaller.Compiler;
+using IronSmalltalk.DefinitionInstaller;
+using IronSmalltalk.DefinitionInstaller.Definitions;
 using IronSmalltalk.InterchangeInstaller.Compiler.DefinitionInstaller;
-using IronSmalltalk.Runtime;
-using IronSmalltalk.Runtime.Behavior;
-using IronSmalltalk.Runtime.Installer;
-using IronSmalltalk.Runtime.Installer.Definitions;
 
-namespace IronSmalltalk.Compiler.Interchange.ParseNodes
+namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
 {
     public abstract class MethodDefinitionNode : InterchangeElementNode
     {

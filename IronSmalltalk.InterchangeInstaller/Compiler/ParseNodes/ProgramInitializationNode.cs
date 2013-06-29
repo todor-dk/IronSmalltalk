@@ -17,13 +17,11 @@
 using System;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
-using IronSmalltalk.Interchange;
+using IronSmalltalk.DefinitionInstaller;
+using IronSmalltalk.DefinitionInstaller.Definitions;
 using IronSmalltalk.InterchangeInstaller.Compiler.DefinitionInstaller;
-using IronSmalltalk.Runtime.Behavior;
-using IronSmalltalk.Runtime.Installer;
-using IronSmalltalk.Runtime.Installer.Definitions;
 
-namespace IronSmalltalk.Compiler.Interchange.ParseNodes
+namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
 {
     public partial class ProgramInitializationNode : InterchangeElementNode
     {

@@ -15,9 +15,10 @@
 */
 
 using System.Collections.Generic;
+using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticNodes;
 
-namespace IronSmalltalk.Compiler.Interchange.ParseNodes
+namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
 {
     public abstract partial class InterchangeParseNode : ParseNode
     {
@@ -34,9 +35,9 @@ namespace IronSmalltalk.Compiler.Interchange.ParseNodes
         /// Get all non-whitespace tokens that directly define the parse node.
         /// </summary>
         /// <returns>An enumerable collection with the tokens directly defining this node.</returns>
-        public override IEnumerable<LexicalTokens.IToken> GetTokens()
+        public override IEnumerable<IToken> GetTokens()
         {
-            return new LexicalTokens.IToken[0];
+            return new IronSmalltalk.Compiler.LexicalTokens.IToken[0];
         }
 
         /// <summary>

@@ -26,7 +26,7 @@ namespace IronSmalltalk.Runtime.Bindings
         /// Create a new pool variable or pool constant binding.
         /// </summary>
         /// <param name="name">Name of the binding.</param>
-        public PoolVariableOrConstantBinding(Symbol name)
+        protected PoolVariableOrConstantBinding(Symbol name)
             : base(name)
         {
         }

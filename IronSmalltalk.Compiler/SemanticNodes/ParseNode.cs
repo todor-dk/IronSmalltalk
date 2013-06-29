@@ -14,6 +14,7 @@
  * **************************************************************************
 */
 
+using System;
 using System.Collections.Generic;
 using IronSmalltalk.Compiler.LexicalTokens;
 
@@ -22,6 +23,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     /// <summary>
     /// The ParseNode is the root of all parse tree nodes.
     /// </summary>
+    [Serializable]
     public abstract class ParseNode : IParseNode
     {
         /// <summary>

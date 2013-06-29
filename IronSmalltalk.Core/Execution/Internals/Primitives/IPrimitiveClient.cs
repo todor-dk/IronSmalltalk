@@ -1,4 +1,4 @@
-/*
+﻿/*
  * **************************************************************************
  *
  * Copyright (c) The IronSmalltalk Project. 
@@ -14,19 +14,17 @@
  * **************************************************************************
 */
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using IronSmalltalk.Runtime.Execution.CallSiteBinders;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.BindingScopes
+namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
 {
-    /// <summary>
-    /// Semantic constants, such as reserved identifiers, statement delimiters etc.,
-    /// mostly defined in X3J20 "3.4 Method Grammar".
-    /// </summary>
-    public static class SemanticConstants
+    public interface IPrimitiveClient
     {
-        public const string Self = "self";
-        public const string Super = "super";
-        public const string Nil = "nil";
-        public const string True = "true";
-        public const string False = "false";
+        ObjectClassCallSiteBinder GetClassBinder();
     }
 }

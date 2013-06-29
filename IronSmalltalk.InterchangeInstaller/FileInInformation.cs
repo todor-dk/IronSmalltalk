@@ -15,16 +15,12 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using System.Threading.Tasks;
 using IronSmalltalk.InterchangeInstaller.Compiler;
-using IronSmalltalk.Runtime.Behavior;
 
-namespace IronSmalltalk.Interchange
+namespace IronSmalltalk.InterchangeInstaller
 {
     public abstract class FileInInformation : ISymbolDocumentProvider
     {

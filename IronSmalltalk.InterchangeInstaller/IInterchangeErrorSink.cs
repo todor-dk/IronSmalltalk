@@ -16,9 +16,8 @@
 
 using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.SemanticAnalysis;
-using IronSmalltalk.Runtime.Installer;
 
-namespace IronSmalltalk.Interchange
+namespace IronSmalltalk.InterchangeInstaller
 {
     /// <summary>
     /// Interface for reporting errors encountered during processing of the source code contained in interchange file.

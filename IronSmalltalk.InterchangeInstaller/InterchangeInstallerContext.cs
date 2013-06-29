@@ -14,63 +14,64 @@
  * **************************************************************************
 */
 
-using IronSmalltalk.Runtime.Installer;
+using IronSmalltalk.DefinitionInstaller;
+using IronSmalltalk.DefinitionInstaller.Definitions;
 
-namespace IronSmalltalk.Interchange
+namespace IronSmalltalk.InterchangeInstaller
 {
     /// <summary>
     /// Installer context that handles the concurrent installation of a batch of sources.
     /// </summary>
-    public class InterchangeInstallerContext : InstallerContext, IInterchangeFileInProcessor
+    public class InterchangeInstallerContext : DefinitionInstallerContext, IInterchangeFileInProcessor
     {
         public InterchangeInstallerContext(IronSmalltalk.SmalltalkRuntime runtime)
             : base(runtime)
         {
         }
 
-        bool IInterchangeFileInProcessor.FileInClass(Runtime.Installer.Definitions.ClassDefinition definition)
+        bool IInterchangeFileInProcessor.FileInClass(ClassDefinition definition)
         {
             this.AddClass(definition);
             return true;
         }
 
-        bool IInterchangeFileInProcessor.FileInGlobal(Runtime.Installer.Definitions.GlobalDefinition definition)
+        bool IInterchangeFileInProcessor.FileInGlobal(GlobalDefinition definition)
         {
             this.AddGlobal(definition);
             return true;
         }
 
-        bool IInterchangeFileInProcessor.FileInGlobalInitializer(Runtime.Installer.Definitions.GlobalInitializer initializer)
+        bool IInterchangeFileInProcessor.FileInGlobalInitializer(GlobalInitializer initializer)
         {
             this.AddGlobalInitializer(initializer);
             return true;
         }
 
-        bool IInterchangeFileInProcessor.FileInMethod(Runtime.Installer.Definitions.MethodDefinition definition)
+        bool IInterchangeFileInProcessor.FileInMethod(MethodDefinition definition)
         {
             this.AddMethod(definition);
             return true;
         }
 
-        bool IInterchangeFileInProcessor.FileInPool(Runtime.Installer.Definitions.PoolDefinition definition)
+        bool IInterchangeFileInProcessor.FileInPool(PoolDefinition definition)
         {
             this.AddPool(definition);
             return true;
         }
 
-        bool IInterchangeFileInProcessor.FileInPoolVariable(Runtime.Installer.Definitions.PoolValueDefinition definition)
+        bool IInterchangeFileInProcessor.FileInPoolVariable(PoolValueDefinition definition)
         {
             this.AddPoolVariable(definition);
             return true;
         }
 
-        bool IInterchangeFileInProcessor.FileInPoolVariableInitializer(Runtime.Installer.Definitions.PoolVariableInitializer initializer)
+        bool IInterchangeFileInProcessor.FileInPoolVariableInitializer(PoolVariableInitializer initializer)
         {
             this.AddPoolVariableInitializer(initializer);
             return true;
         }
 
-        bool IInterchangeFileInProcessor.FileInProgramInitializer(Runtime.Installer.Definitions.ProgramInitializer initializer)
+        bool IInterchangeFileInProcessor.FileInProgramInitializer(ProgramInitializer initializer)
         {
             this.AddProgramInitializer(initializer);
             return true;

@@ -91,8 +91,10 @@
     <Compile Include="Execution\Internals\Primitives\BuiltInPrimitives.cs" />
     <Compile Include="Execution\Internals\Primitives\BuiltInPrimitiveHelper.cs" />
     <Compile Include="Execution\Internals\Primitives\BuiltInPrimitivesEnum.cs" />
+    <Compile Include="Execution\Internals\Primitives\IPrimitiveClient.cs" />
     <Compile Include="Execution\Internals\Primitives\PrimitiveBuilder.cs" />
     <Compile Include="Execution\Internals\Primitives\PrimitiveHelper.cs" />
+    <Compile Include="Execution\Internals\Primitives\PrimitiveInterface.cs" />
     <Compile Include="Execution\Internals\Primitives\PrimitiveInternalException.cs" />
     <Compile Include="Execution\Internals\Primitives\PrimitiveSemanticException.cs" />
     <Compile Include="Execution\Internals\Primitives\PrimitivesEnum.cs" />

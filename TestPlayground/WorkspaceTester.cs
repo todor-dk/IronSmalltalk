@@ -25,8 +25,8 @@ using IronSmalltalk;
 using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
-using IronSmalltalk.Interchange;
-using IronSmalltalk.InterchangeInstaller.Runtime;
+using IronSmalltalk.ExpressionCompiler.Runtime;
+using IronSmalltalk.InterchangeInstaller;
 using IronSmalltalk.Runtime.Execution;
 
 

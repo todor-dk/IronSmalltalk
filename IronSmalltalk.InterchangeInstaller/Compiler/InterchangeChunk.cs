@@ -18,10 +18,9 @@ using System;
 using System.Linq;
 using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.SemanticAnalysis;
-using IronSmalltalk.Interchange;
-using IronSmalltalk.Runtime.Installer;
+using IronSmalltalk.DefinitionInstaller;
 
-namespace IronSmalltalk.Compiler.Interchange
+namespace IronSmalltalk.InterchangeInstaller.Compiler
 {
     /// <summary>
     /// This class represents a piece of source code in the interchange file.
@@ -88,7 +87,7 @@ namespace IronSmalltalk.Compiler.Interchange
         /// <param name="stopPosition">source code end position.</param>
         /// <param name="parseErrorMessage">Parse error message because of source code semantical error.</param>
         /// <param name="offendingToken">Token responsible for the problem.</param>
-        void IParseErrorSink.AddParserError(SourceLocation startPosition, SourceLocation stopPosition, string parseErrorMessage, LexicalTokens.IToken offendingToken)
+        void IParseErrorSink.AddParserError(SourceLocation startPosition, SourceLocation stopPosition, string parseErrorMessage, IronSmalltalk.Compiler.LexicalTokens.IToken offendingToken)
         {
             startPosition = this.TranslateSourcePosition(startPosition);
             stopPosition = this.TranslateSourcePosition(stopPosition);
@@ -104,7 +103,7 @@ namespace IronSmalltalk.Compiler.Interchange
         /// <param name="stopPosition">source code end position.</param>
         /// <param name="parseErrorMessage">Parse error message because of source code semantical error.</param>
         /// <param name="offendingToken">Token responsible for the problem.</param>
-        void IParseErrorSink.AddParserError(SemanticNodes.IParseNode node, SourceLocation startPosition, SourceLocation stopPosition, string parseErrorMessage, LexicalTokens.IToken offendingToken)
+        void IParseErrorSink.AddParserError(IronSmalltalk.Compiler.SemanticNodes.IParseNode node, SourceLocation startPosition, SourceLocation stopPosition, string parseErrorMessage, IronSmalltalk.Compiler.LexicalTokens.IToken offendingToken)
         {
             startPosition = this.TranslateSourcePosition(startPosition);
             stopPosition = this.TranslateSourcePosition(stopPosition);
@@ -119,7 +118,7 @@ namespace IronSmalltalk.Compiler.Interchange
         /// <param name="startPosition">Source code start position.</param>
         /// <param name="stopPosition">source code end position.</param>
         /// <param name="scanErrorMessage">Scan error message because of source code syntax error.</param>   
-        void LexicalAnalysis.IScanErrorSink.AddScanError(LexicalTokens.IToken token, SourceLocation startPosition, SourceLocation stopPosition, string scanErrorMessage)
+        void IronSmalltalk.Compiler.LexicalAnalysis.IScanErrorSink.AddScanError(IronSmalltalk.Compiler.LexicalTokens.IToken token, SourceLocation startPosition, SourceLocation stopPosition, string scanErrorMessage)
         {
             startPosition = this.TranslateSourcePosition(startPosition);
             stopPosition = this.TranslateSourcePosition(stopPosition);

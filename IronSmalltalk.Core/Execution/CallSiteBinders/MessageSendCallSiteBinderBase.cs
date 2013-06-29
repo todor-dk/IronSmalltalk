@@ -37,7 +37,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// </summary>
         /// <param name="runtime">SmalltalkRuntine that this binder belongs to.</param>
         /// <param name="selector">Selector of the message being sent.</param>
-        public MessageSendCallSiteBinderBase(SmalltalkRuntime runtime, Symbol selector)
+        protected MessageSendCallSiteBinderBase(SmalltalkRuntime runtime, Symbol selector)
             : base(runtime)
         {
             if (selector == null)

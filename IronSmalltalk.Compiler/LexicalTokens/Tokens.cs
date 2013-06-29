@@ -49,6 +49,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
     /// If we need common functionality, inject an abstract class above the concrete
     /// classes, or better, use interfaces!
     /// </remarks>
+    [Serializable]
     public abstract class Token : IToken 
     {
         /// <summary>

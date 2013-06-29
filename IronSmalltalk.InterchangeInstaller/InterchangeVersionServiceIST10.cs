@@ -16,9 +16,9 @@
 
 using System;
 using System.IO;
-using IronSmalltalk.Compiler.Interchange;
+using IronSmalltalk.InterchangeInstaller.Compiler;
 
-namespace IronSmalltalk.Interchange
+namespace IronSmalltalk.InterchangeInstaller
 {
     /// <summary>
     /// Interchange Format Version Service for the IronSmalltalk interchange format.

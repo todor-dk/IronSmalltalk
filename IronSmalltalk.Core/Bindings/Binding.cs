@@ -49,7 +49,7 @@ namespace IronSmalltalk.Runtime.Bindings
         /// Creates a new binding with the given name.
         /// </summary>
         /// <param name="name">Name of the binding.</param>
-        public Binding(Symbol name)
+        protected Binding(Symbol name)
         {
             if (name == null)
                 throw new ArgumentNullException();

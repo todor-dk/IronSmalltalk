@@ -15,13 +15,12 @@
 */
 
 using System.IO;
-using IronSmalltalk.Compiler.Interchange.ParseNodes;
 using IronSmalltalk.Compiler.SemanticAnalysis;
-using IronSmalltalk.Interchange;
+using IronSmalltalk.DefinitionInstaller;
+using IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes;
 using IronSmalltalk.Runtime;
-using IronSmalltalk.Runtime.Installer;
 
-namespace IronSmalltalk.Compiler.Interchange
+namespace IronSmalltalk.InterchangeInstaller.Compiler
 {
     public class InterchangeFormatParserIST10 : InterchangeFormatParser
     {
@@ -30,7 +29,7 @@ namespace IronSmalltalk.Compiler.Interchange
         {
         }
 
-        protected override ParseNodes.ClassDefinitionNode CreateClassDefinitionNode()
+        protected override ClassDefinitionNode CreateClassDefinitionNode()
         {
             return new ClassDefinitionNodeIST10();
         }

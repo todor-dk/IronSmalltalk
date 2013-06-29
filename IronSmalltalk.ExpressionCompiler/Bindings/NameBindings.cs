@@ -18,7 +18,7 @@ using System;
 using System.Linq.Expressions;
 using IronSmalltalk.Runtime.Execution.Internals;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
+namespace IronSmalltalk.ExpressionCompiler.Bindings
 {
     public abstract class NameBinding
     {
@@ -48,7 +48,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.Bindings
         public abstract Expression GenerateReadExpression(IBindingClient client);
     }
 
-    public class ErrorBinding : NameBinding, IErrorBinding
+    public sealed class ErrorBinding : NameBinding, IErrorBinding
     {
         public string ErrorDescription { get; private set; }
 

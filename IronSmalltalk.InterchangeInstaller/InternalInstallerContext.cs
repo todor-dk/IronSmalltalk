@@ -16,7 +16,7 @@
 
 using System;
 
-namespace IronSmalltalk.Interchange
+namespace IronSmalltalk.InterchangeInstaller
 {
     /// <summary>
     /// Special installer context for handling the IronSmalltalk class library.

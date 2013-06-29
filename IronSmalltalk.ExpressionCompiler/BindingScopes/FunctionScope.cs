@@ -14,10 +14,11 @@
  * **************************************************************************
 */
 
-using IronSmalltalk.Runtime.CodeGeneration.Bindings;
+using IronSmalltalk.ExpressionCompiler.Bindings;
+using IronSmalltalk.Runtime;
 using RTB = IronSmalltalk.Runtime.Bindings;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.BindingScopes
+namespace IronSmalltalk.ExpressionCompiler.BindingScopes
 {
     /************* Name Resolution Scopes *************
     See full description in BindingScope.cs     
@@ -46,7 +47,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.BindingScopes
         }
     }
 
-    public class InstanceFunctionScope : FunctionScope
+    public sealed class InstanceFunctionScope : FunctionScope
     {
         public InstanceFunctionScope(SmalltalkClass cls, ClassScope outerScope)
             : base(cls, outerScope)
@@ -69,7 +70,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.BindingScopes
         }
     }
 
-    public class ClassFunctionScope : FunctionScope
+    public sealed class ClassFunctionScope : FunctionScope
     {
         public ClassFunctionScope(SmalltalkClass cls, ClassScope outerScope)
             : base(cls, outerScope)

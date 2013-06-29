@@ -14,9 +14,9 @@
  * **************************************************************************
 */
 
-using IronSmalltalk.Compiler.Interchange.ParseNodes;
+using IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes;
 
-namespace IronSmalltalk.Compiler.Interchange.Visiting
+namespace IronSmalltalk.InterchangeInstaller.Compiler.Visiting
 {
     public class InterchangeParseTreeValidatingVisitor : InterchangeParseTreeVisitor<bool>
     {

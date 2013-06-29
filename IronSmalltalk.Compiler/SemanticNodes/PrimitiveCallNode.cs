@@ -14,6 +14,7 @@
  * **************************************************************************
 */
 
+using System;
 using System.Collections.Generic;
 using IronSmalltalk.Compiler.LexicalTokens;
 
@@ -31,6 +32,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     //      System.Console(string arg1);
     // EXAMPLE: <call: 'System.String' ToUpper string>
     //      string this.ToUpper();
+    [Serializable]
     public partial class PrimitiveCallNode : SemanticNode 
     {
         public MethodNode Parent { get; private set; }

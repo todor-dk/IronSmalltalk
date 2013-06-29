@@ -17,11 +17,10 @@
 using System;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
-using IronSmalltalk.Interchange;
-using IronSmalltalk.Runtime.Installer;
-using IronSmalltalk.Runtime.Installer.Definitions;
+using IronSmalltalk.DefinitionInstaller;
+using IronSmalltalk.DefinitionInstaller.Definitions;
 
-namespace IronSmalltalk.Compiler.Interchange.ParseNodes
+namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
 {
     public abstract class GlobalDefinitionNode : InterchangeElementNode
     {

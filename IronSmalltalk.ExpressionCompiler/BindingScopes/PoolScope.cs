@@ -15,10 +15,11 @@
 */
 
 using System;
-using IronSmalltalk.Runtime.CodeGeneration.Bindings;
+using IronSmalltalk.ExpressionCompiler.Bindings;
+using IronSmalltalk.Runtime;
 using RTB = IronSmalltalk.Runtime.Bindings;
 
-namespace IronSmalltalk.Runtime.CodeGeneration.BindingScopes
+namespace IronSmalltalk.ExpressionCompiler.BindingScopes
 {
     /*
     See full description in BindingScope.cs     
@@ -27,7 +28,7 @@ namespace IronSmalltalk.Runtime.CodeGeneration.BindingScopes
     
     pool_scope := global_scope + (pool_var_1 + pool_var_2 + ... + pool_var_n)
     */
-    public class PoolScope : ComposableBindingScope
+    public sealed class PoolScope : ComposableBindingScope
     {
         public Pool Pool { get; private set; }
 
