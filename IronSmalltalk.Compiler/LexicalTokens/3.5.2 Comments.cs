@@ -43,7 +43,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         /// </summary>
         public override string SourceString
         {
-            get { return LexicalConstants.CommentDelimiter.ToString() + this.Value + LexicalConstants.CommentDelimiter.ToString(); }
+            get { return string.Format("{0}{1}{0}", LexicalConstants.CommentDelimiter, this.Value); }
         }
     }
 }

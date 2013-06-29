@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Globalization;
 using IronSmalltalk.Compiler.LexicalAnalysis;
 
 namespace IronSmalltalk.Compiler.LexicalTokens
@@ -45,7 +46,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         /// </summary>
         public override string SourceString
         {
-            get { return LexicalConstants.QuotedSelectorDelimiter.ToString() + this.Value; }
+            get { return LexicalConstants.QuotedSelectorDelimiter.ToString(CultureInfo.InvariantCulture) + this.Value; }
         }
     }
 }

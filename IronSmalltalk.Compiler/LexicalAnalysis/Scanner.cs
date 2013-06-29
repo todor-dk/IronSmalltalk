@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Numerics;
 using System.Text;
@@ -542,7 +543,10 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
                         // The X3J20 standard does not allow the digits to be outside the radix range
                         return this.ReturnError(this.GetIntegerToken(this.Buffer.ToString(), radix),
                             String.Format(LexicalErrors.DigitTooBig,
-                            radix, (radix <= 10) ? (radix - 1).ToString() : (LexicalConstants.FirstLetterDigit + radix - 11).ToString()));
+                                radix, 
+                                (radix <= 10) ? 
+                                    (radix - 1).ToString(CultureInfo.InvariantCulture) : 
+                                    (LexicalConstants.FirstLetterDigit + radix - 11).ToString(CultureInfo.InvariantCulture)));
                     }
 
                     // OK, it's not a digit or uppercase letter ... must be somethig else. We are done reading the integer.
@@ -660,7 +664,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
                 negativeExponent = true;
                 this.Read();
             }
-            else if(!this.ScanResult.IsDigit())
+            if(!this.ScanResult.IsDigit())
                 return this.ReturnError(this.GetFloatToken(integerDigits, decimalDigits, "0", negativeExponent, exponentLetter), LexicalErrors.InvalidFloatNoExponentDigits);
 
             // Add digits to the <exponent> buffer.
@@ -768,6 +772,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         /// <param name="decimalDigits">Decimal digits string, e.g. for "12.34e-5" this param contains "34".</param>
         /// <param name="exponentDigits">Exponent digits string, e.g. for "12.34e-5" this param contains "5".</param>
         /// <param name="negativeExponent">Is the exponent negative? E.g. for "12.34e-5" this param is set to true.</param>
+        /// <param name="exponentLetter">The exponent letter 'e' or '\0' if no exponent. It dictates the type of float.</param>
         /// <returns>A float token.</returns>
         private Token GetFloatToken(string integerDigits, string decimalDigits, string exponentDigits, bool negativeExponent, char exponentLetter)
         {
@@ -1101,8 +1106,6 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
                     {
                         // We hit an identifier (not keyword) following the last keyword. That's not for us!
                         this.Back(); // Back to where the last keyword ended.
-                        if (firstKeyword != null)
-                            firstKeyword = null;
                         return this.ReturnSuccess(new UnquotedSelectorToken(text.ToString()));
                     }
                     // It is a keyword token, so append the keyword to the keyword selector text and continue scanning.

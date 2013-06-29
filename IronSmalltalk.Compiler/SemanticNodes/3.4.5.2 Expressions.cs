@@ -190,7 +190,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
                 throw new InvalidParserOperationException("Expected opening parenthesis token ... '('");
 #endif
             this.Parent = parent;
-            this.LeftParenthesis = (SpecialCharacterToken)token;
+            this.LeftParenthesis = token;
         }
 
         /// <summary>
@@ -259,7 +259,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     /// <summary>
     /// Interface that is used to tag parse nodes that can parent a node implementing IPrimaryNode.
     /// </summary>
-    public interface IPrimaryParentNode : IParseNode, ILiteralNodeParent
+    public interface IPrimaryParentNode : ILiteralNodeParent // also inherits IParseNode
     {
     }
 
@@ -267,7 +267,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     /// The BasicExpressionNode represents the basic building block of a Smalltalk expression.
     /// If is defined in X3J20 as: basic_expression ::= primary [messages cascaded_messages].
     /// </summary>
-    public partial class BasicExpressionNode : ExpressionNode, IMessageSequenceParentNode, ILiteralNodeParent, ICascadeMessageSequenceParentNode
+    public partial class BasicExpressionNode : ExpressionNode, IMessageSequenceParentNode, ICascadeMessageSequenceParentNode
     {
         /// <summary>
         /// The primary, or the receiver of the basic expression.

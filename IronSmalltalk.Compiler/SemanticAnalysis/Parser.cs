@@ -506,7 +506,7 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
                 BasicExpressionNode result = new BasicExpressionNode(parent);
                 this.ParseBaseicExpressionMessages(result, new VariableReferenceleNode(result, identifier), token);
                 return result;
-            };
+            }
             return this.ParseBasicExpression(parent, token);
         }
 

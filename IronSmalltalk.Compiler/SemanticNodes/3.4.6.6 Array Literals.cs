@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 
@@ -95,7 +94,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         public override IEnumerable<IParseNode> GetChildNodes()
         {
             List<IParseNode> result = new List<IParseNode>();
-            result.AddRange(this.Elements.Cast<IParseNode>());
+            result.AddRange(this.Elements);
             return result;
         }
 

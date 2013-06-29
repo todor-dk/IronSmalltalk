@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Globalization;
 using IronSmalltalk.Compiler.LexicalAnalysis;
 
 namespace IronSmalltalk.Compiler.LexicalTokens
@@ -45,11 +46,8 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         {
             get
             {
-                return LexicalConstants.HashedStringDelimiter.ToString() + LexicalConstants.StringDelimiter.ToString() +
-                    this.Value.Replace(
-                        LexicalConstants.StringDelimiter.ToString(),
-                        LexicalConstants.StringDelimiter.ToString() + LexicalConstants.StringDelimiter.ToString())
-                    + LexicalConstants.StringDelimiter.ToString();
+                string del = LexicalConstants.StringDelimiter.ToString(CultureInfo.InvariantCulture);
+                return LexicalConstants.HashedStringDelimiter.ToString(CultureInfo.InvariantCulture) + del + this.Value.Replace(del, del + del) + del;
             }
         }
     }

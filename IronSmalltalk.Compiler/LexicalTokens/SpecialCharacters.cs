@@ -14,6 +14,7 @@
  * **************************************************************************
 */
 
+using System.Globalization;
 using IronSmalltalk.Compiler.LexicalAnalysis;
 
 namespace IronSmalltalk.Compiler.LexicalTokens
@@ -44,7 +45,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         /// </summary>
         public override string SourceString
         {
-            get { return this.Value.ToString(); }
+            get { return this.Value.ToString(CultureInfo.InvariantCulture); }
         }
     }
 
@@ -65,7 +66,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         /// </summary>
         public override string SourceString
         {
-            get { return LexicalConstants.VerticalBar.ToString(); }
+            get { return LexicalConstants.VerticalBar.ToString(CultureInfo.InvariantCulture); }
         }
     }
 
@@ -86,7 +87,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         /// </summary>
         public override string SourceString
         {
-            get { return LexicalConstants.NegativeSign.ToString(); }
+            get { return LexicalConstants.NegativeSign.ToString(CultureInfo.InvariantCulture); }
         }
     }
 }
