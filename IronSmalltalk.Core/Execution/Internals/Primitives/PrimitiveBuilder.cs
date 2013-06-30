@@ -1,31 +1,52 @@
-﻿using System;
+﻿/*
+ * **************************************************************************
+ *
+ * Copyright (c) The IronSmalltalk Project. 
+ *
+ * This source code is subject to terms and conditions of the 
+ * license agreement found in the solution directory. 
+ * See: $(SolutionDir)\License.htm ... in the root of this distribution.
+ * By using this source code in any fashion, you are agreeing 
+ * to be bound by the terms of the license agreement.
+ *
+ * You must not remove this notice, or any other, from this software.
+ *
+ * **************************************************************************
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using IronSmalltalk.Runtime.Execution.CallSiteBinders;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
 {
-    public interface IPrimitiveClient
+    public class PrimitiveBuilder
     {
-        ObjectClassCallSiteBinder GetClassBinder();
-    }
-
-    public static class PrimitiveBuilder
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="primitive"></param>
-        /// <param name="definingType"></param>
-        /// <param name="memberName"></param>
-        /// <param name="parameters"></param>
-        /// <param name="self"></param>
-        /// <returns></returns>
         public static Expression GeneratePrimitive(IPrimitiveClient client, PrimitivesEnum primitive, Type definingType, string memberName, IEnumerable<string> parameters, DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions)
+        {
+            PrimitiveBuilder builder = new PrimitiveBuilder(client, primitive, definingType, memberName, parameters, self, arguments, restrictions);
+            Expression result = builder.GeneratePrimitive();
+            restrictions = builder.Restrictions;
+            return result;
+        }
+
+        public IPrimitiveClient Client { get; private set; }
+        public PrimitivesEnum Primitive { get; private set; }
+        public Type DefiningType { get; private set; }
+        public string MemberName { get; private set; }
+        public IReadOnlyList<string> Parameters { get; private set; }
+        public DynamicMetaObject Self { get; private set; }
+        public DynamicMetaObject[] Arguments { get; private set; }
+        public BindingRestrictions Restrictions { get; internal set; }
+        public bool IgnoreExecutionContextArgument { get; private set; }
+
+        public PrimitiveBuilder(IPrimitiveClient client, PrimitivesEnum primitive, Type definingType, string memberName,
+            IEnumerable<string> parameters, DynamicMetaObject self, DynamicMetaObject[] arguments, BindingRestrictions restrictions)
         {
             if (client == null)
                 throw new ArgumentNullException("client");
@@ -33,98 +54,46 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                 throw new ArgumentNullException("parameters");
             if ((primitive != PrimitivesEnum.InvokeConstructor) && (memberName == null))
                 throw new ArgumentNullException("memberName");
+            // Constructors do not use the member name.
+            if ((primitive == PrimitivesEnum.InvokeConstructor) && (memberName != null))
+                throw new ArgumentException("PrimitivesEnum.InvokeConstructor did not expect a value for <memberName>.", "memberName");
             if ((primitive != PrimitivesEnum.BuiltInPrimitive) && (definingType == null))
                 throw new ArgumentNullException("definingType");
+            // For built-in primitives, the defining type is not used!
+            if ((primitive == PrimitivesEnum.BuiltInPrimitive) && (definingType != null))
+                throw new ArgumentException("PrimitivesEnum.BuiltInPrimitive did not expect a value for <definingType>.", "definingType");
 
-            Type[] argumentTypes;
-            Type returnType;
-            switch (primitive)
+            this.Client = client;
+            this.Primitive = primitive;
+            this.DefiningType = definingType;
+            this.MemberName = memberName;
+            this.Parameters = parameters.ToList().AsReadOnly();
+            this.Self = self;
+            this.Arguments = arguments;
+            this.Restrictions = restrictions;
+            this.IgnoreExecutionContextArgument = true; // TO-DO
+        }
+
+        private Expression GeneratePrimitive()
+        {
+            switch (this.Primitive)
             {
                 case PrimitivesEnum.BuiltInPrimitive:
-                    // For built-in primitives, the defining type is not used!
-                    if (definingType != null)
-                        throw new ArgumentException("PrimitivesEnum.InvokeConstructor did not expect a value for <definingType>.", "definingType");
-                    BuiltInPrimitivesEnum prim;
-                    if (!Enum.TryParse(memberName, out prim))
-                        throw new PrimitiveSemanticException(String.Format(RuntimeCodeGenerationErrors.WrongPrimitive, memberName));
-                    return PrimitiveBuilder.GenerateBuiltInPrimitive(prim, client, self, arguments, ref restrictions, parameters.ToArray());
+                    return this.GenerateBuiltInPrimitive();
                 case PrimitivesEnum.InvokeStaticMethod:
-                    argumentTypes = PrimitiveHelper.GetArgumentTypes(parameters, definingType);
-                    return PrimitiveBuilder.GenerateInvokeStaticMethod(definingType, 
-                            memberName, 
-                            argumentTypes, 
-                            BindingFlags.InvokeMethod | BindingFlags.Static, 
-                            self, 
-                            arguments, 
-                            ref restrictions);
+                    return this.GenerateInvokeStaticMethod();
                 case PrimitivesEnum.InvokeInstanceMethod:
-                    if (!parameters.Any())
-                        throw new PrimitiveSemanticException(RuntimeCodeGenerationErrors.WrongNumberOfParameters);
-                    argumentTypes = PrimitiveHelper.GetArgumentTypes(parameters, definingType);
-                    return PrimitiveBuilder.GenerateInvokeInstanceMethod(definingType,
-                            memberName, 
-                            argumentTypes,
-                            BindingFlags.InvokeMethod | BindingFlags.Instance, 
-                            self, 
-                            arguments, 
-                            ref restrictions);
+                    return this.GenerateInvokeInstanceMethod();
                 case PrimitivesEnum.InvokeConstructor:
-                    if (memberName != null)
-                        throw new ArgumentException("PrimitivesEnum.InvokeConstructor did not expect a value for <memberName>.", "memberName");
-                    argumentTypes = PrimitiveHelper.GetArgumentTypes(parameters, definingType);
-                    return PrimitiveBuilder.GenerateInvokeConstructor(definingType,
-                            argumentTypes,
-                            self, 
-                            arguments, 
-                            ref restrictions);
+                    return this.GenerateInvokeConstructor();
                 case PrimitivesEnum.InvokeGetProperty:
-                    // Get/Set property must have at least ONE type parameter (the return type)
-                    if (!parameters.Any())
-                        throw new PrimitiveSemanticException(RuntimeCodeGenerationErrors.WrongNumberOfParameters);
-                    returnType = PrimitiveHelper.GetArgumentTypes(new string[] { parameters.Last() }, definingType)[0];
-                    argumentTypes = PrimitiveHelper.GetArgumentTypes(parameters.Take(parameters.Count() -1), definingType);
-                    return PrimitiveBuilder.GenerateInvokeProperty(definingType,
-                            memberName,
-                            returnType,
-                            argumentTypes,
-                            BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Static,
-                            self, 
-                            arguments, 
-                            ref restrictions);
+                    return this.GenerateInvokePropertyGet();
                 case PrimitivesEnum.InvokeSetProperty:
-                    // Get/Set property must have at least ONE type parameter (the return type)
-                    if (!parameters.Any())
-                        throw new PrimitiveSemanticException(RuntimeCodeGenerationErrors.WrongNumberOfParameters);
-                    returnType = PrimitiveHelper.GetArgumentTypes(new string[] { parameters.Last() }, definingType)[0];
-                    argumentTypes = PrimitiveHelper.GetArgumentTypes(parameters.Take(parameters.Count() -1), definingType);
-                    return PrimitiveBuilder.GenerateInvokeProperty(definingType,
-                            memberName,
-                            returnType,
-                            argumentTypes,
-                            BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.Static,
-                            self, 
-                            arguments, 
-                            ref restrictions);
+                    return this.GenerateInvokePropertySet();
                 case PrimitivesEnum.GetFieldValue:
-                    // Get/Set Field do not have any type parameters!
-                    if (parameters.Any())
-                        throw new PrimitiveSemanticException(RuntimeCodeGenerationErrors.WrongNumberOfParameters);
-                    return PrimitiveBuilder.GenerateInvokeField(definingType,
-                            memberName,
-                            BindingFlags.GetField | BindingFlags.Instance | BindingFlags.Static,
-                            self,
-                            arguments,
-                            ref restrictions);
+                    return this.GenerateInvokeField(BindingFlags.GetField);
                 case PrimitivesEnum.SetFieldValue:
-                    // Get/Set Field do not have any type parameters!
-                    if (parameters.Any())
-                        throw new PrimitiveSemanticException(RuntimeCodeGenerationErrors.WrongNumberOfParameters);
-                    return PrimitiveBuilder.GenerateInvokeField(definingType,
-                            memberName,
-                            BindingFlags.SetField | BindingFlags.Instance | BindingFlags.Static,
-                            self,
-                            arguments,
-                            ref restrictions);
+                    return this.GenerateInvokeField(BindingFlags.SetField);
                 default:
                     break;
             }
@@ -132,51 +101,223 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
             return null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// This function MUST BE updated if changes are made to the BuiltInPrimitivesEnum enumeration!
+        /// </remarks>
+        private Expression GenerateBuiltInPrimitive()
+        {
+            // For built-in primitives, the defining type is not used!
+            BuiltInPrimitivesEnum primitive;
+            if (!Enum.TryParse(this.MemberName, out primitive))
+                throw new PrimitiveSemanticException(String.Format(RuntimeCodeGenerationErrors.WrongPrimitive, this.MemberName));
+
+            Expression exp;
+            switch (primitive)
+            {
+                // **** Very Common ****
+                case BuiltInPrimitivesEnum.Equals:
+                    exp = BuiltInPrimitives.Equals(this);
+                    break;
+                case BuiltInPrimitivesEnum.IdentityEquals:
+                    exp = BuiltInPrimitives.IdentityEquals(this);
+                    break;
+                case BuiltInPrimitivesEnum.ObjectClass:
+                    exp = BuiltInPrimitives.Class(this, this.Client.GetClassBinder());
+                    break;
+                case BuiltInPrimitivesEnum.ConvertChecked:
+                    exp = BuiltInPrimitives.ConvertChecked(this);
+                    break;
+                case BuiltInPrimitivesEnum.ConvertUnchecked:
+                    exp = BuiltInPrimitives.ConvertUnchecked(this);
+                    break;
+                // **** Numeric Operations ****
+                // ISO/IEC 10967 Integer Operations
+                case BuiltInPrimitivesEnum.IntegerEquals:
+                    exp = BuiltInPrimitives.IntegerEquals(this);
+                    break;
+                case BuiltInPrimitivesEnum.IntegerLessThan:
+                    exp = BuiltInPrimitives.IntegerLessThan(this);
+                    break;
+                case BuiltInPrimitivesEnum.IntegerLessThanOrEqual:
+                    exp = BuiltInPrimitives.IntegerLessThanOrEqual(this);
+                    break;
+                case BuiltInPrimitivesEnum.IntegerGreatherThan:
+                    exp = BuiltInPrimitives.IntegerGreatherThan(this);
+                    break;
+                case BuiltInPrimitivesEnum.IntegerGreatherThanOrEqual:
+                    exp = BuiltInPrimitives.IntegerGreatherThanOrEqual(this);
+                    break;
+                case BuiltInPrimitivesEnum.IntegerAdd:
+                    exp = BuiltInPrimitives.IntegerAdd(this);
+                    break;
+                case BuiltInPrimitivesEnum.IntegerSubtract:
+                    exp = BuiltInPrimitives.IntegerSubtract(this);
+                    break;
+                case BuiltInPrimitivesEnum.IntegerMultiply:
+                    exp = BuiltInPrimitives.IntegerMultiply(this);
+                    break;
+                case BuiltInPrimitivesEnum.IntegerDivideTruncate:
+                    exp = BuiltInPrimitives.IntegerDivideTruncate(this);
+                    break;
+                case BuiltInPrimitivesEnum.IntegerDivideFloor:
+                    exp = BuiltInPrimitives.IntegerDivideFloor(this);
+                    break;
+                case BuiltInPrimitivesEnum.IntegerRemainderTruncate:
+                    exp = BuiltInPrimitives.IntegerRemainderTruncate(this);
+                    break;
+                case BuiltInPrimitivesEnum.IntegerRemainderFloor:
+                    exp = BuiltInPrimitives.IntegerRemainderFloor(this);
+                    break;
+                case BuiltInPrimitivesEnum.IntegerNegate:
+                    exp = BuiltInPrimitives.IntegerNegate(this);
+                    break;
+                // Integer operations .... not part of ISO/IEC 10967
+                case BuiltInPrimitivesEnum.IntegerBitShift:
+                    exp = BuiltInPrimitives.IntegerBitShift(this);
+                    break;
+                case BuiltInPrimitivesEnum.IntegerBitAnd:
+                    exp = BuiltInPrimitives.IntegerBitAnd(this);
+                    break;
+                case BuiltInPrimitivesEnum.IntegerBitOr:
+                    exp = BuiltInPrimitives.IntegerBitOr(this);
+                    break;
+                case BuiltInPrimitivesEnum.IntegerBitXor:
+                    exp = BuiltInPrimitives.IntegerBitXor(this);
+                    break;
+                // ISO/IEC 10967 Float Operations
+                case BuiltInPrimitivesEnum.FloatEquals:
+                    exp = BuiltInPrimitives.FloatEquals(this);
+                    break;
+                case BuiltInPrimitivesEnum.FloatLessThan:
+                    exp = BuiltInPrimitives.FloatLessThan(this);
+                    break;
+                case BuiltInPrimitivesEnum.FloatLessThanOrEqual:
+                    exp = BuiltInPrimitives.FloatLessThanOrEqual(this);
+                    break;
+                case BuiltInPrimitivesEnum.FloatGreatherThan:
+                    exp = BuiltInPrimitives.FloatGreatherThan(this);
+                    break;
+                case BuiltInPrimitivesEnum.FloatGreatherThanOrEqual:
+                    exp = BuiltInPrimitives.FloatGreatherThanOrEqual(this);
+                    break;
+                case BuiltInPrimitivesEnum.FloatAdd:
+                    exp = BuiltInPrimitives.FloatAdd(this);
+                    break;
+                case BuiltInPrimitivesEnum.FloatSubtract:
+                    exp = BuiltInPrimitives.FloatSubtract(this);
+                    break;
+                case BuiltInPrimitivesEnum.FloatMultiply:
+                    exp = BuiltInPrimitives.FloatMultiply(this);
+                    break;
+                case BuiltInPrimitivesEnum.FloatDivide:
+                    exp = BuiltInPrimitives.FloatDivide(this);
+                    break;
+                case BuiltInPrimitivesEnum.FloatNegate:
+                    exp = BuiltInPrimitives.FloatNegate(this);
+                    break;
+                // ISO/IEC 10967 Generic Operations ... for numbers that are not Integers or Floats.
+                case BuiltInPrimitivesEnum.NumberEquals:
+                    exp = BuiltInPrimitives.NumberEquals(this);
+                    break;
+                case BuiltInPrimitivesEnum.NumberLessThan:
+                    exp = BuiltInPrimitives.NumberLessThan(this);
+                    break;
+                case BuiltInPrimitivesEnum.NumberLessThanOrEqual:
+                    exp = BuiltInPrimitives.NumberLessThanOrEqual(this);
+                    break;
+                case BuiltInPrimitivesEnum.NumberGreatherThan:
+                    exp = BuiltInPrimitives.NumberGreatherThan(this);
+                    break;
+                case BuiltInPrimitivesEnum.NumberGreatherThanOrEqual:
+                    exp = BuiltInPrimitives.NumberGreatherThanOrEqual(this);
+                    break;
+                case BuiltInPrimitivesEnum.NumberAdd:
+                    exp = BuiltInPrimitives.NumberAdd(this);
+                    break;
+                case BuiltInPrimitivesEnum.NumberSubtract:
+                    exp = BuiltInPrimitives.NumberSubtract(this);
+                    break;
+                case BuiltInPrimitivesEnum.NumberNegate:
+                    exp = BuiltInPrimitives.NumberNegate(this);
+                    break;
+                // Decimal operations .... not part of ISO/IEC 10967 but currently we assume same semantics
+                case BuiltInPrimitivesEnum.DecimalMultiply:
+                    exp = BuiltInPrimitives.DecimalMultiply(this);
+                    break;
+                case BuiltInPrimitivesEnum.DecimalDivide:
+                    exp = BuiltInPrimitives.DecimalDivide(this);
+                    break;
+                // **** Generic Operations ****
+                //  NB: Don't use those for numeric types. It's not a technical error but difficult to maintain if we find a bug or need to change something.
+                case BuiltInPrimitivesEnum.LessThan:
+                    exp = BuiltInPrimitives.LessThan(this);
+                    break;
+                case BuiltInPrimitivesEnum.LessThanOrEqual:
+                    exp = BuiltInPrimitives.LessThanOrEqual(this);
+                    break;
+                case BuiltInPrimitivesEnum.GreatherThan:
+                    exp = BuiltInPrimitives.GreatherThan(this);
+                    break;
+                case BuiltInPrimitivesEnum.GreatherThanOrEqual:
+                    exp = BuiltInPrimitives.GreatherThanOrEqual(this);
+                    break;
+                case BuiltInPrimitivesEnum.Add:
+                    exp = BuiltInPrimitives.Add(this);
+                    break;
+                case BuiltInPrimitivesEnum.Subtract:
+                    exp = BuiltInPrimitives.Subtract(this);
+                    break;
+                case BuiltInPrimitivesEnum.Negate:
+                    exp = BuiltInPrimitives.Negate(this);
+                    break;
+                default:
+                    throw new NotImplementedException(String.Format("Primitive {0} is not implemented. This is a bug!", primitive));
+            }
+            return exp;
+        }
 
         /// <summary>
         /// Get the expression needed to perform a static method call.
         /// </summary>
-        /// <param name="type">Type that is expected to define the method we are looking for.</param>
-        /// <param name="methodName">Name of the method to invoke.</param>
-        /// <param name="argumentTypes">Types of arguments that we are to pass to the method.</param>
-        /// <param name="bindingFlags"></param>
-        /// <param name="self"></param>
-        /// <param name="arguments"></param>
-        /// <param name="restrictions"></param>
         /// <returns>Expression for the call</returns>
-        public static Expression GenerateInvokeStaticMethod(Type type, string methodName, Type[] argumentTypes, BindingFlags bindingFlags, DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions)
+        private Expression GenerateInvokeStaticMethod()
         {
+            Type[] argumentTypes = PrimitiveHelper.GetArgumentTypes(this.Parameters, this.DefiningType); // Types of arguments that we are to pass to the method.
+
             // Lookup the method ... matching argument types.
-            MethodInfo method = type.GetMethod(methodName, BindingFlags.FlattenHierarchy | BindingFlags.Public | bindingFlags,
+            MethodInfo method = this.DefiningType.GetMethod(this.MemberName,
+                BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.InvokeMethod | BindingFlags.Static,
                 null, argumentTypes.ToArray(), null);
             // If no method found, throw an exception.
             if (method == null)
-                throw new PrimitiveInvalidMemberException(String.Format(RuntimeCodeGenerationErrors.MissingMethod, type.Name, methodName));
-            return Expression.Call(method, PrimitiveHelper.GetArguments(self, arguments,argumentTypes, false, true, ref restrictions));
+                throw new PrimitiveInvalidMemberException(String.Format(RuntimeCodeGenerationErrors.MissingMethod, this.DefiningType.Name, this.MemberName));
+            return Expression.Call(method, PrimitiveHelper.GetArguments(this, argumentTypes, Conversion.Checked));
         }
 
         /// <summary>
         /// Get the expression needed to perform an instance method call.
         /// </summary>
-        /// <param name="type">Type that is expected to define the method we are looking for.</param>
-        /// <param name="methodName">Name of the method to invoke.</param>
-        /// <param name="argumentTypes">Types of arguments that we are to pass to the method.</param>
-        /// <param name="bindingFlags"></param>
-        /// <param name="self"></param>
-        /// <param name="arguments"></param>
-        /// <param name="restrictions"></param>
         /// <returns>Expression for the call</returns>
-        public static Expression GenerateInvokeInstanceMethod(Type type, string methodName, Type[] argumentTypes, BindingFlags bindingFlags, DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions)
+        private Expression GenerateInvokeInstanceMethod()
         {
+            if (!this.Parameters.Any())
+                throw new PrimitiveSemanticException(RuntimeCodeGenerationErrors.WrongNumberOfParameters);
+            Type[] argumentTypes = PrimitiveHelper.GetArgumentTypes(this.Parameters, this.DefiningType); // Types of arguments that we are to pass to the method.
+
             Type[] matchTypes = new Type[argumentTypes.Length - 1];
             Array.Copy(argumentTypes, 1, matchTypes, 0, matchTypes.Length);
             // Lookup the method ... matching argument types.
-            MethodInfo method = type.GetMethod(methodName, BindingFlags.FlattenHierarchy | BindingFlags.Public | bindingFlags,
+            MethodInfo method = this.DefiningType.GetMethod(this.MemberName,
+                BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.InvokeMethod | BindingFlags.Instance,
                 null, matchTypes, null);
             // If no method found, throw an exception.
             if (method == null)
-                throw new PrimitiveInvalidMemberException(String.Format(RuntimeCodeGenerationErrors.MissingMethod, type.Name, methodName));
-            IList<Expression> args = PrimitiveHelper.GetArguments(self, arguments, argumentTypes, false, true, ref restrictions);
+                throw new PrimitiveInvalidMemberException(String.Format(RuntimeCodeGenerationErrors.MissingMethod, this.DefiningType.Name, this.MemberName));
+            IList<Expression> args = PrimitiveHelper.GetArguments(this, argumentTypes, Conversion.Checked);
             Expression instance = args[0];
             args.RemoveAt(0);
             return Expression.Call(instance, method, args);
@@ -185,44 +326,62 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         /// <summary>
         /// Get the expression needed to perform a constructor call.
         /// </summary>
-        /// <param name="type">Type that is expected to define the method we are looking for.</param>
-        /// <param name="argumentTypes">Types of arguments that we are to pass to the method.</param>
-        /// <param name="self"></param>
-        /// <param name="arguments"></param>
         /// <returns>Expression for the call</returns>
-        public static Expression GenerateInvokeConstructor(Type type, Type[] argumentTypes, DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions)
+        private Expression GenerateInvokeConstructor()
         {
+            Type[] argumentTypes = PrimitiveHelper.GetArgumentTypes(this.Parameters, this.DefiningType); // Types of arguments that we are to pass to the method.
+
             // Lookup the constructor ... matching argument types.
-            ConstructorInfo ctor = type.GetConstructor(
+            ConstructorInfo ctor = this.DefiningType.GetConstructor(
                 BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.CreateInstance | BindingFlags.Instance,
                 null, argumentTypes, null);
             // If no constructor found, throw an exception.
             if (ctor == null)
-                throw new PrimitiveInvalidMemberException(String.Format(RuntimeCodeGenerationErrors.MissingConstructor, type.Name));
-            return Expression.New(ctor, PrimitiveHelper.GetArguments(self, arguments, argumentTypes, false, true, ref restrictions));
+                throw new PrimitiveInvalidMemberException(String.Format(RuntimeCodeGenerationErrors.MissingConstructor, this.DefiningType.Name));
+            return Expression.New(ctor, PrimitiveHelper.GetArguments(this, argumentTypes, Conversion.Checked));
+        }
+
+        private Expression GenerateInvokePropertyGet()
+        {
+            // Get/Set property must have at least ONE type parameter (the return type)
+            if (!this.Parameters.Any())
+                throw new PrimitiveSemanticException(RuntimeCodeGenerationErrors.WrongNumberOfParameters);
+            Type returnType = PrimitiveHelper.GetArgumentTypes(new string[] { this.Parameters.Last() }, this.DefiningType)[0];
+            Type[] argumentTypes = PrimitiveHelper.GetArgumentTypes(this.Parameters.Take(this.Parameters.Count() - 1), this.DefiningType);
+            return this.GenerateInvokeProperty(returnType, argumentTypes, BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Static);
+        }
+
+        private Expression GenerateInvokePropertySet()
+        {
+            // Get/Set property must have at least ONE type parameter (the return type)
+            if (!this.Parameters.Any())
+                throw new PrimitiveSemanticException(RuntimeCodeGenerationErrors.WrongNumberOfParameters);
+            Type returnType = PrimitiveHelper.GetArgumentTypes(new string[] { this.Parameters.Last() }, this.DefiningType)[0];
+            Type[] argumentTypes = PrimitiveHelper.GetArgumentTypes(this.Parameters.Take(this.Parameters.Count() - 1), this.DefiningType);
+            return this.GenerateInvokeProperty(returnType, argumentTypes, BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.Static);
         }
 
         /// <summary>
         /// Get the expression needed to perform a property get or set operation.
         /// </summary>
-        /// <param name="type">Type that is expected to define the method we are looking for.</param>
-        /// <param name="propertyName">Name of the property to invoke.</param>
         /// <param name="returnType"></param>
         /// <param name="argumentTypes">Types of arguments that we are to pass to the method.</param>
         /// <param name="bindingFlags"></param>
-        /// <param name="self"></param>
         /// <returns>Expression for the call</returns>
-        public static Expression GenerateInvokeProperty(Type type, string propertyName, Type returnType, Type[] argumentTypes, BindingFlags bindingFlags, DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions)
+        private Expression GenerateInvokeProperty(Type returnType, Type[] argumentTypes, BindingFlags bindingFlags)
         {
             // First, resolve the name of default properties
+            string propertyName = this.MemberName;
             if (propertyName == "this")
-                propertyName = PrimitiveHelper.GetDefaultMemberName(type, typeof(PropertyInfo)) ?? propertyName;
+                propertyName = PrimitiveHelper.GetDefaultMemberName(this.DefiningType, typeof(PropertyInfo)) ?? propertyName;
+
             // Lookup the property ... matching argument types.
-            PropertyInfo property = type.GetProperty(propertyName, BindingFlags.FlattenHierarchy | BindingFlags.Public | bindingFlags,
-                    null, returnType, argumentTypes, null);
+            PropertyInfo property = this.DefiningType.GetProperty(propertyName,
+                BindingFlags.FlattenHierarchy | BindingFlags.Public | bindingFlags,
+                null, returnType, argumentTypes, null);
             // If no property found, throw an exception.
             if (property == null)
-                throw new PrimitiveInvalidMemberException(String.Format(RuntimeCodeGenerationErrors.MissingProperty, type.Name, propertyName));
+                throw new PrimitiveInvalidMemberException(String.Format(RuntimeCodeGenerationErrors.MissingProperty, this.DefiningType.Name, propertyName));
 
             bool isStatic = property.GetAccessors()[0].IsStatic;
 
@@ -232,7 +391,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                 {
                     if (isStatic)
                         return Expression.Property(null, property);
-                    IList<Expression> args = PrimitiveHelper.GetArguments(self, arguments, new Type[] { type }, false, true, ref restrictions);
+                    IList<Expression> args = PrimitiveHelper.GetArguments(this, new Type[] { this.DefiningType }, Conversion.Checked);
                     return Expression.Property(args[0], property);
                 }
                 else
@@ -241,9 +400,9 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                     if (isStatic)
                         types.Add(typeof(object));
                     else
-                        types.Add(type);
+                        types.Add(this.DefiningType);
                     types.AddRange(argumentTypes);
-                    IList<Expression> args = PrimitiveHelper.GetArguments(self, arguments, types.ToArray(), false, true, ref restrictions);
+                    IList<Expression> args = PrimitiveHelper.GetArguments(this, types.ToArray(), Conversion.Checked);
                     Expression instance = args[0];
                     args.RemoveAt(0);
                     if (isStatic)
@@ -257,12 +416,12 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                 {
                     if (isStatic)
                     {
-                        IList<Expression> args = PrimitiveHelper.GetArguments(self, arguments, new Type[] { typeof(object), property.PropertyType }, false, true, ref restrictions);
+                        IList<Expression> args = PrimitiveHelper.GetArguments(this, new Type[] { typeof(object), property.PropertyType }, Conversion.Checked);
                         return Expression.Assign(Expression.Property(null, property), args[1]);
                     }
                     else
                     {
-                        IList<Expression> args = PrimitiveHelper.GetArguments(self, arguments, new Type[] { type, property.PropertyType }, false, true, ref restrictions);
+                        IList<Expression> args = PrimitiveHelper.GetArguments(this, new Type[] { this.DefiningType, property.PropertyType }, Conversion.Checked);
                         return Expression.Assign(Expression.Property(args[0], property), args[1]);
                     }
                 }
@@ -272,10 +431,10 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                     if (isStatic)
                         types.Add(typeof(object));
                     else
-                        types.Add(type);
+                        types.Add(this.DefiningType);
                     types.AddRange(argumentTypes);
                     types.Add(property.PropertyType);
-                    IList<Expression> args = PrimitiveHelper.GetArguments(self, arguments, types.ToArray(), false, true, ref restrictions);
+                    IList<Expression> args = PrimitiveHelper.GetArguments(this, types.ToArray(), Conversion.Checked);
                     Expression instance = args[0];
                     args.RemoveAt(0);
                     Expression value = args[args.Count - 1];
@@ -290,224 +449,41 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         /// <summary>
         /// Get the expression needed to perform a field get or set operation.
         /// </summary>
-        /// <param name="type">Type that is expected to define the method we are looking for.</param>
-        /// <param name="fieldName">Name of the field to invoke.</param>
         /// <param name="bindingFlags"></param>
-        /// <param name="self"></param>
-        /// <param name="arguments"></param>
         /// <returns>Expression for the call</returns>
-        public static Expression GenerateInvokeField(Type type, string fieldName, BindingFlags bindingFlags, DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions)
+        private Expression GenerateInvokeField(BindingFlags bindingFlags)
         {
+            // Get/Set Field do not have any type parameters!
+            if (this.Parameters.Any())
+                throw new PrimitiveSemanticException(RuntimeCodeGenerationErrors.WrongNumberOfParameters);
+
             // Lookup the field ... matching argument types.
-            FieldInfo field = type.GetField(fieldName, BindingFlags.FlattenHierarchy | BindingFlags.Public | bindingFlags);
+            FieldInfo field = this.DefiningType.GetField(this.MemberName,
+                BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | bindingFlags);
             // If no field found, throw an exception.
             if (field == null)
-                throw new PrimitiveInvalidMemberException(String.Format(RuntimeCodeGenerationErrors.MissingField, type.Name, fieldName));
+                throw new PrimitiveInvalidMemberException(String.Format(RuntimeCodeGenerationErrors.MissingField, this.DefiningType.Name, this.MemberName));
 
             if ((bindingFlags & BindingFlags.GetField) == BindingFlags.GetField)
             {
                 if (field.IsStatic)
                     return Expression.Field(null, field);
-                IList<Expression> args = PrimitiveHelper.GetArguments(self, arguments, new Type[] { type }, false, true, ref restrictions);
+                IList<Expression> args = PrimitiveHelper.GetArguments(this, new Type[] { this.DefiningType }, Conversion.Checked);
                 return Expression.Field(args[0], field);
             }
             else
             {
                 if (field.IsStatic)
                 {
-                    IList<Expression> args = PrimitiveHelper.GetArguments(self, arguments, new Type[] { typeof(object), field.FieldType }, false, true, ref restrictions);
+                    IList<Expression> args = PrimitiveHelper.GetArguments(this, new Type[] { typeof(object), field.FieldType }, Conversion.Checked);
                     return Expression.Assign(Expression.Field(null, field), args[1]);
                 }
                 else
                 {
-                    IList<Expression> args = PrimitiveHelper.GetArguments(self, arguments, new Type[] { type, field.FieldType }, false, true, ref restrictions);
+                    IList<Expression> args = PrimitiveHelper.GetArguments(this, new Type[] { this.DefiningType, field.FieldType }, Conversion.Checked);
                     return Expression.Assign(Expression.Field(args[0], field), args[1]);
                 }
             }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="primitive"></param>
-        /// <param name="client"></param>
-        /// <param name="self"></param>
-        /// <param name="arguments"></param>
-        /// <param name="restrictions"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// This function MUST BE updated if changes are made to the BuiltInPrimitivesEnum enumeration!
-        /// </remarks>
-        public static Expression GenerateBuiltInPrimitive(BuiltInPrimitivesEnum primitive, IPrimitiveClient client, DynamicMetaObject self, DynamicMetaObject[] arguments, ref BindingRestrictions restrictions, IList<string> parameters)
-        {
-            if (self == null)
-                throw new ArgumentNullException("self");
-            if (client == null)
-                throw new ArgumentNullException("client");
-            Expression exp;
-            switch (primitive)
-            {
-                // **** Very Common ****
-                case BuiltInPrimitivesEnum.Equals:
-                    exp = BuiltInPrimitives.Equals(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.IdentityEquals:
-                    exp = BuiltInPrimitives.IdentityEquals(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.ObjectClass:
-                    exp = BuiltInPrimitives.Class(self, arguments, ref restrictions, parameters, client.GetClassBinder());
-                    break;
-                case BuiltInPrimitivesEnum.ConvertChecked:
-                    exp = BuiltInPrimitives.ConvertChecked(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.ConvertUnchecked:
-                    exp = BuiltInPrimitives.ConvertUnchecked(self, arguments, ref restrictions, parameters);
-                    break;
-                // **** Numeric Operations ****
-                // ISO/IEC 10967 Integer Operations
-                case BuiltInPrimitivesEnum.IntegerEquals:
-                    exp = BuiltInPrimitives.IntegerEquals(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.IntegerLessThan:
-                    exp = BuiltInPrimitives.IntegerLessThan(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.IntegerLessThanOrEqual:
-                    exp = BuiltInPrimitives.IntegerLessThanOrEqual(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.IntegerGreatherThan:
-                    exp = BuiltInPrimitives.IntegerGreatherThan(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.IntegerGreatherThanOrEqual:
-                    exp = BuiltInPrimitives.IntegerGreatherThanOrEqual(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.IntegerAdd:
-                    exp = BuiltInPrimitives.IntegerAdd(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.IntegerSubtract:
-                    exp = BuiltInPrimitives.IntegerSubtract(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.IntegerMultiply:
-                    exp = BuiltInPrimitives.IntegerMultiply(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.IntegerDivideTruncate:
-                    exp = BuiltInPrimitives.IntegerDivideTruncate(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.IntegerDivideFloor:
-                    exp = BuiltInPrimitives.IntegerDivideFloor(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.IntegerRemainderTruncate:
-                    exp = BuiltInPrimitives.IntegerRemainderTruncate(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.IntegerRemainderFloor:
-                    exp = BuiltInPrimitives.IntegerRemainderFloor(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.IntegerNegate:
-                    exp = BuiltInPrimitives.IntegerNegate(self, arguments, ref restrictions, parameters);
-                    break;
-                // Integer operations .... not part of ISO/IEC 10967
-                case BuiltInPrimitivesEnum.IntegerBitShift:
-                    exp = BuiltInPrimitives.IntegerBitShift(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.IntegerBitAnd:
-                    exp = BuiltInPrimitives.IntegerBitAnd(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.IntegerBitOr:
-                    exp = BuiltInPrimitives.IntegerBitOr(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.IntegerBitXor:
-                    exp = BuiltInPrimitives.IntegerBitXor(self, arguments, ref restrictions, parameters);
-                    break;
-                // ISO/IEC 10967 Float Operations
-                case BuiltInPrimitivesEnum.FloatEquals:
-                    exp = BuiltInPrimitives.FloatEquals(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.FloatLessThan:
-                    exp = BuiltInPrimitives.FloatLessThan(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.FloatLessThanOrEqual:
-                    exp = BuiltInPrimitives.FloatLessThanOrEqual(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.FloatGreatherThan:
-                    exp = BuiltInPrimitives.FloatGreatherThan(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.FloatGreatherThanOrEqual:
-                    exp = BuiltInPrimitives.FloatGreatherThanOrEqual(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.FloatAdd:
-                    exp = BuiltInPrimitives.FloatAdd(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.FloatSubtract:
-                    exp = BuiltInPrimitives.FloatSubtract(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.FloatMultiply:
-                    exp = BuiltInPrimitives.FloatMultiply(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.FloatDivide:
-                    exp = BuiltInPrimitives.FloatDivide(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.FloatNegate:
-                    exp = BuiltInPrimitives.FloatNegate(self, arguments, ref restrictions, parameters);
-                    break;
-                // ISO/IEC 10967 Generic Operations ... for numbers that are not Integers or Floats.
-                case BuiltInPrimitivesEnum.NumberEquals:
-                    exp = BuiltInPrimitives.NumberEquals(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.NumberLessThan:
-                    exp = BuiltInPrimitives.NumberLessThan(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.NumberLessThanOrEqual:
-                    exp = BuiltInPrimitives.NumberLessThanOrEqual(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.NumberGreatherThan:
-                    exp = BuiltInPrimitives.NumberGreatherThan(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.NumberGreatherThanOrEqual:
-                    exp = BuiltInPrimitives.NumberGreatherThanOrEqual(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.NumberAdd:
-                    exp = BuiltInPrimitives.NumberAdd(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.NumberSubtract:
-                    exp = BuiltInPrimitives.NumberSubtract(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.NumberNegate:
-                    exp = BuiltInPrimitives.NumberNegate(self, arguments, ref restrictions, parameters);
-                    break;
-                // Decimal operations .... not part of ISO/IEC 10967 but currently we assume same semantics
-                case BuiltInPrimitivesEnum.DecimalMultiply:
-                    exp = BuiltInPrimitives.DecimalMultiply(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.DecimalDivide:
-                    exp = BuiltInPrimitives.DecimalDivide(self, arguments, ref restrictions, parameters);
-                    break;
-                // **** Generic Operations ****
-                //  NB: Don't use those for numeric types. It's not a technical error but difficult to maintain if we find a bug or need to change something.
-                case BuiltInPrimitivesEnum.LessThan:
-                    exp = BuiltInPrimitives.LessThan(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.LessThanOrEqual:
-                    exp = BuiltInPrimitives.LessThanOrEqual(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.GreatherThan:
-                    exp = BuiltInPrimitives.GreatherThan(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.GreatherThanOrEqual:
-                    exp = BuiltInPrimitives.GreatherThanOrEqual(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.Add:
-                    exp = BuiltInPrimitives.Add(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.Subtract:
-                    exp = BuiltInPrimitives.Subtract(self, arguments, ref restrictions, parameters);
-                    break;
-                case BuiltInPrimitivesEnum.Negate:
-                    exp = BuiltInPrimitives.Negate(self, arguments, ref restrictions, parameters);
-                    break;
-                default:
-                    throw new NotImplementedException(String.Format("Primitive {0} is not implemented. This is a bug!", primitive));
-            }
-            return exp;
         }
     }
 }
