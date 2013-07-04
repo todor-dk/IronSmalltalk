@@ -45,6 +45,7 @@
     <Compile Include="Internals\GlobalGenerator.cs" />
     <Compile Include="Internals\GlobalVariableGenerator.cs" />
     <Compile Include="Internals\InitializerGenerator.cs" />
+    <Compile Include="Internals\MethodGenerator.cs" />
     <Compile Include="Internals\NameScopeGenerator.cs" />
     <Compile Include="Internals\NativeGenerator.cs" />
     <Compile Include="Internals\PoolGenerator.cs" />
@@ -58,9 +59,17 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\IronSmalltalk.Compiler\IronSmalltalk.Compiler.csproj">
+      <Project>{8c1ef7f5-b3af-401b-9223-e10ef00ebae6}</Project>
+      <Name>IronSmalltalk.Compiler</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk.Core\IronSmalltalk.Runtime.csproj">
       <Project>{876ab5db-133a-47dc-b912-62511e312ed6}</Project>
       <Name>IronSmalltalk.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IronSmalltalk.ExpressionCompiler\IronSmalltalk.ExpressionCompiler.csproj">
+      <Project>{fca7dd48-2d8d-44e3-bc00-9446fc793392}</Project>
+      <Name>IronSmalltalk.ExpressionCompiler</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

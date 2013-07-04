@@ -60,7 +60,7 @@ namespace IronSmalltalk.NativeCompiler
         {
             if (String.IsNullOrWhiteSpace(partialName))
                 throw new ArgumentNullException();
-            return String.Format("{0}.{1}", this.Parameters.RootNamespace, partialName);
+            return this.NativeGenerator.AsLegalTypeName(String.Format("{0}.{1}", this.Parameters.RootNamespace, partialName));
         }
 
         internal string GetTypeName(string subNamespace, string typeName)

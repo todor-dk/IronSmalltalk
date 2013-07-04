@@ -129,6 +129,35 @@ namespace IronSmalltalk.NativeCompiler.Internals
             return type;
         }
 
+        internal string AsLegalTypeName(string name)
+        {
+            if (String.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException("name");
+            // There is a bug in Reflection.Emit that leads to 
+            // Unhandled Exception: System.Runtime.InteropServices.COMException (0x80131130): Record not found on lookup.
+            // if there is any of the characters []*&+,\ in the type name and a method defined on the type is called.
+            return name.Replace('+', '_').Replace('[', '_').Replace(']', '_').Replace('*', '_').Replace('&', '_').Replace(',', '_').Replace('\\', '_');
+        }
+
+        internal string AsLegalMethodName(string name)
+        {
+            return this.AsLegalMemberName(name);
+        }
+
+        internal string AsLegalArgumentName(string name)
+        {
+            if (String.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException("name");
+            return name; // No restrictions ... so far.            
+        }
+
+        private string AsLegalMemberName(string name)
+        {
+            if (String.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException("name");
+            return name; // No restrictions ... so far.
+        }
+
 
         // _myAssembly.Save(_outFileName, PortableExecutableKinds.ILOnly, ImageFileMachine.I386);
 

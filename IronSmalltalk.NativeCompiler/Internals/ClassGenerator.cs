@@ -38,6 +38,8 @@ namespace IronSmalltalk.NativeCompiler.Internals
         private TypeBuilder InstanceMethodsType;
         private TypeBuilder ClassMethodsType;
 
+        #region Class Types and Binding Creation
+
         internal override void GenerateTypes()
         {
             this.InstanceMethodsType = this.Compiler.NativeGenerator.DefineType(
@@ -95,6 +97,10 @@ namespace IronSmalltalk.NativeCompiler.Internals
             };
         }
 
+        #endregion
+
+        #region Method Initializers
+
         private Expression<Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>> GetInitMethodsDelegate(NameScopeGenerator scopeGenerator, string name)
         {
             Type initializerType = scopeGenerator.MethodsInitializerType;
@@ -104,7 +110,6 @@ namespace IronSmalltalk.NativeCompiler.Internals
             ParameterExpression runtime = Expression.Parameter(typeof(SmalltalkRuntime), "runtime");
             return Expression.Lambda<Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>>(Expression.Call(initializer, runtime), runtime);
         }
-
 
         private Expression CreateExpressionArray<TItem>(BindingDictionary<TItem> items)
             where TItem : IBinding
@@ -152,5 +157,17 @@ namespace IronSmalltalk.NativeCompiler.Internals
             return Expression.Lambda<Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>>(
                 Expression.Block(new ParameterExpression[] { dictionary } , expressions), name, new ParameterExpression[] { runtime });
         }
+
+        #endregion
+
+        private MethodGenerator InstanceMethodGenerator;
+        private MethodGenerator ClassMethodGenerator;
+
+        internal void GenerateMethods()
+        {
+            this.InstanceMethodGenerator = MethodGenerator.GenerateMethods(this.Compiler, this.Binding.Value, this.Binding.Value.InstanceBehavior, this.InstanceMethodsType);
+            this.ClassMethodGenerator = MethodGenerator.GenerateMethods(this.Compiler, this.Binding.Value, this.Binding.Value.ClassBehavior, this.ClassMethodsType);
+        }
+
     }
 }

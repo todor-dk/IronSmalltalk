@@ -32,6 +32,9 @@ using IronSmalltalk.DefinitionInstaller.Definitions;
 using IronSmalltalk.InterchangeInstaller;
 using IronSmalltalk.Internals;
 using IronSmalltalk.Runtime;
+using System.Linq.Expressions;
+using System.Dynamic;
+using System.Runtime.CompilerServices;
 
 namespace TestPlayground
 {
@@ -238,6 +241,49 @@ namespace TestPlayground
         private void NativeCompileTester_Load(object sender, EventArgs e)
         {
             this.textSourceFiles.Text = Properties.Settings.Default.LastNativePaths;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //ParameterExpression self = Expression.Parameter(typeof(object), "self");
+            //ParameterExpression arg = Expression.Parameter(typeof(object), "arg");
+            //Expression<Func<object, object, object>> lambda = (Expression<Func<object, object, object>>) Expression.Lambda(
+            //    Expression.Dynamic(new TestBinder(), typeof(object), self, arg), self, arg);
+
+            //CallSite<Func<CallSite, object, object, object>> x = CallSite<Func<CallSite, object, object, object>>.Create(new TestBinder());
+            //var res1 = x.Target(x, "abc : {0}", "ced");
+
+            //Func<object, object, object> func;
+            //Microsoft.Scripting.Generation.Snippets.SetSaveAssemblies(true, "c:\\temp");
+            //func = Microsoft.Scripting.Generation.CompilerHelpers.Compile(lambda, true);
+            
+
+            ////Microsoft.Scripting.Generation.Snippets.Shared.SaveSnippets
+            ////Func<object, object, object> func = (Func<object, object, object>) lambda.Compile();
+            //object res = func("abc : {0}", "def");
+
+            //Microsoft.Scripting.Generation.Snippets.SaveAndVerifyAssemblies();
+        }
+
+        public class TestBinder : InvokeBinder
+        {
+            public TestBinder()
+                : base(new CallInfo(1, "obj"))
+            {
+
+            }
+
+            public override DynamicMetaObject FallbackInvoke(DynamicMetaObject target, DynamicMetaObject[] args, DynamicMetaObject errorSuggestion)
+            {
+                MethodInfo method = typeof(string).GetMethod("Format", 
+                    BindingFlags.ExactBinding | BindingFlags.Static | BindingFlags.InvokeMethod  | BindingFlags.Public,
+                    null, new Type[] { typeof(string), typeof(object) }, null);
+               
+                var result = new DynamicMetaObject(
+                    Expression.Call(method, Expression.Convert(target.Expression, typeof(string)), args[0].Expression),
+                    BindingRestrictions.GetTypeRestriction(target.Expression, typeof(string)));
+                return result;
+            }
         }
 
     }
