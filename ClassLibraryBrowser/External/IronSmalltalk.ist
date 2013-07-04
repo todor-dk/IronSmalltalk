@@ -2,7 +2,7 @@
 
 "
 Iron Smalltalk Source Code
-Filed-Out: 2011-10-30 22:31
+Filed-Out: 2013-04-01 22:31
 Definition: C:\Users\tt\Documents\Visual Studio 2010\Projects\IronSmalltalk\ClassLibraryBrowser\External\SmalltalkSystem.xml
 Browser Version: 1.0.0.0
 " ! 
@@ -7128,6 +7128,13 @@ printString
 
 Annotation key: 'ist.runtime.native-name' value: 'PrintString'! 
 
+Number method! 
+between: min and: max
+
+	^min <= self and: [ self <= max ].! 
+
+Annotation key: 'ist.runtime.native-name' value: 'Between'! 
+
 
 " NumberFormatInfo Class Methods " ! 
 
@@ -7849,7 +7856,7 @@ Annotation key: 'ist.runtime.native-name' value: 'Hour'!
 SimpleDateTime method! 
 hour24
 
-	<get_property: 'System.DateTime' Month int>! 
+	<get_property: 'System.DateTime' Hour int>! 
 
 Annotation key: 'ist.runtime.native-name' value: 'Hour24'! 
 
@@ -9508,3 +9515,8 @@ Console " ... Console class implements the Transcript protocol "!
 FloatQ initializer! 
 FloatD! 
 
+" UndefinedObject Instance Methods " ! 
+UndefinedObject method! 
+with: arg01 with: arg02 with: arg03 with: arg04 with: arg05 with: arg06 with: arg07 with: arg08 with: arg09 with: arg10 with: arg11 with: arg12 with: arg13 with: arg14 with: arg15 with: arg16 with: arg17 with: arg18 with: arg19
+
+	^true.! 

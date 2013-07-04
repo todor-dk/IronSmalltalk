@@ -17,6 +17,7 @@
 using System;
 using System.Dynamic;
 using System.Linq;
+using IronSmalltalk.Common;
 
 namespace IronSmalltalk.Runtime.Behavior
 {
@@ -62,11 +63,11 @@ namespace IronSmalltalk.Runtime.Behavior
                 {
                     if (binary)
                     {
-                        if (!@"!%&*+,/<=>?@\~|-".Contains(c))
+                        if (!GlobalConstants.BinaryCharacters.Contains(c))
                         binary = false;
                     } else 
                     {
-                        if (c == ':')
+                        if (c == GlobalConstants.KeywordPostfix)
                             args++;
                     }
                 }

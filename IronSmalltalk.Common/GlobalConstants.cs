@@ -26,5 +26,15 @@ namespace IronSmalltalk.Common
         /// Returns the names of the reserved identifiers (nil, true, false, self and super).
         /// </summary>
         public static readonly string[] ReservedIdentifiers = new string[] { "nil", "true", "false", "self", "super" };
+
+        /// <summary>
+        /// 3.5.5 Operators - Binary Characters
+        /// </summary>
+        public const string BinaryCharacters = @"!%&*+,/<=>?@\~|-";
+
+        /// <summary>
+        /// 3.5.4 Keywords - Keyword Postfix
+        /// </summary>
+        public const char KeywordPostfix = ':';
     }
 }

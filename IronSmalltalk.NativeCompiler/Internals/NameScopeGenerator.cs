@@ -131,6 +131,7 @@ namespace IronSmalltalk.NativeCompiler.Internals
         internal void Generate()
         {
             this.GenerateItemTypes();
+            this.GenerateMethods();
             this.GenerateInitializers();
             this.GeneratePoolInitializers();
             this.GenerateMethodDictionaryInitializers();
@@ -171,6 +172,15 @@ namespace IronSmalltalk.NativeCompiler.Internals
         {
             foreach (GlobalBindingGenerator generator in this.Generators)
                 generator.GenerateTypes();
+        }
+
+        private void GenerateMethods()
+        {
+            foreach (GlobalBindingGenerator generator in this.Generators)
+            {
+                if (generator is ClassGenerator)
+                    ((ClassGenerator)generator).GenerateMethods();
+            }
         }
 
         private void GeneratePoolInitializers()
