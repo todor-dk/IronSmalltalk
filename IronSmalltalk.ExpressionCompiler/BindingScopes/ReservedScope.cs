@@ -16,6 +16,7 @@
 
 using System.Linq.Expressions;
 using IronSmalltalk.ExpressionCompiler.Bindings;
+using IronSmalltalk.Runtime.Execution;
 
 namespace IronSmalltalk.ExpressionCompiler.BindingScopes
 {
@@ -24,12 +25,11 @@ namespace IronSmalltalk.ExpressionCompiler.BindingScopes
         private static BindingScope CreateBindings()
         {
             return new BindingScope(new NameBinding[] {
-                new ConstantBinding(SemanticConstants.Nil, null, typeof(object)),
-                new ConstantBinding(SemanticConstants.True, true, typeof(object)),
-                new ConstantBinding(SemanticConstants.False, false, typeof(object))
+                new SpecialBinding(SemanticConstants.Nil, client => PreboxedConstants.Nil_Expression, true),
+                new SpecialBinding(SemanticConstants.True, client => client.TrueExpression, true),
+                new SpecialBinding(SemanticConstants.False, client => client.FalseExpression, true)
             });
         }
-
 
         public static BindingScope ForPoolInitializer()
         {
@@ -57,26 +57,26 @@ namespace IronSmalltalk.ExpressionCompiler.BindingScopes
             return result;
         }
 
-        public static BindingScope ForInstanceMethod(Expression selfBinding)
+        public static BindingScope ForInstanceMethod()
         {
             BindingScope result = ReservedScope.CreateBindings();
-            result.DefineBinding(new ArgumentBinding(SemanticConstants.Self, selfBinding));
-            result.DefineBinding(new ArgumentBinding(SemanticConstants.Super, selfBinding));
+            result.DefineBinding(new SpecialBinding(SemanticConstants.Self, client => client.SelfExpression, false));
+            result.DefineBinding(new SpecialBinding(SemanticConstants.Super, client => client.SelfExpression, false));
             return result;
         }
 
-        public static BindingScope ForClassMethod(Expression selfBinding)
+        public static BindingScope ForClassMethod()
         {
             BindingScope result = ReservedScope.CreateBindings();
-            result.DefineBinding(new ArgumentBinding(SemanticConstants.Self, selfBinding));
-            result.DefineBinding(new ArgumentBinding(SemanticConstants.Super, selfBinding));
+            result.DefineBinding(new SpecialBinding(SemanticConstants.Self, client => client.SelfExpression, false));
+            result.DefineBinding(new SpecialBinding(SemanticConstants.Super, client => client.SelfExpression, false));
             return result;
         }
 
-        public static BindingScope ForRootClassInstanceMethod(Expression selfBinding)
+        public static BindingScope ForRootClassInstanceMethod()
         {
             BindingScope result = ReservedScope.CreateBindings();
-            result.DefineBinding(new ArgumentBinding(SemanticConstants.Self, selfBinding));
+            result.DefineBinding(new SpecialBinding(SemanticConstants.Self, client => client.SelfExpression, false));
             result.DefineBinding(new ErrorBinding(SemanticConstants.Super));   // Erroneous if instance method and no superclass.
             return result;
         }

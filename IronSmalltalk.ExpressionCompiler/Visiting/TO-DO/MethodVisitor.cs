@@ -31,16 +31,12 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
     public class MethodVisitor : RootEncoderVisitor<Expression, MethodNode>
     {
         internal readonly DynamicMetaObject[] PassedArguments;
-        internal readonly DynamicMetaObject SelfArgument;
 
-        public MethodVisitor(VisitingContext context, DynamicMetaObject self, DynamicMetaObject[] arguments)
+        public MethodVisitor(VisitingContext context, DynamicMetaObject[] arguments)
             : base(context)
         {
-            if (self == null)
-                throw new ArgumentNullException("self");
             if (arguments == null)
                 throw new ArgumentNullException("arguments");
-            this.SelfArgument = self;
             this.PassedArguments = arguments;
         }
 

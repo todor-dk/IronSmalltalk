@@ -19,9 +19,11 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
+using IronSmalltalk.ExpressionCompiler.Internals;
+using IronSmalltalk.Runtime.Execution.Internals;
 using IronSmalltalk.Runtime.Internal;
 
-namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
+namespace IronSmalltalk.ExpressionCompiler.Primitives
 {
     internal static class PrimitiveHelper
     {
@@ -47,9 +49,6 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                 arguments = PrimitiveHelper.EmptyArguments;
             if (argumentTypes == null)
                 throw new ArgumentNullException("argumentTypes");
-
-            if (builder.IgnoreExecutionContextArgument)
-                arguments = arguments.Skip(1).ToArray();
 
             List<Expression> args = new List<Expression>(argumentTypes.Length);
 
@@ -78,7 +77,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                 return args;
             }
             // Some mismatch :-/
-            throw new PrimitiveInternalException(RuntimeCodeGenerationErrors.WrongNumberOfParameters);
+            throw new PrimitiveInternalException(CodeGenerationErrors.WrongNumberOfParameters);
         }
 
         public static Expression Convert(DynamicMetaObject parameter, Type type, Conversion conversion, ref BindingRestrictions restrictions)
@@ -203,7 +202,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                     // Get the parameter type, if we fail to find one, throw an exception now! 
                     Type type = NativeTypeClassMap.GetType(typeName);
                     if (type == null)
-                        throw new PrimitiveInvalidTypeException(String.Format(RuntimeCodeGenerationErrors.WrongTypeName, typeName));
+                        throw new PrimitiveInvalidTypeException(String.Format(CodeGenerationErrors.WrongTypeName, typeName));
                     argumentTypes.Add(type);
                 }
                 first = false;

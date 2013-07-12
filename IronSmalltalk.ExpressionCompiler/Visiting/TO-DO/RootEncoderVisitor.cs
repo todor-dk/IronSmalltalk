@@ -74,7 +74,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             if (node == null)
                 throw new ArgumentNullException();
             if (!node.Accept(ParseTreeValidatingVisitor.Current))
-                throw (new IronSmalltalk.Runtime.Execution.Internals.SemanticCodeGenerationException(CodeGenerationErrors.InvalidCode)).SetNode(node);
+                throw (new SemanticCodeGenerationException(CodeGenerationErrors.InvalidCode)).SetNode(node);
 
             this.DefineArguments(node);
             this.DefineTemporaries(node);
@@ -125,7 +125,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         protected internal override NameBinding GetBinding(string name)
         {
-            NameBinding result = this.Context.Compiler.ReservedScope.GetBinding(name);
+            NameBinding result = this.Context.ReservedScope.GetBinding(name);
             if (result != null)
                 return result;
 
@@ -133,7 +133,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             if (result != null)
                 return result;
 
-            result = this.Context.Compiler.GlobalScope.GetBinding(name);
+            result = this.Context.GlobalScope.GetBinding(name);
             if (result != null)
                 return result;
 

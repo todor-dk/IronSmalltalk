@@ -16,8 +16,9 @@
 
 using System;
 using System.Runtime.Serialization;
+using IronSmalltalk.Runtime.Execution.Internals;
 
-namespace IronSmalltalk.Runtime.Execution.Internals
+namespace IronSmalltalk.ExpressionCompiler.Internals
 {
     /// <summary>
     /// Exception that inidicates that somethig is wrong with the Smalltalk code that

@@ -13,23 +13,18 @@ using IronSmalltalk.Compiler.SemanticNodes;
 using System.Runtime.CompilerServices;
 using IronSmalltalk.Runtime.Execution;
 using System.Reflection;
+using IronSmalltalk.ExpressionCompiler;
+using IronSmalltalk.ExpressionCompiler.BindingScopes;
 
 namespace IronSmalltalk.NativeCompiler.Internals
 {
-    internal class MethodGenerator : GeneratorBase
+    internal abstract class MethodGenerator : GeneratorBase
     {
-        internal static MethodGenerator GenerateMethods(NativeCompiler compiler, SmalltalkClass cls, MethodDictionary methods, TypeBuilder typeBuilder)
-        {
-            MethodGenerator generator = new MethodGenerator(compiler, cls, methods, typeBuilder);
-            generator.GenerateMethods();
-            return generator;
-        }
-
         private readonly MethodDictionary Methods;
         private readonly SmalltalkClass Class;
         private readonly TypeBuilder TypeBuilder;
 
-        private MethodGenerator(NativeCompiler compiler, SmalltalkClass cls, MethodDictionary methods, TypeBuilder typeBuilder)
+        protected MethodGenerator(NativeCompiler compiler, SmalltalkClass cls, MethodDictionary methods, TypeBuilder typeBuilder)
             : base(compiler)
         {
             this.Class = cls;
@@ -37,7 +32,20 @@ namespace IronSmalltalk.NativeCompiler.Internals
             this.TypeBuilder = typeBuilder;
         }
 
-        private void GenerateMethods()
+        private MethodCompiler _MethodCompiler;
+        protected MethodCompiler MethodCompiler
+        {
+            get
+            {
+                if (this._MethodCompiler == null)
+                    this._MethodCompiler = this.GetMethodCompiler();
+                return this._MethodCompiler;
+            }
+        }
+
+        protected abstract MethodCompiler GetMethodCompiler();
+
+        protected void GenerateMethods()
         {
             List<MethodInformation> methods = this.GetMethodNameMap();
             foreach (MethodInformation method in methods)
@@ -50,18 +58,19 @@ namespace IronSmalltalk.NativeCompiler.Internals
         {
             MethodBuilder methodBuilder = this.TypeBuilder.DefineMethod(method.MethodName, MethodAttributes.Public | MethodAttributes.Static);
             LambdaExpression lambda = this.GenerateMethodLambda(method);
-            lambda.CompileToMethod(methodBuilder, this.Compiler.NativeGenerator.DebugInfoGenerator);
+            try
+            {
+                lambda.CompileToMethod(methodBuilder, this.Compiler.NativeGenerator.DebugInfoGenerator);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("{0} {1}", lambda, ex);
+            }
         }
 
         private LambdaExpression GenerateMethodLambda(MethodInformation method)
         {
-            Expression body = Expression.Constant(null, typeof(object));
-
-            return Expression.Lambda(
-                body,
-                method.MethodName,
-                true, // always compile the rules with tail call optimization,
-                method.Arguments);
+            return this.MethodCompiler.CompileBindDelegate(method.Method.ParseTree, this.Class, method.MethodName);
         }
 
         /// <summary>
@@ -100,56 +109,77 @@ namespace IronSmalltalk.NativeCompiler.Internals
         {
             public static MethodInformation CreateMethodInformation(NativeCompiler compiler, string name, RuntimeCompiledMethod method)
             {
-                ParameterExpression[] args = MethodInformation.CreateParametersForMethod(compiler, method);
-                return new MethodInformation(compiler, name, method, args);
-            }
-
-            private static ParameterExpression[] CreateParametersForMethod(NativeCompiler compiler, RuntimeCompiledMethod method)
-            {
-                System.Diagnostics.Debug.Assert(method.ParseTree.Arguments.Count == method.NumberOfArguments);
-
-                ParameterExpression[] args = new ParameterExpression[method.NumberOfArguments + 3];
-                Dictionary<string, ParameterExpression> argsMap = new Dictionary<string, ParameterExpression>();
-
-                string name = MethodGenerator.GetUniqueName(argsMap, "self");
-                ParameterExpression param = Expression.Parameter(typeof(object), name); // All our args are Object
-                argsMap.Add(name, param);
-                args[1] = param;
-
-                for (int i = 0; i < method.ParseTree.Arguments.Count; i++)
-                {
-                    MethodArgumentNode arg = method.ParseTree.Arguments[i];
-                    name = MethodGenerator.GetUniqueName(argsMap, compiler.NativeGenerator.AsLegalArgumentName(arg.Token.Value));
-                    param = Expression.Parameter(typeof(object), name); // All our args are Object
-                    argsMap.Add(name, param);
-                    args[i + 3] = param;
-                }
-
-                // Those are not used by code, and we define them last, just in case there are naming conflicts - the name of those is unimportant.
-                name = MethodGenerator.GetUniqueName(argsMap, "$site");
-                param = Expression.Parameter(typeof(CallSite), name);
-                argsMap.Add(name, param);
-                args[0] = param;
-                name = MethodGenerator.GetUniqueName(argsMap, "$executionContext");
-                param = Expression.Parameter(typeof(ExecutionContext), name);
-                argsMap.Add(name, param);
-                args[2] = param;
-
-                return args;
+                return new MethodInformation(compiler, name, method);
             }
 
             public readonly NativeCompiler Compiler;
             public readonly RuntimeCompiledMethod Method;
             public readonly string MethodName;
-            public readonly ParameterExpression[] Arguments;
 
-            private MethodInformation(NativeCompiler compiler, string name, RuntimeCompiledMethod method, ParameterExpression[] arguments)
+            private MethodInformation(NativeCompiler compiler, string name, RuntimeCompiledMethod method)
             {
                 this.Compiler = compiler;
                 this.Method = method;
                 this.MethodName = name;
-                this.Arguments = arguments;
             }
+        }
+    }
+
+    internal sealed class ClassMethodGenerator : MethodGenerator
+    {
+        internal static ClassMethodGenerator GenerateMethods(ClassGenerator classGenerator)
+        {
+            ClassMethodGenerator generator = new ClassMethodGenerator(
+                classGenerator.Compiler,
+                classGenerator.Binding.Value,
+                classGenerator.Binding.Value.ClassBehavior,
+                classGenerator.ClassMethodsType);
+            generator.GenerateMethods();
+            return generator;
+        }
+
+        private ClassMethodGenerator(NativeCompiler compiler, SmalltalkClass cls, MethodDictionary methods, TypeBuilder typeBuilder)
+            : base(compiler, cls, methods, typeBuilder)
+        {
+        }
+
+        protected override MethodCompiler GetMethodCompiler()
+        {
+            CompilerOptions options = new CompilerOptions();
+            options.DebugInfoService = null;    // BUG-BUG 
+            options.LiteralEncodingStrategy = new NativeLiteralEncodingStrategy();
+            options.DynamicCallStrategy = new NativeDynamicCallStrategy();
+
+            return new ClassMethodCompiler(this.Compiler.Parameters.Runtime, options); 
+        }
+    }
+
+    internal sealed class InstanceMethodGenerator : MethodGenerator
+    {
+        internal static InstanceMethodGenerator GenerateMethods(ClassGenerator classGenerator)
+        {
+            InstanceMethodGenerator generator = new InstanceMethodGenerator(
+                classGenerator.Compiler, 
+                classGenerator.Binding.Value, 
+                classGenerator.Binding.Value.InstanceBehavior, 
+                classGenerator.InstanceMethodsType);
+            generator.GenerateMethods();
+            return generator;
+        }
+
+        private InstanceMethodGenerator(NativeCompiler compiler, SmalltalkClass cls, MethodDictionary methods, TypeBuilder typeBuilder)
+            : base(compiler, cls, methods, typeBuilder)
+        {
+        }
+
+        protected override MethodCompiler GetMethodCompiler()
+        {
+            CompilerOptions options = new CompilerOptions();
+            options.DebugInfoService = null;    // BUG-BUG 
+            options.LiteralEncodingStrategy = new NativeLiteralEncodingStrategy();
+            options.DynamicCallStrategy = new NativeDynamicCallStrategy();
+
+            return new InstanceMethodCompiler(this.Compiler.Parameters.Runtime, options);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * **************************************************************************
  *
  * Copyright (c) The IronSmalltalk Project. 
@@ -14,24 +14,12 @@
  * **************************************************************************
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace IronSmalltalk.Runtime.Execution
+namespace IronSmalltalk.Runtime.Execution.Internals
 {
-    public class ExecutionContext
+    public class RuntimeErrors
     {
-        // Keep this as field ... for performace reasons. It's accessed very often!
-        public readonly SmalltalkRuntime Runtime;
-
-        public ExecutionContext(SmalltalkRuntime runtime)
-        {
-            if (runtime == null)
-                throw new ArgumentNullException("runtime");
-            this.Runtime = runtime;
-        }
+        public const string DoesNotUnderstandMissing = "Could not find the #_doesNotUnderstand:arguments: method.";
+        public const string TooManyMethodArguments = "IronSmalltalk does not support methods with {0} argument. Maximum argument number is {1}.";
     }
 }

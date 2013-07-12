@@ -41,11 +41,15 @@ namespace IronSmalltalk.ExpressionCompiler.Bindings
 
         public override System.Linq.Expressions.Expression GenerateReadExpression(IBindingClient client)
         {
-            if (this.IsConstantValueBinding)
-                return Expression.Constant(this.Binding.Value, typeof(object));
-            return Expression.Property(
-                Expression.Constant(this.Binding, typeof(TBinding)),
-                DiscreteBinding<TBinding>.GetPropertyInfo);
+            // BUG BUG Must re-implement ...
+
+            return Expression.Convert(Expression.Constant(this.Binding.Name.Value, typeof(string)), typeof(object));
+
+            //if (this.IsConstantValueBinding)
+            //    return Expression.Constant(this.Binding.Value, typeof(object));
+            //return Expression.Property(
+            //    Expression.Constant(this.Binding, typeof(TBinding)),
+            //    DiscreteBinding<TBinding>.GetPropertyInfo);
         }
 
         private static PropertyInfo _GetPropertyInfo;

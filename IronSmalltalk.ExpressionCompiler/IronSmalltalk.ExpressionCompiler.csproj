@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
@@ -55,13 +56,35 @@
     <Compile Include="Bindings\GlobalBindings.cs" />
     <Compile Include="Bindings\NameBindings.cs" />
     <Compile Include="Bindings\PoolElementBindings.cs" />
+    <Compile Include="Bindings\SpecialBinding.cs" />
+    <Compile Include="ClassMethodCompiler.cs" />
+    <Compile Include="CompilerOptions.cs" />
     <Compile Include="ExpressionCompiler.cs" />
     <Compile Include="InitializerCompiler.cs" />
+    <Compile Include="InstanceMethodCompiler.cs" />
     <Compile Include="Internals\BindingCodeGeneraionException.cs" />
     <Compile Include="Internals\CodeGenerationErrors.cs" />
+    <Compile Include="Internals\DynamicCallStrategy.cs" />
     <Compile Include="Internals\ExceptionHelper.cs" />
+    <Compile Include="Internals\IDynamicCallStrategy.cs" />
+    <Compile Include="Internals\ILiteralEncodingStrategy.cs" />
+    <Compile Include="Internals\InternalCodeGenerationException.cs" />
     <Compile Include="Internals\LiteralEncodingStrategy.cs" />
+    <Compile Include="Internals\RuntimeCodeGenerationException.cs" />
+    <Compile Include="Internals\SemanticCodeGenerationException.cs" />
     <Compile Include="MethodCompiler.cs" />
+    <Compile Include="Primitives\BuiltInPrimitiveHelper.cs" />
+    <Compile Include="Primitives\BuiltInPrimitives.cs" />
+    <Compile Include="Primitives\BuiltInPrimitivesEnum.cs" />
+    <Compile Include="Primitives\IPrimitiveClient.cs" />
+    <Compile Include="Primitives\PrimitiveBuilder.cs" />
+    <Compile Include="Primitives\PrimitiveHelper.cs" />
+    <Compile Include="Primitives\PrimitiveInterface.cs" />
+    <Compile Include="Primitives\PrimitiveInternalException.cs" />
+    <Compile Include="Primitives\PrimitiveInvalidMemberException.cs" />
+    <Compile Include="Primitives\PrimitiveInvalidTypeException.cs" />
+    <Compile Include="Primitives\PrimitiveSemanticException.cs" />
+    <Compile Include="Primitives\PrimitivesEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runtime\IDebugInfoService.cs" />
     <Compile Include="Runtime\InitializerCompilationResult.cs" />
@@ -106,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BindingScopes\Read Me.txt" />
+    <None Include="Primitives\Primitives Read Me.htm" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

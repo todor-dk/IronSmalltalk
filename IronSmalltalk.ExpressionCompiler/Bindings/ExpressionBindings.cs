@@ -34,37 +34,7 @@ namespace IronSmalltalk.ExpressionCompiler.Bindings
             return this.Expression;
         }
     }
-
-    public sealed class ConstantBinding : ExpressionBinding<ConstantExpression>
-    {
-        public ConstantBinding(string name, object value)
-            : base(name)
-        {
-            if (value == null)
-                throw new ArgumentNullException();
-
-            this.Expression = System.Linq.Expressions.Expression.Constant(value);
-        }
-
-        public ConstantBinding(string name, object value, Type type)
-            : base(name)
-        {
-            if (type == null)
-                throw new ArgumentNullException("type");
-            // It's OK for value to be null, as long as type is given
-            this.Expression = System.Linq.Expressions.Expression.Constant(value, type);
-        }
-
-        /// <summary>
-        /// This returns true if the value of the binding will always be the same. 
-        /// Some read-only bindings (e.g. self, super) are NOT constant-value-bindings.
-        /// </summary>
-        public override bool IsConstantValueBinding
-        {
-            get { return true; }
-        }
-    }
-
+    
     public sealed class ArgumentBinding : ExpressionBinding<Expression>
     {
         public ArgumentBinding(string name)

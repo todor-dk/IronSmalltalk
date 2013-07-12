@@ -21,6 +21,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.ExpressionCompiler.BindingScopes;
 using IronSmalltalk.ExpressionCompiler.Internals;
 using IronSmalltalk.Runtime.Execution.Internals;
 using IronSmalltalk.Runtime.Internal;
@@ -29,21 +30,38 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 {
     public sealed class VisitingContext
     {
-        public VisitingContext(ExpressionCompiler compiler, ParameterExpression self, ParameterExpression executionContext, string superLookupScope)
+        public VisitingContext(ExpressionCompiler compiler, BindingScope globalScope, BindingScope reservedScope, DynamicMetaObject self, DynamicMetaObject executionContext, string superLookupScope)
         {
             if (compiler == null)
                 throw new ArgumentNullException("compiler");
+            if (globalScope == null)
+                throw new ArgumentNullException("globalScope");
+            if (reservedScope == null)
+                throw new ArgumentNullException("reservedScope");
             if (self == null)
                 throw new ArgumentNullException("self");
             if (executionContext == null)
                 throw new ArgumentNullException("executionContext");
             this.Compiler = compiler;
+            this.GlobalScope = globalScope;
+            this.ReservedScope = reservedScope;
             this.Self = self;
             this.ExecutionContext = executionContext;
             this.SuperLookupScope = superLookupScope;
             this._ReturnLabel = null; // Lazy init
             this._HomeContext = null; // Lazy init
         }
+
+        /// <summary>
+        /// Binding lookup scope for identifiers of globals and similar, e.g. global variables, class or instance variables, pool variables etc.
+        /// </summary>
+        public BindingScope GlobalScope { get; private set; }
+
+        /// <summary>
+        /// Binding lookup scope with reserved identifiers, e.g. "true", "false", "nil" etc.
+        /// </summary>
+        public BindingScope ReservedScope { get; private set; }
+
         /// <summary>
         /// Gets or sets binding restrictions to be applied together with the visited executable code.
         /// </summary>
@@ -51,9 +69,9 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         public ExpressionCompiler Compiler { get; private set; }
 
-        public ParameterExpression ExecutionContext { get; private set; }
+        public DynamicMetaObject ExecutionContext { get; private set; }
 
-        public ParameterExpression Self { get; private set; }
+        public DynamicMetaObject Self { get; private set; }
 
         public string SuperLookupScope { get; private set; } // For initializers, always null
 
@@ -139,23 +157,23 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         public Expression CompileDynamicCall(string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, Expression receiver)
         {
-            return this.Compiler.CompileDynamicCall(selector, nativeName, isSuperSend, isConstantReceiver, this.SuperLookupScope, receiver, this.ExecutionContext);
+            return this.Compiler.DynamicCallStrategy.CompileDynamicCall(this, selector, nativeName, isSuperSend, isConstantReceiver, this.SuperLookupScope, receiver, this.ExecutionContext.Expression);
         }
 
         public Expression CompileDynamicCall(string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, Expression receiver, Expression argument)
         {
-            return this.Compiler.CompileDynamicCall(selector, nativeName, isSuperSend, isConstantReceiver, this.SuperLookupScope, receiver, this.ExecutionContext, argument);
+            return this.Compiler.DynamicCallStrategy.CompileDynamicCall(this, selector, nativeName, isSuperSend, isConstantReceiver, this.SuperLookupScope, receiver, this.ExecutionContext.Expression, argument);
         }
 
         public Expression CompileDynamicCall(string selector, string nativeName, int argumentCount, bool isSuperSend, bool isConstantReceiver, Expression receiver, IEnumerable<Expression> arguments)
         {
-            return this.Compiler.CompileDynamicCall(selector, nativeName, argumentCount, isSuperSend, isConstantReceiver, this.SuperLookupScope, receiver, this.ExecutionContext, arguments);
+            return this.Compiler.DynamicCallStrategy.CompileDynamicCall(this, selector, nativeName, argumentCount, isSuperSend, isConstantReceiver, this.SuperLookupScope, receiver, this.ExecutionContext.Expression, arguments);
         }
 
         // Helper for normal send binary messages - because it's used often when inlining
         public Expression CompileDynamicCall(string selector, Expression receiver, Expression argument)
         {
-            return this.Compiler.CompileDynamicCall(selector, selector, false, false, this.SuperLookupScope, receiver, this.ExecutionContext, argument);
+            return this.Compiler.DynamicCallStrategy.CompileDynamicCall(this, selector, selector, false, false, this.SuperLookupScope, receiver, this.ExecutionContext.Expression, argument);
         }
     }
 }

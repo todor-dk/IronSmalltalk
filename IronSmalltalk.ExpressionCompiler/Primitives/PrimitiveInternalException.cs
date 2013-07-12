@@ -16,8 +16,10 @@
 
 using System;
 using System.Runtime.Serialization;
+using IronSmalltalk.ExpressionCompiler.Internals;
+using IronSmalltalk.Runtime.Execution.Internals;
 
-namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
+namespace IronSmalltalk.ExpressionCompiler.Primitives
 {
     /// <summary>
     /// Exception that indicates that something wrong happened during generation of a primitive code.
@@ -27,7 +29,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
     /// but they didn't. This is most probably due to semantic error in the Smalltalk source code,
     /// but we cannot be 100% sure this is the case, and we also have no idea which Smalltalk 
     /// code is the offending code, so we can't throw a semantic error and instead throw
-    /// this exception. This means, the client of our code didn't do the validatio they were 
+    /// this exception. This means, the client of our code didn't do the validation they were 
     /// supposed to. Example:
     ///     Add (+) expects two (2) arguments, but 4 (four) were passed in the 
     ///     primitive declaration, so we fail!

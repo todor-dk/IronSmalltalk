@@ -22,7 +22,7 @@ using IronSmalltalk.ExpressionCompiler.Bindings;
 namespace IronSmalltalk.ExpressionCompiler.Internals
 {
     [Serializable]
-    public class BindingCodeGeneraionException : IronSmalltalk.Runtime.Execution.Internals.SemanticCodeGenerationException
+    public class BindingCodeGeneraionException : SemanticCodeGenerationException
     {
         public BindingCodeGeneraionException() { }
         public BindingCodeGeneraionException(string message) : base(message) { }

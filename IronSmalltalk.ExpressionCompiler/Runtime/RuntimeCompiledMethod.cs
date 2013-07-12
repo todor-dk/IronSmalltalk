@@ -60,9 +60,11 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
             if (arguments == null)
                 throw new ArgumentNullException("arguments");
 
-            BindingScope globalScope = BindingScope.ForClassMethod(cls, globalNameScope);
-            BindingScope reservedScope = ReservedScope.ForClassMethod(self.Expression);
-            ClassMethodCompiler compiler = new ClassMethodCompiler(runtime, globalScope, reservedScope, this.GetDebugInfoService());
+            CompilerOptions options = new CompilerOptions();
+            options.DebugInfoService = this.GetDebugInfoService();
+            options.GlobalNameScope = globalNameScope;
+
+            ClassMethodCompiler compiler = new ClassMethodCompiler(runtime, options);
 
             return compiler.CompileMethod(this.ParseTree, cls, self, arguments);
 
@@ -104,11 +106,11 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
             if (arguments == null)
                 throw new ArgumentNullException("arguments");
 
-            BindingScope globalScope = BindingScope.ForInstanceMethod(cls, globalNameScope);
-            BindingScope reservedScope = (cls.Superclass == null) ?
-                ReservedScope.ForRootClassInstanceMethod(self.Expression) :
-                ReservedScope.ForInstanceMethod(self.Expression);
-            InstanceMethodCompiler compiler = new InstanceMethodCompiler(runtime, globalScope, reservedScope, this.GetDebugInfoService());
+            CompilerOptions options = new CompilerOptions();
+            options.DebugInfoService = this.GetDebugInfoService();
+            options.GlobalNameScope = globalNameScope;
+
+            InstanceMethodCompiler compiler = new InstanceMethodCompiler(runtime, options);
 
             return compiler.CompileMethod(this.ParseTree, cls, self, arguments);
             //MethodVisitor visitor = new MethodVisitor(runtime,
@@ -162,11 +164,11 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
                     return RuntimeCompiledMethod.ReportError(errorSink, rootNode, "Could not compile method");
                 return true;
             }
-            catch (IronSmalltalk.Runtime.Execution.Internals.Primitives.PrimitiveInvalidTypeException ex)
+            catch (IronSmalltalk.ExpressionCompiler.Primitives.PrimitiveInvalidTypeException ex)
             {
                 return RuntimeCompiledMethod.ReportError(errorSink, ex.GetNode(), ex.Message);
             }
-            catch (IronSmalltalk.Runtime.Execution.Internals.SemanticCodeGenerationException ex)
+            catch (SemanticCodeGenerationException ex)
             {
                 return RuntimeCompiledMethod.ReportError(errorSink, ex.GetNode(), ex.Message);
             }

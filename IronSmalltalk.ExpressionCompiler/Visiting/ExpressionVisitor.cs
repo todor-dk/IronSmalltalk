@@ -100,7 +100,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             }
             else if (visitor.IsSuperSend)
             {
-                throw (new IronSmalltalk.Runtime.Execution.Internals.SemanticCodeGenerationException(CodeGenerationErrors.SuperNotFollowedByMessage)).SetNode(node);
+                throw (new SemanticCodeGenerationException(CodeGenerationErrors.SuperNotFollowedByMessage)).SetNode(node);
             }
 
             return result;

@@ -33,14 +33,18 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         Expression IBindingClient.SelfExpression
         {
-            get
-            {
-                NameBinding selfBinding = this.GetBinding(SemanticConstants.Self);
-                if ((selfBinding == null) || selfBinding.IsErrorBinding)
-                    throw new InvalidOperationException("Self is not available in the current context");
-                // NB: We don't expect GenerateReadExpression() to use "this", otherwise recursion!
-                return selfBinding.GenerateReadExpression(this); 
-            }
+            get { return this.Context.Self.Expression; }
+        }
+
+
+        Expression IBindingClient.TrueExpression
+        {
+            get { return this.Context.Compiler.LiteralEncoding.True(this); }
+        }
+
+        Expression IBindingClient.FalseExpression
+        {
+            get { return this.Context.Compiler.LiteralEncoding.False(this); }
         }
     }
 

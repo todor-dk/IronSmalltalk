@@ -36,6 +36,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Internals\ClassGenerator.cs" />
@@ -47,7 +48,9 @@
     <Compile Include="Internals\InitializerGenerator.cs" />
     <Compile Include="Internals\MethodGenerator.cs" />
     <Compile Include="Internals\NameScopeGenerator.cs" />
+    <Compile Include="Internals\NativeDynamicCallStrategy.cs" />
     <Compile Include="Internals\NativeGenerator.cs" />
+    <Compile Include="Internals\NativeLiteralEncodingStrategy.cs" />
     <Compile Include="Internals\PoolGenerator.cs" />
     <Compile Include="Internals\RuntimeGenerator.cs" />
     <Compile Include="NativeCompiler.cs" />
@@ -59,6 +62,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\IronSmalltalk.Common\IronSmalltalk.Common.csproj">
+      <Project>{cbbba006-546a-4dff-95a9-d7b1544205ad}</Project>
+      <Name>IronSmalltalk.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk.Compiler\IronSmalltalk.Compiler.csproj">
       <Project>{8c1ef7f5-b3af-401b-9223-e10ef00ebae6}</Project>
       <Name>IronSmalltalk.Compiler</Name>

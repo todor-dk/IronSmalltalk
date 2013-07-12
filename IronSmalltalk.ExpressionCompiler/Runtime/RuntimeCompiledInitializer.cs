@@ -18,6 +18,7 @@ using System;
 using System.Globalization;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.ExpressionCompiler.BindingScopes;
+using IronSmalltalk.ExpressionCompiler.Internals;
 using IronSmalltalk.ExpressionCompiler.Visiting;
 using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Behavior;
@@ -53,7 +54,10 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
         {
             IDebugInfoService dis = ((this.DebugInfoService == null) || (this.DebugInfoService.SymbolDocument == null)) ? null : this.DebugInfoService;
 
-            InitializerCompiler compiler = new InitializerCompiler(runtime, globalScope, reservedScope, dis);
+            CompilerOptions options = new CompilerOptions();
+            options.DebugInfoService = dis;
+
+            InitializerCompiler compiler = new InitializerCompiler(runtime, options, globalScope, reservedScope);
             return compiler.CompileInitializer(this.ParseTree, initializerName);
         }
 

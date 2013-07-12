@@ -15,17 +15,21 @@
 */
 
 using System;
+using IronSmalltalk.Runtime.Execution.Internals;
 
-namespace IronSmalltalk.Runtime.Execution.Internals
+namespace IronSmalltalk.ExpressionCompiler.Internals
 {
-    public class RuntimeCodeGenerationException : CodeGenerationException
+    /// <summary>
+    /// Exception that occured during code generation and indicates some internal
+    /// inconsistenct. Normally, this should not be thrown.
+    /// </summary>
+    public class InternalCodeGenerationException: CodeGenerationException
     {
-        public RuntimeCodeGenerationException() { }
-        public RuntimeCodeGenerationException(string message) : base(message) { }
-        public RuntimeCodeGenerationException(string message, Exception inner) : base(message, inner) { }
-
+        public InternalCodeGenerationException() { }
+        public InternalCodeGenerationException(string message) : base(message) { }
+        public InternalCodeGenerationException(string message, Exception inner) : base(message, inner) { }
 #if !SILVERLIGHT
-        protected RuntimeCodeGenerationException(
+        protected InternalCodeGenerationException(
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context)
             : base(info, context) { }
