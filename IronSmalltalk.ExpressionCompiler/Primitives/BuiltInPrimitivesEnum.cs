@@ -14,7 +14,7 @@
  * **************************************************************************
 */
 
-namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
+namespace IronSmalltalk.ExpressionCompiler.Primitives
 {
     /// <summary>
     /// List of built-in primitives

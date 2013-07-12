@@ -15,23 +15,19 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
+using IronSmalltalk.ExpressionCompiler.Internals;
+using IronSmalltalk.Runtime.Execution.Internals;
 
-namespace IronSmalltalk.Runtime.Execution
+namespace IronSmalltalk.ExpressionCompiler.Primitives
 {
-    public class ExecutionContext
+    public class PrimitiveSemanticException : SemanticCodeGenerationException
     {
-        // Keep this as field ... for performace reasons. It's accessed very often!
-        public readonly SmalltalkRuntime Runtime;
-
-        public ExecutionContext(SmalltalkRuntime runtime)
-        {
-            if (runtime == null)
-                throw new ArgumentNullException("runtime");
-            this.Runtime = runtime;
-        }
+        public PrimitiveSemanticException() { }
+        public PrimitiveSemanticException(string message) : base(message) { }
+        public PrimitiveSemanticException(string message, Exception inner) : base(message, inner) { }
+#if !SILVERLIGHT
+        protected PrimitiveSemanticException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+#endif
     }
 }

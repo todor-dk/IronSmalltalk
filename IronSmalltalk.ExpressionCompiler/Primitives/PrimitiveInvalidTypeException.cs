@@ -16,8 +16,10 @@
 
 using System;
 using System.Runtime.Serialization;
+using IronSmalltalk.ExpressionCompiler.Internals;
+using IronSmalltalk.Runtime.Execution.Internals;
 
-namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
+namespace IronSmalltalk.ExpressionCompiler.Primitives
 {
     /// <summary>
     /// Exception that indicates that attempt to resolve some .Net type during

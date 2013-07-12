@@ -21,7 +21,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IronSmalltalk.Runtime.Execution.CallSiteBinders;
 
-namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
+namespace IronSmalltalk.ExpressionCompiler.Primitives
 {
     public interface IPrimitiveClient
     {

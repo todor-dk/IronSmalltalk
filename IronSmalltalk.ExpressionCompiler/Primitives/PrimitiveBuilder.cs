@@ -22,8 +22,10 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.ExpressionCompiler.Internals;
+using IronSmalltalk.Runtime.Execution.Internals;
 
-namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
+namespace IronSmalltalk.ExpressionCompiler.Primitives
 {
     public class PrimitiveBuilder
     {
@@ -43,7 +45,6 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         public DynamicMetaObject Self { get; private set; }
         public DynamicMetaObject[] Arguments { get; private set; }
         public BindingRestrictions Restrictions { get; internal set; }
-        public bool IgnoreExecutionContextArgument { get; private set; }
 
         public PrimitiveBuilder(IPrimitiveClient client, PrimitivesEnum primitive, Type definingType, string memberName,
             IEnumerable<string> parameters, DynamicMetaObject self, DynamicMetaObject[] arguments, BindingRestrictions restrictions)
@@ -71,7 +72,6 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
             this.Self = self;
             this.Arguments = arguments;
             this.Restrictions = restrictions;
-            this.IgnoreExecutionContextArgument = true; // TO-DO
         }
 
         private Expression GeneratePrimitive()
@@ -113,7 +113,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
             // For built-in primitives, the defining type is not used!
             BuiltInPrimitivesEnum primitive;
             if (!Enum.TryParse(this.MemberName, out primitive))
-                throw new PrimitiveSemanticException(String.Format(RuntimeCodeGenerationErrors.WrongPrimitive, this.MemberName));
+                throw new PrimitiveSemanticException(String.Format(CodeGenerationErrors.WrongPrimitive, this.MemberName));
 
             Expression exp;
             switch (primitive)
@@ -294,7 +294,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                 null, argumentTypes.ToArray(), null);
             // If no method found, throw an exception.
             if (method == null)
-                throw new PrimitiveInvalidMemberException(String.Format(RuntimeCodeGenerationErrors.MissingMethod, this.DefiningType.Name, this.MemberName));
+                throw new PrimitiveInvalidMemberException(String.Format(CodeGenerationErrors.MissingMethod, this.DefiningType.Name, this.MemberName));
             return Expression.Call(method, PrimitiveHelper.GetArguments(this, argumentTypes, Conversion.Checked));
         }
 
@@ -305,7 +305,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         private Expression GenerateInvokeInstanceMethod()
         {
             if (!this.Parameters.Any())
-                throw new PrimitiveSemanticException(RuntimeCodeGenerationErrors.WrongNumberOfParameters);
+                throw new PrimitiveSemanticException(CodeGenerationErrors.WrongNumberOfParameters);
             Type[] argumentTypes = PrimitiveHelper.GetArgumentTypes(this.Parameters, this.DefiningType); // Types of arguments that we are to pass to the method.
 
             Type[] matchTypes = new Type[argumentTypes.Length - 1];
@@ -316,7 +316,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                 null, matchTypes, null);
             // If no method found, throw an exception.
             if (method == null)
-                throw new PrimitiveInvalidMemberException(String.Format(RuntimeCodeGenerationErrors.MissingMethod, this.DefiningType.Name, this.MemberName));
+                throw new PrimitiveInvalidMemberException(String.Format(CodeGenerationErrors.MissingMethod, this.DefiningType.Name, this.MemberName));
             IList<Expression> args = PrimitiveHelper.GetArguments(this, argumentTypes, Conversion.Checked);
             Expression instance = args[0];
             args.RemoveAt(0);
@@ -337,7 +337,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                 null, argumentTypes, null);
             // If no constructor found, throw an exception.
             if (ctor == null)
-                throw new PrimitiveInvalidMemberException(String.Format(RuntimeCodeGenerationErrors.MissingConstructor, this.DefiningType.Name));
+                throw new PrimitiveInvalidMemberException(String.Format(CodeGenerationErrors.MissingConstructor, this.DefiningType.Name));
             return Expression.New(ctor, PrimitiveHelper.GetArguments(this, argumentTypes, Conversion.Checked));
         }
 
@@ -345,7 +345,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         {
             // Get/Set property must have at least ONE type parameter (the return type)
             if (!this.Parameters.Any())
-                throw new PrimitiveSemanticException(RuntimeCodeGenerationErrors.WrongNumberOfParameters);
+                throw new PrimitiveSemanticException(CodeGenerationErrors.WrongNumberOfParameters);
             Type returnType = PrimitiveHelper.GetArgumentTypes(new string[] { this.Parameters.Last() }, this.DefiningType)[0];
             Type[] argumentTypes = PrimitiveHelper.GetArgumentTypes(this.Parameters.Take(this.Parameters.Count() - 1), this.DefiningType);
             return this.GenerateInvokeProperty(returnType, argumentTypes, BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Static);
@@ -355,7 +355,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         {
             // Get/Set property must have at least ONE type parameter (the return type)
             if (!this.Parameters.Any())
-                throw new PrimitiveSemanticException(RuntimeCodeGenerationErrors.WrongNumberOfParameters);
+                throw new PrimitiveSemanticException(CodeGenerationErrors.WrongNumberOfParameters);
             Type returnType = PrimitiveHelper.GetArgumentTypes(new string[] { this.Parameters.Last() }, this.DefiningType)[0];
             Type[] argumentTypes = PrimitiveHelper.GetArgumentTypes(this.Parameters.Take(this.Parameters.Count() - 1), this.DefiningType);
             return this.GenerateInvokeProperty(returnType, argumentTypes, BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.Static);
@@ -381,7 +381,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                 null, returnType, argumentTypes, null);
             // If no property found, throw an exception.
             if (property == null)
-                throw new PrimitiveInvalidMemberException(String.Format(RuntimeCodeGenerationErrors.MissingProperty, this.DefiningType.Name, propertyName));
+                throw new PrimitiveInvalidMemberException(String.Format(CodeGenerationErrors.MissingProperty, this.DefiningType.Name, propertyName));
 
             bool isStatic = property.GetAccessors()[0].IsStatic;
 
@@ -455,14 +455,14 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
         {
             // Get/Set Field do not have any type parameters!
             if (this.Parameters.Any())
-                throw new PrimitiveSemanticException(RuntimeCodeGenerationErrors.WrongNumberOfParameters);
+                throw new PrimitiveSemanticException(CodeGenerationErrors.WrongNumberOfParameters);
 
             // Lookup the field ... matching argument types.
             FieldInfo field = this.DefiningType.GetField(this.MemberName,
                 BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | bindingFlags);
             // If no field found, throw an exception.
             if (field == null)
-                throw new PrimitiveInvalidMemberException(String.Format(RuntimeCodeGenerationErrors.MissingField, this.DefiningType.Name, this.MemberName));
+                throw new PrimitiveInvalidMemberException(String.Format(CodeGenerationErrors.MissingField, this.DefiningType.Name, this.MemberName));
 
             if ((bindingFlags & BindingFlags.GetField) == BindingFlags.GetField)
             {

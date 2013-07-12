@@ -35,15 +35,7 @@ namespace IronSmalltalk.ExpressionCompiler
 {
     public abstract class ExpressionCompiler
     {
-        /// <summary>
-        /// Binding lookup scope for identifiers of globals and similar, e.g. global variables, class or instance variables, pool variables etc.
-        /// </summary>
-        public BindingScope GlobalScope { get; private set; }
 
-        /// <summary>
-        /// Binding lookup scope with reserved identifiers, e.g. "true", "false", "nil" etc.
-        /// </summary>
-        public BindingScope ReservedScope { get; private set; }
 
         /// <summary>
         /// Service providing information necessary to emit 
@@ -53,32 +45,31 @@ namespace IronSmalltalk.ExpressionCompiler
         /// </summary>
         public IDebugInfoService DebugInfoService { get; private set; }
 
-
         protected SmalltalkRuntime Runtime { get; private set; }
 
-        public LiteralEncodingStrategy LiteralEncoding { get; private set; }
+        public ILiteralEncodingStrategy LiteralEncoding { get; private set; }
+
+        public IDynamicCallStrategy DynamicCallStrategy { get; private set; }
+
+        public CompilerOptions CompilerOptions { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="runtime">Smalltalk runtime responsible for running the code.</param>
-        /// <param name="globalScope">Binding lookup scope with global identifiers, e.g. globals, class variables, instance variables etc.</param>
-        /// <param name="reservedScope">Binding lookup scope with reserved identifiers, e.g. "true", "false", "nil" etc.</param>
-        /// <param name="debugInfoService">Optional debug info service if the generator is to emit debug symbols.</param>
-        public ExpressionCompiler(SmalltalkRuntime runtime, BindingScope globalScope, BindingScope reservedScope, IDebugInfoService debugInfoService)
+        /// <param name="compilerOptions">Options that control the workings of the compiler.</param>
+        protected ExpressionCompiler(SmalltalkRuntime runtime, CompilerOptions compilerOptions)
         {
             if (runtime == null)
                 throw new ArgumentNullException("runtime");
-            if (globalScope == null)
-                throw new ArgumentNullException("globalScope");
-            if (reservedScope == null)
-                throw new ArgumentNullException("reservedScope");
+            if (compilerOptions == null)
+                compilerOptions = new CompilerOptions(); // Default options
 
             this.Runtime = runtime;
-            this.GlobalScope = globalScope;
-            this.ReservedScope = reservedScope;
-            this.DebugInfoService = debugInfoService; // Optional, null is OK
-            this.LiteralEncoding = new LiteralEncodingStrategy();
+            this.CompilerOptions = compilerOptions;
+            this.DebugInfoService = compilerOptions.DebugInfoService; // Optional, null is OK
+            this.LiteralEncoding = compilerOptions.LiteralEncodingStrategy ?? new LiteralEncodingStrategy();
+            this.DynamicCallStrategy = compilerOptions.DynamicCallStrategy ?? new DynamicCallStrategy();
         }
 
         private CallSiteBinderCache _binderCache;
@@ -113,32 +104,7 @@ namespace IronSmalltalk.ExpressionCompiler
             return this.Runtime.GetSymbol(value);
         }
 
-        public Expression CompileDynamicCall(string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, string superLookupScope, 
-            Expression receiver, Expression executionContext)
-        {
-            CallSiteBinder binder = this.GetBinder(selector, nativeName, 0, isSuperSend, isConstantReceiver, superLookupScope);
-            return Expression.Dynamic(binder, typeof(Object), receiver, executionContext);
-        }
-
-        public Expression CompileDynamicCall(string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, string superLookupScope,
-            Expression receiver, Expression executionContext, Expression argument)
-        {
-            CallSiteBinder binder = this.GetBinder(selector, nativeName, 1, isSuperSend, isConstantReceiver, superLookupScope);
-            return Expression.Dynamic(binder, typeof(Object), receiver, executionContext, argument);
-        }
-
-        public Expression CompileDynamicCall(string selector, string nativeName, int argumentCount, bool isSuperSend, bool isConstantReceiver, string superLookupScope,
-            Expression receiver, Expression executionContext, IEnumerable<Expression> arguments)
-        {
-            CallSiteBinder binder = this.GetBinder(selector, nativeName, argumentCount, isSuperSend, isConstantReceiver, superLookupScope);
-            List<Expression> args = new List<Expression>();
-            args.Add(receiver);
-            args.Add(executionContext);
-            args.AddRange(arguments);
-            return Expression.Dynamic(binder, typeof(Object), args);
-        }
-
-        private CallSiteBinder GetBinder(string selector, string nativeName, int argumentCount, bool isSuperSend, bool isConstantReceiver, string superLookupScope)
+        internal CallSiteBinder GetBinder(string selector, string nativeName, int argumentCount, bool isSuperSend, bool isConstantReceiver, string superLookupScope)
         {
             CallSiteBinder binder;
             if (isSuperSend)

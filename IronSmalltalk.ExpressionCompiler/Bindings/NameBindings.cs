@@ -16,6 +16,8 @@
 
 using System;
 using System.Linq.Expressions;
+using IronSmalltalk.ExpressionCompiler.Internals;
+using IronSmalltalk.ExpressionCompiler.Primitives;
 using IronSmalltalk.Runtime.Execution.Internals;
 
 namespace IronSmalltalk.ExpressionCompiler.Bindings
@@ -53,7 +55,7 @@ namespace IronSmalltalk.ExpressionCompiler.Bindings
         public string ErrorDescription { get; private set; }
 
         public ErrorBinding(string name)
-            : this(name, RuntimeCodeGenerationErrors.UndefinedBinding)
+            : this(name, CodeGenerationErrors.UndefinedBinding)
         {
         }
 
@@ -80,6 +82,8 @@ namespace IronSmalltalk.ExpressionCompiler.Bindings
     public interface IBindingClient
     {
         Expression SelfExpression { get; }
+        Expression TrueExpression { get; }
+        Expression FalseExpression { get; }
     }
 
     public interface IAssignableBinding

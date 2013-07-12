@@ -15,7 +15,7 @@
 */
 
 
-namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
+namespace IronSmalltalk.ExpressionCompiler.Primitives
 {
     public enum PrimitivesEnum
     {

@@ -15,8 +15,10 @@
 */
 
 using System;
+using IronSmalltalk.ExpressionCompiler.Internals;
+using IronSmalltalk.Runtime.Execution.Internals;
 
-namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
+namespace IronSmalltalk.ExpressionCompiler.Primitives
 {
     /// <summary>
     /// Exception that indicates that attempt to resolve some member during

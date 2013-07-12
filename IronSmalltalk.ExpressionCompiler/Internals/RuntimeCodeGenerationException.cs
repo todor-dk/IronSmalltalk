@@ -1,4 +1,4 @@
-﻿/*
+/*
  * **************************************************************************
  *
  * Copyright (c) The IronSmalltalk Project. 
@@ -15,17 +15,21 @@
 */
 
 using System;
-using System.Runtime.Serialization;
+using IronSmalltalk.Runtime.Execution.Internals;
 
-namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
+namespace IronSmalltalk.ExpressionCompiler.Internals
 {
-    public class PrimitiveSemanticException : SemanticCodeGenerationException
+    public class RuntimeCodeGenerationException : CodeGenerationException
     {
-        public PrimitiveSemanticException() { }
-        public PrimitiveSemanticException(string message) : base(message) { }
-        public PrimitiveSemanticException(string message, Exception inner) : base(message, inner) { }
+        public RuntimeCodeGenerationException() { }
+        public RuntimeCodeGenerationException(string message) : base(message) { }
+        public RuntimeCodeGenerationException(string message, Exception inner) : base(message, inner) { }
+
 #if !SILVERLIGHT
-        protected PrimitiveSemanticException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        protected RuntimeCodeGenerationException(
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context)
+            : base(info, context) { }
 #endif
     }
 }

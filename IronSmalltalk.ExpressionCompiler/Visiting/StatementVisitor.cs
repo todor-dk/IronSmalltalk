@@ -35,7 +35,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         public override List<Expression> VisitStatementSequence(StatementSequenceNode node)
         {
             if (this.HasReturned)
-                throw (new IronSmalltalk.Runtime.Execution.Internals.SemanticCodeGenerationException(CodeGenerationErrors.CodeAfterReturnStatement)).SetNode(node);
+                throw (new SemanticCodeGenerationException(CodeGenerationErrors.CodeAfterReturnStatement)).SetNode(node);
 
             Expression statementCode = node.Expression.Accept(new ExpressionVisitor(this));
             statementCode = this.Context.Compiler.AddDebugInfo(statementCode, node.Expression);
@@ -51,7 +51,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         public override List<Expression> VisitReturnStatement(ReturnStatementNode node)
         {
             if (this.HasReturned)
-                throw (new IronSmalltalk.Runtime.Execution.Internals.SemanticCodeGenerationException(CodeGenerationErrors.CodeAfterReturnStatement)).SetNode(node);
+                throw (new SemanticCodeGenerationException(CodeGenerationErrors.CodeAfterReturnStatement)).SetNode(node);
             this.HasReturned = true;
 
             this.Expressions.Add(this.Return(node.Expression.Accept(new ExpressionVisitor(this))));

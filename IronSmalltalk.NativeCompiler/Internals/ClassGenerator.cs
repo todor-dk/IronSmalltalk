@@ -35,8 +35,8 @@ namespace IronSmalltalk.NativeCompiler.Internals
         {
         }
 
-        private TypeBuilder InstanceMethodsType;
-        private TypeBuilder ClassMethodsType;
+        internal TypeBuilder InstanceMethodsType { get; private set; }
+        internal TypeBuilder ClassMethodsType { get; private set; }
 
         #region Class Types and Binding Creation
 
@@ -165,8 +165,8 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
         internal void GenerateMethods()
         {
-            this.InstanceMethodGenerator = MethodGenerator.GenerateMethods(this.Compiler, this.Binding.Value, this.Binding.Value.InstanceBehavior, this.InstanceMethodsType);
-            this.ClassMethodGenerator = MethodGenerator.GenerateMethods(this.Compiler, this.Binding.Value, this.Binding.Value.ClassBehavior, this.ClassMethodsType);
+            this.InstanceMethodGenerator = Internals.InstanceMethodGenerator.GenerateMethods(this);
+            this.ClassMethodGenerator = Internals.ClassMethodGenerator.GenerateMethods(this);
         }
 
     }

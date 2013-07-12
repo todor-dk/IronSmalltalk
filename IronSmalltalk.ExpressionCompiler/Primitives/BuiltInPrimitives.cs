@@ -20,7 +20,7 @@ using System.Dynamic;
 using System.Linq.Expressions;
 using IronSmalltalk.Runtime.Execution.CallSiteBinders;
 
-namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
+namespace IronSmalltalk.ExpressionCompiler.Primitives
 {
     /// <summary>
     /// This helper class contains helper function for each (all if possible, otherwise as may as possible)

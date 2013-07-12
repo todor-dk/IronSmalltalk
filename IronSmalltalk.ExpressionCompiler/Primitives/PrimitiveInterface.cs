@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq.Expressions;
 
-namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
+namespace IronSmalltalk.ExpressionCompiler.Primitives
 {
     public static class PrimitiveInterface
     {

@@ -88,7 +88,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 
             // Every class is supposed to implement the #_doesNotUnderstand:arguments:, if not, throw a runtime exception
             if (expression == null)
-                throw new RuntimeCodeGenerationException(RuntimeCodeGenerationErrors.DoesNotUnderstandMissing);
+                throw new CodeGenerationException(RuntimeErrors.DoesNotUnderstandMissing);
 
             // Perform a standard cal to the #_doesNotUnderstand:arguments:
             return new DynamicMetaObject(expression, target.Restrictions.Merge(restrictions));

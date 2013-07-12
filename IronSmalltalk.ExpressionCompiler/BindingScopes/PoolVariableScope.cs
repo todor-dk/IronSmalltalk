@@ -15,6 +15,8 @@
 */
 
 using IronSmalltalk.ExpressionCompiler.Bindings;
+using IronSmalltalk.ExpressionCompiler.Internals;
+using IronSmalltalk.ExpressionCompiler.Primitives;
 using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Execution.Internals;
 using RTB = IronSmalltalk.Runtime.Bindings; 
@@ -67,7 +69,7 @@ namespace IronSmalltalk.ExpressionCompiler.BindingScopes
                     if (binding != null)
                     {
                         if (result != null)
-                            return new ErrorBinding(name, RuntimeCodeGenerationErrors.PoolVariableNotUnique);
+                            return new ErrorBinding(name, CodeGenerationErrors.PoolVariableNotUnique);
                         if (binding is RTB.PoolConstantBinding)
                             result = new PoolConstantBinding(name, (RTB.PoolConstantBinding)binding);
                         else

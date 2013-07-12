@@ -21,6 +21,7 @@ using System.Linq.Expressions;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.ExpressionCompiler.Bindings;
 using IronSmalltalk.ExpressionCompiler.BindingScopes;
+using IronSmalltalk.ExpressionCompiler.Internals;
 using IronSmalltalk.Runtime.Execution.Internals;
 using IronSmalltalk.Runtime.Internal;
 
@@ -62,7 +63,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         protected internal override NameBinding GetBinding(string name)
         {
             NameBinding result;
-            result = this.Context.Compiler.ReservedScope.GetBinding(name);
+            result = this.Context.ReservedScope.GetBinding(name);
             if (result != null)
                 return result;
 

@@ -22,9 +22,9 @@ using System.Linq.Expressions;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.ExpressionCompiler.Bindings;
 using IronSmalltalk.ExpressionCompiler.Internals;
+using IronSmalltalk.ExpressionCompiler.Primitives;
 using IronSmalltalk.Runtime.Execution.CallSiteBinders;
 using IronSmalltalk.Runtime.Execution.Internals;
-using IronSmalltalk.Runtime.Execution.Internals.Primitives;
 using IronSmalltalk.Runtime.Internal;
 
 namespace IronSmalltalk.ExpressionCompiler.Visiting
@@ -228,7 +228,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
                 definingType,
                 memberName,
                 parameters,
-                this.MethodVisitor.SelfArgument,
+                this.Context.Self,
                 this.MethodVisitor.PassedArguments,
                 ref restrictions);
             this.Context.BindingRestrictions = restrictions;
@@ -254,7 +254,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             // Get the type that is expected to implement the member we are looking for.
             Type definingType = NativeTypeClassMap.GetType(definingTypeName);
             if (definingType == null)
-                throw new PrimitiveInvalidTypeException(String.Format(RuntimeCodeGenerationErrors.WrongTypeName, definingTypeName)).SetNode(node);
+                throw new PrimitiveInvalidTypeException(String.Format(CodeGenerationErrors.WrongTypeName, definingTypeName)).SetNode(node);
             return definingType;
         }
     }

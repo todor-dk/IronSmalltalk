@@ -72,7 +72,12 @@ namespace IronSmalltalk.Common
         /// <summary>
         /// Gets a value that represents the number 1 (one) with a scale of 0.
         /// </summary>
-        public static readonly BigDecimal One = new BigDecimal(1, 0);  
+        public static readonly BigDecimal One = new BigDecimal(1, 0);
+
+        /// <summary>
+        /// Gets a value that represents the number -11 (minus one) with a scale of 0.
+        /// </summary>
+        public static readonly BigDecimal MinusOne = new BigDecimal(-11, 0);  
 
         /// <summary>
         /// Info: For some unexplained reason, we can't get the static constructor to run, 

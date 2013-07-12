@@ -21,8 +21,8 @@ using System.Text;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.ExpressionCompiler.Bindings;
 using IronSmalltalk.ExpressionCompiler.Internals;
+using IronSmalltalk.ExpressionCompiler.Primitives;
 using IronSmalltalk.Runtime.Execution.CallSiteBinders;
-using IronSmalltalk.Runtime.Execution.Internals.Primitives;
 
 namespace IronSmalltalk.ExpressionCompiler.Visiting
 {
@@ -142,9 +142,8 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         public override Expression VisitUnaryMessage(Compiler.SemanticNodes.UnaryMessageNode node)
         {
-            return this.Context.Compiler.CompileDynamicCall(node.SelectorToken.Value, node.SelectorToken.Value,
-                this.IsSuperSend, this.IsConstantReceiver, this.Context.SuperLookupScope,
-                this.Receiver, this.Context.ExecutionContext);
+            return this.Context.CompileDynamicCall(node.SelectorToken.Value, node.SelectorToken.Value,
+                this.IsSuperSend, this.IsConstantReceiver, this.Receiver);
         }
 
         public override Expression VisitBinaryMessage(Compiler.SemanticNodes.BinaryMessageNode node)
@@ -153,9 +152,8 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             if (node.SelectorToken.Value == "==")
                 return this.InlineIdentityTest(this.Receiver, argument);
             else
-                return this.Context.Compiler.CompileDynamicCall(node.SelectorToken.Value, node.SelectorToken.Value,
-                    this.IsSuperSend, this.IsConstantReceiver, this.Context.SuperLookupScope,
-                    this.Receiver, this.Context.ExecutionContext, argument);
+                return this.Context.CompileDynamicCall(node.SelectorToken.Value, node.SelectorToken.Value,
+                    this.IsSuperSend, this.IsConstantReceiver, this.Receiver, argument);
         }
 
         public override Expression VisitKeywordMessage(Compiler.SemanticNodes.KeywordMessageNode node)
@@ -168,15 +166,13 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             for (int i = 0; i < node.Arguments.Count; i++)
                 arguments[i] = node.Arguments[i].Accept(this);
 
-            return this.Context.Compiler.CompileDynamicCall(
+            return this.Context.CompileDynamicCall(
                 selector.ToString(), 
                 node.SelectorTokens[0].Value.Substring(0, node.SelectorTokens[0].Value.Length - 1),
                 node.Arguments.Count,
                 this.IsSuperSend, 
                 this.IsConstantReceiver, 
-                this.Context.SuperLookupScope, 
-                this.Receiver, 
-                this.Context.ExecutionContext, 
+                this.Receiver,
                 arguments);
         }
 
@@ -192,7 +188,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             if (node.Messages != null)
                 result = node.Messages.Accept(new MessageVisitor(this, result, visitor.IsSuperSend, visitor.IsConstant, false));
             else if (visitor.IsSuperSend)
-                throw (new IronSmalltalk.Runtime.Execution.Internals.SemanticCodeGenerationException(CodeGenerationErrors.SuperNotFollowedByMessage)).SetNode(node);
+                throw (new SemanticCodeGenerationException(CodeGenerationErrors.SuperNotFollowedByMessage)).SetNode(node);
 
             return result;
         }
@@ -205,7 +201,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             if (node.Messages != null)
                 result = node.Messages.Accept(new MessageVisitor(this, result, visitor.IsSuperSend, visitor.IsConstant, false));
             else if (visitor.IsSuperSend)
-                throw (new IronSmalltalk.Runtime.Execution.Internals.SemanticCodeGenerationException(CodeGenerationErrors.SuperNotFollowedByMessage)).SetNode(node);
+                throw (new SemanticCodeGenerationException(CodeGenerationErrors.SuperNotFollowedByMessage)).SetNode(node);
 
             return result;
         }

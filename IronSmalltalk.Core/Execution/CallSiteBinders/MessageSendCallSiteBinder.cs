@@ -56,7 +56,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 // 1. If dealing with a Smalltalk object, don't do the normal BindInvokeMember and perform our logic directly
                 return base.Bind(target, args);
             else
-                // 2. For all other objects, ask the object to bing the operation and fallback to ST only if it's not successful.
+                // 2. For all other objects, ask the object to bind the operation and fallback to ST only if it's not successful.
                 // NB: Maybe we wan't to do binding BEFORE the object, so we can shadow its methods and not vice versa.
                 return target.BindInvokeMember(this.InvokeMemberBinder, args);
         }

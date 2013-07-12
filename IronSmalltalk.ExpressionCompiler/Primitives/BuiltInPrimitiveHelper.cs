@@ -18,9 +18,11 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq.Expressions;
+using IronSmalltalk.ExpressionCompiler.Internals;
+using IronSmalltalk.Runtime.Execution.Internals;
 using IronSmalltalk.Runtime.Internal;
 
-namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
+namespace IronSmalltalk.ExpressionCompiler.Primitives
 {
     internal static class BuiltInPrimitiveHelper
     {
@@ -282,7 +284,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
                 return null;
             // We don't support if the shift parameter is other than int
             if (NativeTypeClassMap.GetType(builder.Parameters[1]) != typeof(int))
-                throw new PrimitiveInvalidTypeException(String.Format(RuntimeCodeGenerationErrors.WrongShiftTypeName, builder.Parameters[1]));
+                throw new PrimitiveInvalidTypeException(String.Format(CodeGenerationErrors.WrongShiftTypeName, builder.Parameters[1]));
             Type type = NativeTypeClassMap.GetType(builder.Parameters[0]);
 
             int bits;
@@ -306,7 +308,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals.Primitives
             else if (type == typeof(byte))
             { bits = 8; zeroValue = (byte)0; }
             else
-                throw new PrimitiveInvalidTypeException(String.Format(RuntimeCodeGenerationErrors.WrongShiftTypeName, builder.Parameters[0]));
+                throw new PrimitiveInvalidTypeException(String.Format(CodeGenerationErrors.WrongShiftTypeName, builder.Parameters[0]));
 
 
             IList<Expression> args = PrimitiveHelper.GetArguments(builder, new Type[] { type, typeof(int) }, Conversion.Checked);

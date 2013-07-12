@@ -24,13 +24,13 @@ namespace IronSmalltalk.Runtime.Execution.Internals
     /// Exceptions that can be thrown during code generation (JIT compiling).
     /// </summary>
     [Serializable]
-    public abstract class CodeGenerationException : SmalltalkDefinitionException
+    public class CodeGenerationException : SmalltalkDefinitionException
     {
-        protected CodeGenerationException() { }
-        protected CodeGenerationException(string message) : base(message) { }
-        protected CodeGenerationException(string message, Exception inner) : base(message, inner) { }
+        public CodeGenerationException() { }
+        public CodeGenerationException(string message) : base(message) { }
+        public CodeGenerationException(string message, Exception inner) : base(message, inner) { }
 #if !SILVERLIGHT
-        protected CodeGenerationException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        public CodeGenerationException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 #endif
     }
 }
