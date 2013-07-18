@@ -79,5 +79,52 @@ namespace IronSmalltalk.NativeCompiler.Internals
         {
             return PreboxedConstants.True_Expression;
         }
+
+
+        public Expression GetZero(Type type)
+        {
+            if (type == typeof(System.Numerics.BigInteger))
+                return Expression.Property(null, typeof(System.Numerics.BigInteger), "Zero");
+            if (type == typeof(Int64))
+                return Expression.Constant((Int64)0, type);
+            if (type == typeof(Int32))
+                return Expression.Constant((Int32)0, type);
+            if (type == typeof(Int16))
+                return Expression.Constant((Int16)0, type);
+            if (type == typeof(SByte))
+                return Expression.Constant((SByte)0, type);
+            if (type == typeof(UInt64))
+                return Expression.Constant((UInt64)0, type);
+            if (type == typeof(UInt32))
+                return Expression.Constant((UInt32)0, type);
+            if (type == typeof(UInt16))
+                return Expression.Constant((UInt16)0, type);
+            if (type == typeof(Byte))
+                return Expression.Constant((Byte)0, type);
+            throw new NotImplementedException();
+        }
+
+        public Expression GetOne(Type type)
+        {
+            if (type == typeof(System.Numerics.BigInteger))
+                return Expression.Property(null, typeof(System.Numerics.BigInteger), "One");
+            if (type == typeof(Int64))
+                return Expression.Constant((Int64)1, type);
+            if (type == typeof(Int32))
+                return Expression.Constant((Int32)1, type);
+            if (type == typeof(Int16))
+                return Expression.Constant((Int16)1, type);
+            if (type == typeof(SByte))
+                return Expression.Constant((SByte)1, type);
+            if (type == typeof(UInt64))
+                return Expression.Constant((UInt64)1, type);
+            if (type == typeof(UInt32))
+                return Expression.Constant((UInt32)1, type);
+            if (type == typeof(UInt16))
+                return Expression.Constant((UInt16)1, type);
+            if (type == typeof(Byte))
+                return Expression.Constant((Byte)1, type);
+            throw new NotImplementedException();
+        }
     }
 }

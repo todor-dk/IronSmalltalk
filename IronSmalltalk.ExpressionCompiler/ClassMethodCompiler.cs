@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using IronSmalltalk.ExpressionCompiler.BindingScopes;
@@ -23,14 +24,14 @@ namespace IronSmalltalk.ExpressionCompiler
         {
         }
 
-        protected override VisitingContext GetVisitingContext(SmalltalkClass cls, DynamicMetaObject self, DynamicMetaObject[] arguments)
+        protected override VisitingContext GetVisitingContext(SmalltalkClass cls, Expression self, Expression[] arguments)
         {
             SmalltalkNameScope globalNameScope = this.CompilerOptions.GlobalNameScope ?? this.Runtime.GlobalScope;
 
             BindingScope globalScope = BindingScope.ForClassMethod(cls, globalNameScope);
             BindingScope reservedScope = ReservedScope.ForClassMethod();
 
-            return new VisitingContext(this, globalScope, reservedScope, self, arguments[0], cls.Name);
+            return new VisitingContext(this, globalScope, reservedScope, self, arguments[0], arguments.Skip(1), cls.Name);
         }
     }
 }

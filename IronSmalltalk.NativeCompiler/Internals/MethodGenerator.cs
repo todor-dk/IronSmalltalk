@@ -56,6 +56,10 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
         private void GenerateMethod(MethodInformation method)
         {
+            if (this.Class.Name.Value == "Console")
+                return;
+            if (this.Class.Name.Value == "Object")
+                return;
             MethodBuilder methodBuilder = this.TypeBuilder.DefineMethod(method.MethodName, MethodAttributes.Public | MethodAttributes.Static);
             LambdaExpression lambda = this.GenerateMethodLambda(method);
             try
@@ -70,7 +74,7 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
         private LambdaExpression GenerateMethodLambda(MethodInformation method)
         {
-            return this.MethodCompiler.CompileBindDelegate(method.Method.ParseTree, this.Class, method.MethodName);
+            return this.MethodCompiler.CompileMethodLambda(method.Method.ParseTree, this.Class, method.MethodName);
         }
 
         /// <summary>

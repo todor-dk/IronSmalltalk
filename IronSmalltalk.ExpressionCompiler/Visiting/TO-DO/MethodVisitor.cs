@@ -30,20 +30,15 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 {
     public class MethodVisitor : RootEncoderVisitor<Expression, MethodNode>
     {
-        internal readonly DynamicMetaObject[] PassedArguments;
-
-        public MethodVisitor(VisitingContext context, DynamicMetaObject[] arguments)
+        public MethodVisitor(VisitingContext context)
             : base(context)
         {
-            if (arguments == null)
-                throw new ArgumentNullException("arguments");
-            this.PassedArguments = arguments;
         }
 
         protected override void DefineArguments(MethodNode node)
         {
             for (int i = 0; i < node.Arguments.Count; i++)
-                this.DefineArgument(node.Arguments[i].Token.Value, this.PassedArguments[i].Expression);
+                this.DefineArgument(node.Arguments[i].Token.Value, this.Context.Arguments[i]);
         }
 
         protected override List<Expression> GenerateExpressions(MethodNode node, out StatementVisitor visitor)

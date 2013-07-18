@@ -18,6 +18,10 @@ namespace IronSmalltalk.Runtime.Execution
             PreboxedConstants.Char_Expressions = PreboxedConstants.Get_Char_Expressions();
             PreboxedConstants.Int32_Objects = PreboxedConstants.Get_Int32_Objects();
             PreboxedConstants.Int32_Expressions = PreboxedConstants.Get_Int32_Expressions();
+            PreboxedConstants.Byte_Objects = PreboxedConstants.Get_Byte_Objects();
+            PreboxedConstants.Byte_Expressions = PreboxedConstants.Get_Byte_Expressions();
+            PreboxedConstants.SByte_Objects = PreboxedConstants.Get_SByte_Objects();
+            PreboxedConstants.SByte_Expressions = PreboxedConstants.Get_SByte_Expressions();
         }
 
         public static readonly Expression Nil_Expression = Expression.Constant(null, typeof(object));
@@ -3423,6 +3427,5291 @@ namespace IronSmalltalk.Runtime.Execution
         public static readonly Expression Char_00FF_Expression = Expression.Field(null, typeof(PreboxedConstants), "Char_00FF");
 
 
+
+        #endregion
+
+        #region 8-bit Integer
+
+        public static Expression GetConstant(sbyte value)
+        {
+            return PreboxedConstants.SByte_Expressions[(int)value + 128];
+        }
+
+        public static object GetValue(sbyte value)
+        {
+            return PreboxedConstants.SByte_Objects[(int)value + 128];
+        }
+
+        private static readonly object[] SByte_Objects;
+
+        private static object[] Get_SByte_Objects()
+        {
+            return new object[]
+            {
+				PreboxedConstants.SByte_80,
+				PreboxedConstants.SByte_81,
+				PreboxedConstants.SByte_82,
+				PreboxedConstants.SByte_83,
+				PreboxedConstants.SByte_84,
+				PreboxedConstants.SByte_85,
+				PreboxedConstants.SByte_86,
+				PreboxedConstants.SByte_87,
+				PreboxedConstants.SByte_88,
+				PreboxedConstants.SByte_89,
+				PreboxedConstants.SByte_8A,
+				PreboxedConstants.SByte_8B,
+				PreboxedConstants.SByte_8C,
+				PreboxedConstants.SByte_8D,
+				PreboxedConstants.SByte_8E,
+				PreboxedConstants.SByte_8F,
+				PreboxedConstants.SByte_90,
+				PreboxedConstants.SByte_91,
+				PreboxedConstants.SByte_92,
+				PreboxedConstants.SByte_93,
+				PreboxedConstants.SByte_94,
+				PreboxedConstants.SByte_95,
+				PreboxedConstants.SByte_96,
+				PreboxedConstants.SByte_97,
+				PreboxedConstants.SByte_98,
+				PreboxedConstants.SByte_99,
+				PreboxedConstants.SByte_9A,
+				PreboxedConstants.SByte_9B,
+				PreboxedConstants.SByte_9C,
+				PreboxedConstants.SByte_9D,
+				PreboxedConstants.SByte_9E,
+				PreboxedConstants.SByte_9F,
+				PreboxedConstants.SByte_A0,
+				PreboxedConstants.SByte_A1,
+				PreboxedConstants.SByte_A2,
+				PreboxedConstants.SByte_A3,
+				PreboxedConstants.SByte_A4,
+				PreboxedConstants.SByte_A5,
+				PreboxedConstants.SByte_A6,
+				PreboxedConstants.SByte_A7,
+				PreboxedConstants.SByte_A8,
+				PreboxedConstants.SByte_A9,
+				PreboxedConstants.SByte_AA,
+				PreboxedConstants.SByte_AB,
+				PreboxedConstants.SByte_AC,
+				PreboxedConstants.SByte_AD,
+				PreboxedConstants.SByte_AE,
+				PreboxedConstants.SByte_AF,
+				PreboxedConstants.SByte_B0,
+				PreboxedConstants.SByte_B1,
+				PreboxedConstants.SByte_B2,
+				PreboxedConstants.SByte_B3,
+				PreboxedConstants.SByte_B4,
+				PreboxedConstants.SByte_B5,
+				PreboxedConstants.SByte_B6,
+				PreboxedConstants.SByte_B7,
+				PreboxedConstants.SByte_B8,
+				PreboxedConstants.SByte_B9,
+				PreboxedConstants.SByte_BA,
+				PreboxedConstants.SByte_BB,
+				PreboxedConstants.SByte_BC,
+				PreboxedConstants.SByte_BD,
+				PreboxedConstants.SByte_BE,
+				PreboxedConstants.SByte_BF,
+				PreboxedConstants.SByte_C0,
+				PreboxedConstants.SByte_C1,
+				PreboxedConstants.SByte_C2,
+				PreboxedConstants.SByte_C3,
+				PreboxedConstants.SByte_C4,
+				PreboxedConstants.SByte_C5,
+				PreboxedConstants.SByte_C6,
+				PreboxedConstants.SByte_C7,
+				PreboxedConstants.SByte_C8,
+				PreboxedConstants.SByte_C9,
+				PreboxedConstants.SByte_CA,
+				PreboxedConstants.SByte_CB,
+				PreboxedConstants.SByte_CC,
+				PreboxedConstants.SByte_CD,
+				PreboxedConstants.SByte_CE,
+				PreboxedConstants.SByte_CF,
+				PreboxedConstants.SByte_D0,
+				PreboxedConstants.SByte_D1,
+				PreboxedConstants.SByte_D2,
+				PreboxedConstants.SByte_D3,
+				PreboxedConstants.SByte_D4,
+				PreboxedConstants.SByte_D5,
+				PreboxedConstants.SByte_D6,
+				PreboxedConstants.SByte_D7,
+				PreboxedConstants.SByte_D8,
+				PreboxedConstants.SByte_D9,
+				PreboxedConstants.SByte_DA,
+				PreboxedConstants.SByte_DB,
+				PreboxedConstants.SByte_DC,
+				PreboxedConstants.SByte_DD,
+				PreboxedConstants.SByte_DE,
+				PreboxedConstants.SByte_DF,
+				PreboxedConstants.SByte_E0,
+				PreboxedConstants.SByte_E1,
+				PreboxedConstants.SByte_E2,
+				PreboxedConstants.SByte_E3,
+				PreboxedConstants.SByte_E4,
+				PreboxedConstants.SByte_E5,
+				PreboxedConstants.SByte_E6,
+				PreboxedConstants.SByte_E7,
+				PreboxedConstants.SByte_E8,
+				PreboxedConstants.SByte_E9,
+				PreboxedConstants.SByte_EA,
+				PreboxedConstants.SByte_EB,
+				PreboxedConstants.SByte_EC,
+				PreboxedConstants.SByte_ED,
+				PreboxedConstants.SByte_EE,
+				PreboxedConstants.SByte_EF,
+				PreboxedConstants.SByte_F0,
+				PreboxedConstants.SByte_F1,
+				PreboxedConstants.SByte_F2,
+				PreboxedConstants.SByte_F3,
+				PreboxedConstants.SByte_F4,
+				PreboxedConstants.SByte_F5,
+				PreboxedConstants.SByte_F6,
+				PreboxedConstants.SByte_F7,
+				PreboxedConstants.SByte_F8,
+				PreboxedConstants.SByte_F9,
+				PreboxedConstants.SByte_FA,
+				PreboxedConstants.SByte_FB,
+				PreboxedConstants.SByte_FC,
+				PreboxedConstants.SByte_FD,
+				PreboxedConstants.SByte_FE,
+				PreboxedConstants.SByte_FF,
+				PreboxedConstants.SByte_00,
+				PreboxedConstants.SByte_01,
+				PreboxedConstants.SByte_02,
+				PreboxedConstants.SByte_03,
+				PreboxedConstants.SByte_04,
+				PreboxedConstants.SByte_05,
+				PreboxedConstants.SByte_06,
+				PreboxedConstants.SByte_07,
+				PreboxedConstants.SByte_08,
+				PreboxedConstants.SByte_09,
+				PreboxedConstants.SByte_0A,
+				PreboxedConstants.SByte_0B,
+				PreboxedConstants.SByte_0C,
+				PreboxedConstants.SByte_0D,
+				PreboxedConstants.SByte_0E,
+				PreboxedConstants.SByte_0F,
+				PreboxedConstants.SByte_10,
+				PreboxedConstants.SByte_11,
+				PreboxedConstants.SByte_12,
+				PreboxedConstants.SByte_13,
+				PreboxedConstants.SByte_14,
+				PreboxedConstants.SByte_15,
+				PreboxedConstants.SByte_16,
+				PreboxedConstants.SByte_17,
+				PreboxedConstants.SByte_18,
+				PreboxedConstants.SByte_19,
+				PreboxedConstants.SByte_1A,
+				PreboxedConstants.SByte_1B,
+				PreboxedConstants.SByte_1C,
+				PreboxedConstants.SByte_1D,
+				PreboxedConstants.SByte_1E,
+				PreboxedConstants.SByte_1F,
+				PreboxedConstants.SByte_20,
+				PreboxedConstants.SByte_21,
+				PreboxedConstants.SByte_22,
+				PreboxedConstants.SByte_23,
+				PreboxedConstants.SByte_24,
+				PreboxedConstants.SByte_25,
+				PreboxedConstants.SByte_26,
+				PreboxedConstants.SByte_27,
+				PreboxedConstants.SByte_28,
+				PreboxedConstants.SByte_29,
+				PreboxedConstants.SByte_2A,
+				PreboxedConstants.SByte_2B,
+				PreboxedConstants.SByte_2C,
+				PreboxedConstants.SByte_2D,
+				PreboxedConstants.SByte_2E,
+				PreboxedConstants.SByte_2F,
+				PreboxedConstants.SByte_30,
+				PreboxedConstants.SByte_31,
+				PreboxedConstants.SByte_32,
+				PreboxedConstants.SByte_33,
+				PreboxedConstants.SByte_34,
+				PreboxedConstants.SByte_35,
+				PreboxedConstants.SByte_36,
+				PreboxedConstants.SByte_37,
+				PreboxedConstants.SByte_38,
+				PreboxedConstants.SByte_39,
+				PreboxedConstants.SByte_3A,
+				PreboxedConstants.SByte_3B,
+				PreboxedConstants.SByte_3C,
+				PreboxedConstants.SByte_3D,
+				PreboxedConstants.SByte_3E,
+				PreboxedConstants.SByte_3F,
+				PreboxedConstants.SByte_40,
+				PreboxedConstants.SByte_41,
+				PreboxedConstants.SByte_42,
+				PreboxedConstants.SByte_43,
+				PreboxedConstants.SByte_44,
+				PreboxedConstants.SByte_45,
+				PreboxedConstants.SByte_46,
+				PreboxedConstants.SByte_47,
+				PreboxedConstants.SByte_48,
+				PreboxedConstants.SByte_49,
+				PreboxedConstants.SByte_4A,
+				PreboxedConstants.SByte_4B,
+				PreboxedConstants.SByte_4C,
+				PreboxedConstants.SByte_4D,
+				PreboxedConstants.SByte_4E,
+				PreboxedConstants.SByte_4F,
+				PreboxedConstants.SByte_50,
+				PreboxedConstants.SByte_51,
+				PreboxedConstants.SByte_52,
+				PreboxedConstants.SByte_53,
+				PreboxedConstants.SByte_54,
+				PreboxedConstants.SByte_55,
+				PreboxedConstants.SByte_56,
+				PreboxedConstants.SByte_57,
+				PreboxedConstants.SByte_58,
+				PreboxedConstants.SByte_59,
+				PreboxedConstants.SByte_5A,
+				PreboxedConstants.SByte_5B,
+				PreboxedConstants.SByte_5C,
+				PreboxedConstants.SByte_5D,
+				PreboxedConstants.SByte_5E,
+				PreboxedConstants.SByte_5F,
+				PreboxedConstants.SByte_60,
+				PreboxedConstants.SByte_61,
+				PreboxedConstants.SByte_62,
+				PreboxedConstants.SByte_63,
+				PreboxedConstants.SByte_64,
+				PreboxedConstants.SByte_65,
+				PreboxedConstants.SByte_66,
+				PreboxedConstants.SByte_67,
+				PreboxedConstants.SByte_68,
+				PreboxedConstants.SByte_69,
+				PreboxedConstants.SByte_6A,
+				PreboxedConstants.SByte_6B,
+				PreboxedConstants.SByte_6C,
+				PreboxedConstants.SByte_6D,
+				PreboxedConstants.SByte_6E,
+				PreboxedConstants.SByte_6F,
+				PreboxedConstants.SByte_70,
+				PreboxedConstants.SByte_71,
+				PreboxedConstants.SByte_72,
+				PreboxedConstants.SByte_73,
+				PreboxedConstants.SByte_74,
+				PreboxedConstants.SByte_75,
+				PreboxedConstants.SByte_76,
+				PreboxedConstants.SByte_77,
+				PreboxedConstants.SByte_78,
+				PreboxedConstants.SByte_79,
+				PreboxedConstants.SByte_7A,
+				PreboxedConstants.SByte_7B,
+				PreboxedConstants.SByte_7C,
+				PreboxedConstants.SByte_7D,
+				PreboxedConstants.SByte_7E,
+				PreboxedConstants.SByte_7F
+            };
+        }
+
+        private static readonly Expression[] SByte_Expressions;
+
+        private static Expression[] Get_SByte_Expressions()
+        {
+            return new Expression[]
+            {
+				PreboxedConstants.SByte_80_Expression,
+				PreboxedConstants.SByte_81_Expression,
+				PreboxedConstants.SByte_82_Expression,
+				PreboxedConstants.SByte_83_Expression,
+				PreboxedConstants.SByte_84_Expression,
+				PreboxedConstants.SByte_85_Expression,
+				PreboxedConstants.SByte_86_Expression,
+				PreboxedConstants.SByte_87_Expression,
+				PreboxedConstants.SByte_88_Expression,
+				PreboxedConstants.SByte_89_Expression,
+				PreboxedConstants.SByte_8A_Expression,
+				PreboxedConstants.SByte_8B_Expression,
+				PreboxedConstants.SByte_8C_Expression,
+				PreboxedConstants.SByte_8D_Expression,
+				PreboxedConstants.SByte_8E_Expression,
+				PreboxedConstants.SByte_8F_Expression,
+				PreboxedConstants.SByte_90_Expression,
+				PreboxedConstants.SByte_91_Expression,
+				PreboxedConstants.SByte_92_Expression,
+				PreboxedConstants.SByte_93_Expression,
+				PreboxedConstants.SByte_94_Expression,
+				PreboxedConstants.SByte_95_Expression,
+				PreboxedConstants.SByte_96_Expression,
+				PreboxedConstants.SByte_97_Expression,
+				PreboxedConstants.SByte_98_Expression,
+				PreboxedConstants.SByte_99_Expression,
+				PreboxedConstants.SByte_9A_Expression,
+				PreboxedConstants.SByte_9B_Expression,
+				PreboxedConstants.SByte_9C_Expression,
+				PreboxedConstants.SByte_9D_Expression,
+				PreboxedConstants.SByte_9E_Expression,
+				PreboxedConstants.SByte_9F_Expression,
+				PreboxedConstants.SByte_A0_Expression,
+				PreboxedConstants.SByte_A1_Expression,
+				PreboxedConstants.SByte_A2_Expression,
+				PreboxedConstants.SByte_A3_Expression,
+				PreboxedConstants.SByte_A4_Expression,
+				PreboxedConstants.SByte_A5_Expression,
+				PreboxedConstants.SByte_A6_Expression,
+				PreboxedConstants.SByte_A7_Expression,
+				PreboxedConstants.SByte_A8_Expression,
+				PreboxedConstants.SByte_A9_Expression,
+				PreboxedConstants.SByte_AA_Expression,
+				PreboxedConstants.SByte_AB_Expression,
+				PreboxedConstants.SByte_AC_Expression,
+				PreboxedConstants.SByte_AD_Expression,
+				PreboxedConstants.SByte_AE_Expression,
+				PreboxedConstants.SByte_AF_Expression,
+				PreboxedConstants.SByte_B0_Expression,
+				PreboxedConstants.SByte_B1_Expression,
+				PreboxedConstants.SByte_B2_Expression,
+				PreboxedConstants.SByte_B3_Expression,
+				PreboxedConstants.SByte_B4_Expression,
+				PreboxedConstants.SByte_B5_Expression,
+				PreboxedConstants.SByte_B6_Expression,
+				PreboxedConstants.SByte_B7_Expression,
+				PreboxedConstants.SByte_B8_Expression,
+				PreboxedConstants.SByte_B9_Expression,
+				PreboxedConstants.SByte_BA_Expression,
+				PreboxedConstants.SByte_BB_Expression,
+				PreboxedConstants.SByte_BC_Expression,
+				PreboxedConstants.SByte_BD_Expression,
+				PreboxedConstants.SByte_BE_Expression,
+				PreboxedConstants.SByte_BF_Expression,
+				PreboxedConstants.SByte_C0_Expression,
+				PreboxedConstants.SByte_C1_Expression,
+				PreboxedConstants.SByte_C2_Expression,
+				PreboxedConstants.SByte_C3_Expression,
+				PreboxedConstants.SByte_C4_Expression,
+				PreboxedConstants.SByte_C5_Expression,
+				PreboxedConstants.SByte_C6_Expression,
+				PreboxedConstants.SByte_C7_Expression,
+				PreboxedConstants.SByte_C8_Expression,
+				PreboxedConstants.SByte_C9_Expression,
+				PreboxedConstants.SByte_CA_Expression,
+				PreboxedConstants.SByte_CB_Expression,
+				PreboxedConstants.SByte_CC_Expression,
+				PreboxedConstants.SByte_CD_Expression,
+				PreboxedConstants.SByte_CE_Expression,
+				PreboxedConstants.SByte_CF_Expression,
+				PreboxedConstants.SByte_D0_Expression,
+				PreboxedConstants.SByte_D1_Expression,
+				PreboxedConstants.SByte_D2_Expression,
+				PreboxedConstants.SByte_D3_Expression,
+				PreboxedConstants.SByte_D4_Expression,
+				PreboxedConstants.SByte_D5_Expression,
+				PreboxedConstants.SByte_D6_Expression,
+				PreboxedConstants.SByte_D7_Expression,
+				PreboxedConstants.SByte_D8_Expression,
+				PreboxedConstants.SByte_D9_Expression,
+				PreboxedConstants.SByte_DA_Expression,
+				PreboxedConstants.SByte_DB_Expression,
+				PreboxedConstants.SByte_DC_Expression,
+				PreboxedConstants.SByte_DD_Expression,
+				PreboxedConstants.SByte_DE_Expression,
+				PreboxedConstants.SByte_DF_Expression,
+				PreboxedConstants.SByte_E0_Expression,
+				PreboxedConstants.SByte_E1_Expression,
+				PreboxedConstants.SByte_E2_Expression,
+				PreboxedConstants.SByte_E3_Expression,
+				PreboxedConstants.SByte_E4_Expression,
+				PreboxedConstants.SByte_E5_Expression,
+				PreboxedConstants.SByte_E6_Expression,
+				PreboxedConstants.SByte_E7_Expression,
+				PreboxedConstants.SByte_E8_Expression,
+				PreboxedConstants.SByte_E9_Expression,
+				PreboxedConstants.SByte_EA_Expression,
+				PreboxedConstants.SByte_EB_Expression,
+				PreboxedConstants.SByte_EC_Expression,
+				PreboxedConstants.SByte_ED_Expression,
+				PreboxedConstants.SByte_EE_Expression,
+				PreboxedConstants.SByte_EF_Expression,
+				PreboxedConstants.SByte_F0_Expression,
+				PreboxedConstants.SByte_F1_Expression,
+				PreboxedConstants.SByte_F2_Expression,
+				PreboxedConstants.SByte_F3_Expression,
+				PreboxedConstants.SByte_F4_Expression,
+				PreboxedConstants.SByte_F5_Expression,
+				PreboxedConstants.SByte_F6_Expression,
+				PreboxedConstants.SByte_F7_Expression,
+				PreboxedConstants.SByte_F8_Expression,
+				PreboxedConstants.SByte_F9_Expression,
+				PreboxedConstants.SByte_FA_Expression,
+				PreboxedConstants.SByte_FB_Expression,
+				PreboxedConstants.SByte_FC_Expression,
+				PreboxedConstants.SByte_FD_Expression,
+				PreboxedConstants.SByte_FE_Expression,
+				PreboxedConstants.SByte_FF_Expression,
+				PreboxedConstants.SByte_00_Expression,
+				PreboxedConstants.SByte_01_Expression,
+				PreboxedConstants.SByte_02_Expression,
+				PreboxedConstants.SByte_03_Expression,
+				PreboxedConstants.SByte_04_Expression,
+				PreboxedConstants.SByte_05_Expression,
+				PreboxedConstants.SByte_06_Expression,
+				PreboxedConstants.SByte_07_Expression,
+				PreboxedConstants.SByte_08_Expression,
+				PreboxedConstants.SByte_09_Expression,
+				PreboxedConstants.SByte_0A_Expression,
+				PreboxedConstants.SByte_0B_Expression,
+				PreboxedConstants.SByte_0C_Expression,
+				PreboxedConstants.SByte_0D_Expression,
+				PreboxedConstants.SByte_0E_Expression,
+				PreboxedConstants.SByte_0F_Expression,
+				PreboxedConstants.SByte_10_Expression,
+				PreboxedConstants.SByte_11_Expression,
+				PreboxedConstants.SByte_12_Expression,
+				PreboxedConstants.SByte_13_Expression,
+				PreboxedConstants.SByte_14_Expression,
+				PreboxedConstants.SByte_15_Expression,
+				PreboxedConstants.SByte_16_Expression,
+				PreboxedConstants.SByte_17_Expression,
+				PreboxedConstants.SByte_18_Expression,
+				PreboxedConstants.SByte_19_Expression,
+				PreboxedConstants.SByte_1A_Expression,
+				PreboxedConstants.SByte_1B_Expression,
+				PreboxedConstants.SByte_1C_Expression,
+				PreboxedConstants.SByte_1D_Expression,
+				PreboxedConstants.SByte_1E_Expression,
+				PreboxedConstants.SByte_1F_Expression,
+				PreboxedConstants.SByte_20_Expression,
+				PreboxedConstants.SByte_21_Expression,
+				PreboxedConstants.SByte_22_Expression,
+				PreboxedConstants.SByte_23_Expression,
+				PreboxedConstants.SByte_24_Expression,
+				PreboxedConstants.SByte_25_Expression,
+				PreboxedConstants.SByte_26_Expression,
+				PreboxedConstants.SByte_27_Expression,
+				PreboxedConstants.SByte_28_Expression,
+				PreboxedConstants.SByte_29_Expression,
+				PreboxedConstants.SByte_2A_Expression,
+				PreboxedConstants.SByte_2B_Expression,
+				PreboxedConstants.SByte_2C_Expression,
+				PreboxedConstants.SByte_2D_Expression,
+				PreboxedConstants.SByte_2E_Expression,
+				PreboxedConstants.SByte_2F_Expression,
+				PreboxedConstants.SByte_30_Expression,
+				PreboxedConstants.SByte_31_Expression,
+				PreboxedConstants.SByte_32_Expression,
+				PreboxedConstants.SByte_33_Expression,
+				PreboxedConstants.SByte_34_Expression,
+				PreboxedConstants.SByte_35_Expression,
+				PreboxedConstants.SByte_36_Expression,
+				PreboxedConstants.SByte_37_Expression,
+				PreboxedConstants.SByte_38_Expression,
+				PreboxedConstants.SByte_39_Expression,
+				PreboxedConstants.SByte_3A_Expression,
+				PreboxedConstants.SByte_3B_Expression,
+				PreboxedConstants.SByte_3C_Expression,
+				PreboxedConstants.SByte_3D_Expression,
+				PreboxedConstants.SByte_3E_Expression,
+				PreboxedConstants.SByte_3F_Expression,
+				PreboxedConstants.SByte_40_Expression,
+				PreboxedConstants.SByte_41_Expression,
+				PreboxedConstants.SByte_42_Expression,
+				PreboxedConstants.SByte_43_Expression,
+				PreboxedConstants.SByte_44_Expression,
+				PreboxedConstants.SByte_45_Expression,
+				PreboxedConstants.SByte_46_Expression,
+				PreboxedConstants.SByte_47_Expression,
+				PreboxedConstants.SByte_48_Expression,
+				PreboxedConstants.SByte_49_Expression,
+				PreboxedConstants.SByte_4A_Expression,
+				PreboxedConstants.SByte_4B_Expression,
+				PreboxedConstants.SByte_4C_Expression,
+				PreboxedConstants.SByte_4D_Expression,
+				PreboxedConstants.SByte_4E_Expression,
+				PreboxedConstants.SByte_4F_Expression,
+				PreboxedConstants.SByte_50_Expression,
+				PreboxedConstants.SByte_51_Expression,
+				PreboxedConstants.SByte_52_Expression,
+				PreboxedConstants.SByte_53_Expression,
+				PreboxedConstants.SByte_54_Expression,
+				PreboxedConstants.SByte_55_Expression,
+				PreboxedConstants.SByte_56_Expression,
+				PreboxedConstants.SByte_57_Expression,
+				PreboxedConstants.SByte_58_Expression,
+				PreboxedConstants.SByte_59_Expression,
+				PreboxedConstants.SByte_5A_Expression,
+				PreboxedConstants.SByte_5B_Expression,
+				PreboxedConstants.SByte_5C_Expression,
+				PreboxedConstants.SByte_5D_Expression,
+				PreboxedConstants.SByte_5E_Expression,
+				PreboxedConstants.SByte_5F_Expression,
+				PreboxedConstants.SByte_60_Expression,
+				PreboxedConstants.SByte_61_Expression,
+				PreboxedConstants.SByte_62_Expression,
+				PreboxedConstants.SByte_63_Expression,
+				PreboxedConstants.SByte_64_Expression,
+				PreboxedConstants.SByte_65_Expression,
+				PreboxedConstants.SByte_66_Expression,
+				PreboxedConstants.SByte_67_Expression,
+				PreboxedConstants.SByte_68_Expression,
+				PreboxedConstants.SByte_69_Expression,
+				PreboxedConstants.SByte_6A_Expression,
+				PreboxedConstants.SByte_6B_Expression,
+				PreboxedConstants.SByte_6C_Expression,
+				PreboxedConstants.SByte_6D_Expression,
+				PreboxedConstants.SByte_6E_Expression,
+				PreboxedConstants.SByte_6F_Expression,
+				PreboxedConstants.SByte_70_Expression,
+				PreboxedConstants.SByte_71_Expression,
+				PreboxedConstants.SByte_72_Expression,
+				PreboxedConstants.SByte_73_Expression,
+				PreboxedConstants.SByte_74_Expression,
+				PreboxedConstants.SByte_75_Expression,
+				PreboxedConstants.SByte_76_Expression,
+				PreboxedConstants.SByte_77_Expression,
+				PreboxedConstants.SByte_78_Expression,
+				PreboxedConstants.SByte_79_Expression,
+				PreboxedConstants.SByte_7A_Expression,
+				PreboxedConstants.SByte_7B_Expression,
+				PreboxedConstants.SByte_7C_Expression,
+				PreboxedConstants.SByte_7D_Expression,
+				PreboxedConstants.SByte_7E_Expression,
+				PreboxedConstants.SByte_7F_Expression
+            };
+        }
+
+        /// <summary>
+        /// A singleton boxed sbyte -128 (0x80).
+        /// </summary>
+        public static readonly object SByte_80 = (sbyte)-128;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -128 (0x80).
+        /// </summary>
+        public static readonly Expression SByte_80_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_80");
+        /// <summary>
+        /// A singleton boxed sbyte -127 (0x81).
+        /// </summary>
+        public static readonly object SByte_81 = (sbyte)-127;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -127 (0x81).
+        /// </summary>
+        public static readonly Expression SByte_81_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_81");
+        /// <summary>
+        /// A singleton boxed sbyte -126 (0x82).
+        /// </summary>
+        public static readonly object SByte_82 = (sbyte)-126;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -126 (0x82).
+        /// </summary>
+        public static readonly Expression SByte_82_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_82");
+        /// <summary>
+        /// A singleton boxed sbyte -125 (0x83).
+        /// </summary>
+        public static readonly object SByte_83 = (sbyte)-125;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -125 (0x83).
+        /// </summary>
+        public static readonly Expression SByte_83_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_83");
+        /// <summary>
+        /// A singleton boxed sbyte -124 (0x84).
+        /// </summary>
+        public static readonly object SByte_84 = (sbyte)-124;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -124 (0x84).
+        /// </summary>
+        public static readonly Expression SByte_84_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_84");
+        /// <summary>
+        /// A singleton boxed sbyte -123 (0x85).
+        /// </summary>
+        public static readonly object SByte_85 = (sbyte)-123;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -123 (0x85).
+        /// </summary>
+        public static readonly Expression SByte_85_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_85");
+        /// <summary>
+        /// A singleton boxed sbyte -122 (0x86).
+        /// </summary>
+        public static readonly object SByte_86 = (sbyte)-122;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -122 (0x86).
+        /// </summary>
+        public static readonly Expression SByte_86_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_86");
+        /// <summary>
+        /// A singleton boxed sbyte -121 (0x87).
+        /// </summary>
+        public static readonly object SByte_87 = (sbyte)-121;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -121 (0x87).
+        /// </summary>
+        public static readonly Expression SByte_87_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_87");
+        /// <summary>
+        /// A singleton boxed sbyte -120 (0x88).
+        /// </summary>
+        public static readonly object SByte_88 = (sbyte)-120;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -120 (0x88).
+        /// </summary>
+        public static readonly Expression SByte_88_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_88");
+        /// <summary>
+        /// A singleton boxed sbyte -119 (0x89).
+        /// </summary>
+        public static readonly object SByte_89 = (sbyte)-119;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -119 (0x89).
+        /// </summary>
+        public static readonly Expression SByte_89_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_89");
+        /// <summary>
+        /// A singleton boxed sbyte -118 (0x8A).
+        /// </summary>
+        public static readonly object SByte_8A = (sbyte)-118;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -118 (0x8A).
+        /// </summary>
+        public static readonly Expression SByte_8A_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_8A");
+        /// <summary>
+        /// A singleton boxed sbyte -117 (0x8B).
+        /// </summary>
+        public static readonly object SByte_8B = (sbyte)-117;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -117 (0x8B).
+        /// </summary>
+        public static readonly Expression SByte_8B_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_8B");
+        /// <summary>
+        /// A singleton boxed sbyte -116 (0x8C).
+        /// </summary>
+        public static readonly object SByte_8C = (sbyte)-116;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -116 (0x8C).
+        /// </summary>
+        public static readonly Expression SByte_8C_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_8C");
+        /// <summary>
+        /// A singleton boxed sbyte -115 (0x8D).
+        /// </summary>
+        public static readonly object SByte_8D = (sbyte)-115;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -115 (0x8D).
+        /// </summary>
+        public static readonly Expression SByte_8D_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_8D");
+        /// <summary>
+        /// A singleton boxed sbyte -114 (0x8E).
+        /// </summary>
+        public static readonly object SByte_8E = (sbyte)-114;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -114 (0x8E).
+        /// </summary>
+        public static readonly Expression SByte_8E_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_8E");
+        /// <summary>
+        /// A singleton boxed sbyte -113 (0x8F).
+        /// </summary>
+        public static readonly object SByte_8F = (sbyte)-113;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -113 (0x8F).
+        /// </summary>
+        public static readonly Expression SByte_8F_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_8F");
+        /// <summary>
+        /// A singleton boxed sbyte -112 (0x90).
+        /// </summary>
+        public static readonly object SByte_90 = (sbyte)-112;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -112 (0x90).
+        /// </summary>
+        public static readonly Expression SByte_90_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_90");
+        /// <summary>
+        /// A singleton boxed sbyte -111 (0x91).
+        /// </summary>
+        public static readonly object SByte_91 = (sbyte)-111;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -111 (0x91).
+        /// </summary>
+        public static readonly Expression SByte_91_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_91");
+        /// <summary>
+        /// A singleton boxed sbyte -110 (0x92).
+        /// </summary>
+        public static readonly object SByte_92 = (sbyte)-110;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -110 (0x92).
+        /// </summary>
+        public static readonly Expression SByte_92_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_92");
+        /// <summary>
+        /// A singleton boxed sbyte -109 (0x93).
+        /// </summary>
+        public static readonly object SByte_93 = (sbyte)-109;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -109 (0x93).
+        /// </summary>
+        public static readonly Expression SByte_93_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_93");
+        /// <summary>
+        /// A singleton boxed sbyte -108 (0x94).
+        /// </summary>
+        public static readonly object SByte_94 = (sbyte)-108;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -108 (0x94).
+        /// </summary>
+        public static readonly Expression SByte_94_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_94");
+        /// <summary>
+        /// A singleton boxed sbyte -107 (0x95).
+        /// </summary>
+        public static readonly object SByte_95 = (sbyte)-107;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -107 (0x95).
+        /// </summary>
+        public static readonly Expression SByte_95_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_95");
+        /// <summary>
+        /// A singleton boxed sbyte -106 (0x96).
+        /// </summary>
+        public static readonly object SByte_96 = (sbyte)-106;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -106 (0x96).
+        /// </summary>
+        public static readonly Expression SByte_96_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_96");
+        /// <summary>
+        /// A singleton boxed sbyte -105 (0x97).
+        /// </summary>
+        public static readonly object SByte_97 = (sbyte)-105;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -105 (0x97).
+        /// </summary>
+        public static readonly Expression SByte_97_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_97");
+        /// <summary>
+        /// A singleton boxed sbyte -104 (0x98).
+        /// </summary>
+        public static readonly object SByte_98 = (sbyte)-104;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -104 (0x98).
+        /// </summary>
+        public static readonly Expression SByte_98_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_98");
+        /// <summary>
+        /// A singleton boxed sbyte -103 (0x99).
+        /// </summary>
+        public static readonly object SByte_99 = (sbyte)-103;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -103 (0x99).
+        /// </summary>
+        public static readonly Expression SByte_99_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_99");
+        /// <summary>
+        /// A singleton boxed sbyte -102 (0x9A).
+        /// </summary>
+        public static readonly object SByte_9A = (sbyte)-102;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -102 (0x9A).
+        /// </summary>
+        public static readonly Expression SByte_9A_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_9A");
+        /// <summary>
+        /// A singleton boxed sbyte -101 (0x9B).
+        /// </summary>
+        public static readonly object SByte_9B = (sbyte)-101;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -101 (0x9B).
+        /// </summary>
+        public static readonly Expression SByte_9B_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_9B");
+        /// <summary>
+        /// A singleton boxed sbyte -100 (0x9C).
+        /// </summary>
+        public static readonly object SByte_9C = (sbyte)-100;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -100 (0x9C).
+        /// </summary>
+        public static readonly Expression SByte_9C_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_9C");
+        /// <summary>
+        /// A singleton boxed sbyte -99 (0x9D).
+        /// </summary>
+        public static readonly object SByte_9D = (sbyte)-99;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -99 (0x9D).
+        /// </summary>
+        public static readonly Expression SByte_9D_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_9D");
+        /// <summary>
+        /// A singleton boxed sbyte -98 (0x9E).
+        /// </summary>
+        public static readonly object SByte_9E = (sbyte)-98;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -98 (0x9E).
+        /// </summary>
+        public static readonly Expression SByte_9E_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_9E");
+        /// <summary>
+        /// A singleton boxed sbyte -97 (0x9F).
+        /// </summary>
+        public static readonly object SByte_9F = (sbyte)-97;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -97 (0x9F).
+        /// </summary>
+        public static readonly Expression SByte_9F_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_9F");
+        /// <summary>
+        /// A singleton boxed sbyte -96 (0xA0).
+        /// </summary>
+        public static readonly object SByte_A0 = (sbyte)-96;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -96 (0xA0).
+        /// </summary>
+        public static readonly Expression SByte_A0_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_A0");
+        /// <summary>
+        /// A singleton boxed sbyte -95 (0xA1).
+        /// </summary>
+        public static readonly object SByte_A1 = (sbyte)-95;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -95 (0xA1).
+        /// </summary>
+        public static readonly Expression SByte_A1_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_A1");
+        /// <summary>
+        /// A singleton boxed sbyte -94 (0xA2).
+        /// </summary>
+        public static readonly object SByte_A2 = (sbyte)-94;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -94 (0xA2).
+        /// </summary>
+        public static readonly Expression SByte_A2_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_A2");
+        /// <summary>
+        /// A singleton boxed sbyte -93 (0xA3).
+        /// </summary>
+        public static readonly object SByte_A3 = (sbyte)-93;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -93 (0xA3).
+        /// </summary>
+        public static readonly Expression SByte_A3_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_A3");
+        /// <summary>
+        /// A singleton boxed sbyte -92 (0xA4).
+        /// </summary>
+        public static readonly object SByte_A4 = (sbyte)-92;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -92 (0xA4).
+        /// </summary>
+        public static readonly Expression SByte_A4_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_A4");
+        /// <summary>
+        /// A singleton boxed sbyte -91 (0xA5).
+        /// </summary>
+        public static readonly object SByte_A5 = (sbyte)-91;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -91 (0xA5).
+        /// </summary>
+        public static readonly Expression SByte_A5_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_A5");
+        /// <summary>
+        /// A singleton boxed sbyte -90 (0xA6).
+        /// </summary>
+        public static readonly object SByte_A6 = (sbyte)-90;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -90 (0xA6).
+        /// </summary>
+        public static readonly Expression SByte_A6_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_A6");
+        /// <summary>
+        /// A singleton boxed sbyte -89 (0xA7).
+        /// </summary>
+        public static readonly object SByte_A7 = (sbyte)-89;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -89 (0xA7).
+        /// </summary>
+        public static readonly Expression SByte_A7_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_A7");
+        /// <summary>
+        /// A singleton boxed sbyte -88 (0xA8).
+        /// </summary>
+        public static readonly object SByte_A8 = (sbyte)-88;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -88 (0xA8).
+        /// </summary>
+        public static readonly Expression SByte_A8_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_A8");
+        /// <summary>
+        /// A singleton boxed sbyte -87 (0xA9).
+        /// </summary>
+        public static readonly object SByte_A9 = (sbyte)-87;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -87 (0xA9).
+        /// </summary>
+        public static readonly Expression SByte_A9_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_A9");
+        /// <summary>
+        /// A singleton boxed sbyte -86 (0xAA).
+        /// </summary>
+        public static readonly object SByte_AA = (sbyte)-86;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -86 (0xAA).
+        /// </summary>
+        public static readonly Expression SByte_AA_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_AA");
+        /// <summary>
+        /// A singleton boxed sbyte -85 (0xAB).
+        /// </summary>
+        public static readonly object SByte_AB = (sbyte)-85;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -85 (0xAB).
+        /// </summary>
+        public static readonly Expression SByte_AB_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_AB");
+        /// <summary>
+        /// A singleton boxed sbyte -84 (0xAC).
+        /// </summary>
+        public static readonly object SByte_AC = (sbyte)-84;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -84 (0xAC).
+        /// </summary>
+        public static readonly Expression SByte_AC_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_AC");
+        /// <summary>
+        /// A singleton boxed sbyte -83 (0xAD).
+        /// </summary>
+        public static readonly object SByte_AD = (sbyte)-83;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -83 (0xAD).
+        /// </summary>
+        public static readonly Expression SByte_AD_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_AD");
+        /// <summary>
+        /// A singleton boxed sbyte -82 (0xAE).
+        /// </summary>
+        public static readonly object SByte_AE = (sbyte)-82;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -82 (0xAE).
+        /// </summary>
+        public static readonly Expression SByte_AE_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_AE");
+        /// <summary>
+        /// A singleton boxed sbyte -81 (0xAF).
+        /// </summary>
+        public static readonly object SByte_AF = (sbyte)-81;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -81 (0xAF).
+        /// </summary>
+        public static readonly Expression SByte_AF_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_AF");
+        /// <summary>
+        /// A singleton boxed sbyte -80 (0xB0).
+        /// </summary>
+        public static readonly object SByte_B0 = (sbyte)-80;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -80 (0xB0).
+        /// </summary>
+        public static readonly Expression SByte_B0_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_B0");
+        /// <summary>
+        /// A singleton boxed sbyte -79 (0xB1).
+        /// </summary>
+        public static readonly object SByte_B1 = (sbyte)-79;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -79 (0xB1).
+        /// </summary>
+        public static readonly Expression SByte_B1_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_B1");
+        /// <summary>
+        /// A singleton boxed sbyte -78 (0xB2).
+        /// </summary>
+        public static readonly object SByte_B2 = (sbyte)-78;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -78 (0xB2).
+        /// </summary>
+        public static readonly Expression SByte_B2_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_B2");
+        /// <summary>
+        /// A singleton boxed sbyte -77 (0xB3).
+        /// </summary>
+        public static readonly object SByte_B3 = (sbyte)-77;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -77 (0xB3).
+        /// </summary>
+        public static readonly Expression SByte_B3_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_B3");
+        /// <summary>
+        /// A singleton boxed sbyte -76 (0xB4).
+        /// </summary>
+        public static readonly object SByte_B4 = (sbyte)-76;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -76 (0xB4).
+        /// </summary>
+        public static readonly Expression SByte_B4_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_B4");
+        /// <summary>
+        /// A singleton boxed sbyte -75 (0xB5).
+        /// </summary>
+        public static readonly object SByte_B5 = (sbyte)-75;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -75 (0xB5).
+        /// </summary>
+        public static readonly Expression SByte_B5_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_B5");
+        /// <summary>
+        /// A singleton boxed sbyte -74 (0xB6).
+        /// </summary>
+        public static readonly object SByte_B6 = (sbyte)-74;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -74 (0xB6).
+        /// </summary>
+        public static readonly Expression SByte_B6_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_B6");
+        /// <summary>
+        /// A singleton boxed sbyte -73 (0xB7).
+        /// </summary>
+        public static readonly object SByte_B7 = (sbyte)-73;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -73 (0xB7).
+        /// </summary>
+        public static readonly Expression SByte_B7_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_B7");
+        /// <summary>
+        /// A singleton boxed sbyte -72 (0xB8).
+        /// </summary>
+        public static readonly object SByte_B8 = (sbyte)-72;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -72 (0xB8).
+        /// </summary>
+        public static readonly Expression SByte_B8_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_B8");
+        /// <summary>
+        /// A singleton boxed sbyte -71 (0xB9).
+        /// </summary>
+        public static readonly object SByte_B9 = (sbyte)-71;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -71 (0xB9).
+        /// </summary>
+        public static readonly Expression SByte_B9_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_B9");
+        /// <summary>
+        /// A singleton boxed sbyte -70 (0xBA).
+        /// </summary>
+        public static readonly object SByte_BA = (sbyte)-70;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -70 (0xBA).
+        /// </summary>
+        public static readonly Expression SByte_BA_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_BA");
+        /// <summary>
+        /// A singleton boxed sbyte -69 (0xBB).
+        /// </summary>
+        public static readonly object SByte_BB = (sbyte)-69;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -69 (0xBB).
+        /// </summary>
+        public static readonly Expression SByte_BB_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_BB");
+        /// <summary>
+        /// A singleton boxed sbyte -68 (0xBC).
+        /// </summary>
+        public static readonly object SByte_BC = (sbyte)-68;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -68 (0xBC).
+        /// </summary>
+        public static readonly Expression SByte_BC_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_BC");
+        /// <summary>
+        /// A singleton boxed sbyte -67 (0xBD).
+        /// </summary>
+        public static readonly object SByte_BD = (sbyte)-67;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -67 (0xBD).
+        /// </summary>
+        public static readonly Expression SByte_BD_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_BD");
+        /// <summary>
+        /// A singleton boxed sbyte -66 (0xBE).
+        /// </summary>
+        public static readonly object SByte_BE = (sbyte)-66;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -66 (0xBE).
+        /// </summary>
+        public static readonly Expression SByte_BE_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_BE");
+        /// <summary>
+        /// A singleton boxed sbyte -65 (0xBF).
+        /// </summary>
+        public static readonly object SByte_BF = (sbyte)-65;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -65 (0xBF).
+        /// </summary>
+        public static readonly Expression SByte_BF_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_BF");
+        /// <summary>
+        /// A singleton boxed sbyte -64 (0xC0).
+        /// </summary>
+        public static readonly object SByte_C0 = (sbyte)-64;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -64 (0xC0).
+        /// </summary>
+        public static readonly Expression SByte_C0_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_C0");
+        /// <summary>
+        /// A singleton boxed sbyte -63 (0xC1).
+        /// </summary>
+        public static readonly object SByte_C1 = (sbyte)-63;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -63 (0xC1).
+        /// </summary>
+        public static readonly Expression SByte_C1_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_C1");
+        /// <summary>
+        /// A singleton boxed sbyte -62 (0xC2).
+        /// </summary>
+        public static readonly object SByte_C2 = (sbyte)-62;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -62 (0xC2).
+        /// </summary>
+        public static readonly Expression SByte_C2_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_C2");
+        /// <summary>
+        /// A singleton boxed sbyte -61 (0xC3).
+        /// </summary>
+        public static readonly object SByte_C3 = (sbyte)-61;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -61 (0xC3).
+        /// </summary>
+        public static readonly Expression SByte_C3_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_C3");
+        /// <summary>
+        /// A singleton boxed sbyte -60 (0xC4).
+        /// </summary>
+        public static readonly object SByte_C4 = (sbyte)-60;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -60 (0xC4).
+        /// </summary>
+        public static readonly Expression SByte_C4_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_C4");
+        /// <summary>
+        /// A singleton boxed sbyte -59 (0xC5).
+        /// </summary>
+        public static readonly object SByte_C5 = (sbyte)-59;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -59 (0xC5).
+        /// </summary>
+        public static readonly Expression SByte_C5_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_C5");
+        /// <summary>
+        /// A singleton boxed sbyte -58 (0xC6).
+        /// </summary>
+        public static readonly object SByte_C6 = (sbyte)-58;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -58 (0xC6).
+        /// </summary>
+        public static readonly Expression SByte_C6_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_C6");
+        /// <summary>
+        /// A singleton boxed sbyte -57 (0xC7).
+        /// </summary>
+        public static readonly object SByte_C7 = (sbyte)-57;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -57 (0xC7).
+        /// </summary>
+        public static readonly Expression SByte_C7_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_C7");
+        /// <summary>
+        /// A singleton boxed sbyte -56 (0xC8).
+        /// </summary>
+        public static readonly object SByte_C8 = (sbyte)-56;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -56 (0xC8).
+        /// </summary>
+        public static readonly Expression SByte_C8_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_C8");
+        /// <summary>
+        /// A singleton boxed sbyte -55 (0xC9).
+        /// </summary>
+        public static readonly object SByte_C9 = (sbyte)-55;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -55 (0xC9).
+        /// </summary>
+        public static readonly Expression SByte_C9_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_C9");
+        /// <summary>
+        /// A singleton boxed sbyte -54 (0xCA).
+        /// </summary>
+        public static readonly object SByte_CA = (sbyte)-54;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -54 (0xCA).
+        /// </summary>
+        public static readonly Expression SByte_CA_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_CA");
+        /// <summary>
+        /// A singleton boxed sbyte -53 (0xCB).
+        /// </summary>
+        public static readonly object SByte_CB = (sbyte)-53;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -53 (0xCB).
+        /// </summary>
+        public static readonly Expression SByte_CB_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_CB");
+        /// <summary>
+        /// A singleton boxed sbyte -52 (0xCC).
+        /// </summary>
+        public static readonly object SByte_CC = (sbyte)-52;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -52 (0xCC).
+        /// </summary>
+        public static readonly Expression SByte_CC_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_CC");
+        /// <summary>
+        /// A singleton boxed sbyte -51 (0xCD).
+        /// </summary>
+        public static readonly object SByte_CD = (sbyte)-51;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -51 (0xCD).
+        /// </summary>
+        public static readonly Expression SByte_CD_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_CD");
+        /// <summary>
+        /// A singleton boxed sbyte -50 (0xCE).
+        /// </summary>
+        public static readonly object SByte_CE = (sbyte)-50;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -50 (0xCE).
+        /// </summary>
+        public static readonly Expression SByte_CE_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_CE");
+        /// <summary>
+        /// A singleton boxed sbyte -49 (0xCF).
+        /// </summary>
+        public static readonly object SByte_CF = (sbyte)-49;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -49 (0xCF).
+        /// </summary>
+        public static readonly Expression SByte_CF_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_CF");
+        /// <summary>
+        /// A singleton boxed sbyte -48 (0xD0).
+        /// </summary>
+        public static readonly object SByte_D0 = (sbyte)-48;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -48 (0xD0).
+        /// </summary>
+        public static readonly Expression SByte_D0_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_D0");
+        /// <summary>
+        /// A singleton boxed sbyte -47 (0xD1).
+        /// </summary>
+        public static readonly object SByte_D1 = (sbyte)-47;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -47 (0xD1).
+        /// </summary>
+        public static readonly Expression SByte_D1_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_D1");
+        /// <summary>
+        /// A singleton boxed sbyte -46 (0xD2).
+        /// </summary>
+        public static readonly object SByte_D2 = (sbyte)-46;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -46 (0xD2).
+        /// </summary>
+        public static readonly Expression SByte_D2_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_D2");
+        /// <summary>
+        /// A singleton boxed sbyte -45 (0xD3).
+        /// </summary>
+        public static readonly object SByte_D3 = (sbyte)-45;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -45 (0xD3).
+        /// </summary>
+        public static readonly Expression SByte_D3_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_D3");
+        /// <summary>
+        /// A singleton boxed sbyte -44 (0xD4).
+        /// </summary>
+        public static readonly object SByte_D4 = (sbyte)-44;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -44 (0xD4).
+        /// </summary>
+        public static readonly Expression SByte_D4_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_D4");
+        /// <summary>
+        /// A singleton boxed sbyte -43 (0xD5).
+        /// </summary>
+        public static readonly object SByte_D5 = (sbyte)-43;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -43 (0xD5).
+        /// </summary>
+        public static readonly Expression SByte_D5_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_D5");
+        /// <summary>
+        /// A singleton boxed sbyte -42 (0xD6).
+        /// </summary>
+        public static readonly object SByte_D6 = (sbyte)-42;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -42 (0xD6).
+        /// </summary>
+        public static readonly Expression SByte_D6_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_D6");
+        /// <summary>
+        /// A singleton boxed sbyte -41 (0xD7).
+        /// </summary>
+        public static readonly object SByte_D7 = (sbyte)-41;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -41 (0xD7).
+        /// </summary>
+        public static readonly Expression SByte_D7_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_D7");
+        /// <summary>
+        /// A singleton boxed sbyte -40 (0xD8).
+        /// </summary>
+        public static readonly object SByte_D8 = (sbyte)-40;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -40 (0xD8).
+        /// </summary>
+        public static readonly Expression SByte_D8_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_D8");
+        /// <summary>
+        /// A singleton boxed sbyte -39 (0xD9).
+        /// </summary>
+        public static readonly object SByte_D9 = (sbyte)-39;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -39 (0xD9).
+        /// </summary>
+        public static readonly Expression SByte_D9_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_D9");
+        /// <summary>
+        /// A singleton boxed sbyte -38 (0xDA).
+        /// </summary>
+        public static readonly object SByte_DA = (sbyte)-38;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -38 (0xDA).
+        /// </summary>
+        public static readonly Expression SByte_DA_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_DA");
+        /// <summary>
+        /// A singleton boxed sbyte -37 (0xDB).
+        /// </summary>
+        public static readonly object SByte_DB = (sbyte)-37;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -37 (0xDB).
+        /// </summary>
+        public static readonly Expression SByte_DB_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_DB");
+        /// <summary>
+        /// A singleton boxed sbyte -36 (0xDC).
+        /// </summary>
+        public static readonly object SByte_DC = (sbyte)-36;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -36 (0xDC).
+        /// </summary>
+        public static readonly Expression SByte_DC_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_DC");
+        /// <summary>
+        /// A singleton boxed sbyte -35 (0xDD).
+        /// </summary>
+        public static readonly object SByte_DD = (sbyte)-35;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -35 (0xDD).
+        /// </summary>
+        public static readonly Expression SByte_DD_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_DD");
+        /// <summary>
+        /// A singleton boxed sbyte -34 (0xDE).
+        /// </summary>
+        public static readonly object SByte_DE = (sbyte)-34;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -34 (0xDE).
+        /// </summary>
+        public static readonly Expression SByte_DE_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_DE");
+        /// <summary>
+        /// A singleton boxed sbyte -33 (0xDF).
+        /// </summary>
+        public static readonly object SByte_DF = (sbyte)-33;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -33 (0xDF).
+        /// </summary>
+        public static readonly Expression SByte_DF_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_DF");
+        /// <summary>
+        /// A singleton boxed sbyte -32 (0xE0).
+        /// </summary>
+        public static readonly object SByte_E0 = (sbyte)-32;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -32 (0xE0).
+        /// </summary>
+        public static readonly Expression SByte_E0_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_E0");
+        /// <summary>
+        /// A singleton boxed sbyte -31 (0xE1).
+        /// </summary>
+        public static readonly object SByte_E1 = (sbyte)-31;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -31 (0xE1).
+        /// </summary>
+        public static readonly Expression SByte_E1_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_E1");
+        /// <summary>
+        /// A singleton boxed sbyte -30 (0xE2).
+        /// </summary>
+        public static readonly object SByte_E2 = (sbyte)-30;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -30 (0xE2).
+        /// </summary>
+        public static readonly Expression SByte_E2_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_E2");
+        /// <summary>
+        /// A singleton boxed sbyte -29 (0xE3).
+        /// </summary>
+        public static readonly object SByte_E3 = (sbyte)-29;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -29 (0xE3).
+        /// </summary>
+        public static readonly Expression SByte_E3_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_E3");
+        /// <summary>
+        /// A singleton boxed sbyte -28 (0xE4).
+        /// </summary>
+        public static readonly object SByte_E4 = (sbyte)-28;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -28 (0xE4).
+        /// </summary>
+        public static readonly Expression SByte_E4_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_E4");
+        /// <summary>
+        /// A singleton boxed sbyte -27 (0xE5).
+        /// </summary>
+        public static readonly object SByte_E5 = (sbyte)-27;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -27 (0xE5).
+        /// </summary>
+        public static readonly Expression SByte_E5_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_E5");
+        /// <summary>
+        /// A singleton boxed sbyte -26 (0xE6).
+        /// </summary>
+        public static readonly object SByte_E6 = (sbyte)-26;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -26 (0xE6).
+        /// </summary>
+        public static readonly Expression SByte_E6_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_E6");
+        /// <summary>
+        /// A singleton boxed sbyte -25 (0xE7).
+        /// </summary>
+        public static readonly object SByte_E7 = (sbyte)-25;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -25 (0xE7).
+        /// </summary>
+        public static readonly Expression SByte_E7_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_E7");
+        /// <summary>
+        /// A singleton boxed sbyte -24 (0xE8).
+        /// </summary>
+        public static readonly object SByte_E8 = (sbyte)-24;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -24 (0xE8).
+        /// </summary>
+        public static readonly Expression SByte_E8_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_E8");
+        /// <summary>
+        /// A singleton boxed sbyte -23 (0xE9).
+        /// </summary>
+        public static readonly object SByte_E9 = (sbyte)-23;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -23 (0xE9).
+        /// </summary>
+        public static readonly Expression SByte_E9_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_E9");
+        /// <summary>
+        /// A singleton boxed sbyte -22 (0xEA).
+        /// </summary>
+        public static readonly object SByte_EA = (sbyte)-22;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -22 (0xEA).
+        /// </summary>
+        public static readonly Expression SByte_EA_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_EA");
+        /// <summary>
+        /// A singleton boxed sbyte -21 (0xEB).
+        /// </summary>
+        public static readonly object SByte_EB = (sbyte)-21;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -21 (0xEB).
+        /// </summary>
+        public static readonly Expression SByte_EB_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_EB");
+        /// <summary>
+        /// A singleton boxed sbyte -20 (0xEC).
+        /// </summary>
+        public static readonly object SByte_EC = (sbyte)-20;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -20 (0xEC).
+        /// </summary>
+        public static readonly Expression SByte_EC_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_EC");
+        /// <summary>
+        /// A singleton boxed sbyte -19 (0xED).
+        /// </summary>
+        public static readonly object SByte_ED = (sbyte)-19;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -19 (0xED).
+        /// </summary>
+        public static readonly Expression SByte_ED_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_ED");
+        /// <summary>
+        /// A singleton boxed sbyte -18 (0xEE).
+        /// </summary>
+        public static readonly object SByte_EE = (sbyte)-18;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -18 (0xEE).
+        /// </summary>
+        public static readonly Expression SByte_EE_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_EE");
+        /// <summary>
+        /// A singleton boxed sbyte -17 (0xEF).
+        /// </summary>
+        public static readonly object SByte_EF = (sbyte)-17;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -17 (0xEF).
+        /// </summary>
+        public static readonly Expression SByte_EF_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_EF");
+        /// <summary>
+        /// A singleton boxed sbyte -16 (0xF0).
+        /// </summary>
+        public static readonly object SByte_F0 = (sbyte)-16;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -16 (0xF0).
+        /// </summary>
+        public static readonly Expression SByte_F0_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_F0");
+        /// <summary>
+        /// A singleton boxed sbyte -15 (0xF1).
+        /// </summary>
+        public static readonly object SByte_F1 = (sbyte)-15;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -15 (0xF1).
+        /// </summary>
+        public static readonly Expression SByte_F1_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_F1");
+        /// <summary>
+        /// A singleton boxed sbyte -14 (0xF2).
+        /// </summary>
+        public static readonly object SByte_F2 = (sbyte)-14;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -14 (0xF2).
+        /// </summary>
+        public static readonly Expression SByte_F2_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_F2");
+        /// <summary>
+        /// A singleton boxed sbyte -13 (0xF3).
+        /// </summary>
+        public static readonly object SByte_F3 = (sbyte)-13;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -13 (0xF3).
+        /// </summary>
+        public static readonly Expression SByte_F3_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_F3");
+        /// <summary>
+        /// A singleton boxed sbyte -12 (0xF4).
+        /// </summary>
+        public static readonly object SByte_F4 = (sbyte)-12;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -12 (0xF4).
+        /// </summary>
+        public static readonly Expression SByte_F4_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_F4");
+        /// <summary>
+        /// A singleton boxed sbyte -11 (0xF5).
+        /// </summary>
+        public static readonly object SByte_F5 = (sbyte)-11;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -11 (0xF5).
+        /// </summary>
+        public static readonly Expression SByte_F5_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_F5");
+        /// <summary>
+        /// A singleton boxed sbyte -10 (0xF6).
+        /// </summary>
+        public static readonly object SByte_F6 = (sbyte)-10;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -10 (0xF6).
+        /// </summary>
+        public static readonly Expression SByte_F6_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_F6");
+        /// <summary>
+        /// A singleton boxed sbyte -9 (0xF7).
+        /// </summary>
+        public static readonly object SByte_F7 = (sbyte)-9;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -9 (0xF7).
+        /// </summary>
+        public static readonly Expression SByte_F7_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_F7");
+        /// <summary>
+        /// A singleton boxed sbyte -8 (0xF8).
+        /// </summary>
+        public static readonly object SByte_F8 = (sbyte)-8;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -8 (0xF8).
+        /// </summary>
+        public static readonly Expression SByte_F8_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_F8");
+        /// <summary>
+        /// A singleton boxed sbyte -7 (0xF9).
+        /// </summary>
+        public static readonly object SByte_F9 = (sbyte)-7;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -7 (0xF9).
+        /// </summary>
+        public static readonly Expression SByte_F9_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_F9");
+        /// <summary>
+        /// A singleton boxed sbyte -6 (0xFA).
+        /// </summary>
+        public static readonly object SByte_FA = (sbyte)-6;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -6 (0xFA).
+        /// </summary>
+        public static readonly Expression SByte_FA_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_FA");
+        /// <summary>
+        /// A singleton boxed sbyte -5 (0xFB).
+        /// </summary>
+        public static readonly object SByte_FB = (sbyte)-5;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -5 (0xFB).
+        /// </summary>
+        public static readonly Expression SByte_FB_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_FB");
+        /// <summary>
+        /// A singleton boxed sbyte -4 (0xFC).
+        /// </summary>
+        public static readonly object SByte_FC = (sbyte)-4;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -4 (0xFC).
+        /// </summary>
+        public static readonly Expression SByte_FC_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_FC");
+        /// <summary>
+        /// A singleton boxed sbyte -3 (0xFD).
+        /// </summary>
+        public static readonly object SByte_FD = (sbyte)-3;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -3 (0xFD).
+        /// </summary>
+        public static readonly Expression SByte_FD_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_FD");
+        /// <summary>
+        /// A singleton boxed sbyte -2 (0xFE).
+        /// </summary>
+        public static readonly object SByte_FE = (sbyte)-2;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -2 (0xFE).
+        /// </summary>
+        public static readonly Expression SByte_FE_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_FE");
+        /// <summary>
+        /// A singleton boxed sbyte -1 (0xFF).
+        /// </summary>
+        public static readonly object SByte_FF = (sbyte)-1;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte -1 (0xFF).
+        /// </summary>
+        public static readonly Expression SByte_FF_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_FF");
+        /// <summary>
+        /// A singleton boxed sbyte 0 (0x00).
+        /// </summary>
+        public static readonly object SByte_00 = (sbyte)0;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 0 (0x00).
+        /// </summary>
+        public static readonly Expression SByte_00_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_00");
+        /// <summary>
+        /// A singleton boxed sbyte 1 (0x01).
+        /// </summary>
+        public static readonly object SByte_01 = (sbyte)1;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 1 (0x01).
+        /// </summary>
+        public static readonly Expression SByte_01_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_01");
+        /// <summary>
+        /// A singleton boxed sbyte 2 (0x02).
+        /// </summary>
+        public static readonly object SByte_02 = (sbyte)2;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 2 (0x02).
+        /// </summary>
+        public static readonly Expression SByte_02_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_02");
+        /// <summary>
+        /// A singleton boxed sbyte 3 (0x03).
+        /// </summary>
+        public static readonly object SByte_03 = (sbyte)3;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 3 (0x03).
+        /// </summary>
+        public static readonly Expression SByte_03_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_03");
+        /// <summary>
+        /// A singleton boxed sbyte 4 (0x04).
+        /// </summary>
+        public static readonly object SByte_04 = (sbyte)4;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 4 (0x04).
+        /// </summary>
+        public static readonly Expression SByte_04_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_04");
+        /// <summary>
+        /// A singleton boxed sbyte 5 (0x05).
+        /// </summary>
+        public static readonly object SByte_05 = (sbyte)5;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 5 (0x05).
+        /// </summary>
+        public static readonly Expression SByte_05_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_05");
+        /// <summary>
+        /// A singleton boxed sbyte 6 (0x06).
+        /// </summary>
+        public static readonly object SByte_06 = (sbyte)6;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 6 (0x06).
+        /// </summary>
+        public static readonly Expression SByte_06_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_06");
+        /// <summary>
+        /// A singleton boxed sbyte 7 (0x07).
+        /// </summary>
+        public static readonly object SByte_07 = (sbyte)7;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 7 (0x07).
+        /// </summary>
+        public static readonly Expression SByte_07_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_07");
+        /// <summary>
+        /// A singleton boxed sbyte 8 (0x08).
+        /// </summary>
+        public static readonly object SByte_08 = (sbyte)8;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 8 (0x08).
+        /// </summary>
+        public static readonly Expression SByte_08_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_08");
+        /// <summary>
+        /// A singleton boxed sbyte 9 (0x09).
+        /// </summary>
+        public static readonly object SByte_09 = (sbyte)9;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 9 (0x09).
+        /// </summary>
+        public static readonly Expression SByte_09_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_09");
+        /// <summary>
+        /// A singleton boxed sbyte 10 (0x0A).
+        /// </summary>
+        public static readonly object SByte_0A = (sbyte)10;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 10 (0x0A).
+        /// </summary>
+        public static readonly Expression SByte_0A_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_0A");
+        /// <summary>
+        /// A singleton boxed sbyte 11 (0x0B).
+        /// </summary>
+        public static readonly object SByte_0B = (sbyte)11;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 11 (0x0B).
+        /// </summary>
+        public static readonly Expression SByte_0B_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_0B");
+        /// <summary>
+        /// A singleton boxed sbyte 12 (0x0C).
+        /// </summary>
+        public static readonly object SByte_0C = (sbyte)12;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 12 (0x0C).
+        /// </summary>
+        public static readonly Expression SByte_0C_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_0C");
+        /// <summary>
+        /// A singleton boxed sbyte 13 (0x0D).
+        /// </summary>
+        public static readonly object SByte_0D = (sbyte)13;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 13 (0x0D).
+        /// </summary>
+        public static readonly Expression SByte_0D_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_0D");
+        /// <summary>
+        /// A singleton boxed sbyte 14 (0x0E).
+        /// </summary>
+        public static readonly object SByte_0E = (sbyte)14;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 14 (0x0E).
+        /// </summary>
+        public static readonly Expression SByte_0E_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_0E");
+        /// <summary>
+        /// A singleton boxed sbyte 15 (0x0F).
+        /// </summary>
+        public static readonly object SByte_0F = (sbyte)15;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 15 (0x0F).
+        /// </summary>
+        public static readonly Expression SByte_0F_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_0F");
+        /// <summary>
+        /// A singleton boxed sbyte 16 (0x10).
+        /// </summary>
+        public static readonly object SByte_10 = (sbyte)16;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 16 (0x10).
+        /// </summary>
+        public static readonly Expression SByte_10_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_10");
+        /// <summary>
+        /// A singleton boxed sbyte 17 (0x11).
+        /// </summary>
+        public static readonly object SByte_11 = (sbyte)17;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 17 (0x11).
+        /// </summary>
+        public static readonly Expression SByte_11_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_11");
+        /// <summary>
+        /// A singleton boxed sbyte 18 (0x12).
+        /// </summary>
+        public static readonly object SByte_12 = (sbyte)18;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 18 (0x12).
+        /// </summary>
+        public static readonly Expression SByte_12_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_12");
+        /// <summary>
+        /// A singleton boxed sbyte 19 (0x13).
+        /// </summary>
+        public static readonly object SByte_13 = (sbyte)19;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 19 (0x13).
+        /// </summary>
+        public static readonly Expression SByte_13_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_13");
+        /// <summary>
+        /// A singleton boxed sbyte 20 (0x14).
+        /// </summary>
+        public static readonly object SByte_14 = (sbyte)20;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 20 (0x14).
+        /// </summary>
+        public static readonly Expression SByte_14_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_14");
+        /// <summary>
+        /// A singleton boxed sbyte 21 (0x15).
+        /// </summary>
+        public static readonly object SByte_15 = (sbyte)21;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 21 (0x15).
+        /// </summary>
+        public static readonly Expression SByte_15_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_15");
+        /// <summary>
+        /// A singleton boxed sbyte 22 (0x16).
+        /// </summary>
+        public static readonly object SByte_16 = (sbyte)22;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 22 (0x16).
+        /// </summary>
+        public static readonly Expression SByte_16_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_16");
+        /// <summary>
+        /// A singleton boxed sbyte 23 (0x17).
+        /// </summary>
+        public static readonly object SByte_17 = (sbyte)23;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 23 (0x17).
+        /// </summary>
+        public static readonly Expression SByte_17_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_17");
+        /// <summary>
+        /// A singleton boxed sbyte 24 (0x18).
+        /// </summary>
+        public static readonly object SByte_18 = (sbyte)24;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 24 (0x18).
+        /// </summary>
+        public static readonly Expression SByte_18_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_18");
+        /// <summary>
+        /// A singleton boxed sbyte 25 (0x19).
+        /// </summary>
+        public static readonly object SByte_19 = (sbyte)25;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 25 (0x19).
+        /// </summary>
+        public static readonly Expression SByte_19_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_19");
+        /// <summary>
+        /// A singleton boxed sbyte 26 (0x1A).
+        /// </summary>
+        public static readonly object SByte_1A = (sbyte)26;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 26 (0x1A).
+        /// </summary>
+        public static readonly Expression SByte_1A_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_1A");
+        /// <summary>
+        /// A singleton boxed sbyte 27 (0x1B).
+        /// </summary>
+        public static readonly object SByte_1B = (sbyte)27;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 27 (0x1B).
+        /// </summary>
+        public static readonly Expression SByte_1B_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_1B");
+        /// <summary>
+        /// A singleton boxed sbyte 28 (0x1C).
+        /// </summary>
+        public static readonly object SByte_1C = (sbyte)28;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 28 (0x1C).
+        /// </summary>
+        public static readonly Expression SByte_1C_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_1C");
+        /// <summary>
+        /// A singleton boxed sbyte 29 (0x1D).
+        /// </summary>
+        public static readonly object SByte_1D = (sbyte)29;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 29 (0x1D).
+        /// </summary>
+        public static readonly Expression SByte_1D_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_1D");
+        /// <summary>
+        /// A singleton boxed sbyte 30 (0x1E).
+        /// </summary>
+        public static readonly object SByte_1E = (sbyte)30;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 30 (0x1E).
+        /// </summary>
+        public static readonly Expression SByte_1E_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_1E");
+        /// <summary>
+        /// A singleton boxed sbyte 31 (0x1F).
+        /// </summary>
+        public static readonly object SByte_1F = (sbyte)31;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 31 (0x1F).
+        /// </summary>
+        public static readonly Expression SByte_1F_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_1F");
+        /// <summary>
+        /// A singleton boxed sbyte 32 (0x20).
+        /// </summary>
+        public static readonly object SByte_20 = (sbyte)32;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 32 (0x20).
+        /// </summary>
+        public static readonly Expression SByte_20_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_20");
+        /// <summary>
+        /// A singleton boxed sbyte 33 (0x21).
+        /// </summary>
+        public static readonly object SByte_21 = (sbyte)33;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 33 (0x21).
+        /// </summary>
+        public static readonly Expression SByte_21_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_21");
+        /// <summary>
+        /// A singleton boxed sbyte 34 (0x22).
+        /// </summary>
+        public static readonly object SByte_22 = (sbyte)34;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 34 (0x22).
+        /// </summary>
+        public static readonly Expression SByte_22_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_22");
+        /// <summary>
+        /// A singleton boxed sbyte 35 (0x23).
+        /// </summary>
+        public static readonly object SByte_23 = (sbyte)35;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 35 (0x23).
+        /// </summary>
+        public static readonly Expression SByte_23_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_23");
+        /// <summary>
+        /// A singleton boxed sbyte 36 (0x24).
+        /// </summary>
+        public static readonly object SByte_24 = (sbyte)36;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 36 (0x24).
+        /// </summary>
+        public static readonly Expression SByte_24_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_24");
+        /// <summary>
+        /// A singleton boxed sbyte 37 (0x25).
+        /// </summary>
+        public static readonly object SByte_25 = (sbyte)37;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 37 (0x25).
+        /// </summary>
+        public static readonly Expression SByte_25_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_25");
+        /// <summary>
+        /// A singleton boxed sbyte 38 (0x26).
+        /// </summary>
+        public static readonly object SByte_26 = (sbyte)38;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 38 (0x26).
+        /// </summary>
+        public static readonly Expression SByte_26_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_26");
+        /// <summary>
+        /// A singleton boxed sbyte 39 (0x27).
+        /// </summary>
+        public static readonly object SByte_27 = (sbyte)39;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 39 (0x27).
+        /// </summary>
+        public static readonly Expression SByte_27_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_27");
+        /// <summary>
+        /// A singleton boxed sbyte 40 (0x28).
+        /// </summary>
+        public static readonly object SByte_28 = (sbyte)40;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 40 (0x28).
+        /// </summary>
+        public static readonly Expression SByte_28_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_28");
+        /// <summary>
+        /// A singleton boxed sbyte 41 (0x29).
+        /// </summary>
+        public static readonly object SByte_29 = (sbyte)41;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 41 (0x29).
+        /// </summary>
+        public static readonly Expression SByte_29_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_29");
+        /// <summary>
+        /// A singleton boxed sbyte 42 (0x2A).
+        /// </summary>
+        public static readonly object SByte_2A = (sbyte)42;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 42 (0x2A).
+        /// </summary>
+        public static readonly Expression SByte_2A_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_2A");
+        /// <summary>
+        /// A singleton boxed sbyte 43 (0x2B).
+        /// </summary>
+        public static readonly object SByte_2B = (sbyte)43;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 43 (0x2B).
+        /// </summary>
+        public static readonly Expression SByte_2B_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_2B");
+        /// <summary>
+        /// A singleton boxed sbyte 44 (0x2C).
+        /// </summary>
+        public static readonly object SByte_2C = (sbyte)44;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 44 (0x2C).
+        /// </summary>
+        public static readonly Expression SByte_2C_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_2C");
+        /// <summary>
+        /// A singleton boxed sbyte 45 (0x2D).
+        /// </summary>
+        public static readonly object SByte_2D = (sbyte)45;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 45 (0x2D).
+        /// </summary>
+        public static readonly Expression SByte_2D_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_2D");
+        /// <summary>
+        /// A singleton boxed sbyte 46 (0x2E).
+        /// </summary>
+        public static readonly object SByte_2E = (sbyte)46;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 46 (0x2E).
+        /// </summary>
+        public static readonly Expression SByte_2E_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_2E");
+        /// <summary>
+        /// A singleton boxed sbyte 47 (0x2F).
+        /// </summary>
+        public static readonly object SByte_2F = (sbyte)47;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 47 (0x2F).
+        /// </summary>
+        public static readonly Expression SByte_2F_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_2F");
+        /// <summary>
+        /// A singleton boxed sbyte 48 (0x30).
+        /// </summary>
+        public static readonly object SByte_30 = (sbyte)48;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 48 (0x30).
+        /// </summary>
+        public static readonly Expression SByte_30_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_30");
+        /// <summary>
+        /// A singleton boxed sbyte 49 (0x31).
+        /// </summary>
+        public static readonly object SByte_31 = (sbyte)49;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 49 (0x31).
+        /// </summary>
+        public static readonly Expression SByte_31_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_31");
+        /// <summary>
+        /// A singleton boxed sbyte 50 (0x32).
+        /// </summary>
+        public static readonly object SByte_32 = (sbyte)50;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 50 (0x32).
+        /// </summary>
+        public static readonly Expression SByte_32_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_32");
+        /// <summary>
+        /// A singleton boxed sbyte 51 (0x33).
+        /// </summary>
+        public static readonly object SByte_33 = (sbyte)51;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 51 (0x33).
+        /// </summary>
+        public static readonly Expression SByte_33_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_33");
+        /// <summary>
+        /// A singleton boxed sbyte 52 (0x34).
+        /// </summary>
+        public static readonly object SByte_34 = (sbyte)52;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 52 (0x34).
+        /// </summary>
+        public static readonly Expression SByte_34_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_34");
+        /// <summary>
+        /// A singleton boxed sbyte 53 (0x35).
+        /// </summary>
+        public static readonly object SByte_35 = (sbyte)53;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 53 (0x35).
+        /// </summary>
+        public static readonly Expression SByte_35_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_35");
+        /// <summary>
+        /// A singleton boxed sbyte 54 (0x36).
+        /// </summary>
+        public static readonly object SByte_36 = (sbyte)54;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 54 (0x36).
+        /// </summary>
+        public static readonly Expression SByte_36_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_36");
+        /// <summary>
+        /// A singleton boxed sbyte 55 (0x37).
+        /// </summary>
+        public static readonly object SByte_37 = (sbyte)55;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 55 (0x37).
+        /// </summary>
+        public static readonly Expression SByte_37_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_37");
+        /// <summary>
+        /// A singleton boxed sbyte 56 (0x38).
+        /// </summary>
+        public static readonly object SByte_38 = (sbyte)56;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 56 (0x38).
+        /// </summary>
+        public static readonly Expression SByte_38_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_38");
+        /// <summary>
+        /// A singleton boxed sbyte 57 (0x39).
+        /// </summary>
+        public static readonly object SByte_39 = (sbyte)57;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 57 (0x39).
+        /// </summary>
+        public static readonly Expression SByte_39_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_39");
+        /// <summary>
+        /// A singleton boxed sbyte 58 (0x3A).
+        /// </summary>
+        public static readonly object SByte_3A = (sbyte)58;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 58 (0x3A).
+        /// </summary>
+        public static readonly Expression SByte_3A_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_3A");
+        /// <summary>
+        /// A singleton boxed sbyte 59 (0x3B).
+        /// </summary>
+        public static readonly object SByte_3B = (sbyte)59;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 59 (0x3B).
+        /// </summary>
+        public static readonly Expression SByte_3B_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_3B");
+        /// <summary>
+        /// A singleton boxed sbyte 60 (0x3C).
+        /// </summary>
+        public static readonly object SByte_3C = (sbyte)60;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 60 (0x3C).
+        /// </summary>
+        public static readonly Expression SByte_3C_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_3C");
+        /// <summary>
+        /// A singleton boxed sbyte 61 (0x3D).
+        /// </summary>
+        public static readonly object SByte_3D = (sbyte)61;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 61 (0x3D).
+        /// </summary>
+        public static readonly Expression SByte_3D_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_3D");
+        /// <summary>
+        /// A singleton boxed sbyte 62 (0x3E).
+        /// </summary>
+        public static readonly object SByte_3E = (sbyte)62;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 62 (0x3E).
+        /// </summary>
+        public static readonly Expression SByte_3E_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_3E");
+        /// <summary>
+        /// A singleton boxed sbyte 63 (0x3F).
+        /// </summary>
+        public static readonly object SByte_3F = (sbyte)63;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 63 (0x3F).
+        /// </summary>
+        public static readonly Expression SByte_3F_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_3F");
+        /// <summary>
+        /// A singleton boxed sbyte 64 (0x40).
+        /// </summary>
+        public static readonly object SByte_40 = (sbyte)64;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 64 (0x40).
+        /// </summary>
+        public static readonly Expression SByte_40_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_40");
+        /// <summary>
+        /// A singleton boxed sbyte 65 (0x41).
+        /// </summary>
+        public static readonly object SByte_41 = (sbyte)65;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 65 (0x41).
+        /// </summary>
+        public static readonly Expression SByte_41_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_41");
+        /// <summary>
+        /// A singleton boxed sbyte 66 (0x42).
+        /// </summary>
+        public static readonly object SByte_42 = (sbyte)66;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 66 (0x42).
+        /// </summary>
+        public static readonly Expression SByte_42_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_42");
+        /// <summary>
+        /// A singleton boxed sbyte 67 (0x43).
+        /// </summary>
+        public static readonly object SByte_43 = (sbyte)67;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 67 (0x43).
+        /// </summary>
+        public static readonly Expression SByte_43_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_43");
+        /// <summary>
+        /// A singleton boxed sbyte 68 (0x44).
+        /// </summary>
+        public static readonly object SByte_44 = (sbyte)68;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 68 (0x44).
+        /// </summary>
+        public static readonly Expression SByte_44_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_44");
+        /// <summary>
+        /// A singleton boxed sbyte 69 (0x45).
+        /// </summary>
+        public static readonly object SByte_45 = (sbyte)69;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 69 (0x45).
+        /// </summary>
+        public static readonly Expression SByte_45_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_45");
+        /// <summary>
+        /// A singleton boxed sbyte 70 (0x46).
+        /// </summary>
+        public static readonly object SByte_46 = (sbyte)70;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 70 (0x46).
+        /// </summary>
+        public static readonly Expression SByte_46_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_46");
+        /// <summary>
+        /// A singleton boxed sbyte 71 (0x47).
+        /// </summary>
+        public static readonly object SByte_47 = (sbyte)71;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 71 (0x47).
+        /// </summary>
+        public static readonly Expression SByte_47_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_47");
+        /// <summary>
+        /// A singleton boxed sbyte 72 (0x48).
+        /// </summary>
+        public static readonly object SByte_48 = (sbyte)72;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 72 (0x48).
+        /// </summary>
+        public static readonly Expression SByte_48_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_48");
+        /// <summary>
+        /// A singleton boxed sbyte 73 (0x49).
+        /// </summary>
+        public static readonly object SByte_49 = (sbyte)73;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 73 (0x49).
+        /// </summary>
+        public static readonly Expression SByte_49_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_49");
+        /// <summary>
+        /// A singleton boxed sbyte 74 (0x4A).
+        /// </summary>
+        public static readonly object SByte_4A = (sbyte)74;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 74 (0x4A).
+        /// </summary>
+        public static readonly Expression SByte_4A_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_4A");
+        /// <summary>
+        /// A singleton boxed sbyte 75 (0x4B).
+        /// </summary>
+        public static readonly object SByte_4B = (sbyte)75;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 75 (0x4B).
+        /// </summary>
+        public static readonly Expression SByte_4B_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_4B");
+        /// <summary>
+        /// A singleton boxed sbyte 76 (0x4C).
+        /// </summary>
+        public static readonly object SByte_4C = (sbyte)76;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 76 (0x4C).
+        /// </summary>
+        public static readonly Expression SByte_4C_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_4C");
+        /// <summary>
+        /// A singleton boxed sbyte 77 (0x4D).
+        /// </summary>
+        public static readonly object SByte_4D = (sbyte)77;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 77 (0x4D).
+        /// </summary>
+        public static readonly Expression SByte_4D_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_4D");
+        /// <summary>
+        /// A singleton boxed sbyte 78 (0x4E).
+        /// </summary>
+        public static readonly object SByte_4E = (sbyte)78;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 78 (0x4E).
+        /// </summary>
+        public static readonly Expression SByte_4E_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_4E");
+        /// <summary>
+        /// A singleton boxed sbyte 79 (0x4F).
+        /// </summary>
+        public static readonly object SByte_4F = (sbyte)79;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 79 (0x4F).
+        /// </summary>
+        public static readonly Expression SByte_4F_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_4F");
+        /// <summary>
+        /// A singleton boxed sbyte 80 (0x50).
+        /// </summary>
+        public static readonly object SByte_50 = (sbyte)80;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 80 (0x50).
+        /// </summary>
+        public static readonly Expression SByte_50_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_50");
+        /// <summary>
+        /// A singleton boxed sbyte 81 (0x51).
+        /// </summary>
+        public static readonly object SByte_51 = (sbyte)81;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 81 (0x51).
+        /// </summary>
+        public static readonly Expression SByte_51_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_51");
+        /// <summary>
+        /// A singleton boxed sbyte 82 (0x52).
+        /// </summary>
+        public static readonly object SByte_52 = (sbyte)82;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 82 (0x52).
+        /// </summary>
+        public static readonly Expression SByte_52_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_52");
+        /// <summary>
+        /// A singleton boxed sbyte 83 (0x53).
+        /// </summary>
+        public static readonly object SByte_53 = (sbyte)83;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 83 (0x53).
+        /// </summary>
+        public static readonly Expression SByte_53_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_53");
+        /// <summary>
+        /// A singleton boxed sbyte 84 (0x54).
+        /// </summary>
+        public static readonly object SByte_54 = (sbyte)84;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 84 (0x54).
+        /// </summary>
+        public static readonly Expression SByte_54_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_54");
+        /// <summary>
+        /// A singleton boxed sbyte 85 (0x55).
+        /// </summary>
+        public static readonly object SByte_55 = (sbyte)85;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 85 (0x55).
+        /// </summary>
+        public static readonly Expression SByte_55_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_55");
+        /// <summary>
+        /// A singleton boxed sbyte 86 (0x56).
+        /// </summary>
+        public static readonly object SByte_56 = (sbyte)86;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 86 (0x56).
+        /// </summary>
+        public static readonly Expression SByte_56_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_56");
+        /// <summary>
+        /// A singleton boxed sbyte 87 (0x57).
+        /// </summary>
+        public static readonly object SByte_57 = (sbyte)87;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 87 (0x57).
+        /// </summary>
+        public static readonly Expression SByte_57_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_57");
+        /// <summary>
+        /// A singleton boxed sbyte 88 (0x58).
+        /// </summary>
+        public static readonly object SByte_58 = (sbyte)88;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 88 (0x58).
+        /// </summary>
+        public static readonly Expression SByte_58_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_58");
+        /// <summary>
+        /// A singleton boxed sbyte 89 (0x59).
+        /// </summary>
+        public static readonly object SByte_59 = (sbyte)89;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 89 (0x59).
+        /// </summary>
+        public static readonly Expression SByte_59_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_59");
+        /// <summary>
+        /// A singleton boxed sbyte 90 (0x5A).
+        /// </summary>
+        public static readonly object SByte_5A = (sbyte)90;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 90 (0x5A).
+        /// </summary>
+        public static readonly Expression SByte_5A_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_5A");
+        /// <summary>
+        /// A singleton boxed sbyte 91 (0x5B).
+        /// </summary>
+        public static readonly object SByte_5B = (sbyte)91;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 91 (0x5B).
+        /// </summary>
+        public static readonly Expression SByte_5B_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_5B");
+        /// <summary>
+        /// A singleton boxed sbyte 92 (0x5C).
+        /// </summary>
+        public static readonly object SByte_5C = (sbyte)92;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 92 (0x5C).
+        /// </summary>
+        public static readonly Expression SByte_5C_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_5C");
+        /// <summary>
+        /// A singleton boxed sbyte 93 (0x5D).
+        /// </summary>
+        public static readonly object SByte_5D = (sbyte)93;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 93 (0x5D).
+        /// </summary>
+        public static readonly Expression SByte_5D_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_5D");
+        /// <summary>
+        /// A singleton boxed sbyte 94 (0x5E).
+        /// </summary>
+        public static readonly object SByte_5E = (sbyte)94;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 94 (0x5E).
+        /// </summary>
+        public static readonly Expression SByte_5E_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_5E");
+        /// <summary>
+        /// A singleton boxed sbyte 95 (0x5F).
+        /// </summary>
+        public static readonly object SByte_5F = (sbyte)95;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 95 (0x5F).
+        /// </summary>
+        public static readonly Expression SByte_5F_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_5F");
+        /// <summary>
+        /// A singleton boxed sbyte 96 (0x60).
+        /// </summary>
+        public static readonly object SByte_60 = (sbyte)96;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 96 (0x60).
+        /// </summary>
+        public static readonly Expression SByte_60_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_60");
+        /// <summary>
+        /// A singleton boxed sbyte 97 (0x61).
+        /// </summary>
+        public static readonly object SByte_61 = (sbyte)97;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 97 (0x61).
+        /// </summary>
+        public static readonly Expression SByte_61_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_61");
+        /// <summary>
+        /// A singleton boxed sbyte 98 (0x62).
+        /// </summary>
+        public static readonly object SByte_62 = (sbyte)98;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 98 (0x62).
+        /// </summary>
+        public static readonly Expression SByte_62_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_62");
+        /// <summary>
+        /// A singleton boxed sbyte 99 (0x63).
+        /// </summary>
+        public static readonly object SByte_63 = (sbyte)99;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 99 (0x63).
+        /// </summary>
+        public static readonly Expression SByte_63_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_63");
+        /// <summary>
+        /// A singleton boxed sbyte 100 (0x64).
+        /// </summary>
+        public static readonly object SByte_64 = (sbyte)100;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 100 (0x64).
+        /// </summary>
+        public static readonly Expression SByte_64_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_64");
+        /// <summary>
+        /// A singleton boxed sbyte 101 (0x65).
+        /// </summary>
+        public static readonly object SByte_65 = (sbyte)101;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 101 (0x65).
+        /// </summary>
+        public static readonly Expression SByte_65_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_65");
+        /// <summary>
+        /// A singleton boxed sbyte 102 (0x66).
+        /// </summary>
+        public static readonly object SByte_66 = (sbyte)102;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 102 (0x66).
+        /// </summary>
+        public static readonly Expression SByte_66_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_66");
+        /// <summary>
+        /// A singleton boxed sbyte 103 (0x67).
+        /// </summary>
+        public static readonly object SByte_67 = (sbyte)103;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 103 (0x67).
+        /// </summary>
+        public static readonly Expression SByte_67_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_67");
+        /// <summary>
+        /// A singleton boxed sbyte 104 (0x68).
+        /// </summary>
+        public static readonly object SByte_68 = (sbyte)104;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 104 (0x68).
+        /// </summary>
+        public static readonly Expression SByte_68_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_68");
+        /// <summary>
+        /// A singleton boxed sbyte 105 (0x69).
+        /// </summary>
+        public static readonly object SByte_69 = (sbyte)105;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 105 (0x69).
+        /// </summary>
+        public static readonly Expression SByte_69_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_69");
+        /// <summary>
+        /// A singleton boxed sbyte 106 (0x6A).
+        /// </summary>
+        public static readonly object SByte_6A = (sbyte)106;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 106 (0x6A).
+        /// </summary>
+        public static readonly Expression SByte_6A_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_6A");
+        /// <summary>
+        /// A singleton boxed sbyte 107 (0x6B).
+        /// </summary>
+        public static readonly object SByte_6B = (sbyte)107;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 107 (0x6B).
+        /// </summary>
+        public static readonly Expression SByte_6B_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_6B");
+        /// <summary>
+        /// A singleton boxed sbyte 108 (0x6C).
+        /// </summary>
+        public static readonly object SByte_6C = (sbyte)108;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 108 (0x6C).
+        /// </summary>
+        public static readonly Expression SByte_6C_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_6C");
+        /// <summary>
+        /// A singleton boxed sbyte 109 (0x6D).
+        /// </summary>
+        public static readonly object SByte_6D = (sbyte)109;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 109 (0x6D).
+        /// </summary>
+        public static readonly Expression SByte_6D_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_6D");
+        /// <summary>
+        /// A singleton boxed sbyte 110 (0x6E).
+        /// </summary>
+        public static readonly object SByte_6E = (sbyte)110;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 110 (0x6E).
+        /// </summary>
+        public static readonly Expression SByte_6E_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_6E");
+        /// <summary>
+        /// A singleton boxed sbyte 111 (0x6F).
+        /// </summary>
+        public static readonly object SByte_6F = (sbyte)111;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 111 (0x6F).
+        /// </summary>
+        public static readonly Expression SByte_6F_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_6F");
+        /// <summary>
+        /// A singleton boxed sbyte 112 (0x70).
+        /// </summary>
+        public static readonly object SByte_70 = (sbyte)112;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 112 (0x70).
+        /// </summary>
+        public static readonly Expression SByte_70_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_70");
+        /// <summary>
+        /// A singleton boxed sbyte 113 (0x71).
+        /// </summary>
+        public static readonly object SByte_71 = (sbyte)113;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 113 (0x71).
+        /// </summary>
+        public static readonly Expression SByte_71_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_71");
+        /// <summary>
+        /// A singleton boxed sbyte 114 (0x72).
+        /// </summary>
+        public static readonly object SByte_72 = (sbyte)114;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 114 (0x72).
+        /// </summary>
+        public static readonly Expression SByte_72_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_72");
+        /// <summary>
+        /// A singleton boxed sbyte 115 (0x73).
+        /// </summary>
+        public static readonly object SByte_73 = (sbyte)115;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 115 (0x73).
+        /// </summary>
+        public static readonly Expression SByte_73_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_73");
+        /// <summary>
+        /// A singleton boxed sbyte 116 (0x74).
+        /// </summary>
+        public static readonly object SByte_74 = (sbyte)116;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 116 (0x74).
+        /// </summary>
+        public static readonly Expression SByte_74_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_74");
+        /// <summary>
+        /// A singleton boxed sbyte 117 (0x75).
+        /// </summary>
+        public static readonly object SByte_75 = (sbyte)117;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 117 (0x75).
+        /// </summary>
+        public static readonly Expression SByte_75_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_75");
+        /// <summary>
+        /// A singleton boxed sbyte 118 (0x76).
+        /// </summary>
+        public static readonly object SByte_76 = (sbyte)118;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 118 (0x76).
+        /// </summary>
+        public static readonly Expression SByte_76_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_76");
+        /// <summary>
+        /// A singleton boxed sbyte 119 (0x77).
+        /// </summary>
+        public static readonly object SByte_77 = (sbyte)119;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 119 (0x77).
+        /// </summary>
+        public static readonly Expression SByte_77_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_77");
+        /// <summary>
+        /// A singleton boxed sbyte 120 (0x78).
+        /// </summary>
+        public static readonly object SByte_78 = (sbyte)120;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 120 (0x78).
+        /// </summary>
+        public static readonly Expression SByte_78_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_78");
+        /// <summary>
+        /// A singleton boxed sbyte 121 (0x79).
+        /// </summary>
+        public static readonly object SByte_79 = (sbyte)121;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 121 (0x79).
+        /// </summary>
+        public static readonly Expression SByte_79_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_79");
+        /// <summary>
+        /// A singleton boxed sbyte 122 (0x7A).
+        /// </summary>
+        public static readonly object SByte_7A = (sbyte)122;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 122 (0x7A).
+        /// </summary>
+        public static readonly Expression SByte_7A_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_7A");
+        /// <summary>
+        /// A singleton boxed sbyte 123 (0x7B).
+        /// </summary>
+        public static readonly object SByte_7B = (sbyte)123;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 123 (0x7B).
+        /// </summary>
+        public static readonly Expression SByte_7B_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_7B");
+        /// <summary>
+        /// A singleton boxed sbyte 124 (0x7C).
+        /// </summary>
+        public static readonly object SByte_7C = (sbyte)124;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 124 (0x7C).
+        /// </summary>
+        public static readonly Expression SByte_7C_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_7C");
+        /// <summary>
+        /// A singleton boxed sbyte 125 (0x7D).
+        /// </summary>
+        public static readonly object SByte_7D = (sbyte)125;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 125 (0x7D).
+        /// </summary>
+        public static readonly Expression SByte_7D_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_7D");
+        /// <summary>
+        /// A singleton boxed sbyte 126 (0x7E).
+        /// </summary>
+        public static readonly object SByte_7E = (sbyte)126;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 126 (0x7E).
+        /// </summary>
+        public static readonly Expression SByte_7E_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_7E");
+        /// <summary>
+        /// A singleton boxed sbyte 127 (0x7F).
+        /// </summary>
+        public static readonly object SByte_7F = (sbyte)127;
+        /// <summary>
+        /// Expression that returns the singleton boxed sbyte 127 (0x7F).
+        /// </summary>
+        public static readonly Expression SByte_7F_Expression = Expression.Field(null, typeof(PreboxedConstants), "SByte_7F");
+
+
+        #endregion
+
+        #region 8-bit Unsigned Integer
+
+        public static Expression GetConstant(byte value)
+        {
+            return PreboxedConstants.Byte_Expressions[value];
+        }
+
+        public static object GetValue(byte value)
+        {
+            return PreboxedConstants.Byte_Objects[value];
+        }
+
+        private static readonly object[] Byte_Objects;
+
+        private static object[] Get_Byte_Objects()
+        {
+            return new object[]
+            {
+                PreboxedConstants.Byte_00,
+                PreboxedConstants.Byte_01,
+                PreboxedConstants.Byte_02,
+                PreboxedConstants.Byte_03,
+                PreboxedConstants.Byte_04,
+                PreboxedConstants.Byte_05,
+                PreboxedConstants.Byte_06,
+                PreboxedConstants.Byte_07,
+                PreboxedConstants.Byte_08,
+                PreboxedConstants.Byte_09,
+                PreboxedConstants.Byte_0A,
+                PreboxedConstants.Byte_0B,
+                PreboxedConstants.Byte_0C,
+                PreboxedConstants.Byte_0D,
+                PreboxedConstants.Byte_0E,
+                PreboxedConstants.Byte_0F,
+                PreboxedConstants.Byte_10,
+                PreboxedConstants.Byte_11,
+                PreboxedConstants.Byte_12,
+                PreboxedConstants.Byte_13,
+                PreboxedConstants.Byte_14,
+                PreboxedConstants.Byte_15,
+                PreboxedConstants.Byte_16,
+                PreboxedConstants.Byte_17,
+                PreboxedConstants.Byte_18,
+                PreboxedConstants.Byte_19,
+                PreboxedConstants.Byte_1A,
+                PreboxedConstants.Byte_1B,
+                PreboxedConstants.Byte_1C,
+                PreboxedConstants.Byte_1D,
+                PreboxedConstants.Byte_1E,
+                PreboxedConstants.Byte_1F,
+                PreboxedConstants.Byte_20,
+                PreboxedConstants.Byte_21,
+                PreboxedConstants.Byte_22,
+                PreboxedConstants.Byte_23,
+                PreboxedConstants.Byte_24,
+                PreboxedConstants.Byte_25,
+                PreboxedConstants.Byte_26,
+                PreboxedConstants.Byte_27,
+                PreboxedConstants.Byte_28,
+                PreboxedConstants.Byte_29,
+                PreboxedConstants.Byte_2A,
+                PreboxedConstants.Byte_2B,
+                PreboxedConstants.Byte_2C,
+                PreboxedConstants.Byte_2D,
+                PreboxedConstants.Byte_2E,
+                PreboxedConstants.Byte_2F,
+                PreboxedConstants.Byte_30,
+                PreboxedConstants.Byte_31,
+                PreboxedConstants.Byte_32,
+                PreboxedConstants.Byte_33,
+                PreboxedConstants.Byte_34,
+                PreboxedConstants.Byte_35,
+                PreboxedConstants.Byte_36,
+                PreboxedConstants.Byte_37,
+                PreboxedConstants.Byte_38,
+                PreboxedConstants.Byte_39,
+                PreboxedConstants.Byte_3A,
+                PreboxedConstants.Byte_3B,
+                PreboxedConstants.Byte_3C,
+                PreboxedConstants.Byte_3D,
+                PreboxedConstants.Byte_3E,
+                PreboxedConstants.Byte_3F,
+                PreboxedConstants.Byte_40,
+                PreboxedConstants.Byte_41,
+                PreboxedConstants.Byte_42,
+                PreboxedConstants.Byte_43,
+                PreboxedConstants.Byte_44,
+                PreboxedConstants.Byte_45,
+                PreboxedConstants.Byte_46,
+                PreboxedConstants.Byte_47,
+                PreboxedConstants.Byte_48,
+                PreboxedConstants.Byte_49,
+                PreboxedConstants.Byte_4A,
+                PreboxedConstants.Byte_4B,
+                PreboxedConstants.Byte_4C,
+                PreboxedConstants.Byte_4D,
+                PreboxedConstants.Byte_4E,
+                PreboxedConstants.Byte_4F,
+                PreboxedConstants.Byte_50,
+                PreboxedConstants.Byte_51,
+                PreboxedConstants.Byte_52,
+                PreboxedConstants.Byte_53,
+                PreboxedConstants.Byte_54,
+                PreboxedConstants.Byte_55,
+                PreboxedConstants.Byte_56,
+                PreboxedConstants.Byte_57,
+                PreboxedConstants.Byte_58,
+                PreboxedConstants.Byte_59,
+                PreboxedConstants.Byte_5A,
+                PreboxedConstants.Byte_5B,
+                PreboxedConstants.Byte_5C,
+                PreboxedConstants.Byte_5D,
+                PreboxedConstants.Byte_5E,
+                PreboxedConstants.Byte_5F,
+                PreboxedConstants.Byte_60,
+                PreboxedConstants.Byte_61,
+                PreboxedConstants.Byte_62,
+                PreboxedConstants.Byte_63,
+                PreboxedConstants.Byte_64,
+                PreboxedConstants.Byte_65,
+                PreboxedConstants.Byte_66,
+                PreboxedConstants.Byte_67,
+                PreboxedConstants.Byte_68,
+                PreboxedConstants.Byte_69,
+                PreboxedConstants.Byte_6A,
+                PreboxedConstants.Byte_6B,
+                PreboxedConstants.Byte_6C,
+                PreboxedConstants.Byte_6D,
+                PreboxedConstants.Byte_6E,
+                PreboxedConstants.Byte_6F,
+                PreboxedConstants.Byte_70,
+                PreboxedConstants.Byte_71,
+                PreboxedConstants.Byte_72,
+                PreboxedConstants.Byte_73,
+                PreboxedConstants.Byte_74,
+                PreboxedConstants.Byte_75,
+                PreboxedConstants.Byte_76,
+                PreboxedConstants.Byte_77,
+                PreboxedConstants.Byte_78,
+                PreboxedConstants.Byte_79,
+                PreboxedConstants.Byte_7A,
+                PreboxedConstants.Byte_7B,
+                PreboxedConstants.Byte_7C,
+                PreboxedConstants.Byte_7D,
+                PreboxedConstants.Byte_7E,
+                PreboxedConstants.Byte_7F,
+                PreboxedConstants.Byte_80,
+                PreboxedConstants.Byte_81,
+                PreboxedConstants.Byte_82,
+                PreboxedConstants.Byte_83,
+                PreboxedConstants.Byte_84,
+                PreboxedConstants.Byte_85,
+                PreboxedConstants.Byte_86,
+                PreboxedConstants.Byte_87,
+                PreboxedConstants.Byte_88,
+                PreboxedConstants.Byte_89,
+                PreboxedConstants.Byte_8A,
+                PreboxedConstants.Byte_8B,
+                PreboxedConstants.Byte_8C,
+                PreboxedConstants.Byte_8D,
+                PreboxedConstants.Byte_8E,
+                PreboxedConstants.Byte_8F,
+                PreboxedConstants.Byte_90,
+                PreboxedConstants.Byte_91,
+                PreboxedConstants.Byte_92,
+                PreboxedConstants.Byte_93,
+                PreboxedConstants.Byte_94,
+                PreboxedConstants.Byte_95,
+                PreboxedConstants.Byte_96,
+                PreboxedConstants.Byte_97,
+                PreboxedConstants.Byte_98,
+                PreboxedConstants.Byte_99,
+                PreboxedConstants.Byte_9A,
+                PreboxedConstants.Byte_9B,
+                PreboxedConstants.Byte_9C,
+                PreboxedConstants.Byte_9D,
+                PreboxedConstants.Byte_9E,
+                PreboxedConstants.Byte_9F,
+                PreboxedConstants.Byte_A0,
+                PreboxedConstants.Byte_A1,
+                PreboxedConstants.Byte_A2,
+                PreboxedConstants.Byte_A3,
+                PreboxedConstants.Byte_A4,
+                PreboxedConstants.Byte_A5,
+                PreboxedConstants.Byte_A6,
+                PreboxedConstants.Byte_A7,
+                PreboxedConstants.Byte_A8,
+                PreboxedConstants.Byte_A9,
+                PreboxedConstants.Byte_AA,
+                PreboxedConstants.Byte_AB,
+                PreboxedConstants.Byte_AC,
+                PreboxedConstants.Byte_AD,
+                PreboxedConstants.Byte_AE,
+                PreboxedConstants.Byte_AF,
+                PreboxedConstants.Byte_B0,
+                PreboxedConstants.Byte_B1,
+                PreboxedConstants.Byte_B2,
+                PreboxedConstants.Byte_B3,
+                PreboxedConstants.Byte_B4,
+                PreboxedConstants.Byte_B5,
+                PreboxedConstants.Byte_B6,
+                PreboxedConstants.Byte_B7,
+                PreboxedConstants.Byte_B8,
+                PreboxedConstants.Byte_B9,
+                PreboxedConstants.Byte_BA,
+                PreboxedConstants.Byte_BB,
+                PreboxedConstants.Byte_BC,
+                PreboxedConstants.Byte_BD,
+                PreboxedConstants.Byte_BE,
+                PreboxedConstants.Byte_BF,
+                PreboxedConstants.Byte_C0,
+                PreboxedConstants.Byte_C1,
+                PreboxedConstants.Byte_C2,
+                PreboxedConstants.Byte_C3,
+                PreboxedConstants.Byte_C4,
+                PreboxedConstants.Byte_C5,
+                PreboxedConstants.Byte_C6,
+                PreboxedConstants.Byte_C7,
+                PreboxedConstants.Byte_C8,
+                PreboxedConstants.Byte_C9,
+                PreboxedConstants.Byte_CA,
+                PreboxedConstants.Byte_CB,
+                PreboxedConstants.Byte_CC,
+                PreboxedConstants.Byte_CD,
+                PreboxedConstants.Byte_CE,
+                PreboxedConstants.Byte_CF,
+                PreboxedConstants.Byte_D0,
+                PreboxedConstants.Byte_D1,
+                PreboxedConstants.Byte_D2,
+                PreboxedConstants.Byte_D3,
+                PreboxedConstants.Byte_D4,
+                PreboxedConstants.Byte_D5,
+                PreboxedConstants.Byte_D6,
+                PreboxedConstants.Byte_D7,
+                PreboxedConstants.Byte_D8,
+                PreboxedConstants.Byte_D9,
+                PreboxedConstants.Byte_DA,
+                PreboxedConstants.Byte_DB,
+                PreboxedConstants.Byte_DC,
+                PreboxedConstants.Byte_DD,
+                PreboxedConstants.Byte_DE,
+                PreboxedConstants.Byte_DF,
+                PreboxedConstants.Byte_E0,
+                PreboxedConstants.Byte_E1,
+                PreboxedConstants.Byte_E2,
+                PreboxedConstants.Byte_E3,
+                PreboxedConstants.Byte_E4,
+                PreboxedConstants.Byte_E5,
+                PreboxedConstants.Byte_E6,
+                PreboxedConstants.Byte_E7,
+                PreboxedConstants.Byte_E8,
+                PreboxedConstants.Byte_E9,
+                PreboxedConstants.Byte_EA,
+                PreboxedConstants.Byte_EB,
+                PreboxedConstants.Byte_EC,
+                PreboxedConstants.Byte_ED,
+                PreboxedConstants.Byte_EE,
+                PreboxedConstants.Byte_EF,
+                PreboxedConstants.Byte_F0,
+                PreboxedConstants.Byte_F1,
+                PreboxedConstants.Byte_F2,
+                PreboxedConstants.Byte_F3,
+                PreboxedConstants.Byte_F4,
+                PreboxedConstants.Byte_F5,
+                PreboxedConstants.Byte_F6,
+                PreboxedConstants.Byte_F7,
+                PreboxedConstants.Byte_F8,
+                PreboxedConstants.Byte_F9,
+                PreboxedConstants.Byte_FA,
+                PreboxedConstants.Byte_FB,
+                PreboxedConstants.Byte_FC,
+                PreboxedConstants.Byte_FD,
+                PreboxedConstants.Byte_FE,
+                PreboxedConstants.Byte_FF
+            };
+        }
+
+        private static readonly Expression[] Byte_Expressions;
+
+        private static Expression[] Get_Byte_Expressions()
+        {
+            return new Expression[]
+            {
+				PreboxedConstants.Byte_00_Expression,
+				PreboxedConstants.Byte_01_Expression,
+				PreboxedConstants.Byte_02_Expression,
+				PreboxedConstants.Byte_03_Expression,
+				PreboxedConstants.Byte_04_Expression,
+				PreboxedConstants.Byte_05_Expression,
+				PreboxedConstants.Byte_06_Expression,
+				PreboxedConstants.Byte_07_Expression,
+				PreboxedConstants.Byte_08_Expression,
+				PreboxedConstants.Byte_09_Expression,
+				PreboxedConstants.Byte_0A_Expression,
+				PreboxedConstants.Byte_0B_Expression,
+				PreboxedConstants.Byte_0C_Expression,
+				PreboxedConstants.Byte_0D_Expression,
+				PreboxedConstants.Byte_0E_Expression,
+				PreboxedConstants.Byte_0F_Expression,
+				PreboxedConstants.Byte_10_Expression,
+				PreboxedConstants.Byte_11_Expression,
+				PreboxedConstants.Byte_12_Expression,
+				PreboxedConstants.Byte_13_Expression,
+				PreboxedConstants.Byte_14_Expression,
+				PreboxedConstants.Byte_15_Expression,
+				PreboxedConstants.Byte_16_Expression,
+				PreboxedConstants.Byte_17_Expression,
+				PreboxedConstants.Byte_18_Expression,
+				PreboxedConstants.Byte_19_Expression,
+				PreboxedConstants.Byte_1A_Expression,
+				PreboxedConstants.Byte_1B_Expression,
+				PreboxedConstants.Byte_1C_Expression,
+				PreboxedConstants.Byte_1D_Expression,
+				PreboxedConstants.Byte_1E_Expression,
+				PreboxedConstants.Byte_1F_Expression,
+				PreboxedConstants.Byte_20_Expression,
+				PreboxedConstants.Byte_21_Expression,
+				PreboxedConstants.Byte_22_Expression,
+				PreboxedConstants.Byte_23_Expression,
+				PreboxedConstants.Byte_24_Expression,
+				PreboxedConstants.Byte_25_Expression,
+				PreboxedConstants.Byte_26_Expression,
+				PreboxedConstants.Byte_27_Expression,
+				PreboxedConstants.Byte_28_Expression,
+				PreboxedConstants.Byte_29_Expression,
+				PreboxedConstants.Byte_2A_Expression,
+				PreboxedConstants.Byte_2B_Expression,
+				PreboxedConstants.Byte_2C_Expression,
+				PreboxedConstants.Byte_2D_Expression,
+				PreboxedConstants.Byte_2E_Expression,
+				PreboxedConstants.Byte_2F_Expression,
+				PreboxedConstants.Byte_30_Expression,
+				PreboxedConstants.Byte_31_Expression,
+				PreboxedConstants.Byte_32_Expression,
+				PreboxedConstants.Byte_33_Expression,
+				PreboxedConstants.Byte_34_Expression,
+				PreboxedConstants.Byte_35_Expression,
+				PreboxedConstants.Byte_36_Expression,
+				PreboxedConstants.Byte_37_Expression,
+				PreboxedConstants.Byte_38_Expression,
+				PreboxedConstants.Byte_39_Expression,
+				PreboxedConstants.Byte_3A_Expression,
+				PreboxedConstants.Byte_3B_Expression,
+				PreboxedConstants.Byte_3C_Expression,
+				PreboxedConstants.Byte_3D_Expression,
+				PreboxedConstants.Byte_3E_Expression,
+				PreboxedConstants.Byte_3F_Expression,
+				PreboxedConstants.Byte_40_Expression,
+				PreboxedConstants.Byte_41_Expression,
+				PreboxedConstants.Byte_42_Expression,
+				PreboxedConstants.Byte_43_Expression,
+				PreboxedConstants.Byte_44_Expression,
+				PreboxedConstants.Byte_45_Expression,
+				PreboxedConstants.Byte_46_Expression,
+				PreboxedConstants.Byte_47_Expression,
+				PreboxedConstants.Byte_48_Expression,
+				PreboxedConstants.Byte_49_Expression,
+				PreboxedConstants.Byte_4A_Expression,
+				PreboxedConstants.Byte_4B_Expression,
+				PreboxedConstants.Byte_4C_Expression,
+				PreboxedConstants.Byte_4D_Expression,
+				PreboxedConstants.Byte_4E_Expression,
+				PreboxedConstants.Byte_4F_Expression,
+				PreboxedConstants.Byte_50_Expression,
+				PreboxedConstants.Byte_51_Expression,
+				PreboxedConstants.Byte_52_Expression,
+				PreboxedConstants.Byte_53_Expression,
+				PreboxedConstants.Byte_54_Expression,
+				PreboxedConstants.Byte_55_Expression,
+				PreboxedConstants.Byte_56_Expression,
+				PreboxedConstants.Byte_57_Expression,
+				PreboxedConstants.Byte_58_Expression,
+				PreboxedConstants.Byte_59_Expression,
+				PreboxedConstants.Byte_5A_Expression,
+				PreboxedConstants.Byte_5B_Expression,
+				PreboxedConstants.Byte_5C_Expression,
+				PreboxedConstants.Byte_5D_Expression,
+				PreboxedConstants.Byte_5E_Expression,
+				PreboxedConstants.Byte_5F_Expression,
+				PreboxedConstants.Byte_60_Expression,
+				PreboxedConstants.Byte_61_Expression,
+				PreboxedConstants.Byte_62_Expression,
+				PreboxedConstants.Byte_63_Expression,
+				PreboxedConstants.Byte_64_Expression,
+				PreboxedConstants.Byte_65_Expression,
+				PreboxedConstants.Byte_66_Expression,
+				PreboxedConstants.Byte_67_Expression,
+				PreboxedConstants.Byte_68_Expression,
+				PreboxedConstants.Byte_69_Expression,
+				PreboxedConstants.Byte_6A_Expression,
+				PreboxedConstants.Byte_6B_Expression,
+				PreboxedConstants.Byte_6C_Expression,
+				PreboxedConstants.Byte_6D_Expression,
+				PreboxedConstants.Byte_6E_Expression,
+				PreboxedConstants.Byte_6F_Expression,
+				PreboxedConstants.Byte_70_Expression,
+				PreboxedConstants.Byte_71_Expression,
+				PreboxedConstants.Byte_72_Expression,
+				PreboxedConstants.Byte_73_Expression,
+				PreboxedConstants.Byte_74_Expression,
+				PreboxedConstants.Byte_75_Expression,
+				PreboxedConstants.Byte_76_Expression,
+				PreboxedConstants.Byte_77_Expression,
+				PreboxedConstants.Byte_78_Expression,
+				PreboxedConstants.Byte_79_Expression,
+				PreboxedConstants.Byte_7A_Expression,
+				PreboxedConstants.Byte_7B_Expression,
+				PreboxedConstants.Byte_7C_Expression,
+				PreboxedConstants.Byte_7D_Expression,
+				PreboxedConstants.Byte_7E_Expression,
+				PreboxedConstants.Byte_7F_Expression,
+				PreboxedConstants.Byte_80_Expression,
+				PreboxedConstants.Byte_81_Expression,
+				PreboxedConstants.Byte_82_Expression,
+				PreboxedConstants.Byte_83_Expression,
+				PreboxedConstants.Byte_84_Expression,
+				PreboxedConstants.Byte_85_Expression,
+				PreboxedConstants.Byte_86_Expression,
+				PreboxedConstants.Byte_87_Expression,
+				PreboxedConstants.Byte_88_Expression,
+				PreboxedConstants.Byte_89_Expression,
+				PreboxedConstants.Byte_8A_Expression,
+				PreboxedConstants.Byte_8B_Expression,
+				PreboxedConstants.Byte_8C_Expression,
+				PreboxedConstants.Byte_8D_Expression,
+				PreboxedConstants.Byte_8E_Expression,
+				PreboxedConstants.Byte_8F_Expression,
+				PreboxedConstants.Byte_90_Expression,
+				PreboxedConstants.Byte_91_Expression,
+				PreboxedConstants.Byte_92_Expression,
+				PreboxedConstants.Byte_93_Expression,
+				PreboxedConstants.Byte_94_Expression,
+				PreboxedConstants.Byte_95_Expression,
+				PreboxedConstants.Byte_96_Expression,
+				PreboxedConstants.Byte_97_Expression,
+				PreboxedConstants.Byte_98_Expression,
+				PreboxedConstants.Byte_99_Expression,
+				PreboxedConstants.Byte_9A_Expression,
+				PreboxedConstants.Byte_9B_Expression,
+				PreboxedConstants.Byte_9C_Expression,
+				PreboxedConstants.Byte_9D_Expression,
+				PreboxedConstants.Byte_9E_Expression,
+				PreboxedConstants.Byte_9F_Expression,
+				PreboxedConstants.Byte_A0_Expression,
+				PreboxedConstants.Byte_A1_Expression,
+				PreboxedConstants.Byte_A2_Expression,
+				PreboxedConstants.Byte_A3_Expression,
+				PreboxedConstants.Byte_A4_Expression,
+				PreboxedConstants.Byte_A5_Expression,
+				PreboxedConstants.Byte_A6_Expression,
+				PreboxedConstants.Byte_A7_Expression,
+				PreboxedConstants.Byte_A8_Expression,
+				PreboxedConstants.Byte_A9_Expression,
+				PreboxedConstants.Byte_AA_Expression,
+				PreboxedConstants.Byte_AB_Expression,
+				PreboxedConstants.Byte_AC_Expression,
+				PreboxedConstants.Byte_AD_Expression,
+				PreboxedConstants.Byte_AE_Expression,
+				PreboxedConstants.Byte_AF_Expression,
+				PreboxedConstants.Byte_B0_Expression,
+				PreboxedConstants.Byte_B1_Expression,
+				PreboxedConstants.Byte_B2_Expression,
+				PreboxedConstants.Byte_B3_Expression,
+				PreboxedConstants.Byte_B4_Expression,
+				PreboxedConstants.Byte_B5_Expression,
+				PreboxedConstants.Byte_B6_Expression,
+				PreboxedConstants.Byte_B7_Expression,
+				PreboxedConstants.Byte_B8_Expression,
+				PreboxedConstants.Byte_B9_Expression,
+				PreboxedConstants.Byte_BA_Expression,
+				PreboxedConstants.Byte_BB_Expression,
+				PreboxedConstants.Byte_BC_Expression,
+				PreboxedConstants.Byte_BD_Expression,
+				PreboxedConstants.Byte_BE_Expression,
+				PreboxedConstants.Byte_BF_Expression,
+				PreboxedConstants.Byte_C0_Expression,
+				PreboxedConstants.Byte_C1_Expression,
+				PreboxedConstants.Byte_C2_Expression,
+				PreboxedConstants.Byte_C3_Expression,
+				PreboxedConstants.Byte_C4_Expression,
+				PreboxedConstants.Byte_C5_Expression,
+				PreboxedConstants.Byte_C6_Expression,
+				PreboxedConstants.Byte_C7_Expression,
+				PreboxedConstants.Byte_C8_Expression,
+				PreboxedConstants.Byte_C9_Expression,
+				PreboxedConstants.Byte_CA_Expression,
+				PreboxedConstants.Byte_CB_Expression,
+				PreboxedConstants.Byte_CC_Expression,
+				PreboxedConstants.Byte_CD_Expression,
+				PreboxedConstants.Byte_CE_Expression,
+				PreboxedConstants.Byte_CF_Expression,
+				PreboxedConstants.Byte_D0_Expression,
+				PreboxedConstants.Byte_D1_Expression,
+				PreboxedConstants.Byte_D2_Expression,
+				PreboxedConstants.Byte_D3_Expression,
+				PreboxedConstants.Byte_D4_Expression,
+				PreboxedConstants.Byte_D5_Expression,
+				PreboxedConstants.Byte_D6_Expression,
+				PreboxedConstants.Byte_D7_Expression,
+				PreboxedConstants.Byte_D8_Expression,
+				PreboxedConstants.Byte_D9_Expression,
+				PreboxedConstants.Byte_DA_Expression,
+				PreboxedConstants.Byte_DB_Expression,
+				PreboxedConstants.Byte_DC_Expression,
+				PreboxedConstants.Byte_DD_Expression,
+				PreboxedConstants.Byte_DE_Expression,
+				PreboxedConstants.Byte_DF_Expression,
+				PreboxedConstants.Byte_E0_Expression,
+				PreboxedConstants.Byte_E1_Expression,
+				PreboxedConstants.Byte_E2_Expression,
+				PreboxedConstants.Byte_E3_Expression,
+				PreboxedConstants.Byte_E4_Expression,
+				PreboxedConstants.Byte_E5_Expression,
+				PreboxedConstants.Byte_E6_Expression,
+				PreboxedConstants.Byte_E7_Expression,
+				PreboxedConstants.Byte_E8_Expression,
+				PreboxedConstants.Byte_E9_Expression,
+				PreboxedConstants.Byte_EA_Expression,
+				PreboxedConstants.Byte_EB_Expression,
+				PreboxedConstants.Byte_EC_Expression,
+				PreboxedConstants.Byte_ED_Expression,
+				PreboxedConstants.Byte_EE_Expression,
+				PreboxedConstants.Byte_EF_Expression,
+				PreboxedConstants.Byte_F0_Expression,
+				PreboxedConstants.Byte_F1_Expression,
+				PreboxedConstants.Byte_F2_Expression,
+				PreboxedConstants.Byte_F3_Expression,
+				PreboxedConstants.Byte_F4_Expression,
+				PreboxedConstants.Byte_F5_Expression,
+				PreboxedConstants.Byte_F6_Expression,
+				PreboxedConstants.Byte_F7_Expression,
+				PreboxedConstants.Byte_F8_Expression,
+				PreboxedConstants.Byte_F9_Expression,
+				PreboxedConstants.Byte_FA_Expression,
+				PreboxedConstants.Byte_FB_Expression,
+				PreboxedConstants.Byte_FC_Expression,
+				PreboxedConstants.Byte_FD_Expression,
+				PreboxedConstants.Byte_FE_Expression,
+				PreboxedConstants.Byte_FF_Expression
+            };
+        }
+
+        /// <summary>
+        /// A singleton boxed byte 0 (0x00).
+        /// </summary>
+        public static readonly object Byte_00 = (byte)0x00;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 0 (0x00).
+        /// </summary>
+        public static readonly Expression Byte_00_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_00");
+        /// <summary>
+        /// A singleton boxed byte 1 (0x01).
+        /// </summary>
+        public static readonly object Byte_01 = (byte)0x01;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 1 (0x01).
+        /// </summary>
+        public static readonly Expression Byte_01_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_01");
+        /// <summary>
+        /// A singleton boxed byte 2 (0x02).
+        /// </summary>
+        public static readonly object Byte_02 = (byte)0x02;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 2 (0x02).
+        /// </summary>
+        public static readonly Expression Byte_02_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_02");
+        /// <summary>
+        /// A singleton boxed byte 3 (0x03).
+        /// </summary>
+        public static readonly object Byte_03 = (byte)0x03;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 3 (0x03).
+        /// </summary>
+        public static readonly Expression Byte_03_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_03");
+        /// <summary>
+        /// A singleton boxed byte 4 (0x04).
+        /// </summary>
+        public static readonly object Byte_04 = (byte)0x04;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 4 (0x04).
+        /// </summary>
+        public static readonly Expression Byte_04_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_04");
+        /// <summary>
+        /// A singleton boxed byte 5 (0x05).
+        /// </summary>
+        public static readonly object Byte_05 = (byte)0x05;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 5 (0x05).
+        /// </summary>
+        public static readonly Expression Byte_05_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_05");
+        /// <summary>
+        /// A singleton boxed byte 6 (0x06).
+        /// </summary>
+        public static readonly object Byte_06 = (byte)0x06;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 6 (0x06).
+        /// </summary>
+        public static readonly Expression Byte_06_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_06");
+        /// <summary>
+        /// A singleton boxed byte 7 (0x07).
+        /// </summary>
+        public static readonly object Byte_07 = (byte)0x07;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 7 (0x07).
+        /// </summary>
+        public static readonly Expression Byte_07_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_07");
+        /// <summary>
+        /// A singleton boxed byte 8 (0x08).
+        /// </summary>
+        public static readonly object Byte_08 = (byte)0x08;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 8 (0x08).
+        /// </summary>
+        public static readonly Expression Byte_08_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_08");
+        /// <summary>
+        /// A singleton boxed byte 9 (0x09).
+        /// </summary>
+        public static readonly object Byte_09 = (byte)0x09;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 9 (0x09).
+        /// </summary>
+        public static readonly Expression Byte_09_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_09");
+        /// <summary>
+        /// A singleton boxed byte 10 (0x0A).
+        /// </summary>
+        public static readonly object Byte_0A = (byte)0x0A;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 10 (0x0A).
+        /// </summary>
+        public static readonly Expression Byte_0A_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_0A");
+        /// <summary>
+        /// A singleton boxed byte 11 (0x0B).
+        /// </summary>
+        public static readonly object Byte_0B = (byte)0x0B;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 11 (0x0B).
+        /// </summary>
+        public static readonly Expression Byte_0B_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_0B");
+        /// <summary>
+        /// A singleton boxed byte 12 (0x0C).
+        /// </summary>
+        public static readonly object Byte_0C = (byte)0x0C;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 12 (0x0C).
+        /// </summary>
+        public static readonly Expression Byte_0C_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_0C");
+        /// <summary>
+        /// A singleton boxed byte 13 (0x0D).
+        /// </summary>
+        public static readonly object Byte_0D = (byte)0x0D;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 13 (0x0D).
+        /// </summary>
+        public static readonly Expression Byte_0D_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_0D");
+        /// <summary>
+        /// A singleton boxed byte 14 (0x0E).
+        /// </summary>
+        public static readonly object Byte_0E = (byte)0x0E;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 14 (0x0E).
+        /// </summary>
+        public static readonly Expression Byte_0E_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_0E");
+        /// <summary>
+        /// A singleton boxed byte 15 (0x0F).
+        /// </summary>
+        public static readonly object Byte_0F = (byte)0x0F;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 15 (0x0F).
+        /// </summary>
+        public static readonly Expression Byte_0F_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_0F");
+        /// <summary>
+        /// A singleton boxed byte 16 (0x10).
+        /// </summary>
+        public static readonly object Byte_10 = (byte)0x10;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 16 (0x10).
+        /// </summary>
+        public static readonly Expression Byte_10_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_10");
+        /// <summary>
+        /// A singleton boxed byte 17 (0x11).
+        /// </summary>
+        public static readonly object Byte_11 = (byte)0x11;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 17 (0x11).
+        /// </summary>
+        public static readonly Expression Byte_11_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_11");
+        /// <summary>
+        /// A singleton boxed byte 18 (0x12).
+        /// </summary>
+        public static readonly object Byte_12 = (byte)0x12;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 18 (0x12).
+        /// </summary>
+        public static readonly Expression Byte_12_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_12");
+        /// <summary>
+        /// A singleton boxed byte 19 (0x13).
+        /// </summary>
+        public static readonly object Byte_13 = (byte)0x13;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 19 (0x13).
+        /// </summary>
+        public static readonly Expression Byte_13_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_13");
+        /// <summary>
+        /// A singleton boxed byte 20 (0x14).
+        /// </summary>
+        public static readonly object Byte_14 = (byte)0x14;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 20 (0x14).
+        /// </summary>
+        public static readonly Expression Byte_14_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_14");
+        /// <summary>
+        /// A singleton boxed byte 21 (0x15).
+        /// </summary>
+        public static readonly object Byte_15 = (byte)0x15;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 21 (0x15).
+        /// </summary>
+        public static readonly Expression Byte_15_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_15");
+        /// <summary>
+        /// A singleton boxed byte 22 (0x16).
+        /// </summary>
+        public static readonly object Byte_16 = (byte)0x16;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 22 (0x16).
+        /// </summary>
+        public static readonly Expression Byte_16_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_16");
+        /// <summary>
+        /// A singleton boxed byte 23 (0x17).
+        /// </summary>
+        public static readonly object Byte_17 = (byte)0x17;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 23 (0x17).
+        /// </summary>
+        public static readonly Expression Byte_17_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_17");
+        /// <summary>
+        /// A singleton boxed byte 24 (0x18).
+        /// </summary>
+        public static readonly object Byte_18 = (byte)0x18;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 24 (0x18).
+        /// </summary>
+        public static readonly Expression Byte_18_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_18");
+        /// <summary>
+        /// A singleton boxed byte 25 (0x19).
+        /// </summary>
+        public static readonly object Byte_19 = (byte)0x19;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 25 (0x19).
+        /// </summary>
+        public static readonly Expression Byte_19_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_19");
+        /// <summary>
+        /// A singleton boxed byte 26 (0x1A).
+        /// </summary>
+        public static readonly object Byte_1A = (byte)0x1A;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 26 (0x1A).
+        /// </summary>
+        public static readonly Expression Byte_1A_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_1A");
+        /// <summary>
+        /// A singleton boxed byte 27 (0x1B).
+        /// </summary>
+        public static readonly object Byte_1B = (byte)0x1B;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 27 (0x1B).
+        /// </summary>
+        public static readonly Expression Byte_1B_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_1B");
+        /// <summary>
+        /// A singleton boxed byte 28 (0x1C).
+        /// </summary>
+        public static readonly object Byte_1C = (byte)0x1C;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 28 (0x1C).
+        /// </summary>
+        public static readonly Expression Byte_1C_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_1C");
+        /// <summary>
+        /// A singleton boxed byte 29 (0x1D).
+        /// </summary>
+        public static readonly object Byte_1D = (byte)0x1D;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 29 (0x1D).
+        /// </summary>
+        public static readonly Expression Byte_1D_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_1D");
+        /// <summary>
+        /// A singleton boxed byte 30 (0x1E).
+        /// </summary>
+        public static readonly object Byte_1E = (byte)0x1E;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 30 (0x1E).
+        /// </summary>
+        public static readonly Expression Byte_1E_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_1E");
+        /// <summary>
+        /// A singleton boxed byte 31 (0x1F).
+        /// </summary>
+        public static readonly object Byte_1F = (byte)0x1F;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 31 (0x1F).
+        /// </summary>
+        public static readonly Expression Byte_1F_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_1F");
+        /// <summary>
+        /// A singleton boxed byte 32 (0x20).
+        /// </summary>
+        public static readonly object Byte_20 = (byte)0x20;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 32 (0x20).
+        /// </summary>
+        public static readonly Expression Byte_20_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_20");
+        /// <summary>
+        /// A singleton boxed byte 33 (0x21).
+        /// </summary>
+        public static readonly object Byte_21 = (byte)0x21;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 33 (0x21).
+        /// </summary>
+        public static readonly Expression Byte_21_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_21");
+        /// <summary>
+        /// A singleton boxed byte 34 (0x22).
+        /// </summary>
+        public static readonly object Byte_22 = (byte)0x22;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 34 (0x22).
+        /// </summary>
+        public static readonly Expression Byte_22_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_22");
+        /// <summary>
+        /// A singleton boxed byte 35 (0x23).
+        /// </summary>
+        public static readonly object Byte_23 = (byte)0x23;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 35 (0x23).
+        /// </summary>
+        public static readonly Expression Byte_23_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_23");
+        /// <summary>
+        /// A singleton boxed byte 36 (0x24).
+        /// </summary>
+        public static readonly object Byte_24 = (byte)0x24;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 36 (0x24).
+        /// </summary>
+        public static readonly Expression Byte_24_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_24");
+        /// <summary>
+        /// A singleton boxed byte 37 (0x25).
+        /// </summary>
+        public static readonly object Byte_25 = (byte)0x25;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 37 (0x25).
+        /// </summary>
+        public static readonly Expression Byte_25_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_25");
+        /// <summary>
+        /// A singleton boxed byte 38 (0x26).
+        /// </summary>
+        public static readonly object Byte_26 = (byte)0x26;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 38 (0x26).
+        /// </summary>
+        public static readonly Expression Byte_26_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_26");
+        /// <summary>
+        /// A singleton boxed byte 39 (0x27).
+        /// </summary>
+        public static readonly object Byte_27 = (byte)0x27;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 39 (0x27).
+        /// </summary>
+        public static readonly Expression Byte_27_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_27");
+        /// <summary>
+        /// A singleton boxed byte 40 (0x28).
+        /// </summary>
+        public static readonly object Byte_28 = (byte)0x28;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 40 (0x28).
+        /// </summary>
+        public static readonly Expression Byte_28_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_28");
+        /// <summary>
+        /// A singleton boxed byte 41 (0x29).
+        /// </summary>
+        public static readonly object Byte_29 = (byte)0x29;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 41 (0x29).
+        /// </summary>
+        public static readonly Expression Byte_29_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_29");
+        /// <summary>
+        /// A singleton boxed byte 42 (0x2A).
+        /// </summary>
+        public static readonly object Byte_2A = (byte)0x2A;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 42 (0x2A).
+        /// </summary>
+        public static readonly Expression Byte_2A_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_2A");
+        /// <summary>
+        /// A singleton boxed byte 43 (0x2B).
+        /// </summary>
+        public static readonly object Byte_2B = (byte)0x2B;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 43 (0x2B).
+        /// </summary>
+        public static readonly Expression Byte_2B_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_2B");
+        /// <summary>
+        /// A singleton boxed byte 44 (0x2C).
+        /// </summary>
+        public static readonly object Byte_2C = (byte)0x2C;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 44 (0x2C).
+        /// </summary>
+        public static readonly Expression Byte_2C_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_2C");
+        /// <summary>
+        /// A singleton boxed byte 45 (0x2D).
+        /// </summary>
+        public static readonly object Byte_2D = (byte)0x2D;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 45 (0x2D).
+        /// </summary>
+        public static readonly Expression Byte_2D_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_2D");
+        /// <summary>
+        /// A singleton boxed byte 46 (0x2E).
+        /// </summary>
+        public static readonly object Byte_2E = (byte)0x2E;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 46 (0x2E).
+        /// </summary>
+        public static readonly Expression Byte_2E_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_2E");
+        /// <summary>
+        /// A singleton boxed byte 47 (0x2F).
+        /// </summary>
+        public static readonly object Byte_2F = (byte)0x2F;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 47 (0x2F).
+        /// </summary>
+        public static readonly Expression Byte_2F_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_2F");
+        /// <summary>
+        /// A singleton boxed byte 48 (0x30).
+        /// </summary>
+        public static readonly object Byte_30 = (byte)0x30;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 48 (0x30).
+        /// </summary>
+        public static readonly Expression Byte_30_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_30");
+        /// <summary>
+        /// A singleton boxed byte 49 (0x31).
+        /// </summary>
+        public static readonly object Byte_31 = (byte)0x31;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 49 (0x31).
+        /// </summary>
+        public static readonly Expression Byte_31_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_31");
+        /// <summary>
+        /// A singleton boxed byte 50 (0x32).
+        /// </summary>
+        public static readonly object Byte_32 = (byte)0x32;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 50 (0x32).
+        /// </summary>
+        public static readonly Expression Byte_32_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_32");
+        /// <summary>
+        /// A singleton boxed byte 51 (0x33).
+        /// </summary>
+        public static readonly object Byte_33 = (byte)0x33;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 51 (0x33).
+        /// </summary>
+        public static readonly Expression Byte_33_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_33");
+        /// <summary>
+        /// A singleton boxed byte 52 (0x34).
+        /// </summary>
+        public static readonly object Byte_34 = (byte)0x34;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 52 (0x34).
+        /// </summary>
+        public static readonly Expression Byte_34_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_34");
+        /// <summary>
+        /// A singleton boxed byte 53 (0x35).
+        /// </summary>
+        public static readonly object Byte_35 = (byte)0x35;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 53 (0x35).
+        /// </summary>
+        public static readonly Expression Byte_35_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_35");
+        /// <summary>
+        /// A singleton boxed byte 54 (0x36).
+        /// </summary>
+        public static readonly object Byte_36 = (byte)0x36;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 54 (0x36).
+        /// </summary>
+        public static readonly Expression Byte_36_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_36");
+        /// <summary>
+        /// A singleton boxed byte 55 (0x37).
+        /// </summary>
+        public static readonly object Byte_37 = (byte)0x37;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 55 (0x37).
+        /// </summary>
+        public static readonly Expression Byte_37_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_37");
+        /// <summary>
+        /// A singleton boxed byte 56 (0x38).
+        /// </summary>
+        public static readonly object Byte_38 = (byte)0x38;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 56 (0x38).
+        /// </summary>
+        public static readonly Expression Byte_38_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_38");
+        /// <summary>
+        /// A singleton boxed byte 57 (0x39).
+        /// </summary>
+        public static readonly object Byte_39 = (byte)0x39;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 57 (0x39).
+        /// </summary>
+        public static readonly Expression Byte_39_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_39");
+        /// <summary>
+        /// A singleton boxed byte 58 (0x3A).
+        /// </summary>
+        public static readonly object Byte_3A = (byte)0x3A;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 58 (0x3A).
+        /// </summary>
+        public static readonly Expression Byte_3A_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_3A");
+        /// <summary>
+        /// A singleton boxed byte 59 (0x3B).
+        /// </summary>
+        public static readonly object Byte_3B = (byte)0x3B;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 59 (0x3B).
+        /// </summary>
+        public static readonly Expression Byte_3B_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_3B");
+        /// <summary>
+        /// A singleton boxed byte 60 (0x3C).
+        /// </summary>
+        public static readonly object Byte_3C = (byte)0x3C;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 60 (0x3C).
+        /// </summary>
+        public static readonly Expression Byte_3C_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_3C");
+        /// <summary>
+        /// A singleton boxed byte 61 (0x3D).
+        /// </summary>
+        public static readonly object Byte_3D = (byte)0x3D;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 61 (0x3D).
+        /// </summary>
+        public static readonly Expression Byte_3D_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_3D");
+        /// <summary>
+        /// A singleton boxed byte 62 (0x3E).
+        /// </summary>
+        public static readonly object Byte_3E = (byte)0x3E;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 62 (0x3E).
+        /// </summary>
+        public static readonly Expression Byte_3E_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_3E");
+        /// <summary>
+        /// A singleton boxed byte 63 (0x3F).
+        /// </summary>
+        public static readonly object Byte_3F = (byte)0x3F;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 63 (0x3F).
+        /// </summary>
+        public static readonly Expression Byte_3F_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_3F");
+        /// <summary>
+        /// A singleton boxed byte 64 (0x40).
+        /// </summary>
+        public static readonly object Byte_40 = (byte)0x40;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 64 (0x40).
+        /// </summary>
+        public static readonly Expression Byte_40_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_40");
+        /// <summary>
+        /// A singleton boxed byte 65 (0x41).
+        /// </summary>
+        public static readonly object Byte_41 = (byte)0x41;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 65 (0x41).
+        /// </summary>
+        public static readonly Expression Byte_41_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_41");
+        /// <summary>
+        /// A singleton boxed byte 66 (0x42).
+        /// </summary>
+        public static readonly object Byte_42 = (byte)0x42;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 66 (0x42).
+        /// </summary>
+        public static readonly Expression Byte_42_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_42");
+        /// <summary>
+        /// A singleton boxed byte 67 (0x43).
+        /// </summary>
+        public static readonly object Byte_43 = (byte)0x43;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 67 (0x43).
+        /// </summary>
+        public static readonly Expression Byte_43_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_43");
+        /// <summary>
+        /// A singleton boxed byte 68 (0x44).
+        /// </summary>
+        public static readonly object Byte_44 = (byte)0x44;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 68 (0x44).
+        /// </summary>
+        public static readonly Expression Byte_44_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_44");
+        /// <summary>
+        /// A singleton boxed byte 69 (0x45).
+        /// </summary>
+        public static readonly object Byte_45 = (byte)0x45;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 69 (0x45).
+        /// </summary>
+        public static readonly Expression Byte_45_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_45");
+        /// <summary>
+        /// A singleton boxed byte 70 (0x46).
+        /// </summary>
+        public static readonly object Byte_46 = (byte)0x46;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 70 (0x46).
+        /// </summary>
+        public static readonly Expression Byte_46_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_46");
+        /// <summary>
+        /// A singleton boxed byte 71 (0x47).
+        /// </summary>
+        public static readonly object Byte_47 = (byte)0x47;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 71 (0x47).
+        /// </summary>
+        public static readonly Expression Byte_47_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_47");
+        /// <summary>
+        /// A singleton boxed byte 72 (0x48).
+        /// </summary>
+        public static readonly object Byte_48 = (byte)0x48;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 72 (0x48).
+        /// </summary>
+        public static readonly Expression Byte_48_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_48");
+        /// <summary>
+        /// A singleton boxed byte 73 (0x49).
+        /// </summary>
+        public static readonly object Byte_49 = (byte)0x49;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 73 (0x49).
+        /// </summary>
+        public static readonly Expression Byte_49_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_49");
+        /// <summary>
+        /// A singleton boxed byte 74 (0x4A).
+        /// </summary>
+        public static readonly object Byte_4A = (byte)0x4A;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 74 (0x4A).
+        /// </summary>
+        public static readonly Expression Byte_4A_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_4A");
+        /// <summary>
+        /// A singleton boxed byte 75 (0x4B).
+        /// </summary>
+        public static readonly object Byte_4B = (byte)0x4B;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 75 (0x4B).
+        /// </summary>
+        public static readonly Expression Byte_4B_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_4B");
+        /// <summary>
+        /// A singleton boxed byte 76 (0x4C).
+        /// </summary>
+        public static readonly object Byte_4C = (byte)0x4C;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 76 (0x4C).
+        /// </summary>
+        public static readonly Expression Byte_4C_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_4C");
+        /// <summary>
+        /// A singleton boxed byte 77 (0x4D).
+        /// </summary>
+        public static readonly object Byte_4D = (byte)0x4D;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 77 (0x4D).
+        /// </summary>
+        public static readonly Expression Byte_4D_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_4D");
+        /// <summary>
+        /// A singleton boxed byte 78 (0x4E).
+        /// </summary>
+        public static readonly object Byte_4E = (byte)0x4E;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 78 (0x4E).
+        /// </summary>
+        public static readonly Expression Byte_4E_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_4E");
+        /// <summary>
+        /// A singleton boxed byte 79 (0x4F).
+        /// </summary>
+        public static readonly object Byte_4F = (byte)0x4F;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 79 (0x4F).
+        /// </summary>
+        public static readonly Expression Byte_4F_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_4F");
+        /// <summary>
+        /// A singleton boxed byte 80 (0x50).
+        /// </summary>
+        public static readonly object Byte_50 = (byte)0x50;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 80 (0x50).
+        /// </summary>
+        public static readonly Expression Byte_50_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_50");
+        /// <summary>
+        /// A singleton boxed byte 81 (0x51).
+        /// </summary>
+        public static readonly object Byte_51 = (byte)0x51;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 81 (0x51).
+        /// </summary>
+        public static readonly Expression Byte_51_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_51");
+        /// <summary>
+        /// A singleton boxed byte 82 (0x52).
+        /// </summary>
+        public static readonly object Byte_52 = (byte)0x52;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 82 (0x52).
+        /// </summary>
+        public static readonly Expression Byte_52_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_52");
+        /// <summary>
+        /// A singleton boxed byte 83 (0x53).
+        /// </summary>
+        public static readonly object Byte_53 = (byte)0x53;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 83 (0x53).
+        /// </summary>
+        public static readonly Expression Byte_53_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_53");
+        /// <summary>
+        /// A singleton boxed byte 84 (0x54).
+        /// </summary>
+        public static readonly object Byte_54 = (byte)0x54;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 84 (0x54).
+        /// </summary>
+        public static readonly Expression Byte_54_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_54");
+        /// <summary>
+        /// A singleton boxed byte 85 (0x55).
+        /// </summary>
+        public static readonly object Byte_55 = (byte)0x55;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 85 (0x55).
+        /// </summary>
+        public static readonly Expression Byte_55_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_55");
+        /// <summary>
+        /// A singleton boxed byte 86 (0x56).
+        /// </summary>
+        public static readonly object Byte_56 = (byte)0x56;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 86 (0x56).
+        /// </summary>
+        public static readonly Expression Byte_56_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_56");
+        /// <summary>
+        /// A singleton boxed byte 87 (0x57).
+        /// </summary>
+        public static readonly object Byte_57 = (byte)0x57;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 87 (0x57).
+        /// </summary>
+        public static readonly Expression Byte_57_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_57");
+        /// <summary>
+        /// A singleton boxed byte 88 (0x58).
+        /// </summary>
+        public static readonly object Byte_58 = (byte)0x58;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 88 (0x58).
+        /// </summary>
+        public static readonly Expression Byte_58_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_58");
+        /// <summary>
+        /// A singleton boxed byte 89 (0x59).
+        /// </summary>
+        public static readonly object Byte_59 = (byte)0x59;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 89 (0x59).
+        /// </summary>
+        public static readonly Expression Byte_59_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_59");
+        /// <summary>
+        /// A singleton boxed byte 90 (0x5A).
+        /// </summary>
+        public static readonly object Byte_5A = (byte)0x5A;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 90 (0x5A).
+        /// </summary>
+        public static readonly Expression Byte_5A_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_5A");
+        /// <summary>
+        /// A singleton boxed byte 91 (0x5B).
+        /// </summary>
+        public static readonly object Byte_5B = (byte)0x5B;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 91 (0x5B).
+        /// </summary>
+        public static readonly Expression Byte_5B_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_5B");
+        /// <summary>
+        /// A singleton boxed byte 92 (0x5C).
+        /// </summary>
+        public static readonly object Byte_5C = (byte)0x5C;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 92 (0x5C).
+        /// </summary>
+        public static readonly Expression Byte_5C_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_5C");
+        /// <summary>
+        /// A singleton boxed byte 93 (0x5D).
+        /// </summary>
+        public static readonly object Byte_5D = (byte)0x5D;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 93 (0x5D).
+        /// </summary>
+        public static readonly Expression Byte_5D_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_5D");
+        /// <summary>
+        /// A singleton boxed byte 94 (0x5E).
+        /// </summary>
+        public static readonly object Byte_5E = (byte)0x5E;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 94 (0x5E).
+        /// </summary>
+        public static readonly Expression Byte_5E_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_5E");
+        /// <summary>
+        /// A singleton boxed byte 95 (0x5F).
+        /// </summary>
+        public static readonly object Byte_5F = (byte)0x5F;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 95 (0x5F).
+        /// </summary>
+        public static readonly Expression Byte_5F_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_5F");
+        /// <summary>
+        /// A singleton boxed byte 96 (0x60).
+        /// </summary>
+        public static readonly object Byte_60 = (byte)0x60;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 96 (0x60).
+        /// </summary>
+        public static readonly Expression Byte_60_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_60");
+        /// <summary>
+        /// A singleton boxed byte 97 (0x61).
+        /// </summary>
+        public static readonly object Byte_61 = (byte)0x61;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 97 (0x61).
+        /// </summary>
+        public static readonly Expression Byte_61_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_61");
+        /// <summary>
+        /// A singleton boxed byte 98 (0x62).
+        /// </summary>
+        public static readonly object Byte_62 = (byte)0x62;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 98 (0x62).
+        /// </summary>
+        public static readonly Expression Byte_62_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_62");
+        /// <summary>
+        /// A singleton boxed byte 99 (0x63).
+        /// </summary>
+        public static readonly object Byte_63 = (byte)0x63;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 99 (0x63).
+        /// </summary>
+        public static readonly Expression Byte_63_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_63");
+        /// <summary>
+        /// A singleton boxed byte 100 (0x64).
+        /// </summary>
+        public static readonly object Byte_64 = (byte)0x64;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 100 (0x64).
+        /// </summary>
+        public static readonly Expression Byte_64_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_64");
+        /// <summary>
+        /// A singleton boxed byte 101 (0x65).
+        /// </summary>
+        public static readonly object Byte_65 = (byte)0x65;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 101 (0x65).
+        /// </summary>
+        public static readonly Expression Byte_65_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_65");
+        /// <summary>
+        /// A singleton boxed byte 102 (0x66).
+        /// </summary>
+        public static readonly object Byte_66 = (byte)0x66;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 102 (0x66).
+        /// </summary>
+        public static readonly Expression Byte_66_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_66");
+        /// <summary>
+        /// A singleton boxed byte 103 (0x67).
+        /// </summary>
+        public static readonly object Byte_67 = (byte)0x67;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 103 (0x67).
+        /// </summary>
+        public static readonly Expression Byte_67_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_67");
+        /// <summary>
+        /// A singleton boxed byte 104 (0x68).
+        /// </summary>
+        public static readonly object Byte_68 = (byte)0x68;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 104 (0x68).
+        /// </summary>
+        public static readonly Expression Byte_68_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_68");
+        /// <summary>
+        /// A singleton boxed byte 105 (0x69).
+        /// </summary>
+        public static readonly object Byte_69 = (byte)0x69;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 105 (0x69).
+        /// </summary>
+        public static readonly Expression Byte_69_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_69");
+        /// <summary>
+        /// A singleton boxed byte 106 (0x6A).
+        /// </summary>
+        public static readonly object Byte_6A = (byte)0x6A;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 106 (0x6A).
+        /// </summary>
+        public static readonly Expression Byte_6A_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_6A");
+        /// <summary>
+        /// A singleton boxed byte 107 (0x6B).
+        /// </summary>
+        public static readonly object Byte_6B = (byte)0x6B;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 107 (0x6B).
+        /// </summary>
+        public static readonly Expression Byte_6B_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_6B");
+        /// <summary>
+        /// A singleton boxed byte 108 (0x6C).
+        /// </summary>
+        public static readonly object Byte_6C = (byte)0x6C;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 108 (0x6C).
+        /// </summary>
+        public static readonly Expression Byte_6C_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_6C");
+        /// <summary>
+        /// A singleton boxed byte 109 (0x6D).
+        /// </summary>
+        public static readonly object Byte_6D = (byte)0x6D;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 109 (0x6D).
+        /// </summary>
+        public static readonly Expression Byte_6D_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_6D");
+        /// <summary>
+        /// A singleton boxed byte 110 (0x6E).
+        /// </summary>
+        public static readonly object Byte_6E = (byte)0x6E;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 110 (0x6E).
+        /// </summary>
+        public static readonly Expression Byte_6E_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_6E");
+        /// <summary>
+        /// A singleton boxed byte 111 (0x6F).
+        /// </summary>
+        public static readonly object Byte_6F = (byte)0x6F;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 111 (0x6F).
+        /// </summary>
+        public static readonly Expression Byte_6F_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_6F");
+        /// <summary>
+        /// A singleton boxed byte 112 (0x70).
+        /// </summary>
+        public static readonly object Byte_70 = (byte)0x70;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 112 (0x70).
+        /// </summary>
+        public static readonly Expression Byte_70_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_70");
+        /// <summary>
+        /// A singleton boxed byte 113 (0x71).
+        /// </summary>
+        public static readonly object Byte_71 = (byte)0x71;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 113 (0x71).
+        /// </summary>
+        public static readonly Expression Byte_71_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_71");
+        /// <summary>
+        /// A singleton boxed byte 114 (0x72).
+        /// </summary>
+        public static readonly object Byte_72 = (byte)0x72;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 114 (0x72).
+        /// </summary>
+        public static readonly Expression Byte_72_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_72");
+        /// <summary>
+        /// A singleton boxed byte 115 (0x73).
+        /// </summary>
+        public static readonly object Byte_73 = (byte)0x73;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 115 (0x73).
+        /// </summary>
+        public static readonly Expression Byte_73_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_73");
+        /// <summary>
+        /// A singleton boxed byte 116 (0x74).
+        /// </summary>
+        public static readonly object Byte_74 = (byte)0x74;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 116 (0x74).
+        /// </summary>
+        public static readonly Expression Byte_74_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_74");
+        /// <summary>
+        /// A singleton boxed byte 117 (0x75).
+        /// </summary>
+        public static readonly object Byte_75 = (byte)0x75;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 117 (0x75).
+        /// </summary>
+        public static readonly Expression Byte_75_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_75");
+        /// <summary>
+        /// A singleton boxed byte 118 (0x76).
+        /// </summary>
+        public static readonly object Byte_76 = (byte)0x76;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 118 (0x76).
+        /// </summary>
+        public static readonly Expression Byte_76_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_76");
+        /// <summary>
+        /// A singleton boxed byte 119 (0x77).
+        /// </summary>
+        public static readonly object Byte_77 = (byte)0x77;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 119 (0x77).
+        /// </summary>
+        public static readonly Expression Byte_77_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_77");
+        /// <summary>
+        /// A singleton boxed byte 120 (0x78).
+        /// </summary>
+        public static readonly object Byte_78 = (byte)0x78;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 120 (0x78).
+        /// </summary>
+        public static readonly Expression Byte_78_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_78");
+        /// <summary>
+        /// A singleton boxed byte 121 (0x79).
+        /// </summary>
+        public static readonly object Byte_79 = (byte)0x79;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 121 (0x79).
+        /// </summary>
+        public static readonly Expression Byte_79_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_79");
+        /// <summary>
+        /// A singleton boxed byte 122 (0x7A).
+        /// </summary>
+        public static readonly object Byte_7A = (byte)0x7A;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 122 (0x7A).
+        /// </summary>
+        public static readonly Expression Byte_7A_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_7A");
+        /// <summary>
+        /// A singleton boxed byte 123 (0x7B).
+        /// </summary>
+        public static readonly object Byte_7B = (byte)0x7B;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 123 (0x7B).
+        /// </summary>
+        public static readonly Expression Byte_7B_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_7B");
+        /// <summary>
+        /// A singleton boxed byte 124 (0x7C).
+        /// </summary>
+        public static readonly object Byte_7C = (byte)0x7C;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 124 (0x7C).
+        /// </summary>
+        public static readonly Expression Byte_7C_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_7C");
+        /// <summary>
+        /// A singleton boxed byte 125 (0x7D).
+        /// </summary>
+        public static readonly object Byte_7D = (byte)0x7D;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 125 (0x7D).
+        /// </summary>
+        public static readonly Expression Byte_7D_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_7D");
+        /// <summary>
+        /// A singleton boxed byte 126 (0x7E).
+        /// </summary>
+        public static readonly object Byte_7E = (byte)0x7E;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 126 (0x7E).
+        /// </summary>
+        public static readonly Expression Byte_7E_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_7E");
+        /// <summary>
+        /// A singleton boxed byte 127 (0x7F).
+        /// </summary>
+        public static readonly object Byte_7F = (byte)0x7F;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 127 (0x7F).
+        /// </summary>
+        public static readonly Expression Byte_7F_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_7F");
+        /// <summary>
+        /// A singleton boxed byte 128 (0x80).
+        /// </summary>
+        public static readonly object Byte_80 = (byte)0x80;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 128 (0x80).
+        /// </summary>
+        public static readonly Expression Byte_80_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_80");
+        /// <summary>
+        /// A singleton boxed byte 129 (0x81).
+        /// </summary>
+        public static readonly object Byte_81 = (byte)0x81;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 129 (0x81).
+        /// </summary>
+        public static readonly Expression Byte_81_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_81");
+        /// <summary>
+        /// A singleton boxed byte 130 (0x82).
+        /// </summary>
+        public static readonly object Byte_82 = (byte)0x82;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 130 (0x82).
+        /// </summary>
+        public static readonly Expression Byte_82_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_82");
+        /// <summary>
+        /// A singleton boxed byte 131 (0x83).
+        /// </summary>
+        public static readonly object Byte_83 = (byte)0x83;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 131 (0x83).
+        /// </summary>
+        public static readonly Expression Byte_83_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_83");
+        /// <summary>
+        /// A singleton boxed byte 132 (0x84).
+        /// </summary>
+        public static readonly object Byte_84 = (byte)0x84;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 132 (0x84).
+        /// </summary>
+        public static readonly Expression Byte_84_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_84");
+        /// <summary>
+        /// A singleton boxed byte 133 (0x85).
+        /// </summary>
+        public static readonly object Byte_85 = (byte)0x85;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 133 (0x85).
+        /// </summary>
+        public static readonly Expression Byte_85_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_85");
+        /// <summary>
+        /// A singleton boxed byte 134 (0x86).
+        /// </summary>
+        public static readonly object Byte_86 = (byte)0x86;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 134 (0x86).
+        /// </summary>
+        public static readonly Expression Byte_86_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_86");
+        /// <summary>
+        /// A singleton boxed byte 135 (0x87).
+        /// </summary>
+        public static readonly object Byte_87 = (byte)0x87;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 135 (0x87).
+        /// </summary>
+        public static readonly Expression Byte_87_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_87");
+        /// <summary>
+        /// A singleton boxed byte 136 (0x88).
+        /// </summary>
+        public static readonly object Byte_88 = (byte)0x88;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 136 (0x88).
+        /// </summary>
+        public static readonly Expression Byte_88_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_88");
+        /// <summary>
+        /// A singleton boxed byte 137 (0x89).
+        /// </summary>
+        public static readonly object Byte_89 = (byte)0x89;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 137 (0x89).
+        /// </summary>
+        public static readonly Expression Byte_89_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_89");
+        /// <summary>
+        /// A singleton boxed byte 138 (0x8A).
+        /// </summary>
+        public static readonly object Byte_8A = (byte)0x8A;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 138 (0x8A).
+        /// </summary>
+        public static readonly Expression Byte_8A_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_8A");
+        /// <summary>
+        /// A singleton boxed byte 139 (0x8B).
+        /// </summary>
+        public static readonly object Byte_8B = (byte)0x8B;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 139 (0x8B).
+        /// </summary>
+        public static readonly Expression Byte_8B_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_8B");
+        /// <summary>
+        /// A singleton boxed byte 140 (0x8C).
+        /// </summary>
+        public static readonly object Byte_8C = (byte)0x8C;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 140 (0x8C).
+        /// </summary>
+        public static readonly Expression Byte_8C_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_8C");
+        /// <summary>
+        /// A singleton boxed byte 141 (0x8D).
+        /// </summary>
+        public static readonly object Byte_8D = (byte)0x8D;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 141 (0x8D).
+        /// </summary>
+        public static readonly Expression Byte_8D_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_8D");
+        /// <summary>
+        /// A singleton boxed byte 142 (0x8E).
+        /// </summary>
+        public static readonly object Byte_8E = (byte)0x8E;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 142 (0x8E).
+        /// </summary>
+        public static readonly Expression Byte_8E_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_8E");
+        /// <summary>
+        /// A singleton boxed byte 143 (0x8F).
+        /// </summary>
+        public static readonly object Byte_8F = (byte)0x8F;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 143 (0x8F).
+        /// </summary>
+        public static readonly Expression Byte_8F_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_8F");
+        /// <summary>
+        /// A singleton boxed byte 144 (0x90).
+        /// </summary>
+        public static readonly object Byte_90 = (byte)0x90;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 144 (0x90).
+        /// </summary>
+        public static readonly Expression Byte_90_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_90");
+        /// <summary>
+        /// A singleton boxed byte 145 (0x91).
+        /// </summary>
+        public static readonly object Byte_91 = (byte)0x91;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 145 (0x91).
+        /// </summary>
+        public static readonly Expression Byte_91_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_91");
+        /// <summary>
+        /// A singleton boxed byte 146 (0x92).
+        /// </summary>
+        public static readonly object Byte_92 = (byte)0x92;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 146 (0x92).
+        /// </summary>
+        public static readonly Expression Byte_92_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_92");
+        /// <summary>
+        /// A singleton boxed byte 147 (0x93).
+        /// </summary>
+        public static readonly object Byte_93 = (byte)0x93;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 147 (0x93).
+        /// </summary>
+        public static readonly Expression Byte_93_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_93");
+        /// <summary>
+        /// A singleton boxed byte 148 (0x94).
+        /// </summary>
+        public static readonly object Byte_94 = (byte)0x94;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 148 (0x94).
+        /// </summary>
+        public static readonly Expression Byte_94_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_94");
+        /// <summary>
+        /// A singleton boxed byte 149 (0x95).
+        /// </summary>
+        public static readonly object Byte_95 = (byte)0x95;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 149 (0x95).
+        /// </summary>
+        public static readonly Expression Byte_95_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_95");
+        /// <summary>
+        /// A singleton boxed byte 150 (0x96).
+        /// </summary>
+        public static readonly object Byte_96 = (byte)0x96;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 150 (0x96).
+        /// </summary>
+        public static readonly Expression Byte_96_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_96");
+        /// <summary>
+        /// A singleton boxed byte 151 (0x97).
+        /// </summary>
+        public static readonly object Byte_97 = (byte)0x97;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 151 (0x97).
+        /// </summary>
+        public static readonly Expression Byte_97_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_97");
+        /// <summary>
+        /// A singleton boxed byte 152 (0x98).
+        /// </summary>
+        public static readonly object Byte_98 = (byte)0x98;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 152 (0x98).
+        /// </summary>
+        public static readonly Expression Byte_98_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_98");
+        /// <summary>
+        /// A singleton boxed byte 153 (0x99).
+        /// </summary>
+        public static readonly object Byte_99 = (byte)0x99;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 153 (0x99).
+        /// </summary>
+        public static readonly Expression Byte_99_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_99");
+        /// <summary>
+        /// A singleton boxed byte 154 (0x9A).
+        /// </summary>
+        public static readonly object Byte_9A = (byte)0x9A;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 154 (0x9A).
+        /// </summary>
+        public static readonly Expression Byte_9A_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_9A");
+        /// <summary>
+        /// A singleton boxed byte 155 (0x9B).
+        /// </summary>
+        public static readonly object Byte_9B = (byte)0x9B;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 155 (0x9B).
+        /// </summary>
+        public static readonly Expression Byte_9B_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_9B");
+        /// <summary>
+        /// A singleton boxed byte 156 (0x9C).
+        /// </summary>
+        public static readonly object Byte_9C = (byte)0x9C;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 156 (0x9C).
+        /// </summary>
+        public static readonly Expression Byte_9C_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_9C");
+        /// <summary>
+        /// A singleton boxed byte 157 (0x9D).
+        /// </summary>
+        public static readonly object Byte_9D = (byte)0x9D;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 157 (0x9D).
+        /// </summary>
+        public static readonly Expression Byte_9D_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_9D");
+        /// <summary>
+        /// A singleton boxed byte 158 (0x9E).
+        /// </summary>
+        public static readonly object Byte_9E = (byte)0x9E;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 158 (0x9E).
+        /// </summary>
+        public static readonly Expression Byte_9E_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_9E");
+        /// <summary>
+        /// A singleton boxed byte 159 (0x9F).
+        /// </summary>
+        public static readonly object Byte_9F = (byte)0x9F;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 159 (0x9F).
+        /// </summary>
+        public static readonly Expression Byte_9F_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_9F");
+        /// <summary>
+        /// A singleton boxed byte 160 (0xA0).
+        /// </summary>
+        public static readonly object Byte_A0 = (byte)0xA0;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 160 (0xA0).
+        /// </summary>
+        public static readonly Expression Byte_A0_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_A0");
+        /// <summary>
+        /// A singleton boxed byte 161 (0xA1).
+        /// </summary>
+        public static readonly object Byte_A1 = (byte)0xA1;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 161 (0xA1).
+        /// </summary>
+        public static readonly Expression Byte_A1_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_A1");
+        /// <summary>
+        /// A singleton boxed byte 162 (0xA2).
+        /// </summary>
+        public static readonly object Byte_A2 = (byte)0xA2;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 162 (0xA2).
+        /// </summary>
+        public static readonly Expression Byte_A2_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_A2");
+        /// <summary>
+        /// A singleton boxed byte 163 (0xA3).
+        /// </summary>
+        public static readonly object Byte_A3 = (byte)0xA3;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 163 (0xA3).
+        /// </summary>
+        public static readonly Expression Byte_A3_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_A3");
+        /// <summary>
+        /// A singleton boxed byte 164 (0xA4).
+        /// </summary>
+        public static readonly object Byte_A4 = (byte)0xA4;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 164 (0xA4).
+        /// </summary>
+        public static readonly Expression Byte_A4_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_A4");
+        /// <summary>
+        /// A singleton boxed byte 165 (0xA5).
+        /// </summary>
+        public static readonly object Byte_A5 = (byte)0xA5;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 165 (0xA5).
+        /// </summary>
+        public static readonly Expression Byte_A5_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_A5");
+        /// <summary>
+        /// A singleton boxed byte 166 (0xA6).
+        /// </summary>
+        public static readonly object Byte_A6 = (byte)0xA6;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 166 (0xA6).
+        /// </summary>
+        public static readonly Expression Byte_A6_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_A6");
+        /// <summary>
+        /// A singleton boxed byte 167 (0xA7).
+        /// </summary>
+        public static readonly object Byte_A7 = (byte)0xA7;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 167 (0xA7).
+        /// </summary>
+        public static readonly Expression Byte_A7_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_A7");
+        /// <summary>
+        /// A singleton boxed byte 168 (0xA8).
+        /// </summary>
+        public static readonly object Byte_A8 = (byte)0xA8;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 168 (0xA8).
+        /// </summary>
+        public static readonly Expression Byte_A8_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_A8");
+        /// <summary>
+        /// A singleton boxed byte 169 (0xA9).
+        /// </summary>
+        public static readonly object Byte_A9 = (byte)0xA9;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 169 (0xA9).
+        /// </summary>
+        public static readonly Expression Byte_A9_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_A9");
+        /// <summary>
+        /// A singleton boxed byte 170 (0xAA).
+        /// </summary>
+        public static readonly object Byte_AA = (byte)0xAA;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 170 (0xAA).
+        /// </summary>
+        public static readonly Expression Byte_AA_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_AA");
+        /// <summary>
+        /// A singleton boxed byte 171 (0xAB).
+        /// </summary>
+        public static readonly object Byte_AB = (byte)0xAB;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 171 (0xAB).
+        /// </summary>
+        public static readonly Expression Byte_AB_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_AB");
+        /// <summary>
+        /// A singleton boxed byte 172 (0xAC).
+        /// </summary>
+        public static readonly object Byte_AC = (byte)0xAC;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 172 (0xAC).
+        /// </summary>
+        public static readonly Expression Byte_AC_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_AC");
+        /// <summary>
+        /// A singleton boxed byte 173 (0xAD).
+        /// </summary>
+        public static readonly object Byte_AD = (byte)0xAD;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 173 (0xAD).
+        /// </summary>
+        public static readonly Expression Byte_AD_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_AD");
+        /// <summary>
+        /// A singleton boxed byte 174 (0xAE).
+        /// </summary>
+        public static readonly object Byte_AE = (byte)0xAE;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 174 (0xAE).
+        /// </summary>
+        public static readonly Expression Byte_AE_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_AE");
+        /// <summary>
+        /// A singleton boxed byte 175 (0xAF).
+        /// </summary>
+        public static readonly object Byte_AF = (byte)0xAF;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 175 (0xAF).
+        /// </summary>
+        public static readonly Expression Byte_AF_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_AF");
+        /// <summary>
+        /// A singleton boxed byte 176 (0xB0).
+        /// </summary>
+        public static readonly object Byte_B0 = (byte)0xB0;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 176 (0xB0).
+        /// </summary>
+        public static readonly Expression Byte_B0_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_B0");
+        /// <summary>
+        /// A singleton boxed byte 177 (0xB1).
+        /// </summary>
+        public static readonly object Byte_B1 = (byte)0xB1;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 177 (0xB1).
+        /// </summary>
+        public static readonly Expression Byte_B1_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_B1");
+        /// <summary>
+        /// A singleton boxed byte 178 (0xB2).
+        /// </summary>
+        public static readonly object Byte_B2 = (byte)0xB2;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 178 (0xB2).
+        /// </summary>
+        public static readonly Expression Byte_B2_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_B2");
+        /// <summary>
+        /// A singleton boxed byte 179 (0xB3).
+        /// </summary>
+        public static readonly object Byte_B3 = (byte)0xB3;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 179 (0xB3).
+        /// </summary>
+        public static readonly Expression Byte_B3_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_B3");
+        /// <summary>
+        /// A singleton boxed byte 180 (0xB4).
+        /// </summary>
+        public static readonly object Byte_B4 = (byte)0xB4;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 180 (0xB4).
+        /// </summary>
+        public static readonly Expression Byte_B4_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_B4");
+        /// <summary>
+        /// A singleton boxed byte 181 (0xB5).
+        /// </summary>
+        public static readonly object Byte_B5 = (byte)0xB5;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 181 (0xB5).
+        /// </summary>
+        public static readonly Expression Byte_B5_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_B5");
+        /// <summary>
+        /// A singleton boxed byte 182 (0xB6).
+        /// </summary>
+        public static readonly object Byte_B6 = (byte)0xB6;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 182 (0xB6).
+        /// </summary>
+        public static readonly Expression Byte_B6_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_B6");
+        /// <summary>
+        /// A singleton boxed byte 183 (0xB7).
+        /// </summary>
+        public static readonly object Byte_B7 = (byte)0xB7;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 183 (0xB7).
+        /// </summary>
+        public static readonly Expression Byte_B7_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_B7");
+        /// <summary>
+        /// A singleton boxed byte 184 (0xB8).
+        /// </summary>
+        public static readonly object Byte_B8 = (byte)0xB8;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 184 (0xB8).
+        /// </summary>
+        public static readonly Expression Byte_B8_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_B8");
+        /// <summary>
+        /// A singleton boxed byte 185 (0xB9).
+        /// </summary>
+        public static readonly object Byte_B9 = (byte)0xB9;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 185 (0xB9).
+        /// </summary>
+        public static readonly Expression Byte_B9_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_B9");
+        /// <summary>
+        /// A singleton boxed byte 186 (0xBA).
+        /// </summary>
+        public static readonly object Byte_BA = (byte)0xBA;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 186 (0xBA).
+        /// </summary>
+        public static readonly Expression Byte_BA_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_BA");
+        /// <summary>
+        /// A singleton boxed byte 187 (0xBB).
+        /// </summary>
+        public static readonly object Byte_BB = (byte)0xBB;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 187 (0xBB).
+        /// </summary>
+        public static readonly Expression Byte_BB_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_BB");
+        /// <summary>
+        /// A singleton boxed byte 188 (0xBC).
+        /// </summary>
+        public static readonly object Byte_BC = (byte)0xBC;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 188 (0xBC).
+        /// </summary>
+        public static readonly Expression Byte_BC_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_BC");
+        /// <summary>
+        /// A singleton boxed byte 189 (0xBD).
+        /// </summary>
+        public static readonly object Byte_BD = (byte)0xBD;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 189 (0xBD).
+        /// </summary>
+        public static readonly Expression Byte_BD_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_BD");
+        /// <summary>
+        /// A singleton boxed byte 190 (0xBE).
+        /// </summary>
+        public static readonly object Byte_BE = (byte)0xBE;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 190 (0xBE).
+        /// </summary>
+        public static readonly Expression Byte_BE_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_BE");
+        /// <summary>
+        /// A singleton boxed byte 191 (0xBF).
+        /// </summary>
+        public static readonly object Byte_BF = (byte)0xBF;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 191 (0xBF).
+        /// </summary>
+        public static readonly Expression Byte_BF_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_BF");
+        /// <summary>
+        /// A singleton boxed byte 192 (0xC0).
+        /// </summary>
+        public static readonly object Byte_C0 = (byte)0xC0;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 192 (0xC0).
+        /// </summary>
+        public static readonly Expression Byte_C0_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_C0");
+        /// <summary>
+        /// A singleton boxed byte 193 (0xC1).
+        /// </summary>
+        public static readonly object Byte_C1 = (byte)0xC1;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 193 (0xC1).
+        /// </summary>
+        public static readonly Expression Byte_C1_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_C1");
+        /// <summary>
+        /// A singleton boxed byte 194 (0xC2).
+        /// </summary>
+        public static readonly object Byte_C2 = (byte)0xC2;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 194 (0xC2).
+        /// </summary>
+        public static readonly Expression Byte_C2_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_C2");
+        /// <summary>
+        /// A singleton boxed byte 195 (0xC3).
+        /// </summary>
+        public static readonly object Byte_C3 = (byte)0xC3;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 195 (0xC3).
+        /// </summary>
+        public static readonly Expression Byte_C3_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_C3");
+        /// <summary>
+        /// A singleton boxed byte 196 (0xC4).
+        /// </summary>
+        public static readonly object Byte_C4 = (byte)0xC4;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 196 (0xC4).
+        /// </summary>
+        public static readonly Expression Byte_C4_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_C4");
+        /// <summary>
+        /// A singleton boxed byte 197 (0xC5).
+        /// </summary>
+        public static readonly object Byte_C5 = (byte)0xC5;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 197 (0xC5).
+        /// </summary>
+        public static readonly Expression Byte_C5_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_C5");
+        /// <summary>
+        /// A singleton boxed byte 198 (0xC6).
+        /// </summary>
+        public static readonly object Byte_C6 = (byte)0xC6;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 198 (0xC6).
+        /// </summary>
+        public static readonly Expression Byte_C6_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_C6");
+        /// <summary>
+        /// A singleton boxed byte 199 (0xC7).
+        /// </summary>
+        public static readonly object Byte_C7 = (byte)0xC7;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 199 (0xC7).
+        /// </summary>
+        public static readonly Expression Byte_C7_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_C7");
+        /// <summary>
+        /// A singleton boxed byte 200 (0xC8).
+        /// </summary>
+        public static readonly object Byte_C8 = (byte)0xC8;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 200 (0xC8).
+        /// </summary>
+        public static readonly Expression Byte_C8_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_C8");
+        /// <summary>
+        /// A singleton boxed byte 201 (0xC9).
+        /// </summary>
+        public static readonly object Byte_C9 = (byte)0xC9;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 201 (0xC9).
+        /// </summary>
+        public static readonly Expression Byte_C9_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_C9");
+        /// <summary>
+        /// A singleton boxed byte 202 (0xCA).
+        /// </summary>
+        public static readonly object Byte_CA = (byte)0xCA;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 202 (0xCA).
+        /// </summary>
+        public static readonly Expression Byte_CA_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_CA");
+        /// <summary>
+        /// A singleton boxed byte 203 (0xCB).
+        /// </summary>
+        public static readonly object Byte_CB = (byte)0xCB;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 203 (0xCB).
+        /// </summary>
+        public static readonly Expression Byte_CB_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_CB");
+        /// <summary>
+        /// A singleton boxed byte 204 (0xCC).
+        /// </summary>
+        public static readonly object Byte_CC = (byte)0xCC;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 204 (0xCC).
+        /// </summary>
+        public static readonly Expression Byte_CC_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_CC");
+        /// <summary>
+        /// A singleton boxed byte 205 (0xCD).
+        /// </summary>
+        public static readonly object Byte_CD = (byte)0xCD;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 205 (0xCD).
+        /// </summary>
+        public static readonly Expression Byte_CD_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_CD");
+        /// <summary>
+        /// A singleton boxed byte 206 (0xCE).
+        /// </summary>
+        public static readonly object Byte_CE = (byte)0xCE;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 206 (0xCE).
+        /// </summary>
+        public static readonly Expression Byte_CE_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_CE");
+        /// <summary>
+        /// A singleton boxed byte 207 (0xCF).
+        /// </summary>
+        public static readonly object Byte_CF = (byte)0xCF;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 207 (0xCF).
+        /// </summary>
+        public static readonly Expression Byte_CF_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_CF");
+        /// <summary>
+        /// A singleton boxed byte 208 (0xD0).
+        /// </summary>
+        public static readonly object Byte_D0 = (byte)0xD0;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 208 (0xD0).
+        /// </summary>
+        public static readonly Expression Byte_D0_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_D0");
+        /// <summary>
+        /// A singleton boxed byte 209 (0xD1).
+        /// </summary>
+        public static readonly object Byte_D1 = (byte)0xD1;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 209 (0xD1).
+        /// </summary>
+        public static readonly Expression Byte_D1_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_D1");
+        /// <summary>
+        /// A singleton boxed byte 210 (0xD2).
+        /// </summary>
+        public static readonly object Byte_D2 = (byte)0xD2;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 210 (0xD2).
+        /// </summary>
+        public static readonly Expression Byte_D2_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_D2");
+        /// <summary>
+        /// A singleton boxed byte 211 (0xD3).
+        /// </summary>
+        public static readonly object Byte_D3 = (byte)0xD3;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 211 (0xD3).
+        /// </summary>
+        public static readonly Expression Byte_D3_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_D3");
+        /// <summary>
+        /// A singleton boxed byte 212 (0xD4).
+        /// </summary>
+        public static readonly object Byte_D4 = (byte)0xD4;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 212 (0xD4).
+        /// </summary>
+        public static readonly Expression Byte_D4_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_D4");
+        /// <summary>
+        /// A singleton boxed byte 213 (0xD5).
+        /// </summary>
+        public static readonly object Byte_D5 = (byte)0xD5;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 213 (0xD5).
+        /// </summary>
+        public static readonly Expression Byte_D5_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_D5");
+        /// <summary>
+        /// A singleton boxed byte 214 (0xD6).
+        /// </summary>
+        public static readonly object Byte_D6 = (byte)0xD6;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 214 (0xD6).
+        /// </summary>
+        public static readonly Expression Byte_D6_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_D6");
+        /// <summary>
+        /// A singleton boxed byte 215 (0xD7).
+        /// </summary>
+        public static readonly object Byte_D7 = (byte)0xD7;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 215 (0xD7).
+        /// </summary>
+        public static readonly Expression Byte_D7_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_D7");
+        /// <summary>
+        /// A singleton boxed byte 216 (0xD8).
+        /// </summary>
+        public static readonly object Byte_D8 = (byte)0xD8;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 216 (0xD8).
+        /// </summary>
+        public static readonly Expression Byte_D8_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_D8");
+        /// <summary>
+        /// A singleton boxed byte 217 (0xD9).
+        /// </summary>
+        public static readonly object Byte_D9 = (byte)0xD9;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 217 (0xD9).
+        /// </summary>
+        public static readonly Expression Byte_D9_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_D9");
+        /// <summary>
+        /// A singleton boxed byte 218 (0xDA).
+        /// </summary>
+        public static readonly object Byte_DA = (byte)0xDA;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 218 (0xDA).
+        /// </summary>
+        public static readonly Expression Byte_DA_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_DA");
+        /// <summary>
+        /// A singleton boxed byte 219 (0xDB).
+        /// </summary>
+        public static readonly object Byte_DB = (byte)0xDB;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 219 (0xDB).
+        /// </summary>
+        public static readonly Expression Byte_DB_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_DB");
+        /// <summary>
+        /// A singleton boxed byte 220 (0xDC).
+        /// </summary>
+        public static readonly object Byte_DC = (byte)0xDC;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 220 (0xDC).
+        /// </summary>
+        public static readonly Expression Byte_DC_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_DC");
+        /// <summary>
+        /// A singleton boxed byte 221 (0xDD).
+        /// </summary>
+        public static readonly object Byte_DD = (byte)0xDD;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 221 (0xDD).
+        /// </summary>
+        public static readonly Expression Byte_DD_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_DD");
+        /// <summary>
+        /// A singleton boxed byte 222 (0xDE).
+        /// </summary>
+        public static readonly object Byte_DE = (byte)0xDE;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 222 (0xDE).
+        /// </summary>
+        public static readonly Expression Byte_DE_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_DE");
+        /// <summary>
+        /// A singleton boxed byte 223 (0xDF).
+        /// </summary>
+        public static readonly object Byte_DF = (byte)0xDF;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 223 (0xDF).
+        /// </summary>
+        public static readonly Expression Byte_DF_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_DF");
+        /// <summary>
+        /// A singleton boxed byte 224 (0xE0).
+        /// </summary>
+        public static readonly object Byte_E0 = (byte)0xE0;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 224 (0xE0).
+        /// </summary>
+        public static readonly Expression Byte_E0_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_E0");
+        /// <summary>
+        /// A singleton boxed byte 225 (0xE1).
+        /// </summary>
+        public static readonly object Byte_E1 = (byte)0xE1;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 225 (0xE1).
+        /// </summary>
+        public static readonly Expression Byte_E1_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_E1");
+        /// <summary>
+        /// A singleton boxed byte 226 (0xE2).
+        /// </summary>
+        public static readonly object Byte_E2 = (byte)0xE2;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 226 (0xE2).
+        /// </summary>
+        public static readonly Expression Byte_E2_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_E2");
+        /// <summary>
+        /// A singleton boxed byte 227 (0xE3).
+        /// </summary>
+        public static readonly object Byte_E3 = (byte)0xE3;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 227 (0xE3).
+        /// </summary>
+        public static readonly Expression Byte_E3_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_E3");
+        /// <summary>
+        /// A singleton boxed byte 228 (0xE4).
+        /// </summary>
+        public static readonly object Byte_E4 = (byte)0xE4;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 228 (0xE4).
+        /// </summary>
+        public static readonly Expression Byte_E4_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_E4");
+        /// <summary>
+        /// A singleton boxed byte 229 (0xE5).
+        /// </summary>
+        public static readonly object Byte_E5 = (byte)0xE5;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 229 (0xE5).
+        /// </summary>
+        public static readonly Expression Byte_E5_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_E5");
+        /// <summary>
+        /// A singleton boxed byte 230 (0xE6).
+        /// </summary>
+        public static readonly object Byte_E6 = (byte)0xE6;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 230 (0xE6).
+        /// </summary>
+        public static readonly Expression Byte_E6_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_E6");
+        /// <summary>
+        /// A singleton boxed byte 231 (0xE7).
+        /// </summary>
+        public static readonly object Byte_E7 = (byte)0xE7;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 231 (0xE7).
+        /// </summary>
+        public static readonly Expression Byte_E7_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_E7");
+        /// <summary>
+        /// A singleton boxed byte 232 (0xE8).
+        /// </summary>
+        public static readonly object Byte_E8 = (byte)0xE8;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 232 (0xE8).
+        /// </summary>
+        public static readonly Expression Byte_E8_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_E8");
+        /// <summary>
+        /// A singleton boxed byte 233 (0xE9).
+        /// </summary>
+        public static readonly object Byte_E9 = (byte)0xE9;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 233 (0xE9).
+        /// </summary>
+        public static readonly Expression Byte_E9_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_E9");
+        /// <summary>
+        /// A singleton boxed byte 234 (0xEA).
+        /// </summary>
+        public static readonly object Byte_EA = (byte)0xEA;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 234 (0xEA).
+        /// </summary>
+        public static readonly Expression Byte_EA_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_EA");
+        /// <summary>
+        /// A singleton boxed byte 235 (0xEB).
+        /// </summary>
+        public static readonly object Byte_EB = (byte)0xEB;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 235 (0xEB).
+        /// </summary>
+        public static readonly Expression Byte_EB_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_EB");
+        /// <summary>
+        /// A singleton boxed byte 236 (0xEC).
+        /// </summary>
+        public static readonly object Byte_EC = (byte)0xEC;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 236 (0xEC).
+        /// </summary>
+        public static readonly Expression Byte_EC_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_EC");
+        /// <summary>
+        /// A singleton boxed byte 237 (0xED).
+        /// </summary>
+        public static readonly object Byte_ED = (byte)0xED;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 237 (0xED).
+        /// </summary>
+        public static readonly Expression Byte_ED_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_ED");
+        /// <summary>
+        /// A singleton boxed byte 238 (0xEE).
+        /// </summary>
+        public static readonly object Byte_EE = (byte)0xEE;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 238 (0xEE).
+        /// </summary>
+        public static readonly Expression Byte_EE_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_EE");
+        /// <summary>
+        /// A singleton boxed byte 239 (0xEF).
+        /// </summary>
+        public static readonly object Byte_EF = (byte)0xEF;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 239 (0xEF).
+        /// </summary>
+        public static readonly Expression Byte_EF_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_EF");
+        /// <summary>
+        /// A singleton boxed byte 240 (0xF0).
+        /// </summary>
+        public static readonly object Byte_F0 = (byte)0xF0;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 240 (0xF0).
+        /// </summary>
+        public static readonly Expression Byte_F0_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_F0");
+        /// <summary>
+        /// A singleton boxed byte 241 (0xF1).
+        /// </summary>
+        public static readonly object Byte_F1 = (byte)0xF1;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 241 (0xF1).
+        /// </summary>
+        public static readonly Expression Byte_F1_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_F1");
+        /// <summary>
+        /// A singleton boxed byte 242 (0xF2).
+        /// </summary>
+        public static readonly object Byte_F2 = (byte)0xF2;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 242 (0xF2).
+        /// </summary>
+        public static readonly Expression Byte_F2_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_F2");
+        /// <summary>
+        /// A singleton boxed byte 243 (0xF3).
+        /// </summary>
+        public static readonly object Byte_F3 = (byte)0xF3;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 243 (0xF3).
+        /// </summary>
+        public static readonly Expression Byte_F3_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_F3");
+        /// <summary>
+        /// A singleton boxed byte 244 (0xF4).
+        /// </summary>
+        public static readonly object Byte_F4 = (byte)0xF4;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 244 (0xF4).
+        /// </summary>
+        public static readonly Expression Byte_F4_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_F4");
+        /// <summary>
+        /// A singleton boxed byte 245 (0xF5).
+        /// </summary>
+        public static readonly object Byte_F5 = (byte)0xF5;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 245 (0xF5).
+        /// </summary>
+        public static readonly Expression Byte_F5_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_F5");
+        /// <summary>
+        /// A singleton boxed byte 246 (0xF6).
+        /// </summary>
+        public static readonly object Byte_F6 = (byte)0xF6;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 246 (0xF6).
+        /// </summary>
+        public static readonly Expression Byte_F6_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_F6");
+        /// <summary>
+        /// A singleton boxed byte 247 (0xF7).
+        /// </summary>
+        public static readonly object Byte_F7 = (byte)0xF7;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 247 (0xF7).
+        /// </summary>
+        public static readonly Expression Byte_F7_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_F7");
+        /// <summary>
+        /// A singleton boxed byte 248 (0xF8).
+        /// </summary>
+        public static readonly object Byte_F8 = (byte)0xF8;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 248 (0xF8).
+        /// </summary>
+        public static readonly Expression Byte_F8_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_F8");
+        /// <summary>
+        /// A singleton boxed byte 249 (0xF9).
+        /// </summary>
+        public static readonly object Byte_F9 = (byte)0xF9;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 249 (0xF9).
+        /// </summary>
+        public static readonly Expression Byte_F9_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_F9");
+        /// <summary>
+        /// A singleton boxed byte 250 (0xFA).
+        /// </summary>
+        public static readonly object Byte_FA = (byte)0xFA;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 250 (0xFA).
+        /// </summary>
+        public static readonly Expression Byte_FA_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_FA");
+        /// <summary>
+        /// A singleton boxed byte 251 (0xFB).
+        /// </summary>
+        public static readonly object Byte_FB = (byte)0xFB;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 251 (0xFB).
+        /// </summary>
+        public static readonly Expression Byte_FB_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_FB");
+        /// <summary>
+        /// A singleton boxed byte 252 (0xFC).
+        /// </summary>
+        public static readonly object Byte_FC = (byte)0xFC;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 252 (0xFC).
+        /// </summary>
+        public static readonly Expression Byte_FC_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_FC");
+        /// <summary>
+        /// A singleton boxed byte 253 (0xFD).
+        /// </summary>
+        public static readonly object Byte_FD = (byte)0xFD;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 253 (0xFD).
+        /// </summary>
+        public static readonly Expression Byte_FD_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_FD");
+        /// <summary>
+        /// A singleton boxed byte 254 (0xFE).
+        /// </summary>
+        public static readonly object Byte_FE = (byte)0xFE;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 254 (0xFE).
+        /// </summary>
+        public static readonly Expression Byte_FE_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_FE");
+        /// <summary>
+        /// A singleton boxed byte 255 (0xFF).
+        /// </summary>
+        public static readonly object Byte_FF = (byte)0xFF;
+        /// <summary>
+        /// Expression that returns the singleton boxed byte 255 (0xFF).
+        /// </summary>
+        public static readonly Expression Byte_FF_Expression = Expression.Field(null, typeof(PreboxedConstants), "Byte_FF");
+
+        #endregion
+
+        #region 16-bit Ingeger
+
+        public static Expression GetConstant(Int16 value)
+        {
+            if (value == 0)
+                return PreboxedConstants.Int16_Zero_Expression;
+            if (value == 1)
+                return PreboxedConstants.Int16_One_Expression;
+            if (value == -1)
+                return PreboxedConstants.Int16_MinusOne_Expression;
+            return null;
+        }
+
+        public static object GetValue(Int16 value)
+        {
+            if (value == 0)
+                return PreboxedConstants.Int16_Zero;
+            if (value == 1)
+                return PreboxedConstants.Int16_One;
+            if (value == -1)
+                return PreboxedConstants.Int16_MinusOne;
+            return null;
+        }
+
+        /// <summary>
+        /// A singleton boxed Int16 0.
+        /// </summary>
+        public static readonly object Int16_Zero = (Int16)0;
+
+        /// <summary>
+        /// Expression to return the singleton boxed Int16 0.
+        /// </summary>
+        public static readonly Expression Int16_Zero_Expression = Expression.Field(null, typeof(PreboxedConstants), "Int16_Zero");
+
+        /// <summary>
+        /// A singleton boxed Int16 1.
+        /// </summary>
+        public static readonly object Int16_One = (Int16)1;
+
+        /// <summary>
+        /// Expression to return the singleton boxed Int16 1.
+        /// </summary>
+        public static readonly Expression Int16_One_Expression = Expression.Field(null, typeof(PreboxedConstants), "Int16_One");
+
+        /// <summary>
+        /// A singleton boxed Int16 -1.
+        /// </summary>
+        public static readonly object Int16_MinusOne = (Int16)(-1);
+
+        /// <summary>
+        /// Expression to return the singleton boxed Int16 -1.
+        /// </summary>
+        public static readonly Expression Int16_MinusOne_Expression = Expression.Field(null, typeof(PreboxedConstants), "Int16_MinusOne");
+
+        #endregion
+
+        #region 16-bit Unsigned Integer
+
+        public static Expression GetConstant(UInt16 value)
+        {
+            if (value == 0)
+                return PreboxedConstants.UInt16_Zero_Expression;
+            if (value == 1)
+                return PreboxedConstants.UInt16_One_Expression;
+            return null;
+        }
+
+        public static object GetValue(UInt16 value)
+        {
+            if (value == 0)
+                return PreboxedConstants.UInt16_Zero;
+            if (value == 1)
+                return PreboxedConstants.UInt16_One;
+            return null;
+        }
+
+        /// <summary>
+        /// A singleton boxed UInt16 0.
+        /// </summary>
+        public static readonly object UInt16_Zero = (UInt16)0;
+
+        /// <summary>
+        /// Expression to return the singleton boxed UInt16 0.
+        /// </summary>
+        public static readonly Expression UInt16_Zero_Expression = Expression.Field(null, typeof(PreboxedConstants), "UInt16_Zero");
+
+        /// <summary>
+        /// A singleton boxed UInt16 1.
+        /// </summary>
+        public static readonly object UInt16_One = (UInt16)1;
+
+        /// <summary>
+        /// Expression to return the singleton boxed UInt16 1.
+        /// </summary>
+        public static readonly Expression UInt16_One_Expression = Expression.Field(null, typeof(PreboxedConstants), "UInt16_One");
 
         #endregion
 
@@ -9595,6 +14884,146 @@ namespace IronSmalltalk.Runtime.Execution
 
         #endregion
 
+        #region 32-bit Unsigned Integer
+
+        public static Expression GetConstant(UInt32 value)
+        {
+            if (value == 0)
+                return PreboxedConstants.UInt32_Zero_Expression;
+            if (value == 1)
+                return PreboxedConstants.UInt32_One_Expression;
+            return null;
+        }
+
+        public static object GetValue(UInt32 value)
+        {
+            if (value == 0)
+                return PreboxedConstants.UInt32_Zero;
+            if (value == 1)
+                return PreboxedConstants.UInt32_One;
+            return null;
+        }
+
+        /// <summary>
+        /// A singleton boxed UInt32 0.
+        /// </summary>
+        public static readonly object UInt32_Zero = (UInt32)0;
+
+        /// <summary>
+        /// Expression to return the singleton boxed UInt32 0.
+        /// </summary>
+        public static readonly Expression UInt32_Zero_Expression = Expression.Field(null, typeof(PreboxedConstants), "UInt32_Zero");
+
+        /// <summary>
+        /// A singleton boxed UInt32 1.
+        /// </summary>
+        public static readonly object UInt32_One = (UInt32)1;
+
+        /// <summary>
+        /// Expression to return the singleton boxed UInt32 1.
+        /// </summary>
+        public static readonly Expression UInt32_One_Expression = Expression.Field(null, typeof(PreboxedConstants), "UInt32_One");
+
+        #endregion
+
+        #region 64-bit Integer
+
+        public static Expression GetConstant(Int64 value)
+        {
+            if (value == 0)
+                return PreboxedConstants.Int64_Zero_Expression;
+            if (value == 1)
+                return PreboxedConstants.Int64_One_Expression;
+            if (value == -1)
+                return PreboxedConstants.Int64_MinusOne_Expression;
+            return null;
+        }
+
+        public static object GetValue(Int64 value)
+        {
+            if (value == 0)
+                return PreboxedConstants.Int64_Zero;
+            if (value == 1)
+                return PreboxedConstants.Int64_One;
+            if (value == -1)
+                return PreboxedConstants.Int64_MinusOne;
+            return null;
+        }
+
+        /// <summary>
+        /// A singleton boxed Int64 0.
+        /// </summary>
+        public static readonly object Int64_Zero = (Int64)0;
+
+        /// <summary>
+        /// Expression to return the singleton boxed Int64 0.
+        /// </summary>
+        public static readonly Expression Int64_Zero_Expression = Expression.Field(null, typeof(PreboxedConstants), "Int64_Zero");
+
+        /// <summary>
+        /// A singleton boxed Int64 1.
+        /// </summary>
+        public static readonly object Int64_One = (Int64)1;
+
+        /// <summary>
+        /// Expression to return the singleton boxed Int64 1.
+        /// </summary>
+        public static readonly Expression Int64_One_Expression = Expression.Field(null, typeof(PreboxedConstants), "Int64_One");
+
+        /// <summary>
+        /// A singleton boxed Int64 -1.
+        /// </summary>
+        public static readonly object Int64_MinusOne = (Int64) (-1);
+
+        /// <summary>
+        /// Expression to return the singleton boxed Int64 -1.
+        /// </summary>
+        public static readonly Expression Int64_MinusOne_Expression = Expression.Field(null, typeof(PreboxedConstants), "Int64_MinusOne");
+
+        #endregion
+
+        #region 64-bit Unsigned Integer
+
+        public static Expression GetConstant(UInt64 value)
+        {
+            if (value == 0)
+                return PreboxedConstants.UInt64_Zero_Expression;
+            if (value == 1)
+                return PreboxedConstants.UInt64_One_Expression;
+            return null;
+        }
+
+        public static object GetValue(UInt64 value)
+        {
+            if (value == 0)
+                return PreboxedConstants.UInt64_Zero;
+            if (value == 1)
+                return PreboxedConstants.UInt64_One;
+            return null;
+        }
+
+        /// <summary>
+        /// A singleton boxed UInt64 0.
+        /// </summary>
+        public static readonly object UInt64_Zero = (UInt64)0;
+
+        /// <summary>
+        /// Expression to return the singleton boxed UInt64 0.
+        /// </summary>
+        public static readonly Expression UInt64_Zero_Expression = Expression.Field(null, typeof(PreboxedConstants), "UInt64_Zero");
+
+        /// <summary>
+        /// A singleton boxed UInt64 1.
+        /// </summary>
+        public static readonly object UInt64_One = (UInt64)1;
+
+        /// <summary>
+        /// Expression to return the singleton boxed UInt64 1.
+        /// </summary>
+        public static readonly Expression UInt64_One_Expression = Expression.Field(null, typeof(PreboxedConstants), "UInt64_One");
+
+        #endregion
+
         #region BigInteger
 
         public static Expression GetConstant(BigInteger value)
@@ -9706,5 +15135,7 @@ namespace IronSmalltalk.Runtime.Execution
         public static readonly Expression BigDecimal_MinusOne_Expression = Expression.Field(null, typeof(PreboxedConstants), "BigDecimal_MinusOne");
 
         #endregion
+
+
     }
 }

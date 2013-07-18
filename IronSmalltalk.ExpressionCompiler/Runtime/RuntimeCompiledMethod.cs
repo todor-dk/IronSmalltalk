@@ -44,12 +44,12 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
             this.DebugInfoService = debugInfoService;
         }
 
-        public override MethodCompilationResult CompileClassMethod(SmalltalkRuntime runtime, SmalltalkClass cls, DynamicMetaObject self, DynamicMetaObject[] arguments, Symbol superScope)
+        public override MethodCompilationResult CompileClassMethod(SmalltalkRuntime runtime, SmalltalkClass cls, Expression self, Expression[] arguments, Symbol superScope)
         {
             return this.CompileClassMethod(runtime, cls, self, arguments, superScope, runtime.GlobalScope);
         }
 
-        private MethodCompilationResult CompileClassMethod(SmalltalkRuntime runtime, SmalltalkClass cls, DynamicMetaObject self, DynamicMetaObject[] arguments, Symbol superScope, SmalltalkNameScope globalNameScope)
+        private MethodCompilationResult CompileClassMethod(SmalltalkRuntime runtime, SmalltalkClass cls, Expression self, Expression[] arguments, Symbol superScope, SmalltalkNameScope globalNameScope)
         {
             if (runtime == null)
                 throw new ArgumentNullException("runtime");
@@ -90,12 +90,12 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
             return this.DebugInfoService;
         }
 
-        public override MethodCompilationResult CompileInstanceMethod(SmalltalkRuntime runtime, SmalltalkClass cls, DynamicMetaObject self, DynamicMetaObject[] arguments, Symbol superScope)
+        public override MethodCompilationResult CompileInstanceMethod(SmalltalkRuntime runtime, SmalltalkClass cls, Expression self, Expression[] arguments, Symbol superScope)
         {
             return this.CompileInstanceMethod(runtime, cls, self, arguments, superScope, runtime.GlobalScope);
         }
 
-        private MethodCompilationResult CompileInstanceMethod(SmalltalkRuntime runtime, SmalltalkClass cls, DynamicMetaObject self, DynamicMetaObject[] arguments, Symbol superScope, SmalltalkNameScope globalNameScope)
+        private MethodCompilationResult CompileInstanceMethod(SmalltalkRuntime runtime, SmalltalkClass cls, Expression self, Expression[] arguments, Symbol superScope, SmalltalkNameScope globalNameScope)
         {
             if (runtime == null)
                 throw new ArgumentNullException("runtime");
@@ -137,14 +137,14 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
             return this.Validate(cls, errorSink, (r, c, s, a, u) => this.CompileClassMethod(r, c, s, a, u, globalNameScope));
         }
 
-        private bool Validate(SmalltalkClass cls, IRuntimeCodeValidationErrorSink errorSink, Func<SmalltalkRuntime, SmalltalkClass, DynamicMetaObject, DynamicMetaObject[], Symbol, MethodCompilationResult> func)
+        private bool Validate(SmalltalkClass cls, IRuntimeCodeValidationErrorSink errorSink, Func<SmalltalkRuntime, SmalltalkClass, Expression, Expression[], Symbol, MethodCompilationResult> func)
         {
             return RuntimeCompiledMethod.Validate(this.ParseTree, errorSink, delegate()
             {
-                DynamicMetaObject self = new DynamicMetaObject(Expression.Parameter(typeof(object), "self"), BindingRestrictions.Empty, null);
-                DynamicMetaObject[] args = new DynamicMetaObject[this.ParseTree.Arguments.Count+1];
+                Expression self = Expression.Parameter(typeof(object), "self");
+                Expression[] args = new Expression[this.ParseTree.Arguments.Count + 1];
                 for (int i = 0; i < args.Length; i++)
-                    args[i] = new DynamicMetaObject(Expression.Parameter(typeof(object), String.Format("arg{0}", i)), BindingRestrictions.Empty, null);
+                    args[i] = Expression.Parameter(typeof(object), String.Format("arg{0}", i));
 
                 return func(cls.Runtime, cls, self, args, null);
             });
@@ -164,7 +164,7 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
                     return RuntimeCompiledMethod.ReportError(errorSink, rootNode, "Could not compile method");
                 return true;
             }
-            catch (IronSmalltalk.ExpressionCompiler.Primitives.PrimitiveInvalidTypeException ex)
+            catch (IronSmalltalk.ExpressionCompiler.Primitives.Exceptions.PrimitiveInvalidTypeException ex)
             {
                 return RuntimeCompiledMethod.ReportError(errorSink, ex.GetNode(), ex.Message);
             }

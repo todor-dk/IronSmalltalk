@@ -15,37 +15,28 @@
 */
 
 using System;
-using System.Runtime.Serialization;
 using IronSmalltalk.ExpressionCompiler.Internals;
 using IronSmalltalk.Runtime.Execution.Internals;
 
-namespace IronSmalltalk.ExpressionCompiler.Primitives
+namespace IronSmalltalk.ExpressionCompiler.Primitives.Exceptions
 {
     /// <summary>
-    /// Exception that indicates that attempt to resolve some .Net type during
+    /// Exception that indicates that attempt to resolve some member during
     /// primitive call (method with primitive call to a .Net construct) 
-    /// failed to resolve the .Net type it depends on.
+    /// failed to resolve the member it depends on.
     /// </summary>
-
-    public class PrimitiveInvalidTypeException : RuntimeCodeGenerationException
+    [Serializable]
+    public class PrimitiveInvalidMemberException : RuntimeCodeGenerationException
     {
-        public PrimitiveInvalidTypeException()
-        {
-        }
-        public PrimitiveInvalidTypeException(string message)
-            : base(message)
-        {
-        }
-        public PrimitiveInvalidTypeException(string message, Exception inner)
-            : base(message, inner)
-        {
-        }
+        public PrimitiveInvalidMemberException() { }
+        public PrimitiveInvalidMemberException(string message) : base(message) { }
+        public PrimitiveInvalidMemberException(string message, Exception inner) : base(message, inner) { }
 
 #if !SILVERLIGHT
-        protected PrimitiveInvalidTypeException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+        protected PrimitiveInvalidMemberException(
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context)
+            : base(info, context) { }
 #endif
     }
 }
