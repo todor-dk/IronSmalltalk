@@ -34,7 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
@@ -73,18 +72,18 @@
     <Compile Include="Internals\RuntimeCodeGenerationException.cs" />
     <Compile Include="Internals\SemanticCodeGenerationException.cs" />
     <Compile Include="MethodCompiler.cs" />
-    <Compile Include="Primitives\BuiltInPrimitiveHelper.cs" />
-    <Compile Include="Primitives\BuiltInPrimitives.cs" />
-    <Compile Include="Primitives\BuiltInPrimitivesEnum.cs" />
-    <Compile Include="Primitives\IPrimitiveClient.cs" />
-    <Compile Include="Primitives\PrimitiveBuilder.cs" />
-    <Compile Include="Primitives\PrimitiveHelper.cs" />
-    <Compile Include="Primitives\PrimitiveInterface.cs" />
-    <Compile Include="Primitives\PrimitiveInternalException.cs" />
-    <Compile Include="Primitives\PrimitiveInvalidMemberException.cs" />
-    <Compile Include="Primitives\PrimitiveInvalidTypeException.cs" />
-    <Compile Include="Primitives\PrimitiveSemanticException.cs" />
-    <Compile Include="Primitives\PrimitivesEnum.cs" />
+    <Compile Include="Primitives\BuiltInPrimitiveEncoder.cs" />
+    <Compile Include="Primitives\BuiltInPrimitiveEnum.cs" />
+    <Compile Include="Primitives\FieldPrimitiveEncoder.cs" />
+    <Compile Include="Primitives\InvokeConstructorPrimitiveEncoder.cs" />
+    <Compile Include="Primitives\MemberPrimitiveEncoder.cs" />
+    <Compile Include="Primitives\MethodPrimitiveEncoder.cs" />
+    <Compile Include="Primitives\PrimitiveEncoder.cs" />
+    <Compile Include="Primitives\Exceptions\PrimitiveInternalException.cs" />
+    <Compile Include="Primitives\Exceptions\PrimitiveInvalidMemberException.cs" />
+    <Compile Include="Primitives\Exceptions\PrimitiveInvalidTypeException.cs" />
+    <Compile Include="Primitives\Exceptions\PrimitiveSemanticException.cs" />
+    <Compile Include="Primitives\PropertyPrimitiveEncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runtime\IDebugInfoService.cs" />
     <Compile Include="Runtime\InitializerCompilationResult.cs" />
@@ -110,6 +109,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Bindings\NameBindings Diagram.cd" />
+    <None Include="Primitives\Primitives Diagram.cd" />
     <None Include="Visiting\Full Diagram.cd" />
     <None Include="Visiting\Simple Diagram.cd" />
   </ItemGroup>

@@ -23,6 +23,7 @@ using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.ExpressionCompiler.Bindings;
 using IronSmalltalk.ExpressionCompiler.Internals;
 using IronSmalltalk.ExpressionCompiler.Primitives;
+using IronSmalltalk.ExpressionCompiler.Primitives.Exceptions;
 using IronSmalltalk.Runtime.Execution.CallSiteBinders;
 using IronSmalltalk.Runtime.Execution.Internals;
 using IronSmalltalk.Runtime.Internal;
@@ -35,7 +36,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
     /// <remarks>
     /// This is the place where primitive calls are encoded to expressions and where most of the interop to the .Net framework happens.
     /// </remarks>
-    public partial class PrimitiveCallVisitor : NestedEncoderVisitor<List<Expression>>, IPrimitiveClient
+    public partial class PrimitiveCallVisitor : NestedEncoderVisitor<List<Expression>>
     {
         /// <summary>
         /// Indicates if there is Smalltalk fallback code after the primitive call.
@@ -127,6 +128,14 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             return result;
         }
 
+        private Expression GeneratePrimitiveExpression(Compiler.SemanticNodes.PrimitiveCallNode node)
+        {
+            Expression primitiveCall = this.InternalGeneratePrimitiveExpression(node);
+            if (primitiveCall == null)
+                throw new PrimitiveSemanticException(CodeGenerationErrors.UnexpectedCallingconvention);
+            return primitiveCall;
+        }
+
         /// <summary>
         /// This generates the expression needed to do a primitive call. This is the main worker method!
         /// </summary>
@@ -172,75 +181,34 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         ///     GetFieldValue           2   (Defining_Type + Field_Name)
         ///     SetFieldValue           2   (Defining_Type + Field_Name)
         /// </remarks>
-        private Expression GeneratePrimitiveExpression(Compiler.SemanticNodes.PrimitiveCallNode node)
+        private Expression InternalGeneratePrimitiveExpression(Compiler.SemanticNodes.PrimitiveCallNode node)
         {
+            IEnumerable<string> parameters = node.ApiParameters.Select(token => token.Value);
+
             // What type of primitive do we have to do with?
-            PrimitivesEnum primitive;
             if (node.ApiConvention.Value == "primitive:")
-                primitive = PrimitivesEnum.BuiltInPrimitive;
-            else if (node.ApiConvention.Value == "static:")
-                primitive = PrimitivesEnum.InvokeStaticMethod;
-            else if (node.ApiConvention.Value == "call:")
-                primitive = PrimitivesEnum.InvokeInstanceMethod;
-            else if (node.ApiConvention.Value == "ctor:")
-                primitive = PrimitivesEnum.InvokeConstructor;
-            else if (node.ApiConvention.Value == "get_property:")
-                primitive = PrimitivesEnum.InvokeGetProperty;
-            else if (node.ApiConvention.Value == "set_property:")
-                primitive = PrimitivesEnum.InvokeSetProperty;
-            else if (node.ApiConvention.Value == "get_field:")
-                primitive = PrimitivesEnum.GetFieldValue;
-            else if (node.ApiConvention.Value == "set_field:")
-                primitive = PrimitivesEnum.SetFieldValue;
+                return BuiltInPrimitiveEncoder.GeneratePrimitive(this.Context, parameters.Skip(1), node.ApiParameters[0].Value);
+
+            Type definingType = this.GetDefiningType(node);
+            if (node.ApiConvention.Value == "ctor:")
+                return InvokeConstructorPrimitiveEncoder.GeneratePrimitive(this.Context, parameters.Skip(1), definingType);
+
+            string memberName = node.ApiParameters[1].Value;
+            parameters = parameters.Skip(2);
+            if (node.ApiConvention.Value == "static:")
+                return InvokeStaticMethodPrimitiveEncoder.GeneratePrimitive(this.Context, parameters, definingType, memberName);
+            if (node.ApiConvention.Value == "call:")
+                return InvokeInstanceMethodPrimitiveEncoder.GeneratePrimitive(this.Context, parameters, definingType, memberName);
+            if (node.ApiConvention.Value == "get_property:")
+                return GetPropertyPrimitiveEncoder.GeneratePrimitive(this.Context, parameters, definingType, memberName);
+            if (node.ApiConvention.Value == "set_property:")
+                return SetPropertyPrimitiveEncoder.GeneratePrimitive(this.Context, parameters, definingType, memberName);
+            if (node.ApiConvention.Value == "get_field:")
+                return GetFieldPrimitiveEncoder.GeneratePrimitive(this.Context, parameters, definingType, memberName);
+            if (node.ApiConvention.Value == "set_field:")
+                return SetFieldPrimitiveEncoder.GeneratePrimitive(this.Context, parameters, definingType, memberName);
             else
                 throw new PrimitiveSemanticException(CodeGenerationErrors.UnexpectedCallingconvention);
-
-            // Where in the API declaration are the different parameters needed for the API?
-            Type definingType;
-            string memberName;
-            int parametersStartIndex;
-            if (primitive == PrimitivesEnum.BuiltInPrimitive)
-            {
-                definingType = null;
-                memberName = node.ApiParameters[0].Value;
-                parametersStartIndex = 1;
-            }
-            else
-            {
-                definingType = this.GetDefiningType(node);
-                if (primitive == PrimitivesEnum.InvokeConstructor)
-                {
-                    memberName = null;
-                    parametersStartIndex = 1;
-                }
-                else
-                {
-                    memberName = node.ApiParameters[1].Value;
-                    parametersStartIndex = 2;
-                }
-            }
-            IEnumerable<string> parameters = node.ApiParameters.Skip(parametersStartIndex).Select(token => token.Value);
-
-            // Have the helper do the heavy wotk!
-            BindingRestrictions restrictions = this.Context.BindingRestrictions;
-            Expression primitiveCall = PrimitiveInterface.GeneratePrimitive(this,
-                primitive,
-                definingType,
-                memberName,
-                parameters,
-                this.Context.Self,
-                this.MethodVisitor.PassedArguments,
-                ref restrictions);
-            this.Context.BindingRestrictions = restrictions;
-            if (primitiveCall == null)
-                throw new PrimitiveSemanticException(CodeGenerationErrors.UnexpectedCallingconvention);
-            return primitiveCall;
-        }
-
-
-        ObjectClassCallSiteBinder IPrimitiveClient.GetClassBinder()
-        {
-            return this.Context.Compiler.GetClassBinder();
         }
 
         /// <summary>

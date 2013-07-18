@@ -21,7 +21,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IronSmalltalk.Runtime.Behavior;
 
-namespace IronSmalltalk.Runtime.Bindings
+namespace IronSmalltalk.Runtime.Behavior
 {
     public abstract class InitializerList<TItem> : IList<TItem>
     {

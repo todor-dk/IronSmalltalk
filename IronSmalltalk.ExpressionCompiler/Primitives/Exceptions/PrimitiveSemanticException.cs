@@ -19,7 +19,7 @@ using System.Runtime.Serialization;
 using IronSmalltalk.ExpressionCompiler.Internals;
 using IronSmalltalk.Runtime.Execution.Internals;
 
-namespace IronSmalltalk.ExpressionCompiler.Primitives
+namespace IronSmalltalk.ExpressionCompiler.Primitives.Exceptions
 {
     public class PrimitiveSemanticException : SemanticCodeGenerationException
     {

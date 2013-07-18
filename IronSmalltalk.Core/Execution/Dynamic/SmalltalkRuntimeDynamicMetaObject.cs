@@ -16,6 +16,7 @@
 
 using System;
 using System.Dynamic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using IronSmalltalk.Runtime;
@@ -177,7 +178,7 @@ namespace IronSmalltalk
             {
                 if (method != null)
                 {
-                    var compilationResult = method.CompileInstanceMethod(cls.Runtime, cls, this, args, null);
+                    var compilationResult = method.CompileInstanceMethod(cls.Runtime, cls, this.Expression, args.Select(dmo => dmo.Expression).ToArray(), null);
                     return compilationResult.GetDynamicMetaObject(this.Restrictions);
                 }
                 return null;

@@ -22,6 +22,7 @@ using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.ExpressionCompiler.Bindings;
 using IronSmalltalk.ExpressionCompiler.Internals;
 using IronSmalltalk.ExpressionCompiler.Primitives;
+using IronSmalltalk.Runtime.Execution;
 using IronSmalltalk.Runtime.Execution.CallSiteBinders;
 
 namespace IronSmalltalk.ExpressionCompiler.Visiting
@@ -236,7 +237,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         private Expression InlineIdentityTest(Expression a, Expression b)
         {
-            return PrimitiveInterface.EncodeReferenceEquals(a, b, Expression.Constant(true), Expression.Constant(false));
+            return PrimitiveEncoder.EncodeReferenceEquals(a, b);
         }
 
         private Expression InlineMessageSend(Compiler.SemanticNodes.KeywordMessageSequenceNode node)
@@ -483,6 +484,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
                                 Expression.AddAssign(iStart, iStep))))));
 
             ParameterExpression dStart = Expression.Variable(typeof(object), "dStart");
+            ParameterExpression dStep = Expression.Variable(typeof(object), "dStep");
             visitor = new InlineBlockVisitor(this);
             if (block.Arguments.Count > 0)
                 visitor.DefineExternalArgument(block.Arguments[0].Token.Value, dStart);
@@ -490,28 +492,29 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             
             Expression dynamicBlock = Expression.Block(
                 Expression.Assign(dStart, start),
+                Expression.Assign(dStep, Expression.Convert(step, typeof(object))),
                 Expression.IfThen(
-                    Expression.IsTrue(Expression.Convert(this.Context.CompileDynamicCall("=", step, Expression.Constant(0)), typeof(bool))),
+                    Expression.IsTrue(Expression.Convert(this.Context.CompileDynamicCall("=", dStep, PreboxedConstants.Int32_00000000_Expression), typeof(bool))),
                     Expression.Throw(Expression.New(typeof(ArgumentOutOfRangeException)), typeof(object))),
                 Expression.IfThenElse(
-                    Expression.IsTrue(Expression.Convert(this.Context.CompileDynamicCall(">", step, Expression.Constant(0)), typeof(bool))),
+                    Expression.IsTrue(Expression.Convert(this.Context.CompileDynamicCall(">", dStep, PreboxedConstants.Int32_00000000_Expression), typeof(bool))),
                     Expression.Loop(
                         Expression.IfThenElse(
                             Expression.IsTrue(Expression.Convert(this.Context.CompileDynamicCall(">", dStart, stop), typeof(bool))),
                             Expression.Break(exitLabel, nilBinding.GenerateReadExpression(this)),
                             Expression.Block(
                                 dynamicOperation,
-                                Expression.Assign(dStart, this.Context.CompileDynamicCall("+", dStart, step))))),
+                                Expression.Assign(dStart, this.Context.CompileDynamicCall("+", dStart, dStep))))),
                     Expression.Loop(
                         Expression.IfThenElse(
                             Expression.IsTrue(Expression.Convert(this.Context.CompileDynamicCall(">", stop, dStart), typeof(bool))),
                             Expression.Break(exitLabel, nilBinding.GenerateReadExpression(this)),
                             Expression.Block(
                                 dynamicOperation,
-                                Expression.Assign(dStart, this.Context.CompileDynamicCall("+", dStart, step)))))));
+                                Expression.Assign(dStart, this.Context.CompileDynamicCall("+", dStart, dStep)))))));
 
             return Expression.Block(
-                new ParameterExpression[] { iStart, iStop, iStep, iNA, dStart },
+                new ParameterExpression[] { iStart, iStop, iStep, iNA, dStart, dStep },
                 integerBlock,
                 Expression.Label(overflowLabel),
                 dynamicBlock,

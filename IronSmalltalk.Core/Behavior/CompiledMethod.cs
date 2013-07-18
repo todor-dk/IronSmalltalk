@@ -17,6 +17,7 @@
 using System;
 using System.Dynamic;
 using System.Linq;
+using System.Linq.Expressions;
 using IronSmalltalk.Common;
 
 namespace IronSmalltalk.Runtime.Behavior
@@ -79,8 +80,8 @@ namespace IronSmalltalk.Runtime.Behavior
         }
 
 
-        public abstract MethodCompilationResult CompileInstanceMethod(SmalltalkRuntime runtime, SmalltalkClass cls, DynamicMetaObject self, DynamicMetaObject[] arguments, Symbol superScope);
-        public abstract MethodCompilationResult CompileClassMethod(SmalltalkRuntime runtime, SmalltalkClass cls, DynamicMetaObject self, DynamicMetaObject[] arguments, Symbol superScope);
+        public abstract MethodCompilationResult CompileInstanceMethod(SmalltalkRuntime runtime, SmalltalkClass cls, Expression self, Expression[] arguments, Symbol superScope);
+        public abstract MethodCompilationResult CompileClassMethod(SmalltalkRuntime runtime, SmalltalkClass cls, Expression self, Expression[] arguments, Symbol superScope);
     }
 
     public sealed class NativeCompiledMethod : CompiledMethod
@@ -90,12 +91,12 @@ namespace IronSmalltalk.Runtime.Behavior
         {
         }
 
-        public override MethodCompilationResult CompileClassMethod(SmalltalkRuntime runtime, SmalltalkClass cls, DynamicMetaObject self, DynamicMetaObject[] arguments, Symbol superScope)
+        public override MethodCompilationResult CompileClassMethod(SmalltalkRuntime runtime, SmalltalkClass cls, Expression self, Expression[] arguments, Symbol superScope)
         {
             throw new NotImplementedException();
         }
 
-        public override MethodCompilationResult CompileInstanceMethod(SmalltalkRuntime runtime, SmalltalkClass cls, DynamicMetaObject self, DynamicMetaObject[] arguments, Symbol superScope)
+        public override MethodCompilationResult CompileInstanceMethod(SmalltalkRuntime runtime, SmalltalkClass cls, Expression self, Expression[] arguments, Symbol superScope)
         {
             throw new NotImplementedException();
         }

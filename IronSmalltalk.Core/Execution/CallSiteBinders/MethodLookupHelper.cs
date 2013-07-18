@@ -17,6 +17,7 @@
 using System;
 using System.Diagnostics;
 using System.Dynamic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using IronSmalltalk.Runtime.Behavior;
@@ -70,7 +71,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                     {
                         // A class method, special restrictions
                         restrictions = BindingRestrictions.GetInstanceRestriction(self.Expression, receiver);
-                        var compilationResult = mth.CompileClassMethod(runtime, cls, self, arguments, superLookupScope);
+                        var compilationResult = mth.CompileClassMethod(runtime, cls, self.Expression, arguments.Select(dmo => dmo.Expression).ToArray(), superLookupScope);
                         if (compilationResult == null)
                         {
                             executableCode = null;
@@ -100,7 +101,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             }
             else
             {
-                var compilationResult = method.CompileInstanceMethod(runtime, cls, self, arguments, superLookupScope);
+                var compilationResult = method.CompileInstanceMethod(runtime, cls, self.Expression, arguments.Select(dmo => dmo.Expression).ToArray(), superLookupScope);
                 if (compilationResult == null)
                 {
                     executableCode = null;

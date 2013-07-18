@@ -37,7 +37,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
     ///     
     ///     self error: 'Addition failed'.
     /// </example>
-    internal enum BuiltInPrimitivesEnum
+    internal enum BuiltInPrimitiveEnum
     {
         #region **** Very Common ****
 
@@ -150,7 +150,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         /// For bounded values, OverflowException is signaled on overflow.
         /// </summary>
         /// <remarks>
-        /// The current implementation <see cref="BuiltInPrimitiveHelper.Shift"/> only supports the following types:
+        /// The current implementation <see cref="BuiltInPrimitiveEncoder.Shift"/> only supports the following types:
         ///     Value:
         ///         - System.Numerics.BigInteger
         ///         - System.Int64

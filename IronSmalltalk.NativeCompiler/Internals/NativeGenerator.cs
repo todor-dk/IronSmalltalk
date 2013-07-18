@@ -102,7 +102,7 @@ namespace IronSmalltalk.NativeCompiler.Internals
             foreach (TypeBuilder type in this.DefinedTypes)
             {
                 if (!type.IsCreated())
-                    type.CreateType();
+                    type.CreateType();                    
             }
             string filename = System.IO.Path.GetFileName(this.OutputPath);
             this.AssemblyBuilder.Save(filename, PortableExecutableKinds.ILOnly, ImageFileMachine.I386);

@@ -81,7 +81,7 @@
     <Compile Include="Behavior\CompiledInitializer.cs" />
     <Compile Include="Behavior\MethodCompilationResult.cs" />
     <Compile Include="Behavior\NativeCompiledInitializer.cs" />
-    <Compile Include="Bindings\InitializerList.cs" />
+    <Compile Include="Behavior\InitializerList.cs" />
     <Compile Include="Bindings\ISmalltalkNameScopeVisitor.cs" />
     <Compile Include="Execution\CallSiteBinders\MessageSendCallSiteBinderBase.cs" />
     <Compile Include="Execution\CallSiteBinders\RuntimeHelpers.cs" />

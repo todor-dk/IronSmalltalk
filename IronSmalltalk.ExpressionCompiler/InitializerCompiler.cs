@@ -66,12 +66,12 @@ namespace IronSmalltalk.ExpressionCompiler
             if (parseTree == null)
                 throw new ArgumentNullException("parseTree");
 
-            DynamicMetaObject self = DynamicMetaObject.Create(null, Expression.Parameter(typeof (object), "self"));
-            DynamicMetaObject executionContext = DynamicMetaObject.Create(null, Expression.Parameter(typeof(ExecutionContext), "executionContext"));
-            VisitingContext context = new VisitingContext(this, this.GlobalScope, this.ReservedScope, self, executionContext, null);
+            ParameterExpression self = Expression.Parameter(typeof(object), "self");
+            ParameterExpression executionContext = Expression.Parameter(typeof(ExecutionContext), "executionContext");
+            VisitingContext context = new VisitingContext(this, this.GlobalScope, this.ReservedScope, self, executionContext, new ParameterExpression[0], null);
             InitializerVisitor visitor = new InitializerVisitor(context, initializerName);
             Expression<Func<object, ExecutionContext, object>> code = parseTree.Accept(visitor);
-            return new InitializerCompilationResult(code, context.BindingRestrictions);   
+            return new InitializerCompilationResult(code, null);   
         }
     }
 }

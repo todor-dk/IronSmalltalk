@@ -19,7 +19,7 @@ using System.Runtime.Serialization;
 using IronSmalltalk.ExpressionCompiler.Internals;
 using IronSmalltalk.Runtime.Execution.Internals;
 
-namespace IronSmalltalk.ExpressionCompiler.Primitives
+namespace IronSmalltalk.ExpressionCompiler.Primitives.Exceptions
 {
     /// <summary>
     /// Exception that indicates that something wrong happened during generation of a primitive code.

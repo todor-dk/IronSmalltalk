@@ -15,6 +15,7 @@
 */
 
 using System.Dynamic;
+using System.Linq;
 using System.Linq.Expressions;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Execution.CallSiteBinders;
@@ -48,7 +49,7 @@ namespace IronSmalltalk.Runtime
 
             if (method != null)
             {
-                var compilationResult = method.CompileClassMethod(cls.Runtime, cls, target, args, null);
+                var compilationResult = method.CompileClassMethod(cls.Runtime, cls, target.Expression, args.Select(dmo => dmo.Expression).ToArray(), null);
                 return compilationResult.GetDynamicMetaObject(target.Restrictions);
             }
 
@@ -65,7 +66,7 @@ namespace IronSmalltalk.Runtime
 
             if (method != null)
             {
-                var compilationResult = method.CompileInstanceMethod(cls.Runtime, cls, target, args, null);
+                var compilationResult = method.CompileInstanceMethod(cls.Runtime, cls, target.Expression, args.Select(dmo => dmo.Expression).ToArray(), null);
                 return compilationResult.GetDynamicMetaObject(target.Restrictions);
             }
 

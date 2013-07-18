@@ -33,7 +33,7 @@ namespace IronSmalltalk.NativeCompiler.Internals
         {
         }
 
-        private TypeBuilder Type;
+        //private TypeBuilder Type;
 
         internal override void GenerateTypes()
         {

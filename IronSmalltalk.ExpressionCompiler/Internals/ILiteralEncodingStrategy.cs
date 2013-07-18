@@ -22,5 +22,7 @@ namespace IronSmalltalk.ExpressionCompiler.Internals
         Expression String(EncoderVisitor visitor, string value);
         Expression Symbol(EncoderVisitor visitor, string value);
         Expression True(EncoderVisitor visitor);
+        Expression GetZero(Type type);
+        Expression GetOne(Type type);
     }
 }

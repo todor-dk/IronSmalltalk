@@ -106,5 +106,24 @@ namespace IronSmalltalk.ExpressionCompiler.Internals
                 result[i] = elements[i].Accept(arrayVisitor);
             return Expression.Constant(result, typeof(object));
         }
+
+
+        public Expression GetZero(Type type)
+        {
+            return Expression.Constant(LiteralEncodingStrategy.GetValue(type, 0));
+        }
+
+        public Expression GetOne(Type type)
+        {
+            return Expression.Constant(LiteralEncodingStrategy.GetValue(type, 1));
+        }
+
+        private static object GetValue(Type type, object value)
+        {
+            Expression expression = Expression.Convert(Expression.Constant(value, value.GetType()), type);
+            var lambda = Expression.Lambda<Func<object>>(Expression.Convert(expression, typeof(object)));
+            var method = lambda.Compile();
+            return method();
+        }  
     }
 }

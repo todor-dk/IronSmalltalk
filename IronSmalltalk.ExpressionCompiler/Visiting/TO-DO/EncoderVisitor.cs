@@ -33,7 +33,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         Expression IBindingClient.SelfExpression
         {
-            get { return this.Context.Self.Expression; }
+            get { return this.Context.Self; }
         }
 
 
