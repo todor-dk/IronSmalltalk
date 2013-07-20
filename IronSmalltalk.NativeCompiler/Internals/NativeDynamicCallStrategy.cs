@@ -15,6 +15,11 @@ namespace IronSmalltalk.NativeCompiler.Internals
 {
     public class NativeDynamicCallStrategy : IDynamicCallStrategy
     {
+        internal void GenerateLiteralType()
+        {
+
+        }
+
 
         public Expression CompileDynamicCall(VisitingContext context, string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, string superLookupScope, Expression receiver, Expression executionContext)
         {

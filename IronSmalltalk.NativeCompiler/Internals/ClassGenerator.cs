@@ -163,10 +163,16 @@ namespace IronSmalltalk.NativeCompiler.Internals
         private MethodGenerator InstanceMethodGenerator;
         private MethodGenerator ClassMethodGenerator;
 
+        internal void PrepareMethods()
+        {
+            this.InstanceMethodGenerator = Internals.InstanceMethodGenerator.CreateAndPrepareGenerator(this);
+            this.ClassMethodGenerator = Internals.ClassMethodGenerator.CreateAndPrepareGenerator(this);
+        }
+
         internal void GenerateMethods()
         {
-            this.InstanceMethodGenerator = Internals.InstanceMethodGenerator.GenerateMethods(this);
-            this.ClassMethodGenerator = Internals.ClassMethodGenerator.GenerateMethods(this);
+            this.InstanceMethodGenerator.GenerateMethods();
+            this.ClassMethodGenerator.GenerateMethods();
         }
 
     }

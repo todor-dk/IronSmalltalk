@@ -21,8 +21,10 @@ namespace IronSmalltalk.NativeCompiler.Internals
     internal abstract class MethodGenerator : GeneratorBase
     {
         private readonly MethodDictionary Methods;
-        private readonly SmalltalkClass Class;
-        private readonly TypeBuilder TypeBuilder;
+        internal readonly SmalltalkClass Class;
+        internal readonly TypeBuilder TypeBuilder;
+        protected readonly NativeLiteralEncodingStrategy LiteralEncodingStrategy;
+        protected readonly NativeDynamicCallStrategy DynamicCallStrategy;
 
         protected MethodGenerator(NativeCompiler compiler, SmalltalkClass cls, MethodDictionary methods, TypeBuilder typeBuilder)
             : base(compiler)
@@ -30,6 +32,8 @@ namespace IronSmalltalk.NativeCompiler.Internals
             this.Class = cls;
             this.Methods = methods;
             this.TypeBuilder = typeBuilder;
+            this.LiteralEncodingStrategy = new NativeLiteralEncodingStrategy(this);
+            this.DynamicCallStrategy = new NativeDynamicCallStrategy();
         }
 
         private MethodCompiler _MethodCompiler;
@@ -45,10 +49,33 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
         protected abstract MethodCompiler GetMethodCompiler();
 
-        protected void GenerateMethods()
+        private List<MethodInformation> MethodsInfo;
+
+        protected void PrepareGenerator()
         {
-            List<MethodInformation> methods = this.GetMethodNameMap();
-            foreach (MethodInformation method in methods)
+            this.MethodsInfo = this.GetMethodNameMap();
+            foreach (MethodInformation method in this.MethodsInfo)
+            {
+                this.PrepareMethod(method);
+            }
+        }
+
+        private void PrepareMethod(MethodInformation method)
+        {
+            method.LambdaExpression = this.GenerateMethodLambda(method);
+        }
+
+        internal void GenerateMethods()
+        {
+            if (this.Class.Name.Value == "Console")
+                return;
+            if (this.Class.Name.Value == "Object")
+                return;
+
+            this.LiteralEncodingStrategy.GenerateLiteralType();
+            this.DynamicCallStrategy.GenerateLiteralType();
+
+            foreach (MethodInformation method in this.MethodsInfo)
             {
                 this.GenerateMethod(method);
             }
@@ -56,19 +83,14 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
         private void GenerateMethod(MethodInformation method)
         {
-            if (this.Class.Name.Value == "Console")
-                return;
-            if (this.Class.Name.Value == "Object")
-                return;
-            MethodBuilder methodBuilder = this.TypeBuilder.DefineMethod(method.MethodName, MethodAttributes.Public | MethodAttributes.Static);
-            LambdaExpression lambda = this.GenerateMethodLambda(method);
             try
             {
-                lambda.CompileToMethod(methodBuilder, this.Compiler.NativeGenerator.DebugInfoGenerator);
+                MethodBuilder methodBuilder = this.TypeBuilder.DefineMethod(method.MethodName, MethodAttributes.Public | MethodAttributes.Static);
+                method.LambdaExpression.CompileToMethod(methodBuilder, this.Compiler.NativeGenerator.DebugInfoGenerator);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("{0} {1}", lambda, ex);
+                Console.WriteLine("{0} {1}", method.LambdaExpression, ex);
             }
         }
 
@@ -119,6 +141,7 @@ namespace IronSmalltalk.NativeCompiler.Internals
             public readonly NativeCompiler Compiler;
             public readonly RuntimeCompiledMethod Method;
             public readonly string MethodName;
+            public LambdaExpression LambdaExpression; 
 
             private MethodInformation(NativeCompiler compiler, string name, RuntimeCompiledMethod method)
             {
@@ -131,14 +154,14 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
     internal sealed class ClassMethodGenerator : MethodGenerator
     {
-        internal static ClassMethodGenerator GenerateMethods(ClassGenerator classGenerator)
+        internal static ClassMethodGenerator CreateAndPrepareGenerator(ClassGenerator classGenerator)
         {
             ClassMethodGenerator generator = new ClassMethodGenerator(
                 classGenerator.Compiler,
                 classGenerator.Binding.Value,
                 classGenerator.Binding.Value.ClassBehavior,
                 classGenerator.ClassMethodsType);
-            generator.GenerateMethods();
+            generator.PrepareGenerator();
             return generator;
         }
 
@@ -151,8 +174,8 @@ namespace IronSmalltalk.NativeCompiler.Internals
         {
             CompilerOptions options = new CompilerOptions();
             options.DebugInfoService = null;    // BUG-BUG 
-            options.LiteralEncodingStrategy = new NativeLiteralEncodingStrategy();
-            options.DynamicCallStrategy = new NativeDynamicCallStrategy();
+            options.LiteralEncodingStrategy = this.LiteralEncodingStrategy;
+            options.DynamicCallStrategy = this.DynamicCallStrategy;
 
             return new ClassMethodCompiler(this.Compiler.Parameters.Runtime, options); 
         }
@@ -160,14 +183,14 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
     internal sealed class InstanceMethodGenerator : MethodGenerator
     {
-        internal static InstanceMethodGenerator GenerateMethods(ClassGenerator classGenerator)
+        internal static InstanceMethodGenerator CreateAndPrepareGenerator(ClassGenerator classGenerator)
         {
             InstanceMethodGenerator generator = new InstanceMethodGenerator(
                 classGenerator.Compiler, 
                 classGenerator.Binding.Value, 
                 classGenerator.Binding.Value.InstanceBehavior, 
                 classGenerator.InstanceMethodsType);
-            generator.GenerateMethods();
+            generator.PrepareGenerator();
             return generator;
         }
 
@@ -180,8 +203,8 @@ namespace IronSmalltalk.NativeCompiler.Internals
         {
             CompilerOptions options = new CompilerOptions();
             options.DebugInfoService = null;    // BUG-BUG 
-            options.LiteralEncodingStrategy = new NativeLiteralEncodingStrategy();
-            options.DynamicCallStrategy = new NativeDynamicCallStrategy();
+            options.LiteralEncodingStrategy = this.LiteralEncodingStrategy;
+            options.DynamicCallStrategy = this.DynamicCallStrategy;
 
             return new InstanceMethodCompiler(this.Compiler.Parameters.Runtime, options);
         }

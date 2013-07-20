@@ -24,27 +24,19 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 {
     public static class RuntimeHelpers
     {
-        public static MessageSendCallSiteBinder CreateCallSiteBinder(SmalltalkRuntime runtime, string selector, string nativeName, int argumentCount)
+        public static MessageSendCallSiteBinder CreateCallSiteBinder(string selector, string nativeName, int argumentCount)
         {
-            return new MessageSendCallSiteBinder(runtime,
-                runtime.GetSymbol(selector),
-                nativeName,
-                argumentCount);
+            return new MessageSendCallSiteBinder(selector, nativeName, argumentCount);
         }
 
-        public static ConstantSendCallSiteBinder CreateConstantCallSiteBinder(SmalltalkRuntime runtime, string selector, string nativeName, int argumentCount)
+        public static ConstantSendCallSiteBinder CreateConstantCallSiteBinder(string selector, string nativeName, int argumentCount)
         {
-            return new ConstantSendCallSiteBinder(runtime,
-                runtime.GetSymbol(selector),
-                nativeName,
-                argumentCount);
+            return new ConstantSendCallSiteBinder(selector, nativeName, argumentCount);
         }
 
-        public static SuperSendCallSiteBinder CreateSuperSendCallSiteBinder(SmalltalkRuntime runtime, string selector, string superLookupScope, int argumentCount)
+        public static SuperSendCallSiteBinder CreateSuperSendCallSiteBinder(string selector, string superLookupScope, int argumentCount)
         {
-            return new SuperSendCallSiteBinder(runtime,
-                runtime.GetSymbol(selector),
-                runtime.GetSymbol(superLookupScope));
+            return new SuperSendCallSiteBinder(selector, superLookupScope);
         }
     }
 }

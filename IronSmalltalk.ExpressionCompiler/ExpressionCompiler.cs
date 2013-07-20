@@ -109,21 +109,21 @@ namespace IronSmalltalk.ExpressionCompiler
             CallSiteBinder binder;
             if (isSuperSend)
             {
-                return CSB.RuntimeHelpers.CreateSuperSendCallSiteBinder(this.Runtime, selector, superLookupScope, argumentCount);
+                return CSB.RuntimeHelpers.CreateSuperSendCallSiteBinder(selector, superLookupScope, argumentCount);
             }
             else if (isConstantReceiver)
             {
                 binder = this.BinderCache.ConstantSendCache.GetBinder(selector);
                 if (binder == null)
                     binder = this.BinderCache.ConstantSendCache.AddBinder(
-                        CSB.RuntimeHelpers.CreateConstantCallSiteBinder(this.Runtime, selector, nativeName, argumentCount));
+                        CSB.RuntimeHelpers.CreateConstantCallSiteBinder(selector, nativeName, argumentCount));
             }
             else
             {
                 binder = this.BinderCache.MessageSendCache.GetBinder(selector);
                 if (binder == null)
                     binder = this.BinderCache.MessageSendCache.AddBinder(
-                        CSB.RuntimeHelpers.CreateCallSiteBinder(this.Runtime, selector, nativeName, argumentCount));
+                        CSB.RuntimeHelpers.CreateCallSiteBinder(selector, nativeName, argumentCount));
             }
 
             return binder;
@@ -134,7 +134,7 @@ namespace IronSmalltalk.ExpressionCompiler
             ObjectClassCallSiteBinder binder = this.BinderCache.CachedObjectClassCallSiteBinder;
             if (binder == null)
             {
-                binder = new ObjectClassCallSiteBinder(this.Runtime);
+                binder = new ObjectClassCallSiteBinder();
                 this.BinderCache.CachedObjectClassCallSiteBinder = binder;
             }
             return binder;

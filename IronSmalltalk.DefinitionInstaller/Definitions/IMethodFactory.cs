@@ -23,11 +23,9 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
     public interface IMethodFactory
     {
-        CompiledMethod CreateMethod(MethodDefinition definition, IDefinitionInstallerContext installer, SmalltalkClass cls);
+        CompiledMethod CreateMethod(MethodDefinition definition, IDefinitionInstallerContext installer, SmalltalkClass cls, CompiledMethod.MethodType methodType);
 
-        bool ValidateClassMethod(ClassMethodDefinition definition, IDefinitionInstallerContext installer, SmalltalkClass cls, ICodeValidationErrorSink errorSink);
-
-        bool ValidateInstanceMethod(InstanceMethodDefinition definition, IDefinitionInstallerContext installer, SmalltalkClass cls, ICodeValidationErrorSink errorSink);
+        bool ValidateMethod(MethodDefinition definition, IDefinitionInstallerContext installer, SmalltalkClass cls, CompiledMethod.MethodType methodType, ICodeValidationErrorSink errorSink);
     }
 
     /// <summary>

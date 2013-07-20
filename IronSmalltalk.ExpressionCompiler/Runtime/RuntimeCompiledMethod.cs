@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -26,6 +27,7 @@ using IronSmalltalk.ExpressionCompiler.Visiting;
 using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
+using IronSmalltalk.Runtime.Execution;
 
 namespace IronSmalltalk.ExpressionCompiler.Runtime
 {
@@ -35,8 +37,8 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
 
         public IDebugInfoService DebugInfoService { get; private set; }
 
-        public RuntimeCompiledMethod(Symbol selector, MethodNode parseTree, IDebugInfoService debugInfoService)
-            : base(selector)
+        public RuntimeCompiledMethod(SmalltalkClass cls, Symbol selector, MethodType methodType, MethodNode parseTree, IDebugInfoService debugInfoService)
+            : base(cls, selector, methodType)
         {
             if (parseTree == null)
                 throw new ArgumentNullException();
@@ -44,19 +46,26 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
             this.DebugInfoService = debugInfoService;
         }
 
-        public override MethodCompilationResult CompileClassMethod(SmalltalkRuntime runtime, SmalltalkClass cls, Expression self, Expression[] arguments, Symbol superScope)
+        public override Expression GetExpression(Expression self, Expression executionContext, IEnumerable<Expression> arguments)
         {
-            return this.CompileClassMethod(runtime, cls, self, arguments, superScope, runtime.GlobalScope);
+            return this.GetExpression(self, executionContext, arguments, this.Class.Runtime.GlobalScope);
         }
 
-        private MethodCompilationResult CompileClassMethod(SmalltalkRuntime runtime, SmalltalkClass cls, Expression self, Expression[] arguments, Symbol superScope, SmalltalkNameScope globalNameScope)
+        private Expression GetExpression(Expression self, Expression executionContext, IEnumerable<Expression> arguments, SmalltalkNameScope globalNameScope)
         {
-            if (runtime == null)
-                throw new ArgumentNullException("runtime");
-            if (cls == null)
-                throw new ArgumentNullException("cls");
+            Symbol superScope = (this.Class.Superclass == null) ? null : this.Class.Superclass.Name;
+            if (this.Type == MethodType.Class)
+                return this.CompileClassMethod(self, executionContext, arguments.ToArray(), superScope, globalNameScope);
+            else
+                return this.CompileInstanceMethod(self, executionContext, arguments.ToArray(), superScope, globalNameScope);
+        }
+
+        private Expression CompileClassMethod(Expression self, Expression executionContext, Expression[] arguments, Symbol superScope, SmalltalkNameScope globalNameScope)
+        {
             if (self == null)
                 throw new ArgumentNullException("self");
+            if (executionContext == null)
+                throw new ArgumentNullException("executionContext");
             if (arguments == null)
                 throw new ArgumentNullException("arguments");
 
@@ -64,21 +73,26 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
             options.DebugInfoService = this.GetDebugInfoService();
             options.GlobalNameScope = globalNameScope;
 
-            ClassMethodCompiler compiler = new ClassMethodCompiler(runtime, options);
+            ClassMethodCompiler compiler = new ClassMethodCompiler(this.Class.Runtime, options);
 
-            return compiler.CompileMethod(this.ParseTree, cls, self, arguments);
+            return compiler.CompileMethod(this.ParseTree, this.Class, self, executionContext, arguments);
+        }
 
+        private Expression CompileInstanceMethod(Expression self, Expression executionContext, Expression[] arguments, Symbol superScope, SmalltalkNameScope globalNameScope)
+        {
+            if (self == null)
+                throw new ArgumentNullException("self");
+            if (executionContext == null)
+                throw new ArgumentNullException("executionContext");
+            if (arguments == null)
+                throw new ArgumentNullException("arguments");
 
-            //MethodVisitor visitor = new MethodVisitor(runtime,
-            //    BindingScope.ForClassMethod(cls, globalNameScope),
-            //    ReservedScope.ForClassMethod(self.Expression),
-            //    self,
-            //    arguments,
-            //    cls.Name,
-            //    this.GetDebugInfoService());
-            ////visitor.SymbolDocument = Expression.SymbolDocument("<mod>", new Guid("{E1A254E3-FD2E-4D82-BAB3-D4E9B115154E}"), new Guid("{6A28E03C-E404-4190-A012-72B2CCE48DD5}"));
-            //Expression code = this.ParseTree.Accept(visitor);
-            //return new MethodCompilationResult(code, visitor.BindingRestrictions);
+            CompilerOptions options = new CompilerOptions();
+            options.DebugInfoService = this.GetDebugInfoService();
+            options.GlobalNameScope = globalNameScope;
+
+            InstanceMethodCompiler compiler = new InstanceMethodCompiler(this.Class.Runtime, options);
+            return compiler.CompileMethod(this.ParseTree, this.Class, self, executionContext, arguments);
         }
 
         public IDebugInfoService GetDebugInfoService()
@@ -90,63 +104,17 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
             return this.DebugInfoService;
         }
 
-        public override MethodCompilationResult CompileInstanceMethod(SmalltalkRuntime runtime, SmalltalkClass cls, Expression self, Expression[] arguments, Symbol superScope)
+        public bool Validate(SmalltalkNameScope globalNameScope, IRuntimeCodeValidationErrorSink errorSink)
         {
-            return this.CompileInstanceMethod(runtime, cls, self, arguments, superScope, runtime.GlobalScope);
-        }
-
-        private MethodCompilationResult CompileInstanceMethod(SmalltalkRuntime runtime, SmalltalkClass cls, Expression self, Expression[] arguments, Symbol superScope, SmalltalkNameScope globalNameScope)
-        {
-            if (runtime == null)
-                throw new ArgumentNullException("runtime");
-            if (cls == null)
-                throw new ArgumentNullException("cls");
-            if (self == null)
-                throw new ArgumentNullException("self");
-            if (arguments == null)
-                throw new ArgumentNullException("arguments");
-
-            CompilerOptions options = new CompilerOptions();
-            options.DebugInfoService = this.GetDebugInfoService();
-            options.GlobalNameScope = globalNameScope;
-
-            InstanceMethodCompiler compiler = new InstanceMethodCompiler(runtime, options);
-
-            return compiler.CompileMethod(this.ParseTree, cls, self, arguments);
-            //MethodVisitor visitor = new MethodVisitor(runtime,
-            //    BindingScope.ForInstanceMethod(cls, globalNameScope),
-            //    (cls.Superclass == null) ?
-            //        ReservedScope.ForRootClassInstanceMethod(self.Expression) :
-            //        ReservedScope.ForInstanceMethod(self.Expression),
-            //    self,
-            //    arguments,
-            //    cls.Name,
-            //    this.GetDebugInfoService());
-            //Expression code = this.ParseTree.Accept(visitor);
-            //return new MethodCompilationResult(code, visitor.BindingRestrictions);
-        }
-
-
-        public bool ValidateInstanceMethod(SmalltalkClass cls, SmalltalkNameScope globalNameScope, IRuntimeCodeValidationErrorSink errorSink)
-        {
-            return this.Validate(cls, errorSink, (r, c, s, a, u) => this.CompileInstanceMethod(r, c, s, a, u, globalNameScope));
-        }
-
-        public bool ValidateClassMethod(SmalltalkClass cls, SmalltalkNameScope globalNameScope, IRuntimeCodeValidationErrorSink errorSink)
-        {
-            return this.Validate(cls, errorSink, (r, c, s, a, u) => this.CompileClassMethod(r, c, s, a, u, globalNameScope));
-        }
-
-        private bool Validate(SmalltalkClass cls, IRuntimeCodeValidationErrorSink errorSink, Func<SmalltalkRuntime, SmalltalkClass, Expression, Expression[], Symbol, MethodCompilationResult> func)
-        {
-            return RuntimeCompiledMethod.Validate(this.ParseTree, errorSink, delegate()
+            return RuntimeCompiledMethod.Validate(this.ParseTree, errorSink, () =>
             {
                 Expression self = Expression.Parameter(typeof(object), "self");
-                Expression[] args = new Expression[this.ParseTree.Arguments.Count + 1];
+                Expression executionContext = Expression.Parameter(typeof(ExecutionContext), "$executionContext");
+                Expression[] args = new Expression[this.ParseTree.Arguments.Count];
                 for (int i = 0; i < args.Length; i++)
-                    args[i] = Expression.Parameter(typeof(object), String.Format("arg{0}", i));
+                    args[i] = Expression.Parameter(typeof(object), String.Format("arg{0}", i+1));
 
-                return func(cls.Runtime, cls, self, args, null);
+                return this.GetExpression(self, executionContext, args, globalNameScope);
             });
         }
 

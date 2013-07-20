@@ -75,15 +75,15 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 throw new ArgumentNullException();
 
             MessageSendCallSiteBinder result;
-            if (this.StrongCache.TryGetValue(binder.Selector.Value, out result))
+            if (this.StrongCache.TryGetValue(binder.Selector, out result))
             {
                 // It is one of the common selectors
                 if (result != null)
                     // Already cached
                     return result;
                 // Cache it and return ...
-                this.StrongCache.TryUpdate(binder.Selector.Value, binder, null);
-                return this.StrongCache[binder.Selector.Value];
+                this.StrongCache.TryUpdate(binder.Selector, binder, null);
+                return this.StrongCache[binder.Selector];
             }
 
             return this.WeakCache.AddItem(binder);
@@ -136,7 +136,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 
                 // 1. Try to get the CSB from the dictionary. 
                 binder.FinalizationManager = this;
-                WeakReference reference = this._Contents.GetOrAdd(binder.Selector.Value, na => new WeakReference(binder, false));
+                WeakReference reference = this._Contents.GetOrAdd(binder.Selector, na => new WeakReference(binder, false));
                 // 2. Get the CSB from the weak reference holding it
                 MessageSendCallSiteBinder result = reference.Target as MessageSendCallSiteBinder;
                 // Once here, it can't be GC'ed.

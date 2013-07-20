@@ -40,16 +40,6 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// </remarks>
         public ObjectClassCallSiteBinder CachedObjectClassCallSiteBinder;
 
-        /// <summary>
-        /// Cached DoesNotUnderstandCallSiteBinder.
-        /// </summary>
-        /// <remarks>
-        /// Only one DoesNotUnderstandCallSiteBinder exists per SmalltalkRuntime.
-        /// This is due to the fact that the DoesNotUnderstandCallSiteBinder does
-        /// not contain any instance specific information.
-        /// </remarks>
-        public DoesNotUnderstandCallSiteBinder CachedDoesNotUnderstandCallSiteBinder;
-
         public static CallSiteBinderCache GetCache(SmalltalkRuntime runtime)
         {
             if (runtime == null)

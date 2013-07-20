@@ -163,30 +163,31 @@ namespace IronSmalltalk
 
         private DynamicMetaObject PerformOperation(string name, bool ignoreCase, int argumentCount, DynamicMetaObject[] args)
         {
-            if (args == null)
-                args = new DynamicMetaObject[0];
-            bool caseConflict = false;
+            throw new NotImplementedException();
+            //if (args == null)
+            //    args = new DynamicMetaObject[0];
+            //bool caseConflict = false;
 
-            SmalltalkClass cls = this.Runtime.NativeTypeClassMap.GetSmalltalkClass(this.Runtime.GetType());
-            if (cls == null)
-                cls = this.Runtime.NativeTypeClassMap.Object;
-            Symbol na = null;
-            CompiledMethod method = MethodLookupHelper.LookupMethod(ref cls, ref na, 
-                c => c.InstanceBehavior.GetMethodByNativeName(name, argumentCount, ignoreCase, out caseConflict));
+            //SmalltalkClass cls = this.Runtime.NativeTypeClassMap.GetSmalltalkClass(this.Runtime.GetType());
+            //if (cls == null)
+            //    cls = this.Runtime.NativeTypeClassMap.Object;
+            //Symbol na = null;
+            //CompiledMethod method = MethodLookupHelper.LookupMethod(ref cls, ref na, 
+            //    c => c.InstanceBehavior.GetMethodByNativeName(name, argumentCount, ignoreCase, out caseConflict));
 
-            if (!caseConflict)
-            {
-                if (method != null)
-                {
-                    var compilationResult = method.CompileInstanceMethod(cls.Runtime, cls, this.Expression, args.Select(dmo => dmo.Expression).ToArray(), null);
-                    return compilationResult.GetDynamicMetaObject(this.Restrictions);
-                }
-                return null;
-            }
+            //if (!caseConflict)
+            //{
+            //    if (method != null)
+            //    {
+            //        var compilationResult = method.CompileInstanceMethod(cls.Runtime, cls, this.Expression, args.Select(dmo => dmo.Expression).ToArray(), null);
+            //        return compilationResult.GetDynamicMetaObject(this.Restrictions);
+            //    }
+            //    return null;
+            //}
 
-            // The case-conflict exception
-            return new DynamicMetaObject(SmalltalkDynamicMetaObject.CreateCaseConflictException(
-                String.Format("Several methods exist with the name '{0}' and only differ in case.", name)), this.Restrictions);
+            //// The case-conflict exception
+            //return new DynamicMetaObject(SmalltalkDynamicMetaObject.CreateCaseConflictException(
+            //    String.Format("Several methods exist with the name '{0}' and only differ in case.", name)), this.Restrictions);
         }
     }
 }

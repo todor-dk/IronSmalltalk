@@ -125,6 +125,7 @@ namespace IronSmalltalk.Runtime.Behavior
             {
                 if (selector == null)
                     throw new ArgumentNullException();
+                this.ValidateModification(value, selector);
                 this.Contents[selector] = value;
             }
         }
@@ -227,6 +228,12 @@ namespace IronSmalltalk.Runtime.Behavior
         /// </summary>
         /// <param name="selector">Selector to identify the method.</param>
         /// <param name="method">Method to be added to the method dictionary.</param>
+        /// <remarks>
+        /// The method parameter may be null, in which case it behaves like removing it 
+        /// from the behavior of the object. It also has the effect that the method lookup
+        /// will stop and not look into superclasses and the message send for the given 
+        /// selector will result in does-not-understand.
+        /// </remarks>
         public void Add(string selector, CompiledMethod method)
         {
             if (selector == null)
@@ -239,16 +246,17 @@ namespace IronSmalltalk.Runtime.Behavior
         /// </summary>
         /// <param name="selector">Selector to identify the method.</param>
         /// <param name="method">Method to be added to the method dictionary.</param>
+        /// <remarks>
+        /// The method parameter may be null, in which case it behaves like removing it 
+        /// from the behavior of the object. It also has the effect that the method lookup
+        /// will stop and not look into superclasses and the message send for the given 
+        /// selector will result in does-not-understand.
+        /// </remarks>
         public void Add(Symbol selector, CompiledMethod method)
         {
             if (selector == null)
                 throw new ArgumentNullException("selector");
-            if (this._readOnly)
-                throw new InvalidOperationException("Dictionary is in read-only state.");
-            if (selector.Manager.Runtime != this._Runtime)
-                throw new InvalidOperationException("Method selector belongs to a different SmalltalkRuntime.");
-            //if (method. != this._Runtime)
-            //    throw new InvalidOperationException("Method selector belongs to a different SmalltalkRuntime.");
+            this.ValidateModification(method, selector);
             this.Contents.Add(selector, method);
             this._nativeMethodNameMap = null;
         }
@@ -308,6 +316,29 @@ namespace IronSmalltalk.Runtime.Behavior
                 throw new ArgumentNullException();
             return this.Remove(method.Selector);
         }
+
+        private void ValidateModification(CompiledMethod method, Symbol selector)
+        {
+            if (this._readOnly)
+                throw new InvalidOperationException("Dictionary is in read-only state.");
+
+            if ((selector == null) && (method != null))
+                selector = method.Selector;
+
+            if ((selector != null) && (selector.Manager.Runtime != this._Runtime))
+                throw new ArgumentException("Method selector belongs to a different SmalltalkRuntime.", "selector");
+
+            if ((method != null) && (method.Class.Runtime != this._Runtime))
+                throw new ArgumentException("Method selector belongs to a different SmalltalkRuntime.", "method");
+
+            // We could check (method.Selector != selector), but we allow to add a method with a different selector,
+            // thus giving the same CompiledMethod behavior several names (selectors).
+
+            if ((method != null) && (method.Type != this.MethodType))
+                throw new ArgumentException(String.Format("Expected {0} method but was given {1} method.", this.MethodType, method.Type), "method");
+        }
+
+        public abstract CompiledMethod.MethodType MethodType { get; }
 
         #endregion
 
@@ -902,6 +933,11 @@ namespace IronSmalltalk.Runtime.Behavior
             : base(runtime, lazyInitializer)
         {
         }
+
+        public override CompiledMethod.MethodType MethodType
+        {
+            get { return CompiledMethod.MethodType.Class; }
+        }
     }
 
     /// <summary>
@@ -931,6 +967,11 @@ namespace IronSmalltalk.Runtime.Behavior
         public InstanceMethodDictionary(SmalltalkRuntime runtime, Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>> lazyInitializer)
             : base(runtime, lazyInitializer)
         {
+        }
+
+        public override CompiledMethod.MethodType MethodType
+        {
+            get { return CompiledMethod.MethodType.Instance; }
         }
     }
 

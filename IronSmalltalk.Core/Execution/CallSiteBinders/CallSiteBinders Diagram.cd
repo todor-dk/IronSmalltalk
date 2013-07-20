@@ -1,21 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="IronSmalltalk.Runtime.Execution.CallSiteBinders.ConstantSendCallSiteBinder">
-    <Position X="8" Y="15" Width="2.25" />
+    <Position X="8" Y="15.25" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Execution\CallSiteBinders\ConstantSendCallSiteBinder.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="IronSmalltalk.Runtime.Execution.CallSiteBinders.DoesNotUnderstandCallSiteBinder">
-    <Position X="16.75" Y="7.5" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Execution\CallSiteBinders\DoesNotUnderstandCallSiteBinder.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="IronSmalltalk.Runtime.Execution.CallSiteBinders.MessageSendCallSiteBinder">
-    <Position X="8" Y="10.25" Width="2.25" />
+    <Position X="8" Y="10.75" Width="2.25" />
     <NestedTypes>
       <Class Name="IronSmalltalk.Runtime.Execution.CallSiteBinders.MessageSendCallSiteBinder.MessageSendInvokeMemberBinder" Collapsed="true">
         <TypeIdentifier>
@@ -28,10 +21,10 @@
       <FileName>Execution\CallSiteBinders\MessageSendCallSiteBinder.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="IronSmalltalk.Runtime.Execution.CallSiteBinders.MethodLookupHelper" Collapsed="true">
-    <Position X="20.25" Y="3.25" Width="1.5" />
+  <Class Name="IronSmalltalk.Runtime.Execution.CallSiteBinders.MethodLookupHelper">
+    <Position X="6.75" Y="0.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAABAAAIIAAAAAAAAAEAAACAAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <HashCode>AAEBAAAIAAAAACAAAAEAAACAAAAAAAAAAABAAAAAAAE=</HashCode>
       <FileName>Execution\CallSiteBinders\MethodLookupHelper.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -43,7 +36,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Runtime.Execution.CallSiteBinders.SuperSendCallSiteBinder">
-    <Position X="11" Y="10.25" Width="2" />
+    <Position X="11" Y="10.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAACAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Execution\CallSiteBinders\SuperSendCallSiteBinder.cs</FileName>
@@ -59,22 +52,15 @@
   </Class>
   <Class Name="IronSmalltalk.Runtime.Execution.CallSiteBinders.SmalltalkDynamicMetaObjectBinder">
     <Position X="12.25" Y="4.75" Width="2.75" />
-    <NestedTypes>
-      <Class Name="IronSmalltalk.Runtime.Execution.CallSiteBinders.SmalltalkDynamicMetaObjectBinder.LambdaSignature&lt;T&gt;" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Execution\CallSiteBinders\SmalltalkDynamicMetaObjectBinder.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAgAAAAAAAAAAAQCAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Execution\CallSiteBinders\SmalltalkDynamicMetaObjectBinder.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Runtime.Execution.CallSiteBinders.MessageSendCallSiteBinderBase">
     <Position X="9.25" Y="7.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AIAAiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AIAAiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
       <FileName>Execution\CallSiteBinders\MessageSendCallSiteBinderBase.cs</FileName>
     </TypeIdentifier>
   </Class>

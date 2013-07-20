@@ -36,20 +36,16 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.DefinitionInstaller
         {
         }
 
-        public CompiledMethod CreateMethod(MethodDefinition definition, IDefinitionInstallerContext installer, SmalltalkClass cls)
+        public CompiledMethod CreateMethod(MethodDefinition definition, IDefinitionInstallerContext installer, SmalltalkClass cls, CompiledMethod.MethodType methodType)
         {
             Symbol selector = installer.Runtime.GetSymbol(this.ParseTree.Selector);
-            return new RuntimeCompiledMethod(selector, this.ParseTree, new DebugInfoService(this.SourceCodeService));
+            return new RuntimeCompiledMethod(cls, selector, methodType, this.ParseTree, new DebugInfoService(this.SourceCodeService));
         }
 
-        public bool ValidateClassMethod(ClassMethodDefinition definition, IDefinitionInstallerContext installer, SmalltalkClass cls, ICodeValidationErrorSink errorSink)
+        public bool ValidateMethod(MethodDefinition definition, IDefinitionInstallerContext installer, SmalltalkClass cls, CompiledMethod.MethodType methodType, ICodeValidationErrorSink errorSink)
         {
-            return ((RuntimeCompiledMethod)this.CreateMethod(definition, installer, cls)).ValidateClassMethod(cls, installer.NameScope, this.GetErrorSink(errorSink));
-        }
-
-        public bool ValidateInstanceMethod(InstanceMethodDefinition definition, IDefinitionInstallerContext installer, SmalltalkClass cls, ICodeValidationErrorSink errorSink)
-        {
-            return ((RuntimeCompiledMethod)this.CreateMethod(definition, installer, cls)).ValidateInstanceMethod(cls, installer.NameScope, this.GetErrorSink(errorSink));
+            RuntimeCompiledMethod method = (RuntimeCompiledMethod)this.CreateMethod(definition, installer, cls, methodType);
+            return method.Validate(installer.NameScope, this.GetErrorSink(errorSink));
         }
     }
 }

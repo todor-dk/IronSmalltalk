@@ -27,12 +27,11 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// <summary>
         /// Create a new ConstantSendCallSiteBinder.
         /// </summary>
-        /// <param name="runtime">SmalltalkRuntine that this binder belongs to.</param>
         /// <param name="selector">Selector of the message being sent.</param>
         /// <param name="nativeName">Name of the method that the target is asked to bind.</param>
         /// <param name="argumentCount">Number of method arguments.</param>
-        public ConstantSendCallSiteBinder(SmalltalkRuntime runtime, Symbol selector, string nativeName, int argumentCount)
-            : base(runtime, selector, nativeName, argumentCount)
+        public ConstantSendCallSiteBinder(string selector, string nativeName, int argumentCount)
+            : base(selector, nativeName, argumentCount)
         {
         }
     }
