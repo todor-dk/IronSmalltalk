@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -22,16 +23,43 @@ using IronSmalltalk.Common;
 
 namespace IronSmalltalk.Runtime.Behavior
 {
+    /// <summary>
+    /// Instances of the CompiledMethod class represent the code behind a Smalltalk method.
+    /// This code is represented by an AST Expression and can be executed.
+    /// </summary>
     public abstract class CompiledMethod : CompiledCode
     {
+        /// <summary>
+        /// The selector of the method.
+        /// </summary>
         public Symbol Selector { get; private set; }
 
-        protected CompiledMethod(Symbol selector)
+        /// <summary>
+        /// The class that defines the method.
+        /// </summary>
+        public SmalltalkClass Class { get; private set; }
+
+        /// <summary>
+        /// The type of method - either a class or an instance method.
+        /// </summary>
+        public MethodType Type { get; private set; }
+
+        /// <summary>
+        /// Create a new CompiledMethod.
+        /// </summary>
+        /// <param name="cls">The class that defines the method.</param>
+        /// <param name="selector">The selector of the method.</param>
+        /// <param name="methodType">The type of method - either a class or an instance method.</param>
+        protected CompiledMethod(SmalltalkClass cls, Symbol selector, MethodType methodType)
         {
+            if (cls == null)
+                throw new ArgumentNullException("cls");
             if (selector == null)
                 throw new ArgumentNullException("selector");
 
+            this.Class = cls;
             this.Selector = selector;
+            this.Type = methodType;
         }
 
         /// <summary>
@@ -79,24 +107,39 @@ namespace IronSmalltalk.Runtime.Behavior
             }
         }
 
+        /// <summary>
+        /// The type of method - either a class or an instance method.
+        /// </summary>
+        public enum MethodType
+        {
+            /// <summary>
+            /// The method is part of the instance behavior of a Smalltalk class.
+            /// </summary>
+            Instance,
+            /// <summary>
+            /// The method is part of the class behavior of a Smalltalk class.
+            /// </summary>
+            Class
+        }
 
-        public abstract MethodCompilationResult CompileInstanceMethod(SmalltalkRuntime runtime, SmalltalkClass cls, Expression self, Expression[] arguments, Symbol superScope);
-        public abstract MethodCompilationResult CompileClassMethod(SmalltalkRuntime runtime, SmalltalkClass cls, Expression self, Expression[] arguments, Symbol superScope);
+        /// <summary>
+        /// Get (generate) the AST Expression that is needed to execute this method.
+        /// </summary>
+        /// <param name="self">The expression representing the receiver.</param>
+        /// <param name="executionContext">The expression that represents the Smalltalk ExecutionContext.</param>
+        /// <param name="arguments">Arguments that are passed to the method.</param>
+        /// <returns>An AST Expression that can execute the logic of this method.</returns>
+        public abstract Expression GetExpression(Expression self, Expression executionContext, IEnumerable<Expression> arguments);
     }
 
     public sealed class NativeCompiledMethod : CompiledMethod
     {
-        public NativeCompiledMethod(Symbol selector)
-            : base(selector)
+        public NativeCompiledMethod(SmalltalkClass cls, Symbol selector, MethodType methodType)
+            : base(cls, selector, methodType)
         {
         }
 
-        public override MethodCompilationResult CompileClassMethod(SmalltalkRuntime runtime, SmalltalkClass cls, Expression self, Expression[] arguments, Symbol superScope)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override MethodCompilationResult CompileInstanceMethod(SmalltalkRuntime runtime, SmalltalkClass cls, Expression self, Expression[] arguments, Symbol superScope)
+        public override Expression GetExpression(Expression self, Expression executionContext, IEnumerable<Expression> arguments)
         {
             throw new NotImplementedException();
         }

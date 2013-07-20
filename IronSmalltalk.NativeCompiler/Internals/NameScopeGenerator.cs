@@ -179,6 +179,11 @@ namespace IronSmalltalk.NativeCompiler.Internals
             foreach (GlobalBindingGenerator generator in this.Generators)
             {
                 if (generator is ClassGenerator)
+                    ((ClassGenerator)generator).PrepareMethods();
+            }
+            foreach (GlobalBindingGenerator generator in this.Generators)
+            {
+                if (generator is ClassGenerator)
                     ((ClassGenerator)generator).GenerateMethods();
             }
         }

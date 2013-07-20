@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
@@ -37,17 +38,21 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// <param name="superLookupScope">Optional.</param>
         /// <param name="receiver">Optional.</param>
         /// <param name="self">Required.</param>
-        /// <param name="arguments">Required (currently not used).</param>
+        /// <param name="executionContext">Required.</param>
+        /// <param name="arguments">Required.</param>
         /// <param name="receiverClass">Must Return!</param>
+        /// <param name="methodClass">Return null if missing.</param>
         /// <param name="restrictions">Must Return!</param>
         /// <param name="executableCode">Return null if missing.</param>
         public static void GetMethodInformation(SmalltalkRuntime runtime, 
             Symbol selector, 
             Symbol superLookupScope, 
             object receiver,
-            DynamicMetaObject self,
-            DynamicMetaObject[] arguments, 
+            Expression self,
+            Expression executionContext,
+            IEnumerable<Expression> arguments, 
             out SmalltalkClass receiverClass,
+            out SmalltalkClass methodClass,
             out BindingRestrictions restrictions, 
             out Expression executableCode)
         {
@@ -66,53 +71,35 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                         // And in case it's not set (not normal), we default to object
                         receiverClass = runtime.NativeTypeClassMap.Object;
                     // Lookup method in class behavior
-                    CompiledMethod mth = MethodLookupHelper.LookupClassMethod(selector, ref cls, ref superLookupScope);
+                    CompiledMethod mth = MethodLookupHelper.LookupClassMethod(selector, ref cls, superLookupScope);
                     if (mth != null)
                     {
                         // A class method, special restrictions
-                        restrictions = BindingRestrictions.GetInstanceRestriction(self.Expression, receiver);
-                        var compilationResult = mth.CompileClassMethod(runtime, cls, self.Expression, arguments.Select(dmo => dmo.Expression).ToArray(), superLookupScope);
-                        if (compilationResult == null)
-                        {
-                            executableCode = null;
-                        }
-                        else
-                        {
-                            executableCode = compilationResult.ExecutableCode;
-                            restrictions = compilationResult.MergeRestrictions(restrictions);
-                        }
-                        return;
+                        methodClass = cls;
+                        restrictions = BindingRestrictions.GetInstanceRestriction(self, receiver);
+                        executableCode = mth.GetExpression(self, executionContext, arguments);
+                        if (executableCode != null)
+                            return;
                     }
                     // Not in class behavior ... fallback to instance / Object behavior
                     cls = receiverClass;
-                    restrictions = BindingRestrictions.GetTypeRestriction(self.Expression, typeof(SmalltalkClass));
+                    superLookupScope = null;
+                    // IMPROVE: May need to add Runtime Restrictions too.
+                    restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(SmalltalkClass));
                 }
             }
 
-            if ((cls == null) || (restrictions == null))
-                cls = GetClassAndRestrictions(runtime, receiver, self, arguments, out restrictions);
+            if ((cls == null) || (restrictions == null)) // Will not run for receivers of type SmalltalkClass
+                cls = MethodLookupHelper.GetClassAndRestrictions(runtime, receiver, self, arguments, out restrictions);
             receiverClass = cls;
 
             // Look-up the method
-            CompiledMethod method = MethodLookupHelper.LookupInstanceMethod(selector, ref cls, ref superLookupScope);
+            CompiledMethod method = MethodLookupHelper.LookupInstanceMethod(selector, ref cls, superLookupScope);
+            methodClass = cls;
             if (method == null)
-            {
                 executableCode = null;
-            }
             else
-            {
-                var compilationResult = method.CompileInstanceMethod(runtime, cls, self.Expression, arguments.Select(dmo => dmo.Expression).ToArray(), superLookupScope);
-                if (compilationResult == null)
-                {
-                    executableCode = null;
-                }
-                else
-                {
-                    executableCode = compilationResult.ExecutableCode;
-                    restrictions = compilationResult.MergeRestrictions(restrictions);
-                }
-
-            }
+                executableCode = method.GetExpression(self, executionContext, arguments);
         }
 
         /// <summary>
@@ -122,9 +109,9 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// <param name="cls">Class where to start searching for the method (unless superLookupScope) is set.</param>
         /// <param name="superLookupScope">If set, start the lookup from the superclass of this class.</param>
         /// <returns>Returns the compiled method for the given selector or null if none was found.</returns>
-        public static CompiledMethod LookupInstanceMethod(Symbol selector, ref SmalltalkClass cls, ref Symbol superLookupScope)
+        public static CompiledMethod LookupInstanceMethod(Symbol selector, ref SmalltalkClass cls, Symbol superLookupScope)
         {
-            return MethodLookupHelper.LookupMethod(ref cls, ref superLookupScope, delegate(SmalltalkClass c)
+            return MethodLookupHelper.LookupMethod(ref cls, superLookupScope, c =>
             {
                 CompiledMethod method;
                 if (c.InstanceBehavior.TryGetValue(selector, out method))
@@ -141,9 +128,9 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// <param name="superLookupScope">If set, start the lookup from the superclass of this class.</param>
         /// <returns>Returns the compiled method for the given selector or null if none was found.</returns>
         /// <remarks>If the method is not found, this functiond does not searches the instance side of the class.</remarks>
-        public static CompiledMethod LookupClassMethod(Symbol selector, ref SmalltalkClass cls, ref Symbol superLookupScope)
+        public static CompiledMethod LookupClassMethod(Symbol selector, ref SmalltalkClass cls, Symbol superLookupScope)
         {
-            return MethodLookupHelper.LookupMethod(ref cls, ref superLookupScope, delegate(SmalltalkClass c)
+            return MethodLookupHelper.LookupMethod(ref cls, superLookupScope, c =>
             {
                 CompiledMethod method;
                 if (c.ClassBehavior.TryGetValue(selector, out method))
@@ -159,7 +146,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// <param name="superLookupScope">If set, start the lookup from the superclass of this class.</param>
         /// <param name="lookupFunction">Function to perform the method lookup.</param>
         /// <returns>Returns the compiled method for the given selector or null if none was found.</returns>
-        public static CompiledMethod LookupMethod(ref SmalltalkClass cls, ref Symbol superLookupScope, Func<SmalltalkClass, CompiledMethod> lookupFunction)
+        public static CompiledMethod LookupMethod(ref SmalltalkClass cls, Symbol superLookupScope, Func<SmalltalkClass, CompiledMethod> lookupFunction)
         {
             if (lookupFunction == null)
                 throw new ArgumentNullException("lookupFunction");
@@ -184,6 +171,13 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             return null;
         }
 
+        private static readonly FieldInfo SmalltalkObjectClassField = typeof(SmalltalkObject).GetField("Class", BindingFlags.GetField | BindingFlags.Instance | BindingFlags.Public);
+
+        private static readonly FieldInfo SymbolManagerField = typeof(Symbol).GetField("Manager", BindingFlags.GetField | BindingFlags.Instance | BindingFlags.Public);
+
+        private static readonly PropertyInfo PoolRuntimeProperty = typeof(Pool).GetProperty("Runtime", BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.GetProperty,
+                        null, typeof(SmalltalkRuntime), new Type[0], null);
+
         /// <summary>
         /// This core method determines the class of an object.
         /// </summary>
@@ -195,8 +189,8 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// <returns>The SmalltalkClass for the given receiver. This always returns an object (unless the given SmalltalkRuntime is inconsistent).</returns>
         public static SmalltalkClass GetClassAndRestrictions(SmalltalkRuntime runtime, 
             object receiver,
-            DynamicMetaObject self,
-            DynamicMetaObject[] arguments, 
+            Expression self,
+            IEnumerable<Expression> arguments, 
             out BindingRestrictions restrictions)
         {
             SmalltalkClass cls;
@@ -209,7 +203,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                     cls = runtime.NativeTypeClassMap.Native;
                 if (cls == null)
                     cls = runtime.NativeTypeClassMap.Object;
-                restrictions = BindingRestrictions.GetInstanceRestriction(self.Expression, null);
+                restrictions = BindingRestrictions.GetInstanceRestriction(self, null);
             }
             // Smalltalk objects ... almost every objects ends up here.
             else if (receiver is SmalltalkObject)
@@ -218,12 +212,14 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 cls = obj.Class;
                 if (cls.Runtime == runtime)
                 {
-                    FieldInfo field = typeof(SmalltalkObject).GetField("Class", BindingFlags.GetField | BindingFlags.Instance | BindingFlags.Public);
+                    FieldInfo field = MethodLookupHelper.SmalltalkObjectClassField;
                     if (field == null)
                         throw new InvalidOperationException();
-                    restrictions = BindingRestrictions.GetTypeRestriction(self.Expression, typeof(SmalltalkObject));
+                    // Restrictions lool like:
+                    // (self != null) && (self.GetType == typeof(SmalltalkObject) && (((SmalltalkObject)self).Class == cls)
+                    restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(SmalltalkObject));
                     restrictions = restrictions.Merge(BindingRestrictions.GetExpressionRestriction(
-                        Expression.ReferenceEqual(Expression.Field(Expression.Convert(self.Expression, typeof(SmalltalkObject)), field), Expression.Constant(cls))));
+                        Expression.ReferenceEqual(Expression.Field(Expression.Convert(self, typeof(SmalltalkObject)), field), Expression.Constant(cls))));
                 }
                 else
                 {
@@ -232,6 +228,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                     restrictions = null;
                 }
             }
+            // Special case for Symbol objects
             else if (receiver is Symbol)
             {
                 Symbol symbol = (Symbol)receiver;
@@ -239,12 +236,14 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 if (manager.Runtime == runtime)
                 {
                     cls = runtime.NativeTypeClassMap.Symbol;
-                    FieldInfo field = typeof(Symbol).GetField("Manager", BindingFlags.GetField | BindingFlags.Instance | BindingFlags.Public);
+                    FieldInfo field = MethodLookupHelper.SymbolManagerField;
                     if (field == null)
                         throw new InvalidOperationException();
-                    restrictions = BindingRestrictions.GetTypeRestriction(self.Expression, typeof(Symbol));
+                    // Restrictions lool like:
+                    // (self != null) && (self.GetType == typeof(Symbol) && (((Symbol)self).Manager == manager)
+                    restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(Symbol));
                     restrictions = restrictions.Merge(BindingRestrictions.GetExpressionRestriction(
-                        Expression.ReferenceEqual(Expression.Field(Expression.Convert(self.Expression, typeof(Symbol)), field), Expression.Constant(manager))));
+                        Expression.ReferenceEqual(Expression.Field(Expression.Convert(self, typeof(Symbol)), field), Expression.Constant(manager))));
                 }
                 else
                 {
@@ -253,6 +252,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                     restrictions = null;
                 }
             }
+            // Special case for Pool objects
             else if (receiver is Pool)
             {
                 Pool pool = (Pool)receiver;
@@ -260,13 +260,14 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 if (pool.Runtime == runtime)
                 {
                     cls = runtime.NativeTypeClassMap.Pool;
-                    PropertyInfo prop = typeof(Pool).GetProperty("Runtime", BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.GetProperty,
-                        null, typeof(SmalltalkRuntime), new Type[0], null);
+                    PropertyInfo prop = MethodLookupHelper.PoolRuntimeProperty;
                     if (prop == null)
                         throw new InvalidOperationException();
-                    restrictions = BindingRestrictions.GetTypeRestriction(self.Expression, typeof(Pool));
+                    // Restrictions lool like:
+                    // (self != null) && (self.GetType == typeof(Pool) && (((Pool)self).Runtime == runtime)
+                    restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(Pool));
                     restrictions = restrictions.Merge(BindingRestrictions.GetExpressionRestriction(
-                        Expression.ReferenceEqual(Expression.Property(Expression.Convert(self.Expression, typeof(Pool)), prop), Expression.Constant(runtime))));
+                        Expression.ReferenceEqual(Expression.Property(Expression.Convert(self, typeof(Pool)), prop), Expression.Constant(runtime))));
                 }
                 else
                 {
@@ -282,50 +283,53 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 if ((bool)receiver)
                 {
                     cls = runtime.NativeTypeClassMap.True;
-                    restrictionTest = Expression.IsTrue(Expression.Convert(self.Expression, typeof(bool)));
+                    restrictionTest = Expression.IsTrue(Expression.Convert(self, typeof(bool)));
                 }
                 else
                 {
                     cls = runtime.NativeTypeClassMap.False;
-                    restrictionTest = Expression.IsFalse(Expression.Convert(self.Expression, typeof(bool)));
+                    restrictionTest = Expression.IsFalse(Expression.Convert(self, typeof(bool)));
                 }
-                restrictions = BindingRestrictions.GetTypeRestriction(self.Expression, typeof(bool))
+                // Restrictions lool like:
+                // (self != null) && (self.GetType == typeof(Boolean) && ((Boolean)self)
+                // (self != null) && (self.GetType == typeof(Boolean) && !((Boolean)self)
+                restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(bool))
                     .Merge(BindingRestrictions.GetExpressionRestriction(restrictionTest));
             }
             else if (receiver is int)
             {
                 cls = runtime.NativeTypeClassMap.SmallInteger;
-                restrictions = BindingRestrictions.GetTypeRestriction(self.Expression, typeof(int));
+                restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(int));
             }
             else if (receiver is string)
             {
                 cls = runtime.NativeTypeClassMap.String;
-                restrictions = BindingRestrictions.GetTypeRestriction(self.Expression, typeof(string));
+                restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(string));
             }
             else if (receiver is char)
             {
                 cls = runtime.NativeTypeClassMap.Character;
-                restrictions = BindingRestrictions.GetTypeRestriction(self.Expression, typeof(char));
+                restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(char));
             }
             else if (receiver is double)
             {
                 cls = runtime.NativeTypeClassMap.Float;
-                restrictions = BindingRestrictions.GetTypeRestriction(self.Expression, typeof(double));
+                restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(double));
             }
             else if (receiver is decimal)
             {
                 cls = runtime.NativeTypeClassMap.SmallDecimal;
-                restrictions = BindingRestrictions.GetTypeRestriction(self.Expression, typeof(decimal));
+                restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(decimal));
             }
             else if (receiver is System.Numerics.BigInteger)
             {
                 cls = runtime.NativeTypeClassMap.BigInteger;
-                restrictions = BindingRestrictions.GetTypeRestriction(self.Expression, typeof(System.Numerics.BigInteger));
+                restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(System.Numerics.BigInteger));
             }
             else if (receiver is IronSmalltalk.Common.BigDecimal)
             {
                 cls = runtime.NativeTypeClassMap.BigDecimal;
-                restrictions = BindingRestrictions.GetTypeRestriction(self.Expression, typeof(IronSmalltalk.Common.BigDecimal));
+                restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(IronSmalltalk.Common.BigDecimal));
             }
             // Special case for Smalltalk classes, because we want the class behavior ...
             else if (receiver is SmalltalkClass)
@@ -340,8 +344,8 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                     if (cls == null)
                         restrictions = null;
                     else
-                        // NB: Restriction below are no good for For class behavior.
-                        restrictions = BindingRestrictions.GetTypeRestriction(self.Expression, typeof(SmalltalkClass)); 
+                        // NB: Restriction below are no good for For class behavior. Caller must crete own restrictions if class behavior.
+                        restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(SmalltalkClass)); 
                 }
                 else
                 {
@@ -372,7 +376,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 if (cls == null)
                     cls = runtime.NativeTypeClassMap.Native;
                 if (restrictions == null)
-                    restrictions = BindingRestrictions.GetTypeRestriction(self.Expression, type);
+                    restrictions = BindingRestrictions.GetTypeRestriction(self, type);
                 return cls;
             }
         }

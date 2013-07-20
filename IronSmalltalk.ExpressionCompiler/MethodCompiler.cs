@@ -48,7 +48,7 @@ namespace IronSmalltalk.ExpressionCompiler
         {
         }
 
-        public MethodCompilationResult CompileMethod(MethodNode parseTree, SmalltalkClass cls, Expression self, Expression[] arguments)
+        public Expression CompileMethod(MethodNode parseTree, SmalltalkClass cls, Expression self, Expression executionContext, Expression[] arguments)
         {
             if (parseTree == null)
                 throw new ArgumentNullException("parseTree");
@@ -59,13 +59,13 @@ namespace IronSmalltalk.ExpressionCompiler
             if (arguments == null)
                 throw new ArgumentNullException("arguments");
 
-            VisitingContext context = this.GetVisitingContext(cls, self, arguments);
+            VisitingContext context = this.GetVisitingContext(cls, self, executionContext, arguments);
             MethodVisitor visitor = new MethodVisitor(context);
             Expression code = parseTree.Accept(visitor);
-            return new MethodCompilationResult(code, null);
+            return code;
         }
 
-        protected abstract VisitingContext GetVisitingContext(SmalltalkClass cls, Expression self, Expression[] arguments);
+        protected abstract VisitingContext GetVisitingContext(SmalltalkClass cls, Expression self, Expression executionContext, Expression[] arguments);
 
         public LambdaExpression CompileMethodLambda(MethodNode parseTree, SmalltalkClass cls, string methodName)
         {
@@ -76,8 +76,7 @@ namespace IronSmalltalk.ExpressionCompiler
             ParameterExpression[] arguments = MethodCompiler.CreateParametersForMethod(parseTree);
 
             // Compile the method !!!
-            MethodCompilationResult compilationResult = this.CompileMethod(parseTree, cls, arguments[0], arguments.Skip(1).Cast<Expression>().ToArray());
-            Expression body = compilationResult.ExecutableCode;
+            Expression body = this.CompileMethod(parseTree, cls, arguments[0], arguments[1], arguments.Skip(2).Cast<Expression>().ToArray());
 
             // Finally, create a lambda expression out of it.
             return Expression.Lambda(

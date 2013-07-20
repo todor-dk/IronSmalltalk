@@ -34,7 +34,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
 
         protected override bool InternalAddMethod(IDefinitionInstallerContext installer, SmalltalkClass cls)
         {
-            CompiledMethod method = this.Factory.CreateMethod(this, installer, cls);
+            CompiledMethod method = this.Factory.CreateMethod(this, installer, cls, CompiledMethod.MethodType.Class);
             if (method == null)
                 return false;
             System.Diagnostics.Debug.Assert(this.Selector.Value == method.Selector.Value);
@@ -45,7 +45,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
 
         protected override bool InternalValidateMethod(IDefinitionInstallerContext installer, SmalltalkClass cls, ICodeValidationErrorSink errorSink)
         {
-            return this.Factory.ValidateClassMethod(this, installer, cls, errorSink);
+            return this.Factory.ValidateMethod(this, installer, cls, CompiledMethod.MethodType.Class, errorSink);
         }
     }
 }

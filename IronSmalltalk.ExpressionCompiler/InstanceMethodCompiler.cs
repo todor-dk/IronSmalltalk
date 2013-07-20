@@ -25,7 +25,7 @@ namespace IronSmalltalk.ExpressionCompiler
         {
         }
 
-        protected override VisitingContext GetVisitingContext(SmalltalkClass cls, Expression self, Expression[] arguments)
+        protected override VisitingContext GetVisitingContext(SmalltalkClass cls, Expression self, Expression executionContext, Expression[] arguments)
         {
             SmalltalkNameScope globalNameScope = this.CompilerOptions.GlobalNameScope ?? this.Runtime.GlobalScope;
 
@@ -34,7 +34,7 @@ namespace IronSmalltalk.ExpressionCompiler
                 ReservedScope.ForRootClassInstanceMethod() :
                 ReservedScope.ForInstanceMethod();
 
-            return new VisitingContext(this, globalScope, reservedScope, self, arguments[0], arguments.Skip(1), cls.Name);
+            return new VisitingContext(this, globalScope, reservedScope, self, executionContext, arguments, cls.Name);
         }
     }
 }

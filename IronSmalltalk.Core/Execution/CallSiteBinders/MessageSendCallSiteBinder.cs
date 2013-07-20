@@ -30,12 +30,11 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// <summary>
         /// Create a new MessageSendCallSiteBinder.
         /// </summary>
-        /// <param name="runtime">SmalltalkRuntine that this binder belongs to.</param>
         /// <param name="selector">Selector of the message being sent.</param>
         /// <param name="nativeName">Name of the method that the target is asked to bind.</param>
         /// <param name="argumentCount">Number of method arguments.</param>
-        public MessageSendCallSiteBinder(SmalltalkRuntime runtime, Symbol selector, string nativeName, int argumentCount)
-            : base(runtime, selector)
+        public MessageSendCallSiteBinder(string selector, string nativeName, int argumentCount)
+            : base(selector)
         {
             if (argumentCount < 0)
                 throw new ArgumentOutOfRangeException("argumentCount");
@@ -86,6 +85,13 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             }
         }
 
+        /// <summary>
+        /// Binder that helps the MessageSendCallSiteBinder fall-back and use native binding with the target object.
+        /// </summary>
+        /// <remarks>
+        /// It first glance, this class appears look very much the same as the MessageSendCallSiteBinder, 
+        /// but the difference is that it inherits from InvokeMemberBinder.
+        /// </remarks>
         private class MessageSendInvokeMemberBinder : InvokeMemberBinder
         {
             private readonly MessageSendCallSiteBinder Binder;
@@ -151,7 +157,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         ~MessageSendCallSiteBinder()
         {
             if (this._finalizationManager != null)
-                this._finalizationManager.InternalRemoveItem(this.Selector.Value);
+                this._finalizationManager.InternalRemoveItem(this.Selector);
         }
 
         #endregion

@@ -44,22 +44,23 @@ namespace IronSmalltalk.Runtime
 
         DynamicMetaObject ISmalltalkDynamicMetaObjectProvider.PerformOperation(SmalltalkDynamicMetaObject target, string name, bool ignoreCase, int argumentCount, DynamicMetaObject[] args, out bool caseConflict)
         {
-            bool localCaseConflict = false;
-            SmalltalkClass cls = this.Class;
-            Symbol na = null;
-            CompiledMethod method = MethodLookupHelper.LookupMethod(ref cls, ref na, 
-                c => c.InstanceBehavior.GetMethodByNativeName(name, argumentCount, ignoreCase, out localCaseConflict));
+            throw new NotImplementedException();
+            //bool localCaseConflict = false;
+            //SmalltalkClass cls = this.Class;
+            //Symbol na = null;
+            //CompiledMethod method = MethodLookupHelper.LookupMethod(ref cls, ref na, 
+            //    c => c.InstanceBehavior.GetMethodByNativeName(name, argumentCount, ignoreCase, out localCaseConflict));
 
-            caseConflict = localCaseConflict;
-            if (localCaseConflict)
-                return null;
+            //caseConflict = localCaseConflict;
+            //if (localCaseConflict)
+            //    return null;
 
-            if (method != null)
-            {
-                var compilationResult = method.CompileInstanceMethod(cls.Runtime, cls, target.Expression, args.Select(dmo => dmo.Expression).ToArray(), null);
-                return compilationResult.GetDynamicMetaObject(target.Restrictions);
-            }
-            return null;
+            //if (method != null)
+            //{
+            //    MethodCompilationResult compilationResult = method.CompileInstanceMethod(cls.Runtime, cls, target.Expression, args.Select(dmo => dmo.Expression).ToArray(), null);
+            //    return compilationResult.GetDynamicMetaObject(target.Restrictions);
+            //}
+            //return null;
         }
     }
 }

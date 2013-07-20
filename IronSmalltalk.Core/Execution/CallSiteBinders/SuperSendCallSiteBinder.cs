@@ -32,18 +32,17 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// <summary>
         /// For super sends, return the name of the class ABOVE which to start the method lookup.
         /// </summary>
-        public Symbol SuperScope { get; protected set; }
+        public string SuperScope { get; protected set; }
 
         /// <summary>
         /// Create a new SuperSendCallSiteBinder.
         /// </summary>
-        /// <param name="runtime">SmalltalkRuntine that this binder belongs to.</param>
         /// <param name="selector">Selector of the message being sent.</param>
         /// <param name="superScope">The name of the class ABOVE which to start the method lookup.</param>
-        public SuperSendCallSiteBinder(SmalltalkRuntime runtime, Symbol selector, Symbol superScope)
-            : base(runtime, selector)
+        public SuperSendCallSiteBinder(string selector, string superScope)
+            : base(selector)
         {
-            if (superScope == null)
+            if (String.IsNullOrWhiteSpace(superScope))
                 throw new ArgumentNullException("superScope");
             this.SuperScope = superScope;
         }
@@ -58,7 +57,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// the Integer class (and all subclasses) and start the look-up 
         /// process from the superclass of the Integer class.
         /// </example>
-        protected override Symbol GetSuperLookupScope()
+        protected override string GetSuperLookupScope()
         {
             return this.SuperScope;
         }

@@ -38,20 +38,13 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
     public abstract class SmalltalkDynamicMetaObjectBinder : DynamicMetaObjectBinder
     {
         /// <summary>
-        /// The Smalltalk Runtime that this binder belongs to.
-        /// </summary>
-        public SmalltalkRuntime Runtime { get; private set; }
-
-        /// <summary>
         /// Create a new SmalltalkDynamicMetaObjectBinder.
         /// </summary>
-        /// <param name="runtime">SmalltalkRuntine that this binder belongs to.</param>
-        protected SmalltalkDynamicMetaObjectBinder(SmalltalkRuntime runtime)
+        protected SmalltalkDynamicMetaObjectBinder()
         {
-            if (runtime == null)
-                throw new ArgumentNullException("runtime");
-            this.Runtime = runtime;
         }
+
+#if DEBUGCALLSITE
 
         public override T BindDelegate<T>(System.Runtime.CompilerServices.CallSite<T> site, object[] args)
         {
@@ -111,10 +104,6 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 , "CallSite.Target", 
                 true, new ReadOnlyCollection<ParameterExpression>(source));
         }
- 
-
- 
-
 
         private sealed class LambdaSignature<T> where T : class
         {
@@ -149,6 +138,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 this.ReturnLabel = Expression.Label(method.GetReturnType());
             }
         }
+#endif
     }
 
     internal static class HackExtensions
