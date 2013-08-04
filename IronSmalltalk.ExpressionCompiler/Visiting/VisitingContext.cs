@@ -17,10 +17,12 @@
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.ExpressionCompiler.BindingScopes;
 using IronSmalltalk.ExpressionCompiler.Internals;
 using IronSmalltalk.Runtime.Execution.Internals;
@@ -30,7 +32,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 {
     public sealed class VisitingContext
     {
-        public VisitingContext(ExpressionCompiler compiler, BindingScope globalScope, BindingScope reservedScope, Expression self, Expression executionContext, IEnumerable<Expression> arguments, string superLookupScope)
+        public VisitingContext(ExpressionCompiler compiler, BindingScope globalScope, BindingScope reservedScope, Expression self, Expression executionContext, IEnumerable<Expression> arguments, string superLookupScope, string codeName)
         {
             if (compiler == null)
                 throw new ArgumentNullException("compiler");
@@ -53,6 +55,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             this.SuperLookupScope = superLookupScope;
             this._ReturnLabel = null; // Lazy init
             this._HomeContext = null; // Lazy init
+            this.CodeName = codeName;
         }
 
         /// <summary>
@@ -70,6 +73,8 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         public Expression ExecutionContext { get; private set; }
 
         public Expression Self { get; private set; }
+
+        private string CodeName { get; set; }
 
         /// <summary>
         /// Arguments passed to the method. This excludes "self" and "executionContext"
@@ -177,6 +182,22 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         public Expression CompileDynamicCall(string selector, Expression receiver, Expression argument)
         {
             return this.Compiler.DynamicCallStrategy.CompileDynamicCall(this, selector, selector, false, false, this.SuperLookupScope, receiver, this.ExecutionContext, argument);
+        }
+
+        public Expression CompileGetClass(Expression receiver)
+        {
+            return this.Compiler.DynamicCallStrategy.CompileGetClass(this, receiver, this.ExecutionContext);
+        }
+
+        private int BlockNumber = 0;
+
+        internal string GetLambdaName(BlockVisitor visitor, BlockNode block)
+        {
+            this.BlockNumber++;
+            if (String.IsNullOrWhiteSpace(this.CodeName))
+                return null;
+            else
+                return String.Format(CultureInfo.InvariantCulture, "[{0}] in {1}", this.BlockNumber, this.CodeName);
         }
     }
 }

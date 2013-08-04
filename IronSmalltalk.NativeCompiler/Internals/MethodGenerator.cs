@@ -33,7 +33,7 @@ namespace IronSmalltalk.NativeCompiler.Internals
             this.Methods = methods;
             this.TypeBuilder = typeBuilder;
             this.LiteralEncodingStrategy = new NativeLiteralEncodingStrategy(this);
-            this.DynamicCallStrategy = new NativeDynamicCallStrategy();
+            this.DynamicCallStrategy = new NativeDynamicCallStrategy(this);
         }
 
         private MethodCompiler _MethodCompiler;
@@ -67,13 +67,8 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
         internal void GenerateMethods()
         {
-            if (this.Class.Name.Value == "Console")
-                return;
-            if (this.Class.Name.Value == "Object")
-                return;
-
             this.LiteralEncodingStrategy.GenerateLiteralType();
-            this.DynamicCallStrategy.GenerateLiteralType();
+            this.DynamicCallStrategy.GenerateCallSitesType();
 
             foreach (MethodInformation method in this.MethodsInfo)
             {
@@ -83,19 +78,13 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
         private void GenerateMethod(MethodInformation method)
         {
-            try
-            {
-                MethodBuilder methodBuilder = this.TypeBuilder.DefineMethod(method.MethodName, MethodAttributes.Public | MethodAttributes.Static);
-                method.LambdaExpression.CompileToMethod(methodBuilder, this.Compiler.NativeGenerator.DebugInfoGenerator);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("{0} {1}", method.LambdaExpression, ex);
-            }
+            MethodBuilder methodBuilder = this.TypeBuilder.DefineMethod(method.MethodName, MethodAttributes.Public | MethodAttributes.Static);
+            method.LambdaExpression.CompileToMethod(methodBuilder, this.Compiler.NativeGenerator.DebugInfoGenerator);
         }
 
         private LambdaExpression GenerateMethodLambda(MethodInformation method)
         {
+            this.DynamicCallStrategy.CurrentMethodName = method.MethodName;
             return this.MethodCompiler.CompileMethodLambda(method.Method.ParseTree, this.Class, method.MethodName);
         }
 

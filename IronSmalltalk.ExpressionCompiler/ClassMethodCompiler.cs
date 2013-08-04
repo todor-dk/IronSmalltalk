@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.ExpressionCompiler.BindingScopes;
 using IronSmalltalk.ExpressionCompiler.Visiting;
 using IronSmalltalk.Runtime;
@@ -24,14 +25,14 @@ namespace IronSmalltalk.ExpressionCompiler
         {
         }
 
-        protected override VisitingContext GetVisitingContext(SmalltalkClass cls, Expression self, Expression executionContext, Expression[] arguments)
+        protected override VisitingContext GetVisitingContext(MethodNode parseTree, SmalltalkClass cls, Expression self, Expression executionContext, Expression[] arguments)
         {
             SmalltalkNameScope globalNameScope = this.CompilerOptions.GlobalNameScope ?? this.Runtime.GlobalScope;
 
             BindingScope globalScope = BindingScope.ForClassMethod(cls, globalNameScope);
             BindingScope reservedScope = ReservedScope.ForClassMethod();
 
-            return new VisitingContext(this, globalScope, reservedScope, self, executionContext, arguments, cls.Name);
+            return new VisitingContext(this, globalScope, reservedScope, self, executionContext, arguments, cls.Name, parseTree.Selector);
         }
     }
 }

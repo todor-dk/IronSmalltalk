@@ -252,8 +252,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
             if (this.Parameters.Count != 0)
                 return null;
 
-            ObjectClassCallSiteBinder binder = this.Compiler.GetClassBinder();
-            return Expression.Dynamic(binder, typeof(Object), this.Context.Self);
+            return this.Context.CompileGetClass(this.Context.Self);
         }
 
         /// <summary>

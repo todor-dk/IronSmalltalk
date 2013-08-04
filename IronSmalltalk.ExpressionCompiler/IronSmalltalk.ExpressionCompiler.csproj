@@ -86,7 +86,6 @@
     <Compile Include="Primitives\PropertyPrimitiveEncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runtime\IDebugInfoService.cs" />
-    <Compile Include="Runtime\InitializerCompilationResult.cs" />
     <Compile Include="Runtime\IRuntimeCodeValidationErrorSink.cs" />
     <Compile Include="Runtime\RuntimeCompiledInitializer.cs" />
     <Compile Include="Runtime\RuntimeCompiledMethod.cs" />
@@ -109,7 +108,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Bindings\NameBindings Diagram.cd" />
+    <None Include="Compiler Diagram.cd" />
     <None Include="Primitives\Primitives Diagram.cd" />
+    <None Include="Runtime\Runtime Diagram.cd" />
     <None Include="Visiting\Full Diagram.cd" />
     <None Include="Visiting\Simple Diagram.cd" />
   </ItemGroup>

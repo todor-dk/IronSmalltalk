@@ -31,7 +31,7 @@ using IronSmalltalk.Runtime.Execution;
 
 namespace IronSmalltalk.ExpressionCompiler
 {
-    public class InitializerCompiler : ExpressionCompiler
+    public sealed class InitializerCompiler : ExpressionCompiler
     {
         /// <summary>
         /// Binding lookup scope for identifiers of globals and similar, e.g. global variables, class or instance variables, pool variables etc.
@@ -61,17 +61,17 @@ namespace IronSmalltalk.ExpressionCompiler
             this.ReservedScope = reservedScope;        
         }
 
-        public InitializerCompilationResult CompileInitializer(InitializerNode parseTree, string initializerName)
+        public Expression<Func<object, ExecutionContext, object>> CompileInitializer(InitializerNode parseTree, string initializerName)
         {
             if (parseTree == null)
                 throw new ArgumentNullException("parseTree");
 
             ParameterExpression self = Expression.Parameter(typeof(object), "self");
             ParameterExpression executionContext = Expression.Parameter(typeof(ExecutionContext), "executionContext");
-            VisitingContext context = new VisitingContext(this, this.GlobalScope, this.ReservedScope, self, executionContext, new ParameterExpression[0], null);
+            VisitingContext context = new VisitingContext(this, this.GlobalScope, this.ReservedScope, self, executionContext, new ParameterExpression[0], null, initializerName);
             InitializerVisitor visitor = new InitializerVisitor(context, initializerName);
             Expression<Func<object, ExecutionContext, object>> code = parseTree.Accept(visitor);
-            return new InitializerCompilationResult(code, null);   
+            return code;   
         }
     }
 }

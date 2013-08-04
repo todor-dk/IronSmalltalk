@@ -58,9 +58,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{DC3634F0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{238BEABC-FCC9-46BE-B607-6F01A272C5A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronSmalltalk.LambdaCompiler", "IronSmalltalk.LambdaCompiler\IronSmalltalk.LambdaCompiler.csproj", "{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 19
+		SccNumberOfProjects = 20
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs08
 		SccLocalPath0 = .
@@ -126,6 +128,9 @@ Global
 		SccProjectUniqueName18 = IronSmalltalk.NativeCompiler\\IronSmalltalk.NativeCompiler.csproj
 		SccProjectName18 = IronSmalltalk.NativeCompiler
 		SccLocalPath18 = IronSmalltalk.NativeCompiler
+		SccProjectUniqueName19 = IronSmalltalk.LambdaCompiler\\IronSmalltalk.LambdaCompiler.csproj
+		SccProjectName19 = IronSmalltalk.LambdaCompiler
+		SccLocalPath19 = IronSmalltalk.LambdaCompiler
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = IronSmalltalk.vsmdi
@@ -504,6 +509,26 @@ Global
 		{4DE504D2-9E38-4EED-B1C6-9C6E04186B2D}.SilverlightRelease|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4DE504D2-9E38-4EED-B1C6-9C6E04186B2D}.SilverlightRelease|Mixed Platforms.Build.0 = Release|Any CPU
 		{4DE504D2-9E38-4EED-B1C6-9C6E04186B2D}.SilverlightRelease|x86.ActiveCfg = Release|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.Release|x86.ActiveCfg = Release|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.SilverlightDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.SilverlightDebug|Any CPU.Build.0 = Debug|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.SilverlightDebug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.SilverlightDebug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.SilverlightDebug|x86.ActiveCfg = Debug|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.SilverlightRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.SilverlightRelease|Any CPU.Build.0 = Release|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.SilverlightRelease|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.SilverlightRelease|Mixed Platforms.Build.0 = Release|Any CPU
+		{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}.SilverlightRelease|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

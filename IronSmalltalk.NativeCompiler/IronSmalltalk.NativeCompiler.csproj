@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Internals\ClassGenerator.cs" />
+    <Compile Include="Internals\Extensions.cs" />
     <Compile Include="Internals\GeneratorBase.cs" />
     <Compile Include="Internals\GlobalBindingGenerator.cs" />
     <Compile Include="Internals\GlobalConstantGenerator.cs" />

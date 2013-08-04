@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,9 +16,60 @@ namespace IronSmalltalk.NativeCompiler.Internals
 {
     public class NativeDynamicCallStrategy : IDynamicCallStrategy
     {
-        internal void GenerateLiteralType()
-        {
+        internal string CurrentMethodName;
 
+        private readonly MethodGenerator MethodGenerator;
+
+        internal NativeDynamicCallStrategy(MethodGenerator methodGenerator)
+        {
+            this.MethodGenerator = methodGenerator;
+        }
+
+        private TypeBuilder _CallSitesType = null;
+        private TypeBuilder CallSitesType
+        {
+            get
+            {
+                if (this._CallSitesType == null)
+                    this._CallSitesType = this.GetCallSitesType();
+                return this._CallSitesType;
+            }
+        }
+
+        private Type CallSitesTypeType;
+
+        private TypeBuilder GetCallSitesType()
+        {
+            string name = string.Format("{0}.{1}", this.MethodGenerator.TypeBuilder.FullName, "$CallSites");
+            name = this.MethodGenerator.Compiler.NativeGenerator.AsLegalTypeName(name);
+            return this.MethodGenerator.TypeBuilder.DefineNestedType(
+                name,
+                TypeAttributes.Class | TypeAttributes.NestedPrivate | TypeAttributes.Sealed | TypeAttributes.Abstract,
+                typeof(object));
+        }
+
+        internal void GenerateCallSitesType()
+        {
+            if (this._CallSitesType == null)
+                return;
+
+            // It would have been nice to use the Lambda Compiler, but it can't compile constructors,
+            // so we have to generate the constructor by emitting IL code by hand :/
+            ConstructorBuilder ctor = this._CallSitesType.DefineConstructor(
+                MethodAttributes.Private | MethodAttributes.Static, CallingConventions.Standard, new Type[0]);
+            ILGenerator ctorIL = ctor.GetILGenerator();
+            // ... now assign to each literal field
+            for (int i = 0; i < this.DefinedCallSites.Count; i++)
+            {
+                CallSiteDefinition def = this.DefinedCallSites[i];
+                MethodInfo create = def.SiteType.GetMethod("Create");   // Get the CallSite<>.Create method
+                def.Binder.GenerateBinderInitializer(ctorIL);           // Load the Binder
+                ctorIL.Emit(OpCodes.Call, create);                      // Call CallSite<>.Create(Binder) 
+                ctorIL.Emit(OpCodes.Stsfld, def.CallSiteField);         // Store the value in the static field for the call site
+            }
+            ctorIL.Emit(OpCodes.Ret);
+
+            this.CallSitesTypeType = this._CallSitesType.CreateType();
         }
 
 
@@ -39,11 +91,40 @@ namespace IronSmalltalk.NativeCompiler.Internals
             return this.CompileDynamicCall(callSite, receiver, executionContext, arguments);
         }
 
+
+        public Expression CompileGetClass(VisitingContext context, Expression receiver, Expression executionContext)
+        {
+            IBinderDefinition binder = new ClassBinderDefinition();
+
+            Type delegateType = typeof(Func<CallSite, object, ExecutionContext, object>);
+            Type siteType = typeof(CallSite<Func<CallSite, object, ExecutionContext, object>>);
+
+            Expression callSite = this.CreateCallSite(binder, delegateType, siteType, "class");
+            return this.CompileDynamicCall(callSite, receiver, executionContext, new Expression[] { });            
+        }
+
         private Expression CompileDynamicCall(Expression callSite, Expression receiver, Expression executionContext, IEnumerable<Expression> arguments)
         {
             Type delegateType = NativeDynamicCallStrategy.GetCallSiteType(arguments.Count());
             Type siteType = typeof(CallSite<>).MakeGenericType(delegateType);
 
+            List<Expression> args = new List<Expression>();
+            args.Add(callSite);
+            args.Add(receiver);
+            args.Add(executionContext);
+            args.AddRange(arguments);
+
+            FieldInfo target = siteType.GetField("Target", BindingFlags.Instance | BindingFlags.Public);
+            MethodInfo invoke = delegateType.GetMethod("Invoke");
+            ParameterInfo[] pis = invoke.GetParameters();
+
+            // siteExpr.Target.Invoke(siteExpr, *args)
+            return Expression.Call(
+                Expression.Field(callSite, target),
+                invoke,
+                args);
+
+            /* C# Style
             ParameterExpression site = Expression.Variable(siteType, "$site");
             List<Expression> args = new List<Expression>();
             args.Add(site);
@@ -61,6 +142,7 @@ namespace IronSmalltalk.NativeCompiler.Internals
                     Expression.Field(Expression.Assign(site, callSite), target),
                     invoke,
                     args));
+             */
         }
 
 
@@ -99,23 +181,118 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
         private Expression CreateCallSite(int argumentCount, string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, string superLookupScope)
         {
+            BinderDefinition binder = new BinderDefinition(selector, nativeName, isSuperSend, isConstantReceiver, superLookupScope);
+
             Type delegateType = NativeDynamicCallStrategy.GetCallSiteType(argumentCount);
             Type siteType = typeof(CallSite<>).MakeGenericType(delegateType);
-            MethodInfo create = siteType.GetMethod("Create");
-            MethodInfo getCallSite = typeof(NativeDynamicCallStrategy).GetMethod("GetCallSite");
 
-            Expression binder = Expression.Call(null, getCallSite,
-                Expression.Constant(selector, typeof(string)),
-                Expression.Constant(nativeName, typeof(string)),
-                Expression.Constant(isSuperSend, typeof(bool)),
-                Expression.Constant(isConstantReceiver, typeof(bool)),
-                Expression.Constant(superLookupScope, typeof(string)));
-            return Expression.Call(null, create, binder);
+            return this.CreateCallSite(binder, delegateType, siteType, selector);
         }
 
-        public static CallSiteBinder GetCallSite(string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, string superLookupScope)
+        private Expression CreateCallSite(IBinderDefinition binder, Type delegateType, Type siteType, string nameSuggestion)
         {
-            return null;
+            //string nameSuggestion = String.Format("{0}.{1}", this.CurrentMethodName, selector);
+            string name = this.MethodGenerator.Compiler.NativeGenerator.AsLegalMethodName(nameSuggestion);
+            int idx = 0;
+            while (this.DefinedCallSites.Any(def => def.Name == name))
+                name = this.MethodGenerator.Compiler.NativeGenerator.AsLegalMethodName(String.Format("{0}${1}", nameSuggestion, idx++));
+
+            FieldBuilder field = this.CallSitesType.DefineField(name, siteType, FieldAttributes.Static | FieldAttributes.InitOnly | FieldAttributes.Assembly);
+            this.DefinedCallSites.Add(new CallSiteDefinition(name, delegateType, siteType, field, binder));
+
+            return Expression.Field(null, field);
+            //MethodInfo create = siteType.GetMethod("Create");
+            //MethodInfo getCallSite = typeof(NativeDynamicCallStrategy).GetMethod("GetCallSite");
+
+            //Expression binder = Expression.Call(null, getCallSite,
+            //    Expression.Constant(selector, typeof(string)),
+            //    Expression.Constant(nativeName, typeof(string)),
+            //    Expression.Constant(isSuperSend, typeof(bool)),
+            //    Expression.Constant(isConstantReceiver, typeof(bool)),
+            //    Expression.Constant(superLookupScope, typeof(string)));
+            //return Expression.Call(null, create, binder);
+        }
+
+        private List<CallSiteDefinition> DefinedCallSites = new List<CallSiteDefinition>();
+
+        private struct CallSiteDefinition
+        {
+            public readonly string Name;
+            public readonly FieldBuilder CallSiteField;
+            public readonly Type DelegateType;
+            public readonly Type SiteType;
+            public readonly IBinderDefinition Binder;
+
+            public CallSiteDefinition(string name, Type delegateType, Type siteType, FieldBuilder callSiteField, IBinderDefinition binder)
+            {
+                this.Name = name;
+                this.DelegateType = delegateType;
+                this.SiteType = siteType;
+                this.CallSiteField = callSiteField;
+                this.Binder = binder;
+            }
+
+        }
+
+        internal interface IBinderDefinition
+        {
+            void GenerateBinderInitializer(ILGenerator ilgen);
+        }
+
+        private class BinderDefinition : IBinderDefinition
+        {
+            public readonly string Selector;
+            public readonly string NativeName;
+            public readonly bool IsSuperSend;
+            public readonly bool IsConstantReceiver;
+            public readonly string SuperLookupScope;
+
+            public BinderDefinition(string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, string superLookupScope)
+            {
+                if (selector == null)
+                    throw new ArgumentNullException("selector");
+                this.Selector = selector;
+                this.NativeName = nativeName;
+                this.IsSuperSend = isSuperSend;
+                this.IsConstantReceiver = isConstantReceiver;
+                this.SuperLookupScope = superLookupScope;
+            }
+
+            public void GenerateBinderInitializer(ILGenerator ilgen)
+            {
+                MethodInfo getBinder = typeof(IronSmalltalk.Runtime.Execution.CallSiteBinders.CallSiteBinderCache).GetMethod("GetBinder");
+
+                ilgen.Emit(OpCodes.Ldstr, this.Selector);
+                if (this.NativeName == null)
+                    ilgen.Emit(OpCodes.Ldnull);
+                else
+                    ilgen.Emit(OpCodes.Ldstr, this.NativeName);
+                if (this.IsSuperSend)
+                    ilgen.Emit(OpCodes.Ldc_I4_1);
+                else
+                    ilgen.Emit(OpCodes.Ldc_I4_0);
+                if (this.IsConstantReceiver)
+                    ilgen.Emit(OpCodes.Ldc_I4_1);
+                else
+                    ilgen.Emit(OpCodes.Ldc_I4_0);
+                if (this.SuperLookupScope == null)
+                    ilgen.Emit(OpCodes.Ldnull);
+                else
+                    ilgen.Emit(OpCodes.Ldstr, this.SuperLookupScope);
+                ilgen.Emit(OpCodes.Call, getBinder);
+            }
+
+        }
+
+        private class ClassBinderDefinition : IBinderDefinition
+        {
+
+            public void GenerateBinderInitializer(ILGenerator ilgen)
+            {
+                FieldInfo binder = typeof(IronSmalltalk.Runtime.Execution.CallSiteBinders.CallSiteBinderCache).GetField("ObjectClassCallSiteBinder");
+
+                ilgen.Emit(OpCodes.Ldsfld, binder);
+            }
         }
     }
 }

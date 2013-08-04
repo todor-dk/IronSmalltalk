@@ -39,12 +39,12 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         Expression IBindingClient.TrueExpression
         {
-            get { return this.Context.Compiler.LiteralEncoding.True(this); }
+            get { return this.Context.Compiler.LiteralEncoding.True(this.Context); }
         }
 
         Expression IBindingClient.FalseExpression
         {
-            get { return this.Context.Compiler.LiteralEncoding.False(this); }
+            get { return this.Context.Compiler.LiteralEncoding.False(this.Context); }
         }
     }
 

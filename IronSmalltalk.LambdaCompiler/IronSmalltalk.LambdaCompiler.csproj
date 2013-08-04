@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{996E97F7-BCE0-4D64-A0E5-9BD60266CC40}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IronSmalltalk.LambdaCompiler</RootNamespace>
+    <AssemblyName>IronSmalltalk.LambdaCompiler</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ast\IArgumentProvider.cs" />
+    <Compile Include="Compiler\AnalyzedTree.cs" />
+    <Compile Include="Compiler\AssemblyGen.cs" />
+    <Compile Include="Compiler\BoundConstants.cs" />
+    <Compile Include="Compiler\Closure.cs" />
+    <Compile Include="Compiler\CompilerScope.cs" />
+    <Compile Include="Compiler\CompilerScope.Storage.cs" />
+    <Compile Include="Compiler\ConstantCheck.cs" />
+    <Compile Include="Compiler\DebugInfoGenerator.cs" />
+    <Compile Include="Compiler\DelegateHelpers.cs" />
+    <Compile Include="Compiler\DelegateHelpers.Generated.cs" />
+    <Compile Include="Compiler\ExpressionQuoter.cs" />
+    <Compile Include="Compiler\HoistedLocals.cs" />
+    <Compile Include="Compiler\ILGen.cs" />
+    <Compile Include="Compiler\KeyedQueue.cs" />
+    <Compile Include="Compiler\LabelInfo.cs" />
+    <Compile Include="Compiler\LambdaCompiler.Address.cs" />
+    <Compile Include="Compiler\LambdaCompiler.Binary.cs" />
+    <Compile Include="Compiler\LambdaCompiler.ControlFlow.cs" />
+    <Compile Include="Compiler\LambdaCompiler.cs" />
+    <Compile Include="Compiler\LambdaCompiler.Expressions.cs" />
+    <Compile Include="Compiler\LambdaCompiler.Generated.cs" />
+    <Compile Include="Compiler\LambdaCompiler.Lambda.cs" />
+    <Compile Include="Compiler\LambdaCompiler.Logical.cs" />
+    <Compile Include="Compiler\LambdaCompiler.Statements.cs" />
+    <Compile Include="Compiler\LambdaCompiler.Unary.cs" />
+    <Compile Include="Compiler\OffsetTrackingILGenerator.cs" />
+    <Compile Include="Compiler\RuntimeVariableList.cs" />
+    <Compile Include="Compiler\Set.cs" />
+    <Compile Include="Compiler\StackSpiller.Bindings.cs" />
+    <Compile Include="Compiler\StackSpiller.cs" />
+    <Compile Include="Compiler\StackSpiller.Generated.cs" />
+    <Compile Include="Compiler\StackSpiller.Temps.cs" />
+    <Compile Include="Compiler\SymbolDocumentGenerator.cs" />
+    <Compile Include="Compiler\VariableBinder.cs" />
+    <Compile Include="Hacks\BlockN.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\CollectionExtensions.cs" />
+    <Compile Include="Utils\ContractUtils.cs" />
+    <Compile Include="Utils\TypeUtils.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

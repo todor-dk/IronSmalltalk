@@ -128,7 +128,8 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         public override Expression VisitBlock(BlockNode node)
         {
             Expression result = base.VisitBlock(node);
-            LambdaExpression lambda = Expression.Lambda(result, this.Arguments.Select(binding => (ParameterExpression)binding.Expression));
+            string lambdaName = this.Context.GetLambdaName(this, node);
+            LambdaExpression lambda = Expression.Lambda(result, lambdaName, true, this.Arguments.Select(binding => (ParameterExpression)binding.Expression));
             return Expression.Convert(lambda, typeof(object));
         }
 

@@ -17,7 +17,7 @@
   <Class Name="IronSmalltalk.ExpressionCompiler.Primitives.GetFieldPrimitiveEncoder" Collapsed="true">
     <Position X="6.25" Y="11.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAEAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Primitives\FieldPrimitiveEncoder.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -31,7 +31,7 @@
   <Class Name="IronSmalltalk.ExpressionCompiler.Primitives.InvokeConstructorPrimitiveEncoder" Collapsed="true">
     <Position X="7.25" Y="7.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAEAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Primitives\InvokeConstructorPrimitiveEncoder.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -59,14 +59,14 @@
   <Class Name="IronSmalltalk.ExpressionCompiler.Primitives.InvokeStaticMethodPrimitiveEncoder" Collapsed="true">
     <Position X="10.75" Y="11.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAEAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Primitives\MethodPrimitiveEncoder.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.ExpressionCompiler.Primitives.InvokeInstanceMethodPrimitiveEncoder" Collapsed="true">
     <Position X="8.5" Y="11.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAEAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Primitives\MethodPrimitiveEncoder.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -94,14 +94,14 @@
   <Class Name="IronSmalltalk.ExpressionCompiler.Primitives.GetPropertyPrimitiveEncoder" Collapsed="true">
     <Position X="15.25" Y="11.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAEAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Primitives\PropertyPrimitiveEncoder.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.ExpressionCompiler.Primitives.SetPropertyPrimitiveEncoder" Collapsed="true">
     <Position X="13" Y="11.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAEAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Primitives\PropertyPrimitiveEncoder.cs</FileName>
     </TypeIdentifier>
   </Class>

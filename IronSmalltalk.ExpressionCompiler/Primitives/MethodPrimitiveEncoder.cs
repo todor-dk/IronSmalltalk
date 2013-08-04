@@ -46,6 +46,9 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
             // If no method found, throw an exception.
             if (method == null)
                 throw new PrimitiveInvalidMemberException(String.Format(CodeGenerationErrors.MissingMethod, this.DefiningType.Name, this.MemberName));
+            if (method.CallingConvention == CallingConventions.VarArgs)
+                throw new PrimitiveInvalidMemberException(String.Format(CodeGenerationErrors.VarArgsCallingConventionNotSupported, this.DefiningType.Name, this.MemberName));
+
             return Expression.Call(method, this.GetArguments(argumentTypes, Conversion.Checked));
         }
     }
@@ -81,6 +84,9 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
             // If no method found, throw an exception.
             if (method == null)
                 throw new PrimitiveInvalidMemberException(String.Format(CodeGenerationErrors.MissingMethod, this.DefiningType.Name, this.MemberName));
+            if (method.CallingConvention == CallingConventions.VarArgs)
+                throw new PrimitiveInvalidMemberException(String.Format(CodeGenerationErrors.VarArgsCallingConventionNotSupported, this.DefiningType.Name, this.MemberName));
+
             IList<Expression> args = this.GetArguments(argumentTypes, Conversion.Checked);
             Expression instance = args[0];
             args.RemoveAt(0);

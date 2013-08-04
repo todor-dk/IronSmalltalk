@@ -43,14 +43,19 @@ namespace IronSmalltalk.NativeCompiler.Internals
         internal override void GenerateTypes()
         {
             this.InstanceMethodsType = this.Compiler.NativeGenerator.DefineType(
-                this.Compiler.GetTypeName("Classes", this.Binding.Name),
+                this.Compiler.GetTypeName("Classes", this.Binding.Name.Value),
                 typeof(Object),
                 TypeAttributes.Class | TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.Abstract);
 
-            this.ClassMethodsType = this.InstanceMethodsType.DefineNestedType(
-                "class",
-                TypeAttributes.Class | TypeAttributes.NestedPublic | TypeAttributes.Sealed | TypeAttributes.Abstract,
-                typeof(Object));
+            this.ClassMethodsType = this.Compiler.NativeGenerator.DefineType(
+                this.Compiler.GetTypeName("Classes", String.Format("{0} class", this.Binding.Name.Value)),
+                typeof(Object),
+                TypeAttributes.Class | TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.Abstract);
+
+            //this.ClassMethodsType = this.InstanceMethodsType.DefineNestedType(
+            //    "class",
+            //    TypeAttributes.Class | TypeAttributes.NestedPublic | TypeAttributes.Sealed | TypeAttributes.Abstract,
+            //    typeof(Object));
             this.Compiler.NativeGenerator.DefinedTypes.Add(this.ClassMethodsType);
         }
 

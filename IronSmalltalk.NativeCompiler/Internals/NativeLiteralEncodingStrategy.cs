@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Numerics;
@@ -38,7 +39,7 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
         private TypeBuilder GetLiteralsType()
         {
-            string name = string.Format("{0}.{1}", this.MethodGenerator.TypeBuilder.FullName, "Literals");
+            string name = string.Format("{0}.{1}", this.MethodGenerator.TypeBuilder.FullName, "$Literals");
             name = this.MethodGenerator.Compiler.NativeGenerator.AsLegalTypeName(name);
             return this.MethodGenerator.TypeBuilder.DefineNestedType(
                 name,
@@ -52,19 +53,69 @@ namespace IronSmalltalk.NativeCompiler.Internals
         {
             if (this._LiteralsType == null)
                 return;
+
+            // It would have been nice to use the Lambda Compiler, but it can't compile constructors,
+            // ... so we compile a helper method that retunrns an array ...
+            NewArrayExpression array = Expression.NewArrayInit(typeof(object), this.DefinedLiterals.Select(def => def.Initializer));
+            LambdaExpression lambda = Expression.Lambda(array, true);
+            MethodBuilder methodBuilder = this.LiteralsType.DefineMethod("InitializeLiterals", MethodAttributes.Private | MethodAttributes.Static);
+            lambda.CompileToMethod(methodBuilder, this.MethodGenerator.Compiler.NativeGenerator.DebugInfoGenerator);
+            // ... and fromt his array we generate the constructor by emitting IL code by hand :/
+            ConstructorBuilder ctor = this._LiteralsType.DefineConstructor(
+                MethodAttributes.Private | MethodAttributes.Static, CallingConventions.Standard, new Type[0]);
+            ILGenerator ctorIL = ctor.GetILGenerator();
+            ctorIL.DeclareLocal(typeof(object[]));      // Define a temp var for the array
+            ctorIL.Emit(OpCodes.Call, methodBuilder);   // Call the InitializeLiterals method.
+            ctorIL.Emit(OpCodes.Stloc_0);               // Store the result in the temp var
+            // ... now assign to each literal field
+            for (int i = 0; i < this.DefinedLiterals.Count; i++)
+            {
+                ctorIL.Emit(OpCodes.Ldloc_0);           // Load the temp array var
+                ctorIL.PushInt(i);                      // Index in the array
+                ctorIL.Emit(OpCodes.Ldelem_Ref);        // Load elem from the array at the given index
+                ctorIL.Emit(OpCodes.Stsfld, this.DefinedLiterals[i].Field);  // Store the value in the static field
+            }
+            ctorIL.Emit(OpCodes.Ret);
+            
             this.LiteralTypeType = this._LiteralsType.CreateType();
         }
 
         private int LiteralCounter = 1;
 
+        private Expression DefineLiteral(string prefix, string valueText, Expression initializer)
+        {
+            return this.DefineLiteral(string.Format("{0}_{1}", prefix, valueText), initializer);
+        }
+
         private Expression DefineLiteral(string prefix, Expression initializer)
         {
-            string name = string.Format("{0}_{1}", prefix, this.LiteralCounter++);
+            string name = string.Format("{0}${1}", prefix, this.LiteralCounter++);
+
             name = this.MethodGenerator.Compiler.NativeGenerator.AsLegalMethodName(name);
 
             FieldBuilder field = this.LiteralsType.DefineField(name, typeof(object), FieldAttributes.Static | FieldAttributes.InitOnly | FieldAttributes.Assembly);
-            return initializer;
+            this.DefinedLiterals.Add(new LiteralDefinition(name, field, initializer));
+
+            return Expression.Field(null, field);
         }
+
+        private readonly List<LiteralDefinition> DefinedLiterals = new List<LiteralDefinition>();
+
+        private struct LiteralDefinition
+        {
+            public readonly string Name;
+            public readonly Expression Initializer;
+            public readonly FieldBuilder Field;
+
+            public LiteralDefinition(string name, FieldBuilder field, Expression initializer)
+                : this()
+            {
+                this.Name = name;
+                this.Field = field;
+                this.Initializer = initializer;
+            }
+        }
+
 
         public Expression Array(EncoderVisitor visitor, IList<LiteralNode> elements)
         {
@@ -76,44 +127,44 @@ namespace IronSmalltalk.NativeCompiler.Internals
             return Expression.Constant(null, typeof(object));
         }
 
-        public Expression Character(EncoderVisitor visitor, char value)
+        public Expression Character(VisitingContext context, char value)
         {
             Expression initializer = Expression.Convert(Expression.Constant(value, typeof(char)), typeof(object));
-            return PreboxedConstants.GetConstant(value) ?? this.DefineLiteral("Char", initializer);
+            return PreboxedConstants.GetConstant(value) ?? this.DefineLiteral("Char", string.Format("0x{0:X4}", (int)value, CultureInfo.InvariantCulture), initializer);
         }
 
-        public Expression False(EncoderVisitor visitor)
+        public Expression False(VisitingContext context)
         {
             return PreboxedConstants.False_Expression;
         }
 
-        public Expression FloatD(EncoderVisitor visitor, double value)
+        public Expression FloatD(VisitingContext context, double value)
         {
             Expression initializer = Expression.Convert(Expression.Constant(value, typeof(double)), typeof(object));
-            return PreboxedConstants.GetConstant(value) ?? this.DefineLiteral("FloatD", initializer);
+            return PreboxedConstants.GetConstant(value) ?? this.DefineLiteral("FloatD", string.Format("{0}", value, CultureInfo.InvariantCulture), initializer);
         }
 
-        public Expression FloatE(EncoderVisitor visitor, float value)
+        public Expression FloatE(VisitingContext context, float value)
         {
             Expression initializer = Expression.Convert(Expression.Constant(value, typeof(float)), typeof(object));
-            return PreboxedConstants.GetConstant(value) ?? this.DefineLiteral("FloatE", initializer);
+            return PreboxedConstants.GetConstant(value) ?? this.DefineLiteral("FloatE", string.Format("{0}", value, CultureInfo.InvariantCulture), initializer);
         }
 
-        public Expression LargeInteger(EncoderVisitor visitor, BigInteger value)
+        public Expression LargeInteger(VisitingContext context, BigInteger value)
         {
             Expression bytes = Expression.NewArrayInit(typeof(byte[]),
                 value.ToByteArray().Select(b => Expression.Constant(b, typeof(byte))));
             ConstructorInfo ctor = typeof(BigInteger).GetConstructor(new Type[] { typeof(byte[]) });
             Expression initializer = Expression.New(ctor, bytes);
-            return PreboxedConstants.GetConstant(value) ?? this.DefineLiteral("BigInteger", initializer);
+            return PreboxedConstants.GetConstant(value) ?? this.DefineLiteral("BigInteger", string.Format("{0}", value, CultureInfo.InvariantCulture), initializer);
         }
 
-        public Expression Nil(EncoderVisitor visitor)
+        public Expression Nil(VisitingContext context)
         {
             return PreboxedConstants.Nil_Expression;
         }
 
-        public Expression ScaledDecimal(EncoderVisitor visitor, BigDecimal value)
+        public Expression ScaledDecimal(VisitingContext context, BigDecimal value)
         {
             Expression bytes;
             ConstructorInfo ctor = typeof(BigInteger).GetConstructor(new Type[] { typeof(byte[]) });
@@ -126,30 +177,29 @@ namespace IronSmalltalk.NativeCompiler.Internals
             Expression scale = Expression.Constant(value.Scale, typeof(int));
             ctor = typeof(BigDecimal).GetConstructor(new Type[] { typeof(BigInteger), typeof(BigInteger), typeof(int) });
             Expression initializer = Expression.New(ctor, numerator, denominator, scale);
-            return PreboxedConstants.GetConstant(value) ?? this.DefineLiteral("BigDecimal", initializer);
+            return PreboxedConstants.GetConstant(value) ?? this.DefineLiteral("BigDecimal", string.Format("{0}", value, CultureInfo.InvariantCulture), initializer);
         }
 
-        public Expression SmallInteger(EncoderVisitor visitor, int value)
+        public Expression SmallInteger(VisitingContext context, int value)
         {
             Expression initializer = Expression.Convert(Expression.Constant(value, typeof(int)), typeof(object));
-            return PreboxedConstants.GetConstant(value) ?? this.DefineLiteral("Int", initializer);
+            return PreboxedConstants.GetConstant(value) ?? this.DefineLiteral("Int", string.Format("{0}", value, CultureInfo.InvariantCulture), initializer);
         }
 
-        public Expression String(EncoderVisitor visitor, string value)
+        public Expression String(VisitingContext context, string value)
         {
             return Expression.Convert(Expression.Constant(value, typeof(string)), typeof(object));
         }
 
-        public Expression Symbol(EncoderVisitor visitor, string value)
+        public Expression Symbol(VisitingContext context, string value)
         {
             return Expression.Constant(null, typeof(object));
         }
 
-        public Expression True(EncoderVisitor visitor)
+        public Expression True(VisitingContext context)
         {
             return PreboxedConstants.True_Expression;
         }
-
 
         public Expression GetZero(Type type)
         {
@@ -195,6 +245,11 @@ namespace IronSmalltalk.NativeCompiler.Internals
             if (type == typeof(Byte))
                 return Expression.Constant((Byte)1, type);
             throw new NotImplementedException();
+        }
+
+        public Expression GenericLiteral(VisitingContext context, string name, Expression value)
+        {
+            return this.DefineLiteral(name, Expression.Convert(value, typeof(object)));
         }
     }
 }

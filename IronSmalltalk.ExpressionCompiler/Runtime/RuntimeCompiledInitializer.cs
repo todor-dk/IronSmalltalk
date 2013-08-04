@@ -16,6 +16,7 @@
 
 using System;
 using System.Globalization;
+using System.Linq.Expressions;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.ExpressionCompiler.BindingScopes;
 using IronSmalltalk.ExpressionCompiler.Internals;
@@ -43,14 +44,14 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
             this.DebugInfoService = debugInfoService;
         }
 
-        public InitializerCompilationResult Compile(SmalltalkRuntime runtime)
+        public Expression<Func<object, ExecutionContext, object>> Compile(SmalltalkRuntime runtime)
         {
             return this.Compile(runtime, runtime.GlobalScope);
         }
 
-        protected abstract InitializerCompilationResult Compile(SmalltalkRuntime runtime, SmalltalkNameScope globalScope);
+        protected abstract Expression<Func<object, ExecutionContext, object>> Compile(SmalltalkRuntime runtime, SmalltalkNameScope globalScope);
 
-        protected InitializerCompilationResult Compile(SmalltalkRuntime runtime, BindingScope globalScope, BindingScope reservedScope, string initializerName)
+        protected Expression<Func<object, ExecutionContext, object>> Compile(SmalltalkRuntime runtime, BindingScope globalScope, BindingScope reservedScope, string initializerName)
         {
             IDebugInfoService dis = ((this.DebugInfoService == null) || (this.DebugInfoService.SymbolDocument == null)) ? null : this.DebugInfoService;
 
@@ -77,18 +78,18 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
 
         private Func<object, ExecutionContext, object> NativeCompile(SmalltalkRuntime runtime)
         {
-            return this.Compile(runtime).ExecutableCode.Compile();
+            return this.Compile(runtime).Compile();
         }
     }
 
-    public class RuntimeProgramInitializer : RuntimeCompiledInitializer
+    public sealed class RuntimeProgramInitializer : RuntimeCompiledInitializer
     {
         public RuntimeProgramInitializer(InitializerNode parseTree, IDebugInfoService debugInfoService)
             : base(InitializerType.ProgramInitializer, null, parseTree, debugInfoService)
         {
         }
 
-        protected override InitializerCompilationResult Compile(SmalltalkRuntime runtime, SmalltalkNameScope globalScope)
+        protected override Expression<Func<object, ExecutionContext, object>> Compile(SmalltalkRuntime runtime, SmalltalkNameScope globalScope)
         {
             return this.Compile(runtime,
                 BindingScope.ForProgramInitializer(globalScope),
@@ -97,7 +98,7 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
         }
     }
 
-    public class RuntimeGlobalInitializer : RuntimeCompiledInitializer
+    public sealed class RuntimeGlobalInitializer : RuntimeCompiledInitializer
     {
 
         public RuntimeGlobalInitializer(InitializerNode parseTree, IDebugInfoService debugInfoService, GlobalVariableOrConstantBinding binding)
@@ -111,7 +112,7 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
         {
         }
 
-        protected override InitializerCompilationResult Compile(SmalltalkRuntime runtime, SmalltalkNameScope globalScope)
+        protected override Expression<Func<object, ExecutionContext, object>> Compile(SmalltalkRuntime runtime, SmalltalkNameScope globalScope)
         {
             if (this.Type == InitializerType.ClassInitializer)
                 return this.CompileClassInitializer(runtime, globalScope, (SmalltalkClass) this.Binding.Value);
@@ -119,7 +120,7 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
                 return this.CompileGlobalInitializer(runtime, globalScope);
         }
 
-        private InitializerCompilationResult CompileGlobalInitializer(SmalltalkRuntime runtime, SmalltalkNameScope globalNameScope)
+        private Expression<Func<object, ExecutionContext, object>> CompileGlobalInitializer(SmalltalkRuntime runtime, SmalltalkNameScope globalNameScope)
         {
             return this.Compile(runtime,
                 BindingScope.ForGlobalInitializer(globalNameScope),
@@ -127,7 +128,7 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
                 String.Format("{0} initializer", this.Binding.Name.Value));
         }
 
-        private InitializerCompilationResult CompileClassInitializer(SmalltalkRuntime runtime, SmalltalkNameScope globalNameScope, SmalltalkClass cls)
+        private Expression<Func<object, ExecutionContext, object>> CompileClassInitializer(SmalltalkRuntime runtime, SmalltalkNameScope globalNameScope, SmalltalkClass cls)
         {
             return this.Compile(runtime,
                 BindingScope.ForClassInitializer(cls, globalNameScope),
@@ -136,7 +137,7 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
         }
     }
 
-    public class RuntimePoolItemInitializer : RuntimeCompiledInitializer
+    public sealed class RuntimePoolItemInitializer : RuntimeCompiledInitializer
     {
         public string PoolName { get; private set; }
 
@@ -148,7 +149,7 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
             this.PoolName = poolName;
         }
 
-        protected override InitializerCompilationResult Compile(SmalltalkRuntime runtime, SmalltalkNameScope globalScope)
+        protected override Expression<Func<object, ExecutionContext, object>> Compile(SmalltalkRuntime runtime, SmalltalkNameScope globalScope)
         {
             PoolBinding poolBinding = globalScope.GetPoolBinding(this.PoolName);
             if ((poolBinding == null) || (poolBinding.Value == null))
