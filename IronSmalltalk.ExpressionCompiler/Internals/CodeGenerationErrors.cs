@@ -35,6 +35,7 @@ namespace IronSmalltalk.ExpressionCompiler.Internals
         public const string WrongNumberOfParameters = "Wrong number of primitive call parameters.";
         public const string WrongShiftTypeName = "Shift primitive does not support type named '{0}'.";
         public const string MissingMethod = "Type '{0}' does not contain method named {1}.";
+        public const string VarArgsCallingConventionNotSupported = "The VarArgs calling convention used by method '{1}' in type '{0}' is not supported.";
         public const string MissingProperty = "Type '{0}' does not contain property named {1}.";
         public const string MissingField = "Type '{0}' does not contain field named {1}.";
         public const string MissingConstructor = "Type '{0}' does not contain constructor with the given types.";

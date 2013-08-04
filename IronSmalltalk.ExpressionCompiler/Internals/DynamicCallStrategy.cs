@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using IronSmalltalk.ExpressionCompiler.Visiting;
+using IronSmalltalk.Runtime.Execution.CallSiteBinders;
 
 namespace IronSmalltalk.ExpressionCompiler.Internals
 {
@@ -34,6 +35,13 @@ namespace IronSmalltalk.ExpressionCompiler.Internals
             args.Add(executionContext);
             args.AddRange(arguments);
             return Expression.Dynamic(binder, typeof(Object), args);
+        }
+
+
+        public Expression CompileGetClass(VisitingContext context, Expression receiver, Expression executionContext)
+        {
+            ObjectClassCallSiteBinder binder = context.Compiler.GetClassBinder();
+            return Expression.Dynamic(binder, typeof(Object), receiver);
         }
     }
 }

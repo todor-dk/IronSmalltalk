@@ -5,3 +5,6 @@ What is:
 
 Clean Up:
 	References to internal DLR assemblies
+
+Console Host:
+	Save to disk. See: ipy.exe -D -X:SaveAssemblies -X:StaticMethods msdnmag.py

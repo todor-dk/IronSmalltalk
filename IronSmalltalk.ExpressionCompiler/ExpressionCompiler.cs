@@ -129,7 +129,7 @@ namespace IronSmalltalk.ExpressionCompiler
             return binder;
         }
 
-        public ObjectClassCallSiteBinder GetClassBinder()
+        internal ObjectClassCallSiteBinder GetClassBinder()
         {
             ObjectClassCallSiteBinder binder = this.BinderCache.CachedObjectClassCallSiteBinder;
             if (binder == null)

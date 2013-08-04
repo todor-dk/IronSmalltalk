@@ -2,7 +2,7 @@
 
 "
 Iron Smalltalk Source Code
-Filed-Out: 2013-04-01 22:31
+Filed-Out: 2013-08-04 20:33
 Definition: C:\Users\tt\Documents\Visual Studio 2010\Projects\IronSmalltalk\ClassLibraryBrowser\External\SmalltalkSystem.xml
 Browser Version: 1.0.0.0
 " ! 
@@ -2986,13 +2986,6 @@ writeFormatted: format with: arg1 with: arg2 with: arg3
 Annotation key: 'ist.runtime.native-name' value: 'WriteFormatted'! 
 
 Console classMethod! 
-writeFormatted: format with: arg1 with: arg2 with: arg3 with: arg4
-
-	<static: 'System.Console' Write string object object object object>! 
-
-Annotation key: 'ist.runtime.native-name' value: 'WriteFormatted'! 
-
-Console classMethod! 
 writeLineFormatted: format arguments: arg
 
 	<static: 'System.Console' WriteLine string 'System.Object[]'>! 
@@ -3017,13 +3010,6 @@ Console classMethod!
 writeLineFormatted: format with: arg1 with: arg2 with: arg3
 
 	<static: 'System.Console' WriteLine string object object object>! 
-
-Annotation key: 'ist.runtime.native-name' value: 'WriteLineFormatted'! 
-
-Console classMethod! 
-writeLineFormatted: format with: arg1 with: arg2 with: arg3 with: arg4
-
-	<static: 'System.Console' WriteLine string object object object object>! 
 
 Annotation key: 'ist.runtime.native-name' value: 'WriteLineFormatted'! 
 
@@ -9515,8 +9501,3 @@ Console " ... Console class implements the Transcript protocol "!
 FloatQ initializer! 
 FloatD! 
 
-" UndefinedObject Instance Methods " ! 
-UndefinedObject method! 
-with: arg01 with: arg02 with: arg03 with: arg04 with: arg05 with: arg06 with: arg07 with: arg08 with: arg09 with: arg10 with: arg11 with: arg12 with: arg13 with: arg14 with: arg15 with: arg16 with: arg17 with: arg18 with: arg19
-
-	^true.! 

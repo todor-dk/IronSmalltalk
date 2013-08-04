@@ -76,7 +76,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Behavior\CompilationResult.cs" />
     <Compile Include="Behavior\CompiledCode.cs" />
     <Compile Include="Behavior\CompiledInitializer.cs" />
     <Compile Include="Behavior\NativeCompiledInitializer.cs" />

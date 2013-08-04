@@ -40,6 +40,8 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// </remarks>
         public ObjectClassCallSiteBinder CachedObjectClassCallSiteBinder;
 
+        public static readonly ObjectClassCallSiteBinder ObjectClassCallSiteBinder = new ObjectClassCallSiteBinder();
+
         public static CallSiteBinderCache GetCache(SmalltalkRuntime runtime)
         {
             if (runtime == null)
@@ -54,6 +56,11 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 runtime.ServicesCache[typeof(CallSiteBinderCache)] = binderCache;
             }
             return binderCache;
+        }
+
+        public static System.Runtime.CompilerServices.CallSiteBinder GetBinder(string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, string superLookupScope)
+        {
+            return null;
         }
     }
 }

@@ -1,36 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="IronSmalltalk.Runtime.Behavior.CompiledMethod" BaseTypeListCollapsed="true">
-    <Position X="3.5" Y="6.25" Width="1.5" />
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="IronSmalltalk.Runtime.Behavior.CompiledMethod.MethodType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Behavior\CompiledMethod.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>BIAAAAAQAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <HashCode>AIAQAAAAAAAAAQAAAAIAAAAAAAAAAAAAAQAAAAACAAA=</HashCode>
       <FileName>Behavior\CompiledMethod.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Runtime.Behavior.MethodDictionary" Collapsed="true">
-    <Position X="2.25" Y="2.25" Width="1.5" />
+    <Position X="5.25" Y="6.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CBsAEAAAQgAGDhobCQAABAQAAMAAAAEmCAMobRXUb2A=</HashCode>
+      <HashCode>CBsAEAAAQoAGDhobCQAABAQAAMAAAAEmCAMobRXUb2A=</HashCode>
       <FileName>Behavior\MethodDictionary.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="IronSmalltalk.Runtime.Behavior.ClassMethodDictionary" Collapsed="true">
-    <Position X="3.25" Y="3.25" Width="2" />
+    <Position X="6.25" Y="7.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Behavior\MethodDictionary.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Runtime.Behavior.InstanceMethodDictionary" Collapsed="true">
-    <Position X="0.5" Y="3.25" Width="2" />
+    <Position X="3.5" Y="7.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Behavior\MethodDictionary.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Runtime.Behavior.CompiledCode" Collapsed="true">
-    <Position X="0.5" Y="5" Width="1.5" />
+    <Position X="1.75" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAQAACAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Behavior\CompiledCode.cs</FileName>
@@ -38,32 +45,25 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="IronSmalltalk.Runtime.Behavior.NativeCompiledMethod">
-    <Position X="3.5" Y="9.75" Width="1.5" />
+    <Position X="0.5" Y="7.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Behavior\CompiledMethod.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Runtime.Behavior.CompiledInitializer" Collapsed="true">
-    <Position X="5.75" Y="6.25" Width="1.5" />
+    <Position X="2.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAEAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAACA=</HashCode>
       <FileName>Behavior\CompiledInitializer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.Runtime.Behavior.NativeCompiledInitializer" Collapsed="true">
-    <Position X="5.75" Y="7.75" Width="1.5" />
+    <Position X="2.75" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
       <FileName>Behavior\NativeCompiledInitializer.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Interface Name="IronSmalltalk.Runtime.Behavior.IIntermediateCodeValidationErrorSink" Collapsed="true">
-    <Position X="12.5" Y="4.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Behavior\IntermediateCodeBase.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

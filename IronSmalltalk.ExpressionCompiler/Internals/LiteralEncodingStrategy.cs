@@ -30,58 +30,58 @@ namespace IronSmalltalk.ExpressionCompiler.Internals
 {
     public class LiteralEncodingStrategy : ILiteralEncodingStrategy
     {
-        public Expression Character(EncoderVisitor visitor, char value)
+        public Expression Character(VisitingContext context, char value)
         {
             return Expression.Constant(PreboxedConstants.GetValue(value) ?? value, typeof(object));
         }
 
-        public Expression FloatE(EncoderVisitor visitor, float value)
+        public Expression FloatE(VisitingContext context, float value)
         {
             return Expression.Constant(PreboxedConstants.GetValue(value) ?? value, typeof(object));
         }
 
-        public Expression FloatD(EncoderVisitor visitor, double value)
+        public Expression FloatD(VisitingContext context, double value)
         {
             return Expression.Constant(PreboxedConstants.GetValue(value) ?? value, typeof(object));
         }
 
-        public Expression LargeInteger(EncoderVisitor visitor, BigInteger value)
+        public Expression LargeInteger(VisitingContext context, BigInteger value)
         {
             return Expression.Constant(PreboxedConstants.GetValue(value) ?? value, typeof(object));
         }
 
-        public Expression ScaledDecimal(EncoderVisitor visitor, BigDecimal value)
+        public Expression ScaledDecimal(VisitingContext context, BigDecimal value)
         {
             return Expression.Constant(PreboxedConstants.GetValue(value) ?? value, typeof(object));
         }
 
-        public Expression SmallInteger(EncoderVisitor visitor, int value)
+        public Expression SmallInteger(VisitingContext context, int value)
         {
             return Expression.Constant(PreboxedConstants.GetValue(value) ?? value, typeof(object));
         }
 
-        public Expression String(EncoderVisitor visitor, string value)
+        public Expression String(VisitingContext context, string value)
         {
             return Expression.Constant(value, typeof(object));
         }
 
-        public Expression Symbol(EncoderVisitor visitor, string value)
+        public Expression Symbol(VisitingContext context, string value)
         {
             // #'asUppercase' or #'this is a test'
-            return Expression.Constant(visitor.Context.Compiler.GetSymbol(value), typeof(object));
+            return Expression.Constant(context.Compiler.GetSymbol(value), typeof(object));
         }
 
-        public Expression Nil(EncoderVisitor visitor)
+        public Expression Nil(VisitingContext context)
         {
             return PreboxedConstants.Nil_Expression;
         }
 
-        public Expression True(EncoderVisitor visitor)
+        public Expression True(VisitingContext context)
         {
             return Expression.Constant(PreboxedConstants.True, typeof(object));
         }
 
-        public Expression False(EncoderVisitor visitor)
+        public Expression False(VisitingContext context)
         {
             return Expression.Constant(PreboxedConstants.False, typeof(object));
         }
@@ -124,6 +124,15 @@ namespace IronSmalltalk.ExpressionCompiler.Internals
             var lambda = Expression.Lambda<Func<object>>(Expression.Convert(expression, typeof(object)));
             var method = lambda.Compile();
             return method();
-        }  
+        }
+
+
+        public Expression GenericLiteral(VisitingContext context, string name, Expression value)
+        {
+            return value;
+        }
+
+
+        
     }
 }

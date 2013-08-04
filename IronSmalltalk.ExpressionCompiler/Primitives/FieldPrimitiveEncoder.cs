@@ -39,7 +39,13 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
             if ((bindingFlags & BindingFlags.GetField) == BindingFlags.GetField)
             {
                 if (field.IsStatic)
+                {
+                    // If the field is "const" or "static readonly" and it's a value type, the literal strategy may want to pre-box it.
+                    if ((field.IsLiteral || field.IsInitOnly) && field.FieldType.IsValueType)
+                        return this.Compiler.LiteralEncoding.GenericLiteral(this.Context, String.Format("{0}.{1}", field.FieldType.Name, field.Name), Expression.Field(null, field));
+
                     return Expression.Field(null, field);
+                }
                 IList<Expression> args = this.GetArguments(new Type[] { this.DefiningType }, Conversion.Checked);
                 return Expression.Field(args[0], field);
             }
