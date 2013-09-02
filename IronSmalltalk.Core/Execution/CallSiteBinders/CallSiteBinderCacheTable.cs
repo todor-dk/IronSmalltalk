@@ -16,74 +16,68 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 {
-    public class CallSiteBinderCacheTable
+    internal interface ICallSiteBinderCacheItem<TKey>
+        where TKey : class
     {
-        /// <summary>
-        /// Selectors of messages we concider common and worth caching agresively.
-        /// </summary>
-        /// <remarks>
-        /// The list below was creating by examining an existing Smalltalk sourcecode
-        /// and determining the most often sent messages (as number of call-sites).
-        /// </remarks>
-        public static readonly string[] CommonSelectors = new string[] {
-            "=", "~=", "==", "~~", ">", ">=", "<", "<=",    // comparison operations 
-            "+", "-", "*", "/", "\\\\", "//",               // arithmetic operations 
-            "&", "|",                                       // logical operations 
-            "@", ",",                                       // miscellaneous 
-            "add:", "addAll:", "and:", "asString", "at:", "at:ifAbsent:", "at:put:", "atEnd", 
-            "basicAt:", "basicAt:put:", "basicHash", "basicHash:", "basicNew", "basicNew:", "basicSize", 
-            "between:and:", "class", "do:", "doesNotUnderstand:", "ensure:",
-            "ifFalse:", "ifFalse:ifTrue:", "ifTrue:", "ifTrue:ifFalse:", 
-            "isEmpty", "isNil", "key", "max:", "min:", "new", "new:", 
-            "nextPut:", "nextPutAll:", "not", "notNil", "on:do:", "or:", "printOn:", "printString", 
-            "propertyAt:", "propertyAt:ifAbsent:", "propertyAt:ifAbsentPut:", "propertyAt:put:", 
-            "release", "size", "to:by:do:", "to:do:", "triggerEvent:", "value", "value:", "value:value:", 
-            "vmInterrupt:", "when:send:to:", "when:send:to:with:", 
-            "whileFalse", "whileFalse:", "whileTrue", "whileTrue:", "with:", "with:with:", "x", "y", "yourself"
-        };
+        TKey CacheKey { get; }
+        ICallSiteBinderCacheFinalizationManager<TKey> FinalizationManager { get; set; }
+    }
 
-        private readonly WeakCallSiteBinderCache WeakCache = new WeakCallSiteBinderCache();
-        private readonly ConcurrentDictionary<string, MessageSendCallSiteBinder> StrongCache;
+    internal interface ICallSiteBinderCacheFinalizationManager<TKey>
+    {
+        void InternalRemoveItem(TKey key);
+    }
 
-        public CallSiteBinderCacheTable()
+    internal class CallSiteBinderCacheTable<TKey, TValue>
+        where TKey : class
+        where TValue : class, ICallSiteBinderCacheItem<TKey>
+    {
+        private readonly WeakCallSiteBinderCache WeakCache;
+        private readonly ConcurrentDictionary<TKey, TValue> StrongCache;
+
+        public CallSiteBinderCacheTable(IEnumerable<TKey> strongKeys, IEqualityComparer<TKey> comparer)
         {
-            this.WeakCache = new WeakCallSiteBinderCache();
-            this.StrongCache = new ConcurrentDictionary<string, MessageSendCallSiteBinder>();
-            foreach (string selector in CallSiteBinderCacheTable.CommonSelectors)
-                this.StrongCache[selector] = null;
+            this.WeakCache = new WeakCallSiteBinderCache(comparer);
+            this.StrongCache = new ConcurrentDictionary<TKey, TValue>(Environment.ProcessorCount, 250, comparer);
+            if (strongKeys != null)
+            {
+                foreach (TKey key in strongKeys)
+                    this.StrongCache[key] = null;
+            }
         }
 
-        public MessageSendCallSiteBinder GetBinder(string selector)
+        public TValue GetBinder(TKey key)
         {
-            if (String.IsNullOrEmpty(selector))
+            if (key == null)
                 throw new ArgumentNullException();
 
-            MessageSendCallSiteBinder result;
-            this.StrongCache.TryGetValue(selector, out result);
+            TValue result;
+            this.StrongCache.TryGetValue(key, out result);
             if (result != null)
                 return result;
 
-            return this.WeakCache.GetItem(selector);
+            return this.WeakCache.GetItem(key);
         }
 
-        public MessageSendCallSiteBinder AddBinder(MessageSendCallSiteBinder binder)
+        public TValue AddBinder(TValue binder)
         {
             if (binder == null)
                 throw new ArgumentNullException();
 
-            MessageSendCallSiteBinder result;
-            if (this.StrongCache.TryGetValue(binder.Selector, out result))
+            TValue result;
+            if (this.StrongCache.TryGetValue(binder.CacheKey, out result))
             {
                 // It is one of the common selectors
                 if (result != null)
                     // Already cached
                     return result;
                 // Cache it and return ...
-                this.StrongCache.TryUpdate(binder.Selector, binder, null);
-                return this.StrongCache[binder.Selector];
+                this.StrongCache.TryUpdate(binder.CacheKey, binder, null);
+                return this.StrongCache[binder.CacheKey];
             }
 
             return this.WeakCache.AddItem(binder);
@@ -95,19 +89,18 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// <remarks>
         /// This is roughly based on the SymbolTable
         /// </remarks>
-        internal class WeakCallSiteBinderCache
+        private class WeakCallSiteBinderCache : ICallSiteBinderCacheFinalizationManager<TKey>
         {
-            private ConcurrentDictionary<string, WeakReference> _Contents;
+            private ConcurrentDictionary<TKey, WeakReference> _Contents;
 
             /// <summary>
             /// Create and initialize an empty weak table.
             /// </summary>
-            public WeakCallSiteBinderCache()
+            internal WeakCallSiteBinderCache(IEqualityComparer<TKey> comparer)
             {
                 // We expect very low concurrency on writing ... 
                 // Use StringComparer.InvariantCulture ... because keys are case-sensitive etc.
-                this._Contents = new ConcurrentDictionary<string, WeakReference>(
-                    Environment.ProcessorCount, 250, StringComparer.InvariantCulture);
+                this._Contents = new ConcurrentDictionary<TKey, WeakReference>(Environment.ProcessorCount, 250, comparer);
             }
 
             /// <summary>
@@ -115,30 +108,30 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             /// </summary>
             /// <param name="selector">String value of the selector.</param>
             /// <returns>An existing Call-Site-Binder or null if none.</returns>
-            public MessageSendCallSiteBinder GetItem(string selector)
+            internal TValue GetItem(TKey key)
             {
-                if (selector == null)
+                if (key == null)
                     throw new ArgumentNullException();
 
                 // 1. Try to get the CSB from the dictionary. There are good changes that:
                 WeakReference reference;
-                this._Contents.TryGetValue(selector, out reference);
+                this._Contents.TryGetValue(key, out reference);
                 if (reference == null)
                     return null;
                 // 2. Get the CSB from the weak reference holding it
-                return reference.Target as MessageSendCallSiteBinder;
+                return reference.Target as TValue;
             }
 
-            public MessageSendCallSiteBinder AddItem(MessageSendCallSiteBinder binder)
+            internal TValue AddItem(TValue binder)
             {
                 if (binder == null)
                     throw new ArgumentNullException();
 
                 // 1. Try to get the CSB from the dictionary. 
                 binder.FinalizationManager = this;
-                WeakReference reference = this._Contents.GetOrAdd(binder.Selector, na => new WeakReference(binder, false));
+                WeakReference reference = this._Contents.GetOrAdd(binder.CacheKey, na => new WeakReference(binder, false));
                 // 2. Get the CSB from the weak reference holding it
-                MessageSendCallSiteBinder result = reference.Target as MessageSendCallSiteBinder;
+                TValue result = reference.Target as TValue;
                 // Once here, it can't be GC'ed.
                 if (result != null)
                     // somebody else managed to put 
@@ -151,10 +144,10 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             /// A Call-Site-Binder was GC'ed. Remove the Call-Site-Binder info from the internal string-CSB dictionary.
             /// </summary>
             /// <param name="selector">String value of the Call-Site-Binder that was GC'ed.</param>
-            internal void InternalRemoveItem(string selector)
+            void ICallSiteBinderCacheFinalizationManager<TKey>.InternalRemoveItem(TKey key)
             {
                 WeakReference reference;
-                this._Contents.TryGetValue(selector, out reference);
+                this._Contents.TryGetValue(key, out reference);
                 if (reference == null)
                     return;
 
@@ -164,10 +157,10 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 //         however, before this code managed to run, somebody requested a CSB with the
                 //         same selector, and a new CSB object was created.
                 //         Therefore, we cannot throw the weak reference away!
-                MessageSendCallSiteBinder csb = reference.Target as MessageSendCallSiteBinder;
+                TValue csb = reference.Target as TValue;
                 if (csb == null)
                     // Remove the weak reference from the contents dictionary ... this is case a).
-                    this._Contents.TryRemove(selector, out reference);
+                    this._Contents.TryRemove(key, out reference);
             }
         }
     }

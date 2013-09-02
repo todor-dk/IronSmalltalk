@@ -21,24 +21,23 @@ using System.Text;
 using System.Threading.Tasks;
 using IronSmalltalk.Runtime.Bindings;
 
-namespace IronSmalltalk.NativeCompiler.Internals
+namespace IronSmalltalk.NativeCompiler.Generators.Globals
 {
-    internal class GlobalConstantGenerator : GlobalGenerator<GlobalConstantBinding>
+    internal sealed class GlobalVariableGenerator : GlobalGenerator<GlobalVariableBinding>
     {
-        internal GlobalConstantGenerator(NativeCompiler compiler, GlobalConstantBinding binding)
+        internal GlobalVariableGenerator(NativeCompiler compiler, GlobalVariableBinding binding)
             : base(compiler, binding)
         {
         }
 
         protected override string SubNamespace
         {
-            get { return "Constants"; }
+            get { return "Globals"; }
         }
 
         protected override string AddBindingMethodName
         {
-            get { return "AddGlobalConstantBinding"; }
+            get { return "AddGlobalVariableBinding"; }
         }
-
     }
 }

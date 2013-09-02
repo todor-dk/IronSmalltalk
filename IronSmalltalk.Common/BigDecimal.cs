@@ -141,13 +141,6 @@ namespace IronSmalltalk.Common
                 this.Denominator = BigInteger.Pow(10, scale);
         }
 
-        private BigDecimal(BigInteger numerator, BigInteger denominator, int scale)
-        {
-            this.Numerator = numerator;
-            this.Denominator = denominator;
-            this.Scale = scale;
-        }
-
         /// <summary>
         /// Initializes a new instance of the BigDecimal structure using a decimal value.
         /// </summary>

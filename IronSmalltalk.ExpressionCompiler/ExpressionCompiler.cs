@@ -72,17 +72,6 @@ namespace IronSmalltalk.ExpressionCompiler
             this.DynamicCallStrategy = compilerOptions.DynamicCallStrategy ?? new DynamicCallStrategy();
         }
 
-        private CallSiteBinderCache _binderCache;
-        public CallSiteBinderCache BinderCache
-        {
-            get
-            {
-                if (this._binderCache == null)
-                    this._binderCache = CallSiteBinderCache.GetCache(this.Runtime);
-                return this._binderCache;
-            }
-        }
-
         public Expression AddDebugInfo(Expression expression, IParseNode node)
         {
             if (this.DebugInfoService == null)
@@ -102,42 +91,6 @@ namespace IronSmalltalk.ExpressionCompiler
         public Symbol GetSymbol(string value)
         {
             return this.Runtime.GetSymbol(value);
-        }
-
-        internal CallSiteBinder GetBinder(string selector, string nativeName, int argumentCount, bool isSuperSend, bool isConstantReceiver, string superLookupScope)
-        {
-            CallSiteBinder binder;
-            if (isSuperSend)
-            {
-                return CSB.RuntimeHelpers.CreateSuperSendCallSiteBinder(selector, superLookupScope, argumentCount);
-            }
-            else if (isConstantReceiver)
-            {
-                binder = this.BinderCache.ConstantSendCache.GetBinder(selector);
-                if (binder == null)
-                    binder = this.BinderCache.ConstantSendCache.AddBinder(
-                        CSB.RuntimeHelpers.CreateConstantCallSiteBinder(selector, nativeName, argumentCount));
-            }
-            else
-            {
-                binder = this.BinderCache.MessageSendCache.GetBinder(selector);
-                if (binder == null)
-                    binder = this.BinderCache.MessageSendCache.AddBinder(
-                        CSB.RuntimeHelpers.CreateCallSiteBinder(selector, nativeName, argumentCount));
-            }
-
-            return binder;
-        }
-
-        internal ObjectClassCallSiteBinder GetClassBinder()
-        {
-            ObjectClassCallSiteBinder binder = this.BinderCache.CachedObjectClassCallSiteBinder;
-            if (binder == null)
-            {
-                binder = new ObjectClassCallSiteBinder();
-                this.BinderCache.CachedObjectClassCallSiteBinder = binder;
-            }
-            return binder;
         }
     }
 }

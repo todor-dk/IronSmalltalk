@@ -17,14 +17,30 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.NativeCompiler.Generators;
 using IronSmalltalk.NativeCompiler.Internals;
 
 namespace IronSmalltalk.NativeCompiler
 {
+    /// <summary>
+    /// The native compiler generates a .Net assembly given a Smalltalk runtime definition.
+    /// </summary>
+    /// <remarks>
+    /// This class is the entry point to the native compiler.
+    /// It is initializer from a NativeCompilerParameters object.
+    /// </remarks>
     public class NativeCompiler
     {
+        /// <summary>
+        /// Generate a .Net native assembly for the given Smalltalk runtime definition.
+        /// </summary>
+        /// <param name="parameters">
+        /// Parameter object that contains the information about the Smalltalk runtime
+        /// as well as additional parameters that govern the native assembly generation.
+        /// </param>
         public static void GenerateNativeAssembly(NativeCompilerParameters parameters)
         {
             if (parameters == null)
@@ -80,20 +96,23 @@ namespace IronSmalltalk.NativeCompiler
             return this.GetTypeName(String.Join(".", names));
         }
 
+        /// <summary>
+        /// The main method - responsible for generation of the assembly
+        /// </summary>
         private void Generate()
         {
+            // Visit the name scopes in the runtime.
             NameScopeGenerator extensionScope = new NameScopeGenerator(this, "ExtensionScope", true);
             this.Parameters.Runtime.ExtensionScope.Accept(extensionScope);
             NameScopeGenerator globalScope = new NameScopeGenerator(this, "GlobalScope", false);
             this.Parameters.Runtime.GlobalScope.Accept(globalScope);
 
-            //RuntimeGenerator runtimeGen = new RuntimeGenerator(this);
-            //runtimeGen.GenerateTypes();
-            extensionScope.Generate();
-            globalScope.Generate();
-
-            RuntimeGenerator runtime = new RuntimeGenerator(this, extensionScope, globalScope);
-            runtime.Generate();
+            // Generate types from the result of the name scope visiting
+            MethodInfo extensionScopeInitializer = extensionScope.GenerateInitializerMethod();
+            MethodInfo globalScopeInitializer = globalScope.GenerateInitializerMethod();
+            // Generate the entry point class, the one that creates the new Smalltalk runtime.
+            RuntimeGenerator runtime = new RuntimeGenerator(this, extensionScopeInitializer, globalScopeInitializer);
+            runtime.GenerateCreateRuntimeMethods();
             
 
             /* Order should be:
@@ -167,8 +186,6 @@ Dictionary<Symbol, CompiledMethod>
            */
 
             this.NativeGenerator.SaveAssembly();
-        }
-
-        
+        }    
     }
 }

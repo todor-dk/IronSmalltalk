@@ -1,66 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="IronSmalltalk.NativeCompiler.Internals.GeneratorBase" Collapsed="true">
-    <Position X="5" Y="1.5" Width="1.5" />
+  <Class Name="IronSmalltalk.NativeCompiler.Internals.MethodGenerator">
+    <Position X="14.75" Y="0.5" Width="2" />
+    <NestedTypes>
+      <Class Name="IronSmalltalk.NativeCompiler.Internals.MethodGenerator.MethodInformation" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Internals\MethodGenerator.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Internals\GeneratorBase.cs</FileName>
+      <HashCode>QIgAgAAAAAIQAAAgAAIIIAAACAAAABAEiAAGQQAAAEA=</HashCode>
+      <FileName>Internals\MethodGenerator.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="IronSmalltalk.NativeCompiler.Internals.ClassGenerator" Collapsed="true">
-    <Position X="1.75" Y="5.75" Width="1.5" />
+  <Class Name="IronSmalltalk.NativeCompiler.Internals.ClassMethodGenerator">
+    <Position X="16" Y="7.25" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAEAAIAAAAAAA=</HashCode>
-      <FileName>Internals\ClassGenerator.cs</FileName>
+      <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAAAABAAgAAABAAAAAA=</HashCode>
+      <FileName>Internals\ClassMethodGenerator.cs</FileName>
+      <NewMemberFileName>Internals\MethodGenerator.cs</NewMemberFileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="IronSmalltalk.NativeCompiler.Internals.GlobalConstantGenerator" Collapsed="true">
-    <Position X="6.25" Y="7.25" Width="1.5" />
+  <Class Name="IronSmalltalk.NativeCompiler.Internals.InstanceMethodGenerator">
+    <Position X="13" Y="7.25" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Internals\GlobalConstantGenerator.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="IronSmalltalk.NativeCompiler.Internals.GlobalGenerator&lt;TBinding&gt;" Collapsed="true">
-    <Position X="7.25" Y="5.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAEQAAAAAAAAA=</HashCode>
-      <FileName>Internals\GlobalGenerator.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="IronSmalltalk.NativeCompiler.Internals.GlobalVariableGenerator" Collapsed="true">
-    <Position X="8.5" Y="7.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Internals\GlobalVariableGenerator.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="IronSmalltalk.NativeCompiler.Internals.PoolGenerator" Collapsed="true">
-    <Position X="4" Y="5.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEQAAAAAAAAA=</HashCode>
-      <FileName>Internals\PoolGenerator.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="IronSmalltalk.NativeCompiler.Internals.GlobalBindingGenerator&lt;TBinding&gt;" Collapsed="true">
-    <Position X="5" Y="4.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
-      <FileName>Internals\GlobalBindingGenerator.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="IronSmalltalk.NativeCompiler.Internals.GlobalBindingGenerator" Collapsed="true">
-    <Position X="5" Y="2.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
-      <FileName>Internals\GlobalBindingGenerator.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="IronSmalltalk.NativeCompiler.Internals.RuntimeGenerator" Collapsed="true">
-    <Position X="7.5" Y="2.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEQAAAAAgAAA=</HashCode>
-      <FileName>Internals\RuntimeGenerator.cs</FileName>
+      <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAAAABAAgAAABAAAAAA=</HashCode>
+      <FileName>Internals\InstanceMethodGenerator.cs</FileName>
+      <NewMemberFileName>Internals\MethodGenerator.cs</NewMemberFileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

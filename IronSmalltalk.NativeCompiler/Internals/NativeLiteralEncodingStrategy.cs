@@ -6,12 +6,14 @@ using System.Linq.Expressions;
 using System.Numerics;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.ExpressionCompiler.Internals;
 using IronSmalltalk.ExpressionCompiler.Visiting;
+using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Execution;
 
 namespace IronSmalltalk.NativeCompiler.Internals
@@ -23,6 +25,8 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
         internal NativeLiteralEncodingStrategy(MethodGenerator methodGenerator)
         {
+            if (methodGenerator == null)
+                throw new ArgumentNullException();
             this.MethodGenerator = methodGenerator;
         }
 
@@ -79,6 +83,126 @@ namespace IronSmalltalk.NativeCompiler.Internals
             
             this.LiteralTypeType = this._LiteralsType.CreateType();
         }
+
+
+        private TypeBuilder _LiteralCallSitesType = null;
+        private TypeBuilder LiteralCallSitesType
+        {
+            get
+            {
+                if (this._LiteralCallSitesType == null)
+                    this._LiteralCallSitesType = this.GetLiteralCallSitesType();
+                return this._LiteralCallSitesType;
+            }
+        }
+
+        private Type LiteralCallSitesTypeType;
+
+        private TypeBuilder GetLiteralCallSitesType()
+        {
+            string name = string.Format("{0}.{1}", this.MethodGenerator.TypeBuilder.FullName, "$LiteralCallSites");
+            name = this.MethodGenerator.Compiler.NativeGenerator.AsLegalTypeName(name);
+            return this.MethodGenerator.TypeBuilder.DefineNestedType(
+                name,
+                TypeAttributes.Class | TypeAttributes.NestedPrivate | TypeAttributes.Sealed | TypeAttributes.Abstract,
+                typeof(object));
+        }
+
+        internal void GenerateLiteralCallSitesType()
+        {
+            if (this._LiteralCallSitesType == null)
+                return;
+
+            // It would have been nice to use the Lambda Compiler, but it can't compile constructors,
+            // so we have to generate the constructor by emitting IL code by hand :/
+            ConstructorBuilder ctor = this._LiteralCallSitesType.DefineConstructor(
+                MethodAttributes.Private | MethodAttributes.Static, CallingConventions.Standard, new Type[0]);
+            ILGenerator ctorIL = ctor.GetILGenerator();
+            // ... now assign to each literal field
+            for (int i = 0; i < this.DefinedLiteralCallSites.Count; i++)
+            {
+                CallSiteDefinition def = this.DefinedLiteralCallSites[i];
+                MethodInfo create = def.SiteType.GetMethod("Create");   // Get the CallSite<>.Create method
+                def.Binder.GenerateBinderInitializer(ctorIL);           // Load the Binder
+                ctorIL.Emit(OpCodes.Call, create);                      // Call CallSite<>.Create(Binder) 
+                ctorIL.Emit(OpCodes.Stsfld, def.CallSiteField);         // Store the value in the static field for the call site
+            }
+            ctorIL.Emit(OpCodes.Ret);
+
+            this.LiteralCallSitesTypeType = this._LiteralCallSitesType.CreateType();
+        }
+
+        private List<CallSiteDefinition> DefinedLiteralCallSites = new List<CallSiteDefinition>();
+
+        private struct CallSiteDefinition
+        {
+            public readonly string Name;
+            public readonly FieldBuilder CallSiteField;
+            public readonly Type DelegateType;
+            public readonly Type SiteType;
+            public readonly IBinderDefinition Binder;
+
+            public CallSiteDefinition(string name, Type delegateType, Type siteType, FieldBuilder callSiteField, IBinderDefinition binder)
+            {
+                this.Name = name;
+                this.DelegateType = delegateType;
+                this.SiteType = siteType;
+                this.CallSiteField = callSiteField;
+                this.Binder = binder;
+            }
+        }
+
+        internal interface IBinderDefinition
+        {
+            void GenerateBinderInitializer(ILGenerator ilgen);
+        }
+
+        private class SymbolBinderDefinition : IBinderDefinition
+        {
+            public readonly string SymbolKey;
+
+            public SymbolBinderDefinition(string symbolKey)
+            {
+                if (symbolKey == null)
+                    throw new ArgumentNullException("symbolKey");
+               this.SymbolKey = symbolKey;
+            }
+
+            public void GenerateBinderInitializer(ILGenerator ilgen)
+            {
+                MethodInfo getBinder = typeof(IronSmalltalk.Runtime.Execution.CallSiteBinders.CallSiteBinderCache).GetMethod("GetSymbolBinder");
+
+                ilgen.Emit(OpCodes.Ldstr, this.SymbolKey);
+                ilgen.Emit(OpCodes.Call, getBinder);
+            }
+
+        }
+
+        //private Expression DefineLiteralCallSite(string nameSuggestion)
+        //{
+        //    //string nameSuggestion = String.Format("{0}.{1}", this.CurrentMethodName, selector);
+        //    string name = this.MethodGenerator.Compiler.NativeGenerator.AsLegalMethodName(nameSuggestion);
+        //    int idx = 0;
+        //    while (this.DefinedLiteralCallSites.Any(def => def.Name == name))
+        //        name = this.MethodGenerator.Compiler.NativeGenerator.AsLegalMethodName(String.Format("{0}${1}", nameSuggestion, idx++));
+
+        //    Type delegateType = typeof(Func<ExecutionContext, Symbol>);
+        //    Type siteType = typeof(CallSite<>).MakeGenericType(delegateType);
+
+        //    FieldBuilder field = this.LiteralCallSitesType.DefineField(name, siteType, FieldAttributes.Static | FieldAttributes.InitOnly | FieldAttributes.Assembly);
+        //    this.DefinedCallSites.Add(new CallSiteDefinition(name, delegateType, siteType, field, binder));
+
+        //    return Expression.Field(null, field);
+        //}
+
+
+
+
+
+
+
+
+
 
         private int LiteralCounter = 1;
 
@@ -152,10 +276,10 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
         public Expression LargeInteger(VisitingContext context, BigInteger value)
         {
-            Expression bytes = Expression.NewArrayInit(typeof(byte[]),
+            Expression bytes = Expression.NewArrayInit(typeof(byte),
                 value.ToByteArray().Select(b => Expression.Constant(b, typeof(byte))));
             ConstructorInfo ctor = typeof(BigInteger).GetConstructor(new Type[] { typeof(byte[]) });
-            Expression initializer = Expression.New(ctor, bytes);
+            Expression initializer = Expression.Convert(Expression.New(ctor, bytes), typeof(object));
             return PreboxedConstants.GetConstant(value) ?? this.DefineLiteral("BigInteger", string.Format("{0}", value, CultureInfo.InvariantCulture), initializer);
         }
 
@@ -166,17 +290,16 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
         public Expression ScaledDecimal(VisitingContext context, BigDecimal value)
         {
-            Expression bytes;
+            // The numerator of the BigDecimal
             ConstructorInfo ctor = typeof(BigInteger).GetConstructor(new Type[] { typeof(byte[]) });
-            bytes = Expression.NewArrayInit(typeof(byte[]),
+            Expression bytes = Expression.NewArrayInit(typeof(byte),
                 value.Numerator.ToByteArray().Select(b => Expression.Constant(b, typeof(byte))));
             Expression numerator = Expression.New(ctor, bytes);
-            bytes = Expression.NewArrayInit(typeof(byte[]),
-                value.Denominator.ToByteArray().Select(b => Expression.Constant(b, typeof(byte))));
-            Expression denominator = Expression.New(ctor, bytes);
+            // The scale
             Expression scale = Expression.Constant(value.Scale, typeof(int));
-            ctor = typeof(BigDecimal).GetConstructor(new Type[] { typeof(BigInteger), typeof(BigInteger), typeof(int) });
-            Expression initializer = Expression.New(ctor, numerator, denominator, scale);
+            // Constructing a new BigDecimal
+            ctor = typeof(BigDecimal).GetConstructor(new Type[] { typeof(BigInteger), typeof(int) });
+            Expression initializer = Expression.Convert(Expression.New(ctor, numerator, scale), typeof(object));
             return PreboxedConstants.GetConstant(value) ?? this.DefineLiteral("BigDecimal", string.Format("{0}", value, CultureInfo.InvariantCulture), initializer);
         }
 

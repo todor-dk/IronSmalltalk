@@ -25,7 +25,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
     /// Call-Site-Binder for nomal (non-super) dynamic message sends. 
     /// This binder is responsible for binding the operations for message sends.
     /// </summary>
-    public class MessageSendCallSiteBinder : MessageSendCallSiteBinderBase 
+    public class MessageSendCallSiteBinder : MessageSendCallSiteBinderBase, ICallSiteBinderCacheItem<string>
     {
         /// <summary>
         /// Create a new MessageSendCallSiteBinder.
@@ -138,9 +138,12 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 
         #region Call-Site-Binder Cache Support
 
-        private CallSiteBinderCacheTable.WeakCallSiteBinderCache _finalizationManager;
+        string ICallSiteBinderCacheItem<string>.CacheKey
+        {
+            get { return this.Selector; }
+        }
 
-        internal CallSiteBinderCacheTable.WeakCallSiteBinderCache FinalizationManager
+        ICallSiteBinderCacheFinalizationManager<string> ICallSiteBinderCacheItem<string>.FinalizationManager
         {
             get
             {
@@ -153,6 +156,8 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 this._finalizationManager = value;
             }
         }
+
+        private ICallSiteBinderCacheFinalizationManager<string> _finalizationManager;
 
         ~MessageSendCallSiteBinder()
         {

@@ -22,14 +22,18 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.NativeCompiler.Generators;
 using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
 using IronSmalltalk.Runtime.Execution;
 
-namespace IronSmalltalk.NativeCompiler.Internals
+namespace IronSmalltalk.NativeCompiler.Generators.Initializers
 {
-    internal class InitializerGenerator : GeneratorBase
+    /// <summary>
+    /// Generates initializers (class, global (variable/constant), pool item (variable/constant) and program).
+    /// </summary>
+    internal sealed class InitializerGenerator : GeneratorBase
     {
         private readonly CompiledInitializer Initializer;
 
@@ -92,13 +96,15 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
         private Expression<Func<object, ExecutionContext, object>> GenerateInitializerLambda(string name)
         {
-            ParameterExpression self = Expression.Parameter(typeof(object));
+            ParameterExpression self = Expression.Parameter(typeof(object), "self");
             ParameterExpression context = Expression.Parameter(typeof(ExecutionContext), "executionContext");
+
+            // TO-DO ... compile the initializer!
 
             return Expression.Lambda<Func<object, ExecutionContext, object>>(self, name, new ParameterExpression[] { self, context });
         } 
 
-        internal IEnumerable<Expression> GenerateCreateInitializer(ParameterExpression initializer, ParameterExpression runtime, ParameterExpression scope, ParameterExpression initializersType)
+        internal IEnumerable<Expression> GenerateCreateInitializerExpression(ParameterExpression initializer, ParameterExpression runtime, ParameterExpression scope, ParameterExpression initializersType)
         {
             MethodInfo method;
             MethodCallExpression initializerCall;
@@ -170,71 +176,51 @@ namespace IronSmalltalk.NativeCompiler.Internals
             return expressions;
         }
 
-        private static readonly Type[] AddProgramInitializerParameterTypes = new Type[]
-        {
-            typeof(SmalltalkRuntime), typeof(SmalltalkNameScope), typeof(Type), typeof(string)
-        };
-
         private MethodInfo GetAddProgramInitializerMethod()
         {
             Type helperType = typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper);
-            MethodInfo method = helperType.GetMethod("AddProgramInitializer", BindingFlags.Static | BindingFlags.Public, null, InitializerGenerator.AddProgramInitializerParameterTypes, null);
+            Type[] argTypes = new Type[] { typeof(SmalltalkRuntime), typeof(SmalltalkNameScope), typeof(Type), typeof(string) };
+            MethodInfo method = helperType.GetMethod("AddProgramInitializer", BindingFlags.Static | BindingFlags.Public, null, argTypes, null);
             if (method == null)
                 throw new Exception(String.Format("Could not find static method AddProgramInitializer in class {0}.", helperType.FullName));
             return method;
         }
 
-        private static readonly Type[] AddClassInitializerParameterTypes = new Type[]
-        {
-            typeof(SmalltalkRuntime), typeof(SmalltalkNameScope), typeof(Type), typeof(string), typeof(string)
-        };
-
         private MethodInfo GetAddClassInitializerMethod()
         {
             Type helperType = typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper);
-            MethodInfo method = helperType.GetMethod("AddClassInitializer", BindingFlags.Static | BindingFlags.Public, null, InitializerGenerator.AddClassInitializerParameterTypes, null);
+            Type[] argTypes = new Type[] { typeof(SmalltalkRuntime), typeof(SmalltalkNameScope), typeof(Type), typeof(string), typeof(string) };
+            MethodInfo method = helperType.GetMethod("AddClassInitializer", BindingFlags.Static | BindingFlags.Public, null, argTypes, null);
             if (method == null)
                 throw new Exception(String.Format("Could not find static method AddClassInitializer in class {0}.", helperType.FullName));
             return method;
         }
 
-        private static readonly Type[] AddGlobalInitializerParameterTypes = new Type[]
-        {
-            typeof(SmalltalkRuntime), typeof(SmalltalkNameScope), typeof(Type), typeof(string), typeof(string)
-        };
-
         private MethodInfo GetAddGlobalInitializerMethod()
         {
             Type helperType = typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper);
-            MethodInfo method = helperType.GetMethod("AddGlobalInitializer", BindingFlags.Static | BindingFlags.Public, null, InitializerGenerator.AddGlobalInitializerParameterTypes, null);
+            Type[] argTypes = new Type[] { typeof(SmalltalkRuntime), typeof(SmalltalkNameScope), typeof(Type), typeof(string), typeof(string) };
+            MethodInfo method = helperType.GetMethod("AddGlobalInitializer", BindingFlags.Static | BindingFlags.Public, null, argTypes, null);
             if (method == null)
                 throw new Exception(String.Format("Could not find static method AddGlobalInitializer in class {0}.", helperType.FullName));
             return method;
         }
 
-        private static readonly Type[] AddPoolInitializerParameterTypes = new Type[]
-        {
-            typeof(SmalltalkRuntime), typeof(SmalltalkNameScope), typeof(Type), typeof(string), typeof(string), typeof(string)
-        };
-
         private MethodInfo GetAddPoolInitializerMethod()
         {
             Type helperType = typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper);
-            MethodInfo method = helperType.GetMethod("AddPoolInitializer", BindingFlags.Static | BindingFlags.Public, null, InitializerGenerator.AddPoolInitializerParameterTypes, null);
+            Type[] argTypes = new Type[] { typeof(SmalltalkRuntime), typeof(SmalltalkNameScope), typeof(Type), typeof(string), typeof(string), typeof(string) };
+            MethodInfo method = helperType.GetMethod("AddPoolInitializer", BindingFlags.Static | BindingFlags.Public, null, argTypes, null);
             if (method == null)
                 throw new Exception(String.Format("Could not find static method AddPoolInitializer in class {0}.", helperType.FullName));
             return method;
         }
 
-        private static readonly Type[] AnnotateObjectParameterTypes = new Type[]
-        {
-            typeof(CompiledInitializer), typeof(string), typeof(string)
-        };
-
         private MethodInfo GetAnnotateObjectMethod()
         {
             Type helperType = typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper);
-            MethodInfo method = helperType.GetMethod("AnnotateObject", BindingFlags.Static | BindingFlags.Public, null, AnnotateObjectParameterTypes, null);
+            Type[] argTypes = new Type[] { typeof(CompiledInitializer), typeof(string), typeof(string) };
+            MethodInfo method = helperType.GetMethod("AnnotateObject", BindingFlags.Static | BindingFlags.Public, null, argTypes, null);
             if (method == null)
                 throw new Exception(String.Format("Could not find static method AnnotateObject in class {0}.", helperType.FullName));
             return method;

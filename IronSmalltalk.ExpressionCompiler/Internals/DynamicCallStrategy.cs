@@ -15,21 +15,21 @@ namespace IronSmalltalk.ExpressionCompiler.Internals
         public Expression CompileDynamicCall(VisitingContext context, string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, string superLookupScope,
             Expression receiver, Expression executionContext)
         {
-            CallSiteBinder binder = context.Compiler.GetBinder(selector, nativeName, 0, isSuperSend, isConstantReceiver, superLookupScope);
+            CallSiteBinder binder = CallSiteBinderCache.GetMessageBinder(selector, nativeName, 0, isSuperSend, isConstantReceiver, superLookupScope);
             return Expression.Dynamic(binder, typeof(Object), receiver, executionContext);
         }
 
         public Expression CompileDynamicCall(VisitingContext context, string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, string superLookupScope,
             Expression receiver, Expression executionContext, Expression argument)
         {
-            CallSiteBinder binder = context.Compiler.GetBinder(selector, nativeName, 1, isSuperSend, isConstantReceiver, superLookupScope);
+            CallSiteBinder binder = CallSiteBinderCache.GetMessageBinder(selector, nativeName, 1, isSuperSend, isConstantReceiver, superLookupScope);
             return Expression.Dynamic(binder, typeof(Object), receiver, executionContext, argument);
         }
 
         public Expression CompileDynamicCall(VisitingContext context, string selector, string nativeName, int argumentCount, bool isSuperSend, bool isConstantReceiver, string superLookupScope,
             Expression receiver, Expression executionContext, IEnumerable<Expression> arguments)
         {
-            CallSiteBinder binder = context.Compiler.GetBinder(selector, nativeName, argumentCount, isSuperSend, isConstantReceiver, superLookupScope);
+            CallSiteBinder binder = CallSiteBinderCache.GetMessageBinder(selector, nativeName, argumentCount, isSuperSend, isConstantReceiver, superLookupScope);
             List<Expression> args = new List<Expression>();
             args.Add(receiver);
             args.Add(executionContext);
@@ -40,7 +40,7 @@ namespace IronSmalltalk.ExpressionCompiler.Internals
 
         public Expression CompileGetClass(VisitingContext context, Expression receiver, Expression executionContext)
         {
-            ObjectClassCallSiteBinder binder = context.Compiler.GetClassBinder();
+            ObjectClassCallSiteBinder binder = CallSiteBinderCache.Current.ObjectClassCallSiteBinder;
             return Expression.Dynamic(binder, typeof(Object), receiver);
         }
     }

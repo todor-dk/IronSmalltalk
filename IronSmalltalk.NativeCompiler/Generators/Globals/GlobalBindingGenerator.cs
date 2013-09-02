@@ -21,18 +21,20 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.NativeCompiler.Internals;
 using IronSmalltalk.Runtime.Bindings;
 
-namespace IronSmalltalk.NativeCompiler.Internals
+namespace IronSmalltalk.NativeCompiler.Generators.Globals
 {
+    /// <summary>
+    /// Class for generating global bindings like classes, pools and globals (constants/variables).
+    /// </summary>
     internal abstract class GlobalBindingGenerator : GeneratorBase
     {
         internal GlobalBindingGenerator(NativeCompiler compiler)
             : base(compiler)
         {
         }
-
-        internal abstract void GenerateTypes();
 
         protected abstract string AddBindingMethodName { get; }
 
@@ -42,12 +44,6 @@ namespace IronSmalltalk.NativeCompiler.Internals
         {
             typeof(SmalltalkRuntime), typeof(IronSmalltalk.Runtime.Bindings.SmalltalkNameScope), typeof(string)
         };
-
-        internal MethodCallExpression GenerateAddBinding(ParameterExpression runtime, ParameterExpression scope)
-        {
-            MethodInfo method = this.GetAddBindingMethod();
-            return Expression.Call(method, runtime, scope, Expression.Constant(this.BindingName, typeof(String)));
-        }
 
         internal MethodInfo GetAddBindingMethod()
         {

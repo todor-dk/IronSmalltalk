@@ -19,24 +19,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.Runtime.Bindings;
 
-namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
+namespace IronSmalltalk.NativeCompiler.Generators.Globals
 {
-    public static class RuntimeHelpers
+    internal sealed class GlobalConstantGenerator : GlobalGenerator<GlobalConstantBinding>
     {
-        public static MessageSendCallSiteBinder CreateCallSiteBinder(string selector, string nativeName, int argumentCount)
+        internal GlobalConstantGenerator(NativeCompiler compiler, GlobalConstantBinding binding)
+            : base(compiler, binding)
         {
-            return new MessageSendCallSiteBinder(selector, nativeName, argumentCount);
         }
 
-        public static ConstantSendCallSiteBinder CreateConstantCallSiteBinder(string selector, string nativeName, int argumentCount)
+        protected override string SubNamespace
         {
-            return new ConstantSendCallSiteBinder(selector, nativeName, argumentCount);
+            get { return "Constants"; }
         }
 
-        public static SuperSendCallSiteBinder CreateSuperSendCallSiteBinder(string selector, string superLookupScope, int argumentCount)
+        protected override string AddBindingMethodName
         {
-            return new SuperSendCallSiteBinder(selector, superLookupScope);
+            get { return "AddGlobalConstantBinding"; }
         }
+
     }
 }

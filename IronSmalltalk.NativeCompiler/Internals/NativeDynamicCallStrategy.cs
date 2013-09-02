@@ -181,7 +181,7 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
         private Expression CreateCallSite(int argumentCount, string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, string superLookupScope)
         {
-            BinderDefinition binder = new BinderDefinition(selector, nativeName, isSuperSend, isConstantReceiver, superLookupScope);
+            BinderDefinition binder = new BinderDefinition(selector, nativeName, argumentCount, isSuperSend, isConstantReceiver, superLookupScope);
 
             Type delegateType = NativeDynamicCallStrategy.GetCallSiteType(argumentCount);
             Type siteType = typeof(CallSite<>).MakeGenericType(delegateType);
@@ -243,16 +243,20 @@ namespace IronSmalltalk.NativeCompiler.Internals
         {
             public readonly string Selector;
             public readonly string NativeName;
+            public readonly int ArgumentCount;
             public readonly bool IsSuperSend;
             public readonly bool IsConstantReceiver;
             public readonly string SuperLookupScope;
 
-            public BinderDefinition(string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, string superLookupScope)
+            public BinderDefinition(string selector, string nativeName, int argumentCount, bool isSuperSend, bool isConstantReceiver, string superLookupScope)
             {
                 if (selector == null)
                     throw new ArgumentNullException("selector");
+                if (argumentCount < 0)
+                    throw new ArgumentOutOfRangeException("argumentCount");
                 this.Selector = selector;
                 this.NativeName = nativeName;
+                this.ArgumentCount = argumentCount;
                 this.IsSuperSend = isSuperSend;
                 this.IsConstantReceiver = isConstantReceiver;
                 this.SuperLookupScope = superLookupScope;
@@ -260,13 +264,14 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
             public void GenerateBinderInitializer(ILGenerator ilgen)
             {
-                MethodInfo getBinder = typeof(IronSmalltalk.Runtime.Execution.CallSiteBinders.CallSiteBinderCache).GetMethod("GetBinder");
+                MethodInfo getBinder = typeof(IronSmalltalk.Runtime.Execution.CallSiteBinders.CallSiteBinderCache).GetMethod("GetMessageBinder");
 
                 ilgen.Emit(OpCodes.Ldstr, this.Selector);
                 if (this.NativeName == null)
                     ilgen.Emit(OpCodes.Ldnull);
                 else
                     ilgen.Emit(OpCodes.Ldstr, this.NativeName);
+                ilgen.PushInt(this.ArgumentCount);
                 if (this.IsSuperSend)
                     ilgen.Emit(OpCodes.Ldc_I4_1);
                 else
