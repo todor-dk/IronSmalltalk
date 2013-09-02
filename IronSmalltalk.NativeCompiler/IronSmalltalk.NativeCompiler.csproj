@@ -40,29 +40,36 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Internals\ClassGenerator.cs" />
+    <Compile Include="Generators\Globals\ClassGenerator.cs" />
+    <Compile Include="Internals\ClassMethodGenerator.cs" />
     <Compile Include="Internals\Extensions.cs" />
-    <Compile Include="Internals\GeneratorBase.cs" />
-    <Compile Include="Internals\GlobalBindingGenerator.cs" />
-    <Compile Include="Internals\GlobalConstantGenerator.cs" />
-    <Compile Include="Internals\GlobalGenerator.cs" />
-    <Compile Include="Internals\GlobalVariableGenerator.cs" />
-    <Compile Include="Internals\InitializerGenerator.cs" />
+    <Compile Include="Generators\GeneratorBase.cs" />
+    <Compile Include="Generators\Globals\GlobalBindingGenerator.cs" />
+    <Compile Include="Generators\Globals\GlobalConstantGenerator.cs" />
+    <Compile Include="Generators\Globals\GlobalGenerator.cs" />
+    <Compile Include="Generators\Globals\GlobalVariableGenerator.cs" />
+    <Compile Include="Generators\Initializers\InitializerGenerator.cs" />
+    <Compile Include="Internals\InstanceMethodGenerator.cs" />
     <Compile Include="Internals\MethodGenerator.cs" />
-    <Compile Include="Internals\NameScopeGenerator.cs" />
+    <Compile Include="Generators\NameScopeGenerator.cs" />
     <Compile Include="Internals\NativeDynamicCallStrategy.cs" />
     <Compile Include="Internals\NativeGenerator.cs" />
     <Compile Include="Internals\NativeLiteralEncodingStrategy.cs" />
-    <Compile Include="Internals\PoolGenerator.cs" />
-    <Compile Include="Internals\RuntimeGenerator.cs" />
+    <Compile Include="Generators\Globals\PoolGenerator.cs" />
+    <Compile Include="Generators\RuntimeGenerator.cs" />
     <Compile Include="NativeCompiler.cs" />
     <Compile Include="NativeCompilerParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Generators\Generators Diagram.cd" />
+    <None Include="Generators\Globals\Global Generators Diagram.cd" />
+    <None Include="Generators\Initializers\Initializer Generators Diagram.cd" />
     <None Include="Internals\Generators Diagram.cd" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Generators\Behavior\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IronSmalltalk.Common\IronSmalltalk.Common.csproj">
       <Project>{cbbba006-546a-4dff-95a9-d7b1544205ad}</Project>

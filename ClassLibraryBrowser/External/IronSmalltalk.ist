@@ -5,7 +5,7 @@ Iron Smalltalk Source Code
 Filed-Out: 2013-08-04 20:33
 Definition: C:\Users\tt\Documents\Visual Studio 2010\Projects\IronSmalltalk\ClassLibraryBrowser\External\SmalltalkSystem.xml
 Browser Version: 1.0.0.0
-" ! 
+" !  
 
 " Class Definitions " ! 
 Class named: 'AbstractArray'
@@ -9501,3 +9501,156 @@ Console " ... Console class implements the Transcript protocol "!
 FloatQ initializer! 
 FloatD! 
 
+Class named: 'AConstancts'
+	superclass: 'Object'
+	indexedInstanceVariables: #'none'
+	instanceVariableNames: ''
+	classVariableNames: ''
+	sharedPools: ''
+	classInstanceVariableNames: ''! 
+
+	
+AConstancts method! 
+array1
+
+	^#().! 
+	
+AConstancts method! 
+array2
+
+	^#(123).! 	
+	
+AConstancts method! 
+array2
+
+	^#('ABC').! 
+	
+AConstancts method! 
+array3
+
+	^#(123 'ABC').! 
+	
+AConstancts method! 
+array4
+
+	^#(123 'ABC' #(456.78)).! 	
+	
+AConstancts method! 
+array5
+
+	^#(123 'ABC' #(456.78)).!
+	
+AConstancts method! 
+array6
+
+	^#(123 'ABC' #('DEF')).!	
+	
+AConstancts method! 
+array7
+
+	^#(true false #true #false nil #(#nil)).!		
+	
+AConstancts method! 
+true
+
+	^true.!	
+	
+AConstancts method! 
+false
+
+	^false.!	
+
+AConstancts method! 
+string
+
+	^'ABC'.!	
+	
+AConstancts method! 
+smallInt
+
+	^1.!
+	
+AConstancts method! 
+smallInt2
+
+	^1234567.!	
+
+AConstancts method! 
+dec1
+
+	^123.45s.!	
+	
+AConstancts method! 
+dec2
+
+	^0s.!	
+	
+AConstancts method! 
+dec3
+
+	^1s.!	
+
+AConstancts method! 
+dec4
+
+	^123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789.45s.!		
+
+AConstancts method! 
+nil
+
+	^nil.!	
+	
+AConstancts method! 
+largeInt
+
+	^1234567889012345.!	
+	
+AConstancts method! 
+float
+
+	^123.45.!	
+	
+AConstancts method! 
+float0
+
+	^0.0.!		
+	
+AConstancts method! 
+floatE
+
+	^123.45e1!	
+	
+AConstancts method! 
+floatE0
+
+	^0.0e1!		
+
+AConstancts method! 
+floatD
+
+	^123.45d1!		
+	
+AConstancts method! 
+floatD0
+
+	^0.0d1!		
+	
+AConstancts method! 
+char
+
+	^$T!	
+
+AConstancts method! 
+char1
+
+	^$д !		
+	
+AConstancts method! 
+symbol1
+
+	^#ABC!		
+	
+AConstancts method! 
+symbol2
+
+	^#'Iron Smalltalk'!		

@@ -22,26 +22,16 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.NativeCompiler.Internals;
 using IronSmalltalk.Runtime.Bindings;
 
-namespace IronSmalltalk.NativeCompiler.Internals
+namespace IronSmalltalk.NativeCompiler.Generators.Globals
 {
-    internal class PoolGenerator : GlobalBindingGenerator<PoolBinding>
+    internal sealed class PoolGenerator : GlobalBindingGenerator<PoolBinding>
     {
         internal PoolGenerator(NativeCompiler compiler, PoolBinding binding)
             : base(compiler, binding)
         {
-        }
-
-
-        //private TypeBuilder Type;
-
-        internal override void GenerateTypes()
-        {
-            //this.Type = this.Compiler.NativeGenerator.DefineType(
-            //    this.Compiler.GetTypeName("Pools", this.Binding.Name),
-            //    typeof(Object),
-            //    TypeAttributes.Class | TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.Abstract);
         }
 
         protected override string AddBindingMethodName

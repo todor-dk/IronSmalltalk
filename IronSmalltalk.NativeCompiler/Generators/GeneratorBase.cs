@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IronSmalltalk.NativeCompiler.Internals
+namespace IronSmalltalk.NativeCompiler.Generators
 {
     internal abstract class GeneratorBase
     {

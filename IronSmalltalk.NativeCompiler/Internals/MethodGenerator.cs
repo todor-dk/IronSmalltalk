@@ -15,6 +15,8 @@ using IronSmalltalk.Runtime.Execution;
 using System.Reflection;
 using IronSmalltalk.ExpressionCompiler;
 using IronSmalltalk.ExpressionCompiler.BindingScopes;
+using IronSmalltalk.NativeCompiler.Generators.Globals;
+using IronSmalltalk.NativeCompiler.Generators;
 
 namespace IronSmalltalk.NativeCompiler.Internals
 {
@@ -22,16 +24,18 @@ namespace IronSmalltalk.NativeCompiler.Internals
     {
         private readonly MethodDictionary Methods;
         internal readonly SmalltalkClass Class;
-        internal readonly TypeBuilder TypeBuilder;
         protected readonly NativeLiteralEncodingStrategy LiteralEncodingStrategy;
         protected readonly NativeDynamicCallStrategy DynamicCallStrategy;
 
-        protected MethodGenerator(NativeCompiler compiler, SmalltalkClass cls, MethodDictionary methods, TypeBuilder typeBuilder)
+        protected MethodGenerator(NativeCompiler compiler, SmalltalkClass cls, MethodDictionary methods)
             : base(compiler)
         {
+            if (cls == null)
+                throw new ArgumentNullException("cls");
+            if (methods == null)
+                throw new ArgumentNullException("methods");
             this.Class = cls;
             this.Methods = methods;
-            this.TypeBuilder = typeBuilder;
             this.LiteralEncodingStrategy = new NativeLiteralEncodingStrategy(this);
             this.DynamicCallStrategy = new NativeDynamicCallStrategy(this);
         }
@@ -48,6 +52,25 @@ namespace IronSmalltalk.NativeCompiler.Internals
         }
 
         protected abstract MethodCompiler GetMethodCompiler();
+
+        private TypeBuilder _TypeBuilder;
+        internal TypeBuilder TypeBuilder
+        {
+            get
+            {
+                if (this._TypeBuilder == null)
+                {
+                    this._TypeBuilder = this.Compiler.NativeGenerator.DefineType(
+                        this.Compiler.GetTypeName("Classes", this.TypeName),
+                        typeof(Object),
+                        TypeAttributes.Class | TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.Abstract);
+                }
+                return this._TypeBuilder;
+            }
+        }
+
+        protected abstract string TypeName { get; }
+
 
         private List<MethodInformation> MethodsInfo;
 
@@ -68,6 +91,7 @@ namespace IronSmalltalk.NativeCompiler.Internals
         internal void GenerateMethods()
         {
             this.LiteralEncodingStrategy.GenerateLiteralType();
+            this.LiteralEncodingStrategy.GenerateLiteralCallSitesType();
             this.DynamicCallStrategy.GenerateCallSitesType();
 
             foreach (MethodInformation method in this.MethodsInfo)
@@ -139,63 +163,52 @@ namespace IronSmalltalk.NativeCompiler.Internals
                 this.MethodName = name;
             }
         }
-    }
 
-    internal sealed class ClassMethodGenerator : MethodGenerator
-    {
-        internal static ClassMethodGenerator CreateAndPrepareGenerator(ClassGenerator classGenerator)
+        internal MethodInfo InitMethodDictionariesMethod { get; private set; }
+
+        internal void GenerateInitMethodDictionaries(TypeBuilder type)
         {
-            ClassMethodGenerator generator = new ClassMethodGenerator(
-                classGenerator.Compiler,
-                classGenerator.Binding.Value,
-                classGenerator.Binding.Value.ClassBehavior,
-                classGenerator.ClassMethodsType);
-            generator.PrepareGenerator();
-            return generator;
+            string name = this.InitMethodDictionariesMethodName;
+            MethodBuilder method = type.DefineMethod(name, MethodAttributes.Assembly | MethodAttributes.Static);
+
+            var lambda = this.GenerateInitMethodDictionaryLambda(name, this.Methods);
+            lambda.CompileToMethod(method, this.Compiler.NativeGenerator.DebugInfoGenerator);
+
+            this.InitMethodDictionariesMethod = method;
         }
 
-        private ClassMethodGenerator(NativeCompiler compiler, SmalltalkClass cls, MethodDictionary methods, TypeBuilder typeBuilder)
-            : base(compiler, cls, methods, typeBuilder)
+        protected abstract string InitMethodDictionariesMethodName { get; }
+
+        private Expression<Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>> GenerateInitMethodDictionaryLambda(string name, MethodDictionary methodDictionary)
         {
+            ParameterExpression runtime = Expression.Parameter(typeof(SmalltalkRuntime), "runtime");
+            ParameterExpression dictionary = Expression.Parameter(typeof(Dictionary<Symbol, CompiledMethod>), "dictionary");
+
+            List<Expression> expressions = new List<Expression>();
+
+            ConstructorInfo ctor = typeof(Dictionary<Symbol, CompiledMethod>).GetConstructor(new Type[] { typeof(int) });
+            if (ctor == null)
+                throw new Exception("Could not find the constructor for Dictionary<Symbol, CompiledMethod> with type (int).");
+            expressions.Add(Expression.Assign(
+                dictionary,
+                Expression.New(
+                    ctor,
+                    Expression.Constant(methodDictionary.Count, typeof(int)))));
+
+            return Expression.Lambda<Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>>(
+                Expression.Block(new ParameterExpression[] { dictionary }, expressions), name, new ParameterExpression[] { runtime });
         }
 
-        protected override MethodCompiler GetMethodCompiler()
+        internal Expression<Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>> GetInitMethodsDelegate(NameScopeGenerator scopeGenerator)
         {
-            CompilerOptions options = new CompilerOptions();
-            options.DebugInfoService = null;    // BUG-BUG 
-            options.LiteralEncodingStrategy = this.LiteralEncodingStrategy;
-            options.DynamicCallStrategy = this.DynamicCallStrategy;
+            // IMPROVE: Why can't we use this.InitMethodDictionariesMethod directly and need to do the extra lookup?
+            Type initializerType = scopeGenerator.MethodsInitializerType;
+            MethodInfo initializer = initializerType.GetMethod(this.InitMethodDictionariesMethod.Name, BindingFlags.Static | BindingFlags.NonPublic, null, new Type[] { typeof(SmalltalkRuntime) }, null);
 
-            return new ClassMethodCompiler(this.Compiler.Parameters.Runtime, options); 
-        }
-    }
-
-    internal sealed class InstanceMethodGenerator : MethodGenerator
-    {
-        internal static InstanceMethodGenerator CreateAndPrepareGenerator(ClassGenerator classGenerator)
-        {
-            InstanceMethodGenerator generator = new InstanceMethodGenerator(
-                classGenerator.Compiler, 
-                classGenerator.Binding.Value, 
-                classGenerator.Binding.Value.InstanceBehavior, 
-                classGenerator.InstanceMethodsType);
-            generator.PrepareGenerator();
-            return generator;
+            // NB: This will create helper methods, but too much work to get around this ...
+            ParameterExpression runtime = Expression.Parameter(typeof(SmalltalkRuntime), "runtime");
+            return Expression.Lambda<Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>>(Expression.Call(initializer, runtime), runtime);
         }
 
-        private InstanceMethodGenerator(NativeCompiler compiler, SmalltalkClass cls, MethodDictionary methods, TypeBuilder typeBuilder)
-            : base(compiler, cls, methods, typeBuilder)
-        {
-        }
-
-        protected override MethodCompiler GetMethodCompiler()
-        {
-            CompilerOptions options = new CompilerOptions();
-            options.DebugInfoService = null;    // BUG-BUG 
-            options.LiteralEncodingStrategy = this.LiteralEncodingStrategy;
-            options.DynamicCallStrategy = this.DynamicCallStrategy;
-
-            return new InstanceMethodCompiler(this.Compiler.Parameters.Runtime, options);
-        }
     }
 }

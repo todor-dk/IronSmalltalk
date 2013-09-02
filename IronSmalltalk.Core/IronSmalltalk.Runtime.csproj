@@ -82,12 +82,14 @@
     <Compile Include="Behavior\InitializerList.cs" />
     <Compile Include="Bindings\ISmalltalkNameScopeVisitor.cs" />
     <Compile Include="Execution\CallSiteBinders\MessageSendCallSiteBinderBase.cs" />
-    <Compile Include="Execution\CallSiteBinders\RuntimeHelpers.cs" />
     <Compile Include="Execution\CallSiteBinders\SmalltalkDynamicMetaObjectBinder.cs" />
+    <Compile Include="Execution\CallSiteBinders\SymbolCallSiteBinder.cs" />
     <Compile Include="Execution\Dynamic\SmalltalkRuntime.DynamicMetaObject.cs" />
     <Compile Include="Execution\ExecutionContext.cs" />
+    <Compile Include="Execution\Internals\ImplementationException.cs" />
     <Compile Include="Execution\Internals\ImplementationLimitationException.cs" />
     <Compile Include="Execution\Internals\MethodSignatures.cs" />
+    <Compile Include="Execution\Internals\SymbolPlaceholder.cs" />
     <Compile Include="Execution\PreboxedConstants.cs" />
     <Compile Include="Internal\NativeLoadHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
