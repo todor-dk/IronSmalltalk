@@ -20,8 +20,10 @@ using System.Dynamic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.Common.Internal;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.ExpressionCompiler.BindingScopes;
 using IronSmalltalk.ExpressionCompiler.Internals;
@@ -94,6 +96,8 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             }
         }
 
+        private static readonly ConstructorInfo HomeContextCtor = TypeUtilities.Constructor(typeof(HomeContext));
+
         private Expression _HomeContext;
         private ParameterExpression _HomeContextVariable;
         public Expression HomeContext
@@ -102,16 +106,12 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             {
                 if (this._HomeContext == null)
                 {
-                    System.Reflection.ConstructorInfo ctor = typeof(HomeContext).GetConstructor(new Type[0]);
-                    if (ctor == null)
-                        throw new InternalCodeGenerationException(CodeGenerationErrors.InternalError);
-
                     // Semantics are as follows:
                     // .... = ( (_HomeContext == null) ? (_HomeContext = new HomeContext()) : _HomeContext );
                     ParameterExpression homeContextVariable = Expression.Variable(typeof(HomeContext), "_HomeContext");
                     this._HomeContext = Expression.Condition(
                         Expression.ReferenceEqual(homeContextVariable, Expression.Constant(null, typeof(HomeContext))),
-                        Expression.Assign(homeContextVariable, Expression.New(ctor)),
+                        Expression.Assign(homeContextVariable, Expression.New(VisitingContext.HomeContextCtor)),
                         homeContextVariable,
                         typeof(HomeContext));
                     this._HomeContextVariable = homeContextVariable;

@@ -20,6 +20,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.Common.Internal;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
 using IronSmalltalk.Runtime.Execution;
@@ -332,7 +333,7 @@ namespace IronSmalltalk.Runtime.Internal
         private static CompiledInitializer AddInitializer(SmalltalkNameScope scope, InitializerType type, IDiscreteBinding binding, Type delegateType, string delegateName)
         {
 
-            MethodInfo method = delegateType.GetMethod(delegateName, BindingFlags.Public | BindingFlags.Static, null, NativeLoadHelper.InitializerDelegateTypes, null);
+            MethodInfo method = TypeUtilities.Method(delegateType, delegateName, BindingFlags.Public | BindingFlags.Static, NativeLoadHelper.InitializerDelegateTypes);
             Func<object, ExecutionContext, object> functionDelegate = (Func<object, ExecutionContext, object>) method.CreateDelegate(typeof(Func<object, ExecutionContext, object>));
 
             NativeCompiledInitializer initializer = new NativeCompiledInitializer(type, binding, functionDelegate);

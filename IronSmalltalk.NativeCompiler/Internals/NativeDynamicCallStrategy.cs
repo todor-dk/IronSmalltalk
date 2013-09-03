@@ -7,6 +7,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.Common.Internal;
 using IronSmalltalk.ExpressionCompiler.Internals;
 using IronSmalltalk.ExpressionCompiler.Visiting;
 using IronSmalltalk.Runtime.Execution;
@@ -103,6 +104,8 @@ namespace IronSmalltalk.NativeCompiler.Internals
             return this.CompileDynamicCall(callSite, receiver, executionContext, new Expression[] { });            
         }
 
+
+
         private Expression CompileDynamicCall(Expression callSite, Expression receiver, Expression executionContext, IEnumerable<Expression> arguments)
         {
             Type delegateType = NativeDynamicCallStrategy.GetCallSiteType(arguments.Count());
@@ -114,7 +117,7 @@ namespace IronSmalltalk.NativeCompiler.Internals
             args.Add(executionContext);
             args.AddRange(arguments);
 
-            FieldInfo target = siteType.GetField("Target", BindingFlags.Instance | BindingFlags.Public);
+            FieldInfo target = TypeUtilities.Field(siteType, "Target", BindingFlags.Instance | BindingFlags.Public);
             MethodInfo invoke = delegateType.GetMethod("Invoke");
             ParameterInfo[] pis = invoke.GetParameters();
 
@@ -132,7 +135,7 @@ namespace IronSmalltalk.NativeCompiler.Internals
             args.Add(executionContext);
             args.AddRange(arguments);
 
-            FieldInfo target = siteType.GetField("Target", BindingFlags.Instance | BindingFlags.Public);
+            FieldInfo target = TypeUtilities.Field(siteType, "Target", BindingFlags.Instance | BindingFlags.Public);
             MethodInfo invoke = delegateType.GetMethod("Invoke");
             ParameterInfo[] pis = invoke.GetParameters();
             // ($site = siteExpr).Target.Invoke($site, *args)
@@ -291,12 +294,11 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
         private class ClassBinderDefinition : IBinderDefinition
         {
+            private static readonly FieldInfo ObjectClassCallSiteBinderField = TypeUtilities.Field(typeof(IronSmalltalk.Runtime.Execution.CallSiteBinders.CallSiteBinderCache), "ObjectClassCallSiteBinder");
 
             public void GenerateBinderInitializer(ILGenerator ilgen)
             {
-                FieldInfo binder = typeof(IronSmalltalk.Runtime.Execution.CallSiteBinders.CallSiteBinderCache).GetField("ObjectClassCallSiteBinder");
-
-                ilgen.Emit(OpCodes.Ldsfld, binder);
+                ilgen.Emit(OpCodes.Ldsfld, ClassBinderDefinition.ObjectClassCallSiteBinderField);
             }
         }
     }

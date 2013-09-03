@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using IronSmalltalk.Common;
+using IronSmalltalk.Common.Internal;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.ExpressionCompiler.Internals;
 using IronSmalltalk.ExpressionCompiler.Visiting;
@@ -274,12 +275,13 @@ namespace IronSmalltalk.NativeCompiler.Internals
             return PreboxedConstants.GetConstant(value) ?? this.DefineLiteral("FloatE", string.Format("{0}", value, CultureInfo.InvariantCulture), initializer);
         }
 
+        private static readonly ConstructorInfo BigIntegerCtor = TypeUtilities.Constructor(typeof(BigInteger), typeof(byte[]));
+
         public Expression LargeInteger(VisitingContext context, BigInteger value)
         {
             Expression bytes = Expression.NewArrayInit(typeof(byte),
                 value.ToByteArray().Select(b => Expression.Constant(b, typeof(byte))));
-            ConstructorInfo ctor = typeof(BigInteger).GetConstructor(new Type[] { typeof(byte[]) });
-            Expression initializer = Expression.Convert(Expression.New(ctor, bytes), typeof(object));
+            Expression initializer = Expression.Convert(Expression.New(NativeLiteralEncodingStrategy.BigIntegerCtor, bytes), typeof(object));
             return PreboxedConstants.GetConstant(value) ?? this.DefineLiteral("BigInteger", string.Format("{0}", value, CultureInfo.InvariantCulture), initializer);
         }
 
@@ -288,18 +290,18 @@ namespace IronSmalltalk.NativeCompiler.Internals
             return PreboxedConstants.Nil_Expression;
         }
 
+        private static readonly ConstructorInfo BigDecimalCtor = TypeUtilities.Constructor(typeof(BigDecimal), typeof(BigInteger), typeof(int));
+
         public Expression ScaledDecimal(VisitingContext context, BigDecimal value)
         {
             // The numerator of the BigDecimal
-            ConstructorInfo ctor = typeof(BigInteger).GetConstructor(new Type[] { typeof(byte[]) });
             Expression bytes = Expression.NewArrayInit(typeof(byte),
                 value.Numerator.ToByteArray().Select(b => Expression.Constant(b, typeof(byte))));
-            Expression numerator = Expression.New(ctor, bytes);
+            Expression numerator = Expression.New(NativeLiteralEncodingStrategy.BigIntegerCtor, bytes);
             // The scale
             Expression scale = Expression.Constant(value.Scale, typeof(int));
             // Constructing a new BigDecimal
-            ctor = typeof(BigDecimal).GetConstructor(new Type[] { typeof(BigInteger), typeof(int) });
-            Expression initializer = Expression.Convert(Expression.New(ctor, numerator, scale), typeof(object));
+            Expression initializer = Expression.Convert(Expression.New(NativeLiteralEncodingStrategy.BigDecimalCtor, numerator, scale), typeof(object));
             return PreboxedConstants.GetConstant(value) ?? this.DefineLiteral("BigDecimal", string.Format("{0}", value, CultureInfo.InvariantCulture), initializer);
         }
 

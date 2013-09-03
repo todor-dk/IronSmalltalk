@@ -171,13 +171,6 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             return null;
         }
 
-        private static readonly FieldInfo SmalltalkObjectClassField = typeof(SmalltalkObject).GetField("Class", BindingFlags.GetField | BindingFlags.Instance | BindingFlags.Public);
-
-        private static readonly FieldInfo SymbolManagerField = typeof(Symbol).GetField("Manager", BindingFlags.GetField | BindingFlags.Instance | BindingFlags.Public);
-
-        private static readonly PropertyInfo PoolRuntimeProperty = typeof(Pool).GetProperty("Runtime", BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.GetProperty,
-                        null, typeof(SmalltalkRuntime), new Type[0], null);
-
         /// <summary>
         /// This core method determines the class of an object.
         /// </summary>
@@ -212,14 +205,11 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 cls = obj.Class;
                 if (cls.Runtime == runtime)
                 {
-                    FieldInfo field = MethodLookupHelper.SmalltalkObjectClassField;
-                    if (field == null)
-                        throw new InvalidOperationException();
                     // Restrictions lool like:
                     // (self != null) && (self.GetType == typeof(SmalltalkObject) && (((SmalltalkObject)self).Class == cls)
                     restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(SmalltalkObject));
                     restrictions = restrictions.Merge(BindingRestrictions.GetExpressionRestriction(
-                        Expression.ReferenceEqual(Expression.Field(Expression.Convert(self, typeof(SmalltalkObject)), field), Expression.Constant(cls))));
+                        Expression.ReferenceEqual(Expression.Field(Expression.Convert(self, typeof(SmalltalkObject)), SmalltalkObject.ClassField), Expression.Constant(cls))));
                 }
                 else
                 {
@@ -236,14 +226,11 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 if (manager.Runtime == runtime)
                 {
                     cls = runtime.NativeTypeClassMap.Symbol;
-                    FieldInfo field = MethodLookupHelper.SymbolManagerField;
-                    if (field == null)
-                        throw new InvalidOperationException();
                     // Restrictions lool like:
                     // (self != null) && (self.GetType == typeof(Symbol) && (((Symbol)self).Manager == manager)
                     restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(Symbol));
                     restrictions = restrictions.Merge(BindingRestrictions.GetExpressionRestriction(
-                        Expression.ReferenceEqual(Expression.Field(Expression.Convert(self, typeof(Symbol)), field), Expression.Constant(manager))));
+                        Expression.ReferenceEqual(Expression.Field(Expression.Convert(self, typeof(Symbol)), Symbol.ManagerField), Expression.Constant(manager))));
                 }
                 else
                 {
@@ -260,14 +247,11 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 if (pool.Runtime == runtime)
                 {
                     cls = runtime.NativeTypeClassMap.Pool;
-                    PropertyInfo prop = MethodLookupHelper.PoolRuntimeProperty;
-                    if (prop == null)
-                        throw new InvalidOperationException();
                     // Restrictions lool like:
                     // (self != null) && (self.GetType == typeof(Pool) && (((Pool)self).Runtime == runtime)
                     restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(Pool));
                     restrictions = restrictions.Merge(BindingRestrictions.GetExpressionRestriction(
-                        Expression.ReferenceEqual(Expression.Property(Expression.Convert(self, typeof(Pool)), prop), Expression.Constant(runtime))));
+                        Expression.ReferenceEqual(Expression.Property(Expression.Convert(self, typeof(Pool)), Pool.RuntimeProperty), Expression.Constant(runtime))));
                 }
                 else
                 {

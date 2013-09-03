@@ -23,6 +23,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.Common.Internal;
 
 namespace IronSmalltalk.NativeCompiler.Internals
 {
@@ -66,6 +67,8 @@ namespace IronSmalltalk.NativeCompiler.Internals
             var a = this.AssemblyBuilder.ManifestModule;
         }
 
+        private static readonly ConstructorInfo DebuggableAttributeCtor = TypeUtilities.Constructor(typeof(DebuggableAttribute), typeof(DebuggableAttribute.DebuggingModes));
+
         private void SetDebuggableAttributes()
         {
             DebuggableAttribute.DebuggingModes attrs =
@@ -85,16 +88,13 @@ namespace IronSmalltalk.NativeCompiler.Internals
                 // runtime to not load the PDB file.
                 DebuggableAttribute.DebuggingModes.IgnoreSymbolStoreSequencePoints;
 
-            Type[] argTypes = new Type[] { typeof(DebuggableAttribute.DebuggingModes) };
             Object[] argValues = new Object[] { attrs };
-
-            var debuggableCtor = typeof(DebuggableAttribute).GetConstructor(argTypes);
 
             // To suppress optimizations when debugging dynamic modules, apply the DebuggableAttribute attribute 
             // to the dynamic assembly before calling DefineDynamicModule. Create an instance of DebuggableAttribute 
             // with the DisableOptimizations flag and apply it using the SetCustomAttribute method. The attribute 
             // must be applied to the dynamic assembly. It has no effect if applied to the module.
-            this.AssemblyBuilder.SetCustomAttribute(new CustomAttributeBuilder(debuggableCtor, argValues));
+            this.AssemblyBuilder.SetCustomAttribute(new CustomAttributeBuilder(NativeGenerator.DebuggableAttributeCtor, argValues));
         }
 
         internal void SaveAssembly()

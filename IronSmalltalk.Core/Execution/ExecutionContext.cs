@@ -17,8 +17,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.Common.Internal;
 
 namespace IronSmalltalk.Runtime.Execution
 {
@@ -26,6 +28,8 @@ namespace IronSmalltalk.Runtime.Execution
     {
         // Keep this as field ... for performace reasons. It's accessed very often!
         public readonly SmalltalkRuntime Runtime;
+
+        public static readonly FieldInfo RuntimeField = TypeUtilities.Field(typeof(ExecutionContext), "Runtime");
 
         public ExecutionContext(SmalltalkRuntime runtime)
         {

@@ -19,6 +19,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using IronSmalltalk.Common.Internal;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Execution.CallSiteBinders;
 using IronSmalltalk.Runtime.Execution.Dynamic;
@@ -32,12 +33,9 @@ namespace IronSmalltalk.Runtime
             // Create the restrictions, which in pseudo-C# is defines as:
             //  SmalltalkClass cls = this.Class;    // Constant value  
             //  (self is SmalltalkObject) && (((SmalltalkObject) self).Class == cls);
-            FieldInfo field = typeof(SmalltalkObject).GetField("Class", BindingFlags.GetField | BindingFlags.Instance | BindingFlags.Public);
-            if (field == null)
-                throw new InvalidOperationException();
             BindingRestrictions restrictions = BindingRestrictions.GetTypeRestriction(parameter, typeof(SmalltalkObject));
             restrictions = restrictions.Merge(BindingRestrictions.GetExpressionRestriction(
-                Expression.ReferenceEqual(Expression.Field(Expression.Convert(parameter, typeof(SmalltalkObject)), field), Expression.Constant(this.Class))));
+                Expression.ReferenceEqual(Expression.Field(Expression.Convert(parameter, typeof(SmalltalkObject)), SmalltalkObject.ClassField), Expression.Constant(this.Class))));
 
             return new SmalltalkDynamicMetaObject(parameter, restrictions, this);
         }

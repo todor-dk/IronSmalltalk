@@ -17,19 +17,19 @@
   <Class Name="IronSmalltalk.NativeCompiler.Internals.MethodGenerator" Collapsed="true">
     <Position X="5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QIAAAAAAAAIQAAAgAAIIIAAACAAAABAAiAAGQQAAAEA=</HashCode>
+      <HashCode>QIgAgAAAAAIQAAAgAAIKIAAACIAAABAEiAAGQQAAAEA=</HashCode>
       <FileName>Internals\MethodGenerator.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="IronSmalltalk.NativeCompiler.Generators.RuntimeGenerator" Collapsed="true">
-    <Position X="7.25" Y="1.75" Width="1.5" />
+  <Class Name="IronSmalltalk.NativeCompiler.Generators.RuntimeGenerator">
+    <Position X="7.5" Y="1.75" Width="2.75" />
     <TypeIdentifier>
       <HashCode>IAAAAAAAIAAAAAAAACAAAAAAAAAAAAAAAQAAAAAIAAA=</HashCode>
       <FileName>Generators\RuntimeGenerator.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="IronSmalltalk.NativeCompiler.Generators.Initializers.InitializerGenerator" Collapsed="true">
-    <Position X="9.5" Y="1.75" Width="1.5" />
+  <Class Name="IronSmalltalk.NativeCompiler.Generators.Initializers.InitializerGenerator">
+    <Position X="10.75" Y="1.75" Width="3.25" />
     <TypeIdentifier>
       <HashCode>ABAACACAAQAAAAAEAgAAAAAAAQAAAAAAAAECAAIABAA=</HashCode>
       <FileName>Generators\Initializers\InitializerGenerator.cs</FileName>
@@ -38,7 +38,7 @@
   <Class Name="IronSmalltalk.NativeCompiler.Generators.NameScopeGenerator" Collapsed="true">
     <Position X="12" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CEIEAAAAAAEQggCAAgAACAAAQABAQgAAAAAEAAIgDAA=</HashCode>
+      <HashCode>CEIEAAAAAAEQggCAAgAACCAAQABAQgAAAAAEAAIgDAA=</HashCode>
       <FileName>Generators\NameScopeGenerator.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />

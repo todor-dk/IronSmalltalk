@@ -20,6 +20,7 @@ using System.Reflection;
 using IronSmalltalk.Runtime;
 using RTB = IronSmalltalk.Runtime.Bindings;
 using GlobalVariableBinding = IronSmalltalk.ExpressionCompiler.Bindings.GlobalVariableBinding;
+using IronSmalltalk.Common.Internal;
 
 
 namespace IronSmalltalk.ExpressionCompiler.Bindings
@@ -71,20 +72,7 @@ namespace IronSmalltalk.ExpressionCompiler.Bindings
 
     public sealed class InstanceVariableBinding : ArrayBasedVariableBinding<SmalltalkObject>
     {
-        private static readonly FieldInfo InstanceVariablesField;
-
-        static InstanceVariableBinding()
-        {
-            InstanceVariableBinding.InstanceVariablesField = InstanceVariableBinding.GetField("InstanceVariables");
-        }
-
-        private static FieldInfo GetField(string name)
-        {
-            FieldInfo field = typeof(SmalltalkObject).GetField(name, BindingFlags.GetField | BindingFlags.Instance | BindingFlags.Public);
-            if (field == null)
-                throw new InvalidOperationException(String.Format("Could not find the SmalltalkObject.{0} field!", name));
-            return field;
-        }
+        private static readonly FieldInfo InstanceVariablesField = TypeUtilities.Field(typeof(SmalltalkObject), "InstanceVariables");
 
         public InstanceVariableBinding(string name, int index)
             : base(name, index)

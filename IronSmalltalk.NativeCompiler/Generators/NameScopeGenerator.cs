@@ -22,6 +22,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.Common.Internal;
 using IronSmalltalk.NativeCompiler.Generators.Globals;
 using IronSmalltalk.NativeCompiler.Generators.Initializers;
 using IronSmalltalk.Runtime.Behavior;
@@ -255,14 +256,12 @@ namespace IronSmalltalk.NativeCompiler.Generators
             return method;
         }
 
+        private static readonly MethodInfo AddProtectedNameMethod = TypeUtilities.Method(typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper),
+            "AddProtectedName", typeof(SmalltalkRuntime), typeof(IronSmalltalk.Runtime.Bindings.SmalltalkNameScope), typeof(string));
+
         private MethodCallExpression GenerateAddProtectedName(string name, ParameterExpression runtime, ParameterExpression scope)
         {
-            Type[] argTypes = new Type[] { typeof(SmalltalkRuntime), typeof(IronSmalltalk.Runtime.Bindings.SmalltalkNameScope), typeof(string) };
-            Type helperType = typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper);
-            MethodInfo method = helperType.GetMethod("AddProtectedName", BindingFlags.Static | BindingFlags.Public, null, argTypes, null);
-            if (method == null)
-                throw new Exception(String.Format("Could not find static method AddProtectedName in class {0}.", helperType.FullName));
-            return Expression.Call(method, runtime, scope, Expression.Constant(name, typeof(String)));
+            return Expression.Call(NameScopeGenerator.AddProtectedNameMethod, runtime, scope, Expression.Constant(name, typeof(String)));
         }
     }
 }

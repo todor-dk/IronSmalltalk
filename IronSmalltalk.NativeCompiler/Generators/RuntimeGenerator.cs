@@ -22,6 +22,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.Common.Internal;
 using IronSmalltalk.NativeCompiler.Generators;
 using IronSmalltalk.NativeCompiler.Internals;
 using IronSmalltalk.Runtime.Bindings;
@@ -56,17 +57,15 @@ namespace IronSmalltalk.NativeCompiler.Generators
             this.GenerateCreateRuntime(true);
         }
 
+        private static readonly ConstructorInfo ScopeInitializerDelegateCtor = TypeUtilities.Constructor(
+            typeof(Action<SmalltalkRuntime, SmalltalkNameScope>), typeof(object), typeof(IntPtr));
+
+        private static readonly MethodInfo CreateRuntimeMethod = TypeUtilities.Method(typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper),
+            "CreateRuntime", typeof(bool), typeof(Action<SmalltalkRuntime, SmalltalkNameScope>), typeof(Action<SmalltalkRuntime, SmalltalkNameScope>));
+
         private void GenerateCreateRuntime(bool hasInitializeParameter)
         {
-            ConstructorInfo initializerCtor = typeof(Action<SmalltalkRuntime, SmalltalkNameScope>).GetConstructor(
-                new Type[] { typeof(object), typeof(IntPtr) });
-            Type helperType = typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper);
-            Type[] argTypes = new Type[] { typeof(bool), typeof(Action<SmalltalkRuntime, SmalltalkNameScope>), typeof(Action<SmalltalkRuntime, SmalltalkNameScope>) };
-            MethodInfo createRuntimeMethod = helperType.GetMethod("CreateRuntime", BindingFlags.Static | BindingFlags.Public, null, argTypes, null);
-            if (createRuntimeMethod == null)
-                throw new Exception(String.Format("Could not find static method CreateRuntime in class {0}.", helperType.FullName));
-
-            argTypes = hasInitializeParameter ? new Type[] { typeof(bool) } : new Type[] {};
+            Type[] argTypes = hasInitializeParameter ? new Type[] { typeof(bool) } : new Type[] { };
             MethodBuilder method = this.Type.DefineMethod("CreateRuntime", MethodAttributes.Public | MethodAttributes.Static, 
                 CallingConventions.Standard, typeof(SmalltalkRuntime), argTypes);
 
@@ -80,15 +79,15 @@ namespace IronSmalltalk.NativeCompiler.Generators
             // Create delegate for the extension scope initializer
             ilGen.Emit(OpCodes.Ldnull);                             // instance (this) ... it's a static method.
             ilGen.Emit(OpCodes.Ldftn, this.ExtensionScopeInitializer);   // pointer to the initializer method
-            ilGen.Emit(OpCodes.Newobj, initializerCtor);            // create the delegate object
+            ilGen.Emit(OpCodes.Newobj, RuntimeGenerator.ScopeInitializerDelegateCtor);            // create the delegate object
 
             // Create delegate for the global scope initializer
             ilGen.Emit(OpCodes.Ldnull);                             // instance (this) ... it's a static method.
             ilGen.Emit(OpCodes.Ldftn, this.GlobalScopeInitializer);      // pointer to the initializer method
-            ilGen.Emit(OpCodes.Newobj, initializerCtor);            // create the delegate object
+            ilGen.Emit(OpCodes.Newobj, RuntimeGenerator.ScopeInitializerDelegateCtor);            // create the delegate object
 
             // Call the method (on the stack: bool, Action<SmalltalkRuntime, SmalltalkNameScope>, Action<SmalltalkRuntime, SmalltalkNameScope>
-            ilGen.Emit(OpCodes.Call, createRuntimeMethod);          // Call NativeLoadHelper.CreateRuntime();
+            ilGen.Emit(OpCodes.Call, RuntimeGenerator.CreateRuntimeMethod);          // Call NativeLoadHelper.CreateRuntime();
             ilGen.Emit(OpCodes.Ret);                                // Return the result
         }
     }

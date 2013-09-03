@@ -17,6 +17,7 @@ using IronSmalltalk.ExpressionCompiler;
 using IronSmalltalk.ExpressionCompiler.BindingScopes;
 using IronSmalltalk.NativeCompiler.Generators.Globals;
 using IronSmalltalk.NativeCompiler.Generators;
+using IronSmalltalk.Common.Internal;
 
 namespace IronSmalltalk.NativeCompiler.Internals
 {
@@ -179,6 +180,8 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
         protected abstract string InitMethodDictionariesMethodName { get; }
 
+        private static readonly ConstructorInfo DictionarySymbolCompiledMethodCtor = TypeUtilities.Constructor(typeof(Dictionary<Symbol, CompiledMethod>), typeof(int));
+
         private Expression<Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>> GenerateInitMethodDictionaryLambda(string name, MethodDictionary methodDictionary)
         {
             ParameterExpression runtime = Expression.Parameter(typeof(SmalltalkRuntime), "runtime");
@@ -186,13 +189,10 @@ namespace IronSmalltalk.NativeCompiler.Internals
 
             List<Expression> expressions = new List<Expression>();
 
-            ConstructorInfo ctor = typeof(Dictionary<Symbol, CompiledMethod>).GetConstructor(new Type[] { typeof(int) });
-            if (ctor == null)
-                throw new Exception("Could not find the constructor for Dictionary<Symbol, CompiledMethod> with type (int).");
             expressions.Add(Expression.Assign(
                 dictionary,
                 Expression.New(
-                    ctor,
+                    MethodGenerator.DictionarySymbolCompiledMethodCtor,
                     Expression.Constant(methodDictionary.Count, typeof(int)))));
 
             return Expression.Lambda<Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>>(
