@@ -34,7 +34,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             Expression expr = Expression.Constant(symbol, typeof(object));
             BindingRestrictions restictions = BindingRestrictions.GetExpressionRestriction(
                 Expression.Equal(
-                    Expression.Field(args[0].Expression, typeof(ExecutionContext).GetField("Runtime")),
+                    Expression.Field(args[0].Expression, ExecutionContext.RuntimeField),
                     Expression.Constant(executionContext.Runtime, typeof(SmalltalkRuntime))));
 
             return new DynamicMetaObject(expr, restictions);

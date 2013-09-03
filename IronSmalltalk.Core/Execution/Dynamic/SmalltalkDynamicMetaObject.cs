@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq.Expressions;
 using System.Reflection;
+using IronSmalltalk.Common.Internal;
 
 namespace IronSmalltalk.Runtime.Execution.Dynamic
 {
@@ -39,19 +40,15 @@ namespace IronSmalltalk.Runtime.Execution.Dynamic
             this.Self = self;
         }
 
+        private static readonly ConstructorInfo InvalidOperationExceptionCtor = TypeUtilities.Constructor(typeof(InvalidOperationException), typeof(string));
+
         internal static Expression CreateCaseConflictException(string message)
         {
             if (message == null)
                 throw new ArgumentNullException();
-
-            Type type = typeof(InvalidOperationException); // TO-DO ... what is the correct exception type for this?
-            ConstructorInfo ctor = type.GetConstructor(new Type[]{ typeof(string) });
-            if (ctor == null)
-                throw new InvalidOperationException(String.Format(
-                    "Expected the exception class {0} to have a constructor that takes a string.", type));
-            
+           
             return Expression.Throw(
-                Expression.New(ctor, Expression.Constant(message, typeof(string))));
+                Expression.New(SmalltalkDynamicMetaObject.InvalidOperationExceptionCtor, Expression.Constant(message, typeof(string))));
         }
 
         public override DynamicMetaObject BindInvokeMember(InvokeMemberBinder binder, DynamicMetaObject[] args)

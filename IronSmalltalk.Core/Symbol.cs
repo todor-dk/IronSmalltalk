@@ -15,6 +15,8 @@
 */
 
 using System;
+using System.Reflection;
+using IronSmalltalk.Common.Internal;
 using IronSmalltalk.Runtime.Internal;
 
 namespace IronSmalltalk.Runtime
@@ -33,6 +35,11 @@ namespace IronSmalltalk.Runtime
         /// Internal. SymbolTable that contains the symbol and ensures uniqueness within the runtime.
         /// </summary>
         public readonly SymbolTable Manager;
+
+        /// <summary>
+        /// Internal. The FieldInfo of the Symbol.Manager field.
+        /// </summary>
+        public static readonly FieldInfo ManagerField = TypeUtilities.Field(typeof(Symbol), "Manager");
         
         /// <summary>
         /// Create a new symbol. NB: Do not use this! It is intended for the SymbolTable!

@@ -18,6 +18,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using IronSmalltalk.Common.Internal;
 
 namespace IronSmalltalk.Runtime.Bindings
 {
@@ -40,7 +42,14 @@ namespace IronSmalltalk.Runtime.Bindings
         where TItem : IBinding
     {
         private readonly Dictionary<Symbol, TItem> _Contents;
+
         public SmalltalkRuntime Runtime { get; private set; }
+
+        /// <summary>
+        /// Internal. The FieldInfo of the BindingDictionary.Runtime field.
+        /// </summary>
+        public static readonly PropertyInfo RuntimeProperty = TypeUtilities.Property(typeof(BindingDictionary<TItem>), typeof(SmalltalkRuntime), "Runtime");
+
         private bool _readOnly = false;
 
         public BindingDictionary(SmalltalkRuntime runtime)

@@ -15,6 +15,8 @@
 */
 
 using System;
+using System.Reflection;
+using IronSmalltalk.Common.Internal;
 
 namespace IronSmalltalk.Runtime
 {
@@ -31,6 +33,11 @@ namespace IronSmalltalk.Runtime
         /// The SmalltalkClass that this object is instance of.
         /// </summary>
         public readonly SmalltalkClass Class;
+
+        /// <summary>
+        /// Internal. The FieldInfo of the SmalltalkObject.Class field.
+        /// </summary>
+        public static readonly FieldInfo ClassField = TypeUtilities.Field(typeof(SmalltalkObject), "Class");
 
         /// <summary>
         /// Array with the instance variables of the object.

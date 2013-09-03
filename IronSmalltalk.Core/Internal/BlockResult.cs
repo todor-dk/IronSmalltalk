@@ -16,6 +16,7 @@
 
 using System;
 using System.Reflection;
+using IronSmalltalk.Common.Internal;
 
 namespace IronSmalltalk.Runtime.Internal
 {
@@ -51,40 +52,24 @@ namespace IronSmalltalk.Runtime.Internal
         /// <summary>
         /// Internal. The FieldInfo of the BlockResult.Value field.
         /// </summary>
-        public static readonly FieldInfo ValueField;
+        public static readonly FieldInfo ValueField = TypeUtilities.Field(typeof(BlockResult), "Value");
 
         /// <summary>
         /// Internal. The FieldInfo of the BlockResult.HomeContext field.
         /// </summary>
-        public static readonly FieldInfo HomeContextField;
+        public static readonly FieldInfo HomeContextField = TypeUtilities.Field(typeof(BlockResult), "HomeContext");
 
         /// <summary>
         /// Internal. The ConstructorInfo of the BlockResult.ctor() constructor.
         /// </summary>
-        public static readonly ConstructorInfo ConstructorInfo;
-
-        /// <summary>
-        /// Initializes the cached reflection information (used by the JIT compiler).
-        /// </summary>
-        static BlockResult()
-        {
-            BlockResult.ValueField = typeof(BlockResult).GetField("Value", BindingFlags.GetField | BindingFlags.Instance | BindingFlags.Public);
-            if (BlockResult.ValueField == null)
-                throw new InvalidOperationException("Could not find BlockResult.Value field.");
-            BlockResult.HomeContextField = typeof(BlockResult).GetField("HomeContext", BindingFlags.GetField | BindingFlags.Instance | BindingFlags.Public);
-            if (BlockResult.HomeContextField == null)
-                throw new InvalidOperationException("Could not find BlockResult.HomeContextField field.");
-            BlockResult.ConstructorInfo = typeof(BlockResult).GetConstructor(BindingFlags.Public | BindingFlags.CreateInstance | BindingFlags.Instance,
-                null, new Type[] { typeof(HomeContext), typeof(object) }, null);
-            if (BlockResult.ConstructorInfo == null)
-                throw new InvalidOperationException("Could not find BlockResult.ctor(HomeContext, object) field.");
-        }
+        public static readonly ConstructorInfo ConstructorInfo = TypeUtilities.Constructor(typeof(BlockResult), typeof(HomeContext), typeof(object));
 
         /// <summary>
         /// Create a new block result.
         /// </summary>
         /// <param name="homeContext">HomeContext identifying which mehtod actication created the block.</param>
         /// <param name="value">Value being returned.</param>
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public BlockResult(HomeContext homeContext, object value)
             //: base("Method has already returned")
         {

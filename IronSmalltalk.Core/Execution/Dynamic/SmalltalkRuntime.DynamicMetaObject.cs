@@ -19,6 +19,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using IronSmalltalk.Common.Internal;
 using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
@@ -89,6 +90,8 @@ namespace IronSmalltalk
                 errorSuggestion => binder.FallbackSetMember(this, errorSuggestion));
         }
 
+        private static readonly ConstructorInfo InvalidOperationExceptionCtor = TypeUtilities.Constructor(typeof(InvalidOperationException), typeof(string));
+
         private DynamicMetaObject GetSetMemberWorker(string name, bool ignoreCase, Type returnType, bool isSetValue, Func<MemberExpression, Expression> action, Func<DynamicMetaObject, DynamicMetaObject> fallback)
         {
             bool caseConflict;
@@ -109,13 +112,8 @@ namespace IronSmalltalk
 
             if (msg != null)
             {
-                Type type = typeof(InvalidOperationException);
-                ConstructorInfo ctor = type.GetConstructor(new Type[] { typeof(string) });
-                if (ctor == null)
-                    throw new InvalidOperationException();
-
                 Expression errorSuggestion = Expression.Throw(
-                    Expression.New(ctor, Expression.Constant(msg, typeof(String))), returnType);
+                    Expression.New(SmalltalkRuntimeDynamicMetaObject.InvalidOperationExceptionCtor, Expression.Constant(msg, typeof(String))), returnType);
 
                 return fallback(new DynamicMetaObject(errorSuggestion, this.Restrictions));
             }
