@@ -9516,12 +9516,12 @@ array1
 	^#().! 
 	
 AConstancts method! 
-array2
+array2a
 
 	^#(123).! 	
 	
 AConstancts method! 
-array2
+array2b
 
 	^#('ABC').! 
 	
@@ -9538,7 +9538,7 @@ array4
 AConstancts method! 
 array5
 
-	^#(123 'ABC' #(456.78)).!
+	^#(123 #ABC #(456.78)).!
 	
 AConstancts method! 
 array6
@@ -9654,3 +9654,13 @@ AConstancts method!
 symbol2
 
 	^#'Iron Smalltalk'!		
+	
+AConstancts method! 
+symbol3
+
+	^#Array!	
+	
+AConstancts method! 
+symbol4
+
+	^#Array!	

@@ -41,6 +41,8 @@ namespace IronSmalltalk.NativeCompiler.Internals
         {
             this.Parameters = parameters;
             this.AssemblyName = new AssemblyName(parameters.AssemblyName);
+            if (!String.IsNullOrWhiteSpace(parameters.AssemblyVersion))
+                this.AssemblyName.Version = new Version(parameters.AssemblyVersion);
             string filename = String.Format("{0}.{1}", this.AssemblyName.Name, parameters.FileExtension);
             this.OutputPath = System.IO.Path.Combine(parameters.OutputDirectory, filename);
 
@@ -59,12 +61,62 @@ namespace IronSmalltalk.NativeCompiler.Internals
             if (this.Parameters.EmitDebugSymbols)
                 this.SetDebuggableAttributes();
 
-            this.AssemblyBuilder.DefineVersionInfoResource(parameters.Product, parameters.ProductVersion, parameters.Company, 
-                parameters.Copyright, parameters.Trademark);
+            this.SetFileVersion(parameters);
 
+            this.AssemblyBuilder.DefineVersionInfoResource();
+            
             this.ModuleBuilder = this.AssemblyBuilder.DefineDynamicModule(this.AssemblyName.Name,  filename, this.Parameters.EmitDebugSymbols);
 
             var a = this.AssemblyBuilder.ManifestModule;
+        }
+
+        private static readonly ConstructorInfo AssemblyFileVersionCtor = TypeUtilities.Constructor(
+            typeof(AssemblyFileVersionAttribute), typeof(string));
+
+        private static readonly ConstructorInfo AssemblyTitleCtor = TypeUtilities.Constructor(
+            typeof(AssemblyTitleAttribute), typeof(string));
+
+        private static readonly ConstructorInfo AssemblyCopyrightCtor = TypeUtilities.Constructor(
+            typeof(AssemblyCopyrightAttribute), typeof(string));
+
+        private static readonly ConstructorInfo AssemblyDescriptionCtor = TypeUtilities.Constructor(
+            typeof(AssemblyDescriptionAttribute), typeof(string));
+
+        private static readonly ConstructorInfo AssemblyCompanyCtor = TypeUtilities.Constructor(
+            typeof(AssemblyCompanyAttribute), typeof(string));
+
+        private static readonly ConstructorInfo AssemblyProductCtor = TypeUtilities.Constructor(
+            typeof(AssemblyProductAttribute), typeof(string));
+
+        private static readonly ConstructorInfo AssemblyTrademarkCtor = TypeUtilities.Constructor(
+            typeof(AssemblyTrademarkAttribute), typeof(string));
+
+        private static readonly ConstructorInfo AssemblyVersionCtor = TypeUtilities.Constructor(
+            typeof(AssemblyVersionAttribute), typeof(string));
+
+        private static readonly ConstructorInfo AssemblyInformationalVersionCtor = TypeUtilities.Constructor(
+            typeof(AssemblyInformationalVersionAttribute), typeof(string));
+
+        private void SetFileVersion(NativeCompilerParameters parameters)
+        {
+            if (!String.IsNullOrWhiteSpace(parameters.ProductTitle))
+                this.AssemblyBuilder.SetCustomAttribute(new CustomAttributeBuilder(NativeGenerator.AssemblyTitleCtor, new object[] { parameters.ProductTitle }));
+            if (!String.IsNullOrWhiteSpace(parameters.ProductDescription))
+                this.AssemblyBuilder.SetCustomAttribute(new CustomAttributeBuilder(NativeGenerator.AssemblyDescriptionCtor, new object[] { parameters.ProductDescription }));
+            if (!String.IsNullOrWhiteSpace(parameters.Company))
+                this.AssemblyBuilder.SetCustomAttribute(new CustomAttributeBuilder(NativeGenerator.AssemblyCompanyCtor, new object[] { parameters.Company }));
+            if (!String.IsNullOrWhiteSpace(parameters.Product))
+                this.AssemblyBuilder.SetCustomAttribute(new CustomAttributeBuilder(NativeGenerator.AssemblyProductCtor, new object[] { parameters.Product }));
+            if (!String.IsNullOrWhiteSpace(parameters.Copyright))
+                this.AssemblyBuilder.SetCustomAttribute(new CustomAttributeBuilder(NativeGenerator.AssemblyCopyrightCtor, new object[] { parameters.Copyright }));
+            if (!String.IsNullOrWhiteSpace(parameters.Trademark))
+                this.AssemblyBuilder.SetCustomAttribute(new CustomAttributeBuilder(NativeGenerator.AssemblyTrademarkCtor, new object[] { parameters.Trademark }));            
+            if (!String.IsNullOrWhiteSpace(parameters.ProductVersion))
+                this.AssemblyBuilder.SetCustomAttribute(new CustomAttributeBuilder(NativeGenerator.AssemblyVersionCtor, new object[] { parameters.ProductVersion }));
+            if (!String.IsNullOrWhiteSpace(parameters.ProductVersion))
+                this.AssemblyBuilder.SetCustomAttribute(new CustomAttributeBuilder(NativeGenerator.AssemblyInformationalVersionCtor, new object[] { parameters.ProductVersion }));
+            if (!String.IsNullOrWhiteSpace(parameters.FileVersion))
+                this.AssemblyBuilder.SetCustomAttribute(new CustomAttributeBuilder(NativeGenerator.AssemblyFileVersionCtor, new object[] { parameters.FileVersion }));
         }
 
         private static readonly ConstructorInfo DebuggableAttributeCtor = TypeUtilities.Constructor(typeof(DebuggableAttribute), typeof(DebuggableAttribute.DebuggingModes));

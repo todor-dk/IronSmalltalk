@@ -34,6 +34,7 @@ namespace IronSmalltalk.Runtime
         /// <summary>
         /// Internal. SymbolTable that contains the symbol and ensures uniqueness within the runtime.
         /// </summary>
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public readonly SymbolTable Manager;
 
         /// <summary>

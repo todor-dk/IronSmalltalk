@@ -72,8 +72,6 @@ namespace IronSmalltalk.ExpressionCompiler.Bindings
 
     public sealed class InstanceVariableBinding : ArrayBasedVariableBinding<SmalltalkObject>
     {
-        private static readonly FieldInfo InstanceVariablesField = TypeUtilities.Field(typeof(SmalltalkObject), "InstanceVariables");
-
         public InstanceVariableBinding(string name, int index)
             : base(name, index)
         {
@@ -85,27 +83,12 @@ namespace IronSmalltalk.ExpressionCompiler.Bindings
             Expression self = client.SelfExpression;
             return Expression.Field(
                     Expression.Convert(self, typeof(SmalltalkObject)),
-                    InstanceVariableBinding.InstanceVariablesField);
+                    SmalltalkObject.InstanceVariablesField);
         }
     }
 
     public sealed class ClassInstanceVariableBinding : ArrayBasedVariableBinding<SmalltalkClass>
     {
-        private static readonly PropertyInfo InstanceVariablesProperty;
-
-        static ClassInstanceVariableBinding()
-        {
-            ClassInstanceVariableBinding.InstanceVariablesProperty = ClassInstanceVariableBinding.GetProperty("ClassInstanceVariables");
-        }
-
-        private static PropertyInfo GetProperty(string name)
-        {
-            PropertyInfo prop = typeof(SmalltalkClass).GetProperty(name, BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public);
-            if (prop == null)
-                throw new InvalidOperationException(String.Format("Could not find the SmalltalkClass.{0} field!", name));
-            return prop;
-        }
-
         public ClassInstanceVariableBinding(string name, int index)
             : base(name, index)
         {
@@ -117,7 +100,7 @@ namespace IronSmalltalk.ExpressionCompiler.Bindings
             Expression self = client.SelfExpression;
             return Expression.Property(
                     Expression.Convert(self, typeof(SmalltalkClass)),
-                    ClassInstanceVariableBinding.InstanceVariablesProperty);
+                    SmalltalkClass.ClassInstanceVariablesProperty);
         }
     }
 }

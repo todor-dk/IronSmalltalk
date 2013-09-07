@@ -102,6 +102,7 @@ namespace IronSmalltalk.Runtime.Bindings
         /// <summary>
         /// The value of the binding.
         /// </summary>
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         object Value { get; }
 
         /// <summary>
@@ -122,6 +123,7 @@ namespace IronSmalltalk.Runtime.Bindings
         /// The "new" keywords is needed due to technical reasons. 
         /// The Value.get method is semantically identical to the base class' method.
         /// </remarks>
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         new object Value { get; set; }
     }
 }

@@ -16,16 +16,16 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
 {
     public abstract class PrimitiveEncoder
     {
-        public VisitingContext Context { get; private set; }
+        public PrimitiveCallVisitor Visitor { get; private set; }
         public IReadOnlyList<string> Parameters { get; private set; }
 
-        public PrimitiveEncoder(VisitingContext context, IEnumerable<string> parameters)
+        public PrimitiveEncoder(PrimitiveCallVisitor visitor, IEnumerable<string> parameters)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
+            if (visitor == null)
+                throw new ArgumentNullException("visitor");
             if (parameters == null)
                 throw new ArgumentNullException("parameters");
-            this.Context = context;
+            this.Visitor = visitor;
             this.Parameters = parameters.ToList().AsReadOnly();
         }
 
@@ -33,6 +33,12 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         {
             get { return this.Context.Compiler; }
         }
+
+        public VisitingContext Context
+        {
+            get { return this.Visitor.Context; }
+        }
+
 
         protected Expression UnaryOperation(Func<Expression, Expression> func)
         {

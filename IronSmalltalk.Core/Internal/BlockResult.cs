@@ -28,6 +28,14 @@ namespace IronSmalltalk.Runtime.Internal
     /// </remarks>
     public class HomeContext : Object
     {
+        /// <summary>
+        /// Create a new HomeContext.
+        /// </summary>
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
+        public HomeContext()
+        {
+
+        }
     }
 
     /// <summary>
@@ -42,11 +50,13 @@ namespace IronSmalltalk.Runtime.Internal
         /// <summary>
         /// HomeContext identifying which mehtod actication created the block.
         /// </summary>
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public readonly HomeContext HomeContext;
 
         /// <summary>
         /// Value being returned.
         /// </summary>
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public object Value;
 
         /// <summary>

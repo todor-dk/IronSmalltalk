@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
@@ -39,13 +40,26 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         Expression IBindingClient.TrueExpression
         {
-            get { return this.Context.Compiler.LiteralEncoding.True(this.Context); }
+            get { return this.Context.Compiler.LiteralEncoding.True(this); }
         }
 
         Expression IBindingClient.FalseExpression
         {
-            get { return this.Context.Compiler.LiteralEncoding.False(this.Context); }
+            get { return this.Context.Compiler.LiteralEncoding.False(this); }
         }
+
+        /// <summary>
+        /// Get the chain of visitors with the root visitor as the first item and this visitor as the last item.
+        /// </summary>
+        /// <returns>Returns the chain of visitors with the root visitor as the first item and this visitor as the last item.</returns>
+        public IReadOnlyList<EncoderVisitor> GetVisitorChain()
+        {
+            List<EncoderVisitor> result = new List<EncoderVisitor>();
+            this.AddToVisitorChain(result);
+            return result;
+        }
+
+        protected internal abstract void AddToVisitorChain(List<EncoderVisitor> list);
     }
 
     public abstract class EncoderVisitor<TResult> : EncoderVisitor, IParseTreeVisitor<TResult>
@@ -284,6 +298,12 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         protected internal override Expression Return(Expression value)
         {
             return this.EnclosingVisitor.Return(value);
+        }
+
+        protected internal override void AddToVisitorChain(List<EncoderVisitor> list)
+        {
+            this.EnclosingVisitor.AddToVisitorChain(list);
+            list.Add(this);
         }
     }
 }

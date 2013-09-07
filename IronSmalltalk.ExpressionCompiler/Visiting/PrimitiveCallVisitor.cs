@@ -187,26 +187,26 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
             // What type of primitive do we have to do with?
             if (node.ApiConvention.Value == "primitive:")
-                return BuiltInPrimitiveEncoder.GeneratePrimitive(this.Context, parameters.Skip(1), node.ApiParameters[0].Value);
+                return BuiltInPrimitiveEncoder.GeneratePrimitive(this, parameters.Skip(1), node.ApiParameters[0].Value);
 
             Type definingType = this.GetDefiningType(node);
             if (node.ApiConvention.Value == "ctor:")
-                return InvokeConstructorPrimitiveEncoder.GeneratePrimitive(this.Context, parameters.Skip(1), definingType);
+                return InvokeConstructorPrimitiveEncoder.GeneratePrimitive(this, parameters.Skip(1), definingType);
 
             string memberName = node.ApiParameters[1].Value;
             parameters = parameters.Skip(2);
             if (node.ApiConvention.Value == "static:")
-                return InvokeStaticMethodPrimitiveEncoder.GeneratePrimitive(this.Context, parameters, definingType, memberName);
+                return InvokeStaticMethodPrimitiveEncoder.GeneratePrimitive(this, parameters, definingType, memberName);
             if (node.ApiConvention.Value == "call:")
-                return InvokeInstanceMethodPrimitiveEncoder.GeneratePrimitive(this.Context, parameters, definingType, memberName);
+                return InvokeInstanceMethodPrimitiveEncoder.GeneratePrimitive(this, parameters, definingType, memberName);
             if (node.ApiConvention.Value == "get_property:")
-                return GetPropertyPrimitiveEncoder.GeneratePrimitive(this.Context, parameters, definingType, memberName);
+                return GetPropertyPrimitiveEncoder.GeneratePrimitive(this, parameters, definingType, memberName);
             if (node.ApiConvention.Value == "set_property:")
-                return SetPropertyPrimitiveEncoder.GeneratePrimitive(this.Context, parameters, definingType, memberName);
+                return SetPropertyPrimitiveEncoder.GeneratePrimitive(this, parameters, definingType, memberName);
             if (node.ApiConvention.Value == "get_field:")
-                return GetFieldPrimitiveEncoder.GeneratePrimitive(this.Context, parameters, definingType, memberName);
+                return GetFieldPrimitiveEncoder.GeneratePrimitive(this, parameters, definingType, memberName);
             if (node.ApiConvention.Value == "set_field:")
-                return SetFieldPrimitiveEncoder.GeneratePrimitive(this.Context, parameters, definingType, memberName);
+                return SetFieldPrimitiveEncoder.GeneratePrimitive(this, parameters, definingType, memberName);
             else
                 throw new PrimitiveSemanticException(CodeGenerationErrors.UnexpectedCallingconvention);
         }

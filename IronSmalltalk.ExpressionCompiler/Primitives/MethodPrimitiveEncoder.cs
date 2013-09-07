@@ -13,22 +13,22 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
 {
     public abstract class MethodPrimitiveEncoder : NamedMemberPrimitiveEncoder
     {
-        public MethodPrimitiveEncoder(VisitingContext context, IEnumerable<string> parameters, Type definingType, string memberName)
-            : base(context, parameters, definingType, memberName)
+        public MethodPrimitiveEncoder(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType, string memberName)
+            : base(visitor, parameters, definingType, memberName)
         {
         }
     }
 
     public sealed class InvokeStaticMethodPrimitiveEncoder : MethodPrimitiveEncoder
     {
-        private InvokeStaticMethodPrimitiveEncoder(VisitingContext context, IEnumerable<string> parameters, Type definingType, string memberName)
-            : base(context, parameters, definingType, memberName)
+        private InvokeStaticMethodPrimitiveEncoder(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType, string memberName)
+            : base(visitor, parameters, definingType, memberName)
         {
         }
 
-        public static Expression GeneratePrimitive(VisitingContext context, IEnumerable<string> parameters, Type definingType, string memberName)
+        public static Expression GeneratePrimitive(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType, string memberName)
         {
-            return (new InvokeStaticMethodPrimitiveEncoder(context, parameters, definingType, memberName)).GenerateExpression();
+            return (new InvokeStaticMethodPrimitiveEncoder(visitor, parameters, definingType, memberName)).GenerateExpression();
         }
 
         /// <summary>
@@ -55,14 +55,14 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
 
     public sealed class InvokeInstanceMethodPrimitiveEncoder : MethodPrimitiveEncoder
     {
-        private InvokeInstanceMethodPrimitiveEncoder(VisitingContext context, IEnumerable<string> parameters, Type definingType, string memberName)
-            : base(context, parameters, definingType, memberName)
+        private InvokeInstanceMethodPrimitiveEncoder(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType, string memberName)
+            : base(visitor, parameters, definingType, memberName)
         {
         }
 
-        public static Expression GeneratePrimitive(VisitingContext context, IEnumerable<string> parameters, Type definingType, string memberName)
+        public static Expression GeneratePrimitive(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType, string memberName)
         {
-            return (new InvokeInstanceMethodPrimitiveEncoder(context, parameters, definingType, memberName)).GenerateExpression();
+            return (new InvokeInstanceMethodPrimitiveEncoder(visitor, parameters, definingType, memberName)).GenerateExpression();
         }
 
         /// <summary>

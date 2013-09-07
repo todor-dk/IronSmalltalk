@@ -131,17 +131,4 @@ namespace IronSmalltalk.Runtime.Behavior
         /// <returns>An AST Expression that can execute the logic of this method.</returns>
         public abstract Expression GetExpression(Expression self, Expression executionContext, IEnumerable<Expression> arguments);
     }
-
-    public sealed class NativeCompiledMethod : CompiledMethod
-    {
-        public NativeCompiledMethod(SmalltalkClass cls, Symbol selector, MethodType methodType)
-            : base(cls, selector, methodType)
-        {
-        }
-
-        public override Expression GetExpression(Expression self, Expression executionContext, IEnumerable<Expression> arguments)
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

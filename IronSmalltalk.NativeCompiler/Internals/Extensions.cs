@@ -5,10 +5,12 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.ExpressionCompiler.Visiting;
+using IronSmalltalk.NativeCompiler.CompilationStrategies;
 
 namespace IronSmalltalk.NativeCompiler.Internals
 {
-    public static class Extensions
+    internal static class Extensions
     {
         public static void PushInt(this ILGenerator self, int value)
         {
@@ -42,5 +44,35 @@ namespace IronSmalltalk.NativeCompiler.Internals
                 self.Emit(OpCodes.Ldc_I4, value);
         }
 
+        public static string GetUniqueMemberName(this TypeBuilder self, string name)
+        {
+            if (self == null)
+                throw new ArgumentNullException("self");
+            if (String.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException("name");
+
+            // BUG BUG BUG ... assume no conflict
+
+            return name;
+
+            //string[] names = self.GetMembers().Select(mem => mem.Name).ToArray();
+
+            //if (!names.Contains(name))
+            //    return name;
+
+            //for (int i = 0; ; i++)
+            //{
+            //    string suggestion = String.Format("{0}_{1}", name, i);
+            //    if (!names.Contains(suggestion))
+            //        return suggestion;
+            //}
+        }
+
+        internal static NativeLiteralEncodingStrategy.NativeLiteralArrayVisitor GetNativeLiteralArrayVisitor(this EncoderVisitor self)
+        {
+            if (self == null)
+                throw new ArgumentNullException();
+            return (NativeLiteralEncodingStrategy.NativeLiteralArrayVisitor) self.GetVisitorChain().Reverse().FirstOrDefault(visitor => visitor is NativeLiteralEncodingStrategy.NativeLiteralArrayVisitor);
+        }
     }
 }

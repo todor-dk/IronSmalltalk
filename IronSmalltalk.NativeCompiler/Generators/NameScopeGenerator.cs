@@ -111,7 +111,12 @@ namespace IronSmalltalk.NativeCompiler.Generators
             }
         }
 
-        internal MethodInfo GenerateInitializerMethod()
+        /// <summary>
+        /// Generate types and methods that can initialize the name scope of this generator.
+        /// This includes methods for initializing classes, methods, pools, initializers etc.
+        /// </summary>
+        /// <returns>The newly created method that is used to initialize the name scope.</returns>
+        internal MethodInfo GenerateNameScopeInitializerMethod()
         {
             this.GenerateClassTypes();
             this.GenerateMethodDictionaryInitializers();
@@ -128,7 +133,7 @@ namespace IronSmalltalk.NativeCompiler.Generators
         private void GenerateClassTypes()
         {
             foreach (ClassGenerator generator in this.Generators.OfType<ClassGenerator>())
-                generator.GenerateTypes();
+                generator.GenerateBehaviorTypes();
         }
 
         /// <summary>
@@ -137,13 +142,14 @@ namespace IronSmalltalk.NativeCompiler.Generators
         /// </summary>
         private void GenerateMethodDictionaryInitializers()
         {
+            // Type named ".Initializers.ScopeName_MethodInitializers" to contain the initializers.
             this.MethodsInitializerTypeBuilder = this.Compiler.NativeGenerator.DefineType(
                 this.Compiler.GetTypeName("Initializers", String.Format("{0}_MethodInitializers", this.ScopeName)),
                 typeof(Object),
                 TypeAttributes.Class | TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.Abstract);
 
             foreach (ClassGenerator generator in this.Generators.OfType<ClassGenerator>())
-                generator.GenerateInitMethodDictionaries(this.MethodsInitializerTypeBuilder);
+                generator.GenerateMethodDictionariesInitializer(this.MethodsInitializerTypeBuilder);
         }
 
         /// <summary>
@@ -152,6 +158,7 @@ namespace IronSmalltalk.NativeCompiler.Generators
         /// </summary>
         private void GeneratePoolInitializers()
         {
+            // Type named ".Initializers.ScopeName_PoolInitializers" to contain the initializers.
             this.PoolsInitializerTypeBuilder = this.Compiler.NativeGenerator.DefineType(
                 this.Compiler.GetTypeName("Initializers", String.Format("{0}_PoolInitializers", this.ScopeName)),
                 typeof(Object),
@@ -168,6 +175,7 @@ namespace IronSmalltalk.NativeCompiler.Generators
         /// </summary>
         private void GenerateInitializers()
         {
+            // Type named ".Initializers.ScopeName_Initializers" to contain the initializers.
             this.InitializersTypeBuilder = this.Compiler.NativeGenerator.DefineType(
                 this.Compiler.GetTypeName("Initializers", String.Format("{0}_Initializers", this.ScopeName)),
                 typeof(Object),
@@ -197,36 +205,18 @@ namespace IronSmalltalk.NativeCompiler.Generators
             // Define parameters
             ParameterExpression runtime = Expression.Parameter(typeof(SmalltalkRuntime), "runtime");
             ParameterExpression scope = Expression.Parameter(typeof(IronSmalltalk.Runtime.Bindings.SmalltalkNameScope), "scope");
-
-            List<ParameterExpression> variables = new List<ParameterExpression>();
             List<Expression> expressions = new List<Expression>();
-            List<Expression> createObjects = new List<Expression>();
 
             // Adds statement ... NativeLoadHelper.AddProtectedName(runtime, scope, "...");
             foreach (string pn in this.ProtectedNames)
                 expressions.Add(this.GenerateAddProtectedName(pn, runtime, scope));
 
+            List<ParameterExpression> variables = new List<ParameterExpression>();
+            List<Expression> initializeBindings = new List<Expression>();
             foreach (GlobalBindingGenerator gbg in this.Generators)
-            {
-                // The method that will add the global binding, e.g. ... NativeLoadHelper.AddClassBinding(...);
-                MethodInfo addBindingMethod = gbg.GetAddBindingMethod();
-                // Create a temp var for each global binding object.
-                ParameterExpression variable = Expression.Parameter(addBindingMethod.ReturnType, gbg.BindingName);
-                variables.Add(variable);
-                // Add a statement to call that method and assign it to the temp var .... ClassBinding binding27 = NativeLoadHelper.AddClassBinding(runtime, scope, "...");
-                expressions.Add(Expression.Assign(variable, Expression.Call(addBindingMethod, runtime, scope, Expression.Constant(gbg.BindingName, typeof(String)))));
-
-                // Add a statement that will create the global object. This is relevant for clases and pools.
-                // Example ...  NativeLoadHelper.CreateClass(runtime, scope, binding27, "...", SmalltalkClass.InstanceStateEnum.Native, ...); 
-                IEnumerable<Expression> expression = gbg.GenerateCreateObject(runtime, this, scope, variable);
-                if (expression != null)
-                    createObjects.AddRange(expression);
-                // Add optional annotations ... NativeLoadHelper.AnnotateObject(binding27, "...", "...");
-                gbg.GenerateAnnotations(createObjects, variable);
-            }
-
+                gbg.GenerateGlobal(this, runtime, scope, variables, expressions, initializeBindings);
             // The statements for creating the global objects and adding annotations are added at the END after the create binding statements.
-            expressions.AddRange(createObjects);
+            expressions.AddRange(initializeBindings);
 
             // Now, create a temp var that holds the name type of the name scope initializers 
             ParameterExpression initializersType = Expression.Parameter(typeof(Type), "initializersType");
@@ -236,10 +226,11 @@ namespace IronSmalltalk.NativeCompiler.Generators
             // Create a temp var to hold the initializer
             ParameterExpression initializer = Expression.Parameter(typeof(CompiledInitializer), "initializer");
             variables.Add(initializer);
+
             foreach (InitializerGenerator generator in this.Initializers)
             {
                 // Call a helper method to add initializer statements ... CompiledInitializer initializer = NativeLoadHelper.AddClassInitializer(runtime, scope, delegateType, "BigDecimal_Class_Initializer", "BigDecimal");
-                IEnumerable<Expression> expression = generator.GenerateCreateInitializerExpression(initializer, runtime, scope, initializersType);
+                IEnumerable<Expression> expression = generator.GenerateCreateInitializer(initializer, runtime, scope, initializersType);
                 if (expression != null)
                     expressions.AddRange(expression);
             }

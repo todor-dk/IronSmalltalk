@@ -27,17 +27,17 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
     {
         public string PrimitiveName { get; private set; }
 
-        private BuiltInPrimitiveEncoder(VisitingContext context, IEnumerable<string> parameters, string primitiveName)
-            : base(context, parameters)
+        private BuiltInPrimitiveEncoder(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, string primitiveName)
+            : base(visitor, parameters)
         {
             if (String.IsNullOrWhiteSpace(primitiveName))
                 throw new ArgumentNullException("primitiveName");
             this.PrimitiveName = primitiveName;
         }
 
-        public static Expression GeneratePrimitive(VisitingContext context, IEnumerable<string> parameters, string primitiveName)
+        public static Expression GeneratePrimitive(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, string primitiveName)
         {
-            return (new BuiltInPrimitiveEncoder(context, parameters, primitiveName)).GenerateExpression();
+            return (new BuiltInPrimitiveEncoder(visitor, parameters, primitiveName)).GenerateExpression();
         }
 
         /// <summary>

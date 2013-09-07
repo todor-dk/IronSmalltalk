@@ -46,6 +46,11 @@ namespace IronSmalltalk.NativeCompiler.Generators
 
         private TypeBuilder Type;
 
+        /// <summary>
+        /// Generates a type that's the "entry point" into this IronSmalltalk compilation
+        /// as well as methods named "CreateRuntime" (two variants), which are used to
+        /// initialize a new instance of a SmalltalkRuntime.
+        /// </summary>
         internal void GenerateCreateRuntimeMethods()
         {
             this.Type = this.Compiler.NativeGenerator.DefineType(
@@ -66,29 +71,32 @@ namespace IronSmalltalk.NativeCompiler.Generators
         private void GenerateCreateRuntime(bool hasInitializeParameter)
         {
             Type[] argTypes = hasInitializeParameter ? new Type[] { typeof(bool) } : new Type[] { };
-            MethodBuilder method = this.Type.DefineMethod("CreateRuntime", MethodAttributes.Public | MethodAttributes.Static, 
+            MethodBuilder method = this.Type.DefineMethod("CreateRuntime", MethodAttributes.Public | MethodAttributes.Static,
                 CallingConventions.Standard, typeof(SmalltalkRuntime), argTypes);
+
+            if (hasInitializeParameter)
+                method.DefineParameter(1, ParameterAttributes.None, "initialize");
 
             ILGenerator ilGen = method.GetILGenerator();
 
             if (hasInitializeParameter)
-                ilGen.Emit(OpCodes.Ldarg_0);                        // arg 0
+                ilGen.Emit(OpCodes.Ldarg_0);                                            // arg 0
             else
-                ilGen.Emit(OpCodes.Ldc_I4_1);                       // true
+                ilGen.Emit(OpCodes.Ldc_I4_1);                                           // true
 
             // Create delegate for the extension scope initializer
-            ilGen.Emit(OpCodes.Ldnull);                             // instance (this) ... it's a static method.
-            ilGen.Emit(OpCodes.Ldftn, this.ExtensionScopeInitializer);   // pointer to the initializer method
-            ilGen.Emit(OpCodes.Newobj, RuntimeGenerator.ScopeInitializerDelegateCtor);            // create the delegate object
+            ilGen.Emit(OpCodes.Ldnull);                                                 // instance (this) ... it's a static method.
+            ilGen.Emit(OpCodes.Ldftn, this.ExtensionScopeInitializer);                  // pointer to the initializer method
+            ilGen.Emit(OpCodes.Newobj, RuntimeGenerator.ScopeInitializerDelegateCtor);  // create the delegate object
 
             // Create delegate for the global scope initializer
-            ilGen.Emit(OpCodes.Ldnull);                             // instance (this) ... it's a static method.
-            ilGen.Emit(OpCodes.Ldftn, this.GlobalScopeInitializer);      // pointer to the initializer method
-            ilGen.Emit(OpCodes.Newobj, RuntimeGenerator.ScopeInitializerDelegateCtor);            // create the delegate object
+            ilGen.Emit(OpCodes.Ldnull);                                                 // instance (this) ... it's a static method.
+            ilGen.Emit(OpCodes.Ldftn, this.GlobalScopeInitializer);                     // pointer to the initializer method
+            ilGen.Emit(OpCodes.Newobj, RuntimeGenerator.ScopeInitializerDelegateCtor);  // create the delegate object
 
             // Call the method (on the stack: bool, Action<SmalltalkRuntime, SmalltalkNameScope>, Action<SmalltalkRuntime, SmalltalkNameScope>
-            ilGen.Emit(OpCodes.Call, RuntimeGenerator.CreateRuntimeMethod);          // Call NativeLoadHelper.CreateRuntime();
-            ilGen.Emit(OpCodes.Ret);                                // Return the result
+            ilGen.Emit(OpCodes.Call, RuntimeGenerator.CreateRuntimeMethod);             // Call NativeLoadHelper.CreateRuntime();
+            ilGen.Emit(OpCodes.Ret);                                                    // Return the result
         }
     }
 }

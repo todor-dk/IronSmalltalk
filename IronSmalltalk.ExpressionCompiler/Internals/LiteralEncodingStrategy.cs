@@ -30,64 +30,63 @@ namespace IronSmalltalk.ExpressionCompiler.Internals
 {
     public class LiteralEncodingStrategy : ILiteralEncodingStrategy
     {
-        public Expression Character(VisitingContext context, char value)
+        Expression ILiteralEncodingStrategy.Character(EncoderVisitor visitor, char value)
         {
             return Expression.Constant(PreboxedConstants.GetValue(value) ?? value, typeof(object));
         }
 
-        public Expression FloatE(VisitingContext context, float value)
+        Expression ILiteralEncodingStrategy.FloatE(EncoderVisitor visitor, float value)
         {
             return Expression.Constant(PreboxedConstants.GetValue(value) ?? value, typeof(object));
         }
 
-        public Expression FloatD(VisitingContext context, double value)
+        Expression ILiteralEncodingStrategy.FloatD(EncoderVisitor visitor, double value)
         {
             return Expression.Constant(PreboxedConstants.GetValue(value) ?? value, typeof(object));
         }
 
-        public Expression LargeInteger(VisitingContext context, BigInteger value)
+        Expression ILiteralEncodingStrategy.LargeInteger(EncoderVisitor visitor, BigInteger value)
         {
             return Expression.Constant(PreboxedConstants.GetValue(value) ?? value, typeof(object));
         }
 
-        public Expression ScaledDecimal(VisitingContext context, BigDecimal value)
+        Expression ILiteralEncodingStrategy.ScaledDecimal(EncoderVisitor visitor, BigDecimal value)
         {
             return Expression.Constant(PreboxedConstants.GetValue(value) ?? value, typeof(object));
         }
 
-        public Expression SmallInteger(VisitingContext context, int value)
+        Expression ILiteralEncodingStrategy.SmallInteger(EncoderVisitor visitor, int value)
         {
             return Expression.Constant(PreboxedConstants.GetValue(value) ?? value, typeof(object));
         }
 
-        public Expression String(VisitingContext context, string value)
+        Expression ILiteralEncodingStrategy.String(EncoderVisitor visitor, string value)
         {
             return Expression.Constant(value, typeof(object));
         }
 
-        public Expression Symbol(VisitingContext context, string value)
+        Expression ILiteralEncodingStrategy.Symbol(EncoderVisitor visitor, string value)
         {
             // #'asUppercase' or #'this is a test'
-            return Expression.Constant(context.Compiler.GetSymbol(value), typeof(object));
+            return Expression.Constant(visitor.Context.Compiler.GetSymbol(value), typeof(object));
         }
 
-        public Expression Nil(VisitingContext context)
+        Expression ILiteralEncodingStrategy.Nil(EncoderVisitor visitor)
         {
             return PreboxedConstants.Nil_Expression;
         }
 
-        public Expression True(VisitingContext context)
+        Expression ILiteralEncodingStrategy.True(EncoderVisitor visitor)
         {
             return Expression.Constant(PreboxedConstants.True, typeof(object));
         }
 
-        public Expression False(VisitingContext context)
+        Expression ILiteralEncodingStrategy.False(EncoderVisitor visitor)
         {
             return Expression.Constant(PreboxedConstants.False, typeof(object));
         }
 
-        // Used when the array is primary
-        public Expression Array(EncoderVisitor visitor, IList<LiteralNode> elements)
+        Expression ILiteralEncodingStrategy.Array(EncoderVisitor visitor, IList<LiteralNode> elements)
         {
             LiteralVisitorConstantValue arrayVisitor = new LiteralVisitorConstantValue(visitor);
             object[] result = new object[elements.Count];
@@ -96,24 +95,12 @@ namespace IronSmalltalk.ExpressionCompiler.Internals
             return Expression.Constant(result, typeof(object));
         }
 
-        // Used when the array is nested inside an array and we need to encode to expression
-        public Expression Array(LiteralVisitorExpressionValue visitor, IList<LiteralNode> elements)
-        {
-            // BUG BUG ... review this code
-            LiteralVisitorExpressionValue arrayVisitor = new LiteralVisitorExpressionValue(visitor);
-            Expression[] result = new Expression[elements.Count];
-            for (int i = 0; i < result.Length; i++)
-                result[i] = elements[i].Accept(arrayVisitor);
-            return Expression.Constant(result, typeof(object));
-        }
-
-
-        public Expression GetZero(Type type)
+        Expression ILiteralEncodingStrategy.GetZero(Type type)
         {
             return Expression.Constant(LiteralEncodingStrategy.GetValue(type, 0));
         }
 
-        public Expression GetOne(Type type)
+        Expression ILiteralEncodingStrategy.GetOne(Type type)
         {
             return Expression.Constant(LiteralEncodingStrategy.GetValue(type, 1));
         }
@@ -127,7 +114,7 @@ namespace IronSmalltalk.ExpressionCompiler.Internals
         }
 
 
-        public Expression GenericLiteral(VisitingContext context, string name, Expression value)
+        Expression ILiteralEncodingStrategy.GenericLiteral(EncoderVisitor visitor, string name, Expression value)
         {
             return value;
         }

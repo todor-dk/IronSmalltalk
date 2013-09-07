@@ -43,6 +43,7 @@ namespace IronSmalltalk.Runtime.Bindings
     {
         private readonly Dictionary<Symbol, TItem> _Contents;
 
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public SmalltalkRuntime Runtime { get; private set; }
 
         /// <summary>

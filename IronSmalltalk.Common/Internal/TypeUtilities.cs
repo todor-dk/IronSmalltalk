@@ -13,7 +13,7 @@ namespace IronSmalltalk.Common.Internal
 
         public static ConstructorInfo Constructor(Type type, params Type[] argumentTypes)
         {
-            return TypeUtilities.Constructor(type, BindingFlags.Public | BindingFlags.CreateInstance | BindingFlags.FlattenHierarchy, argumentTypes);
+            return TypeUtilities.Constructor(type, BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy, argumentTypes);
         }
 
         public static ConstructorInfo Constructor(Type type, BindingFlags bindingFlags, params Type[] argumentTypes)
@@ -43,6 +43,17 @@ namespace IronSmalltalk.Common.Internal
                 throw new MissingFieldException(type.Name, name);
 
             return field;
+        }
+
+        public static MethodInfo Method(Type type, string name)
+        {
+            if (type == null)
+                throw new ArgumentNullException("type");
+            MethodInfo method = type.GetMethod(name);
+            if (method == null)
+                throw new MissingMethodException(type.Name, String.Format("{0}(...)", name));
+
+            return method;
         }
 
         public static MethodInfo Method(Type type, string name, params Type[] argumentTypes)

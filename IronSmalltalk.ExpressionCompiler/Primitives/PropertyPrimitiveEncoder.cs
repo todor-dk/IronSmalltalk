@@ -13,8 +13,8 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
 {
     public abstract class PropertyPrimitiveEncoder : NamedMemberPrimitiveEncoder
     {
-        protected PropertyPrimitiveEncoder(VisitingContext context, IEnumerable<string> parameters, Type definingType, string memberName)
-            : base(context, parameters, definingType, memberName)
+        protected PropertyPrimitiveEncoder(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType, string memberName)
+            : base(visitor, parameters, definingType, memberName)
         {
         }
 
@@ -126,8 +126,8 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
 
     public sealed class GetPropertyPrimitiveEncoder : PropertyPrimitiveEncoder
     {
-        private GetPropertyPrimitiveEncoder(VisitingContext context, IEnumerable<string> parameters, Type definingType, string memberName)
-            : base(context, parameters, definingType, memberName)
+        private GetPropertyPrimitiveEncoder(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType, string memberName)
+            : base(visitor, parameters, definingType, memberName)
         {
         }
 
@@ -136,16 +136,16 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
             return this.GenerateInvokeProperty(BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Static);
         }
 
-        public static Expression GeneratePrimitive(VisitingContext context, IEnumerable<string> parameters, Type definingType, string memberName)
+        public static Expression GeneratePrimitive(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType, string memberName)
         {
-            return (new GetPropertyPrimitiveEncoder(context, parameters, definingType, memberName)).GenerateExpression();
+            return (new GetPropertyPrimitiveEncoder(visitor, parameters, definingType, memberName)).GenerateExpression();
         }
     }
 
     public sealed class SetPropertyPrimitiveEncoder : PropertyPrimitiveEncoder
     {
-        private SetPropertyPrimitiveEncoder(VisitingContext context, IEnumerable<string> parameters, Type definingType, string memberName)
-            : base(context, parameters, definingType, memberName)
+        private SetPropertyPrimitiveEncoder(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType, string memberName)
+            : base(visitor, parameters, definingType, memberName)
         {
         }
 
@@ -154,9 +154,9 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
             return this.GenerateInvokeProperty(BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.Static);
         }
 
-        public static Expression GeneratePrimitive(VisitingContext context, IEnumerable<string> parameters, Type definingType, string memberName)
+        public static Expression GeneratePrimitive(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType, string memberName)
         {
-            return (new SetPropertyPrimitiveEncoder(context, parameters, definingType, memberName)).GenerateExpression();
+            return (new SetPropertyPrimitiveEncoder(visitor, parameters, definingType, memberName)).GenerateExpression();
         }
     }
 }

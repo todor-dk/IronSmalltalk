@@ -17,6 +17,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using IronSmalltalk.Common.Internal;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
 using IronSmalltalk.Runtime.Internal;
@@ -231,7 +233,13 @@ namespace IronSmalltalk.Runtime
         /// <summary>
         /// Array with the class-instance variables of the class.
         /// </summary>
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public object[] ClassInstanceVariables { get; private set; }
+
+        /// <summary>
+        /// Internal. The PropertyInfo of the SmalltalkClass.ClassInstanceVariables property.
+        /// </summary>
+        public static readonly PropertyInfo ClassInstanceVariablesProperty = TypeUtilities.Property(typeof(SmalltalkClass), typeof(object[]), "ClassInstanceVariables");
 
         /// <summary>
         /// Number of all named instance variables defined in the class (including superclasses).
