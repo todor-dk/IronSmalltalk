@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
@@ -85,6 +86,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// <remarks>
         /// There ARE senders of this method!
         /// </remarks>
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static CallSiteBinder GetMessageBinder(string selector, string nativeName, int argumentCount, bool isSuperSend, bool isConstantReceiver, string superLookupScope)
         {
             if (isSuperSend)
@@ -108,6 +110,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             }
         }
 
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static SymbolCallSiteBinder GetSymbolBinder(string symbolKey)
         {
             if (symbolKey == null)
@@ -116,6 +119,12 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             if (binder == null)
                 binder = CallSiteBinderCache.Current.SymbolCache.AddBinder(new SymbolCallSiteBinder(symbolKey));
             return binder;
+        }
+
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
+        public static ObjectClassCallSiteBinder GetObjectClassBinder()
+        {
+            return CallSiteBinderCache.Current.ObjectClassCallSiteBinder;
         }
     }
 }

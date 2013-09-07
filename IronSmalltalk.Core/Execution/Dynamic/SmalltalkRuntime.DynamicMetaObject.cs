@@ -52,18 +52,8 @@ namespace IronSmalltalk
             this.Runtime = runtime;
         }
 
-        static SmalltalkRuntimeDynamicMetaObject()
-        {
-            SmalltalkRuntimeDynamicMetaObject.GetValueProperty = typeof(IBinding).GetProperty("Value");
-            if (SmalltalkRuntimeDynamicMetaObject.GetValueProperty == null)
-                throw new InvalidOperationException("The property Value does not exists in IBinding");
-            SmalltalkRuntimeDynamicMetaObject.SetValueProperty = typeof(IWritableBinding).GetProperty("Value");
-            if (SmalltalkRuntimeDynamicMetaObject.SetValueProperty == null)
-                throw new InvalidOperationException("The property Value does not exists in IWritableBinding");
-        }
-
-        private static readonly PropertyInfo GetValueProperty = typeof(IBinding).GetProperty("Value");
-        private static readonly PropertyInfo SetValueProperty = typeof(IWritableBinding).GetProperty("Value");
+        private static readonly PropertyInfo GetValueProperty = TypeUtilities.Property(typeof(IBinding), typeof(object), "Value");
+        private static readonly PropertyInfo SetValueProperty = TypeUtilities.Property(typeof(IWritableBinding), typeof(object), "Value");
 
         /// <summary>
         /// 

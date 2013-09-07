@@ -13,14 +13,14 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
 {
     public sealed class InvokeConstructorPrimitiveEncoder : MemberPrimitiveEncoder
     {
-        private InvokeConstructorPrimitiveEncoder(VisitingContext context, IEnumerable<string> parameters, Type definingType)
-            : base(context, parameters, definingType)
+        private InvokeConstructorPrimitiveEncoder(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType)
+            : base(visitor, parameters, definingType)
         {
         }
 
-        public static Expression GeneratePrimitive(VisitingContext context, IEnumerable<string> parameters, Type definingType)
+        public static Expression GeneratePrimitive(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType)
         {
-            return (new InvokeConstructorPrimitiveEncoder(context, parameters, definingType)).GenerateExpression();
+            return (new InvokeConstructorPrimitiveEncoder(visitor, parameters, definingType)).GenerateExpression();
         }
 
         /// <summary>

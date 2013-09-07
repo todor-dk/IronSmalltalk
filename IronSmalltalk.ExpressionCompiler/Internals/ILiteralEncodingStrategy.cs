@@ -10,20 +10,19 @@ namespace IronSmalltalk.ExpressionCompiler.Internals
     public interface ILiteralEncodingStrategy
     {
         Expression Array(EncoderVisitor visitor, IList<LiteralNode> elements);
-        Expression Array(LiteralVisitorExpressionValue visitor, IList<LiteralNode> elements);
-        Expression Character(VisitingContext context, char value);
-        Expression False(VisitingContext context);
-        Expression FloatD(VisitingContext context, double value);
-        Expression FloatE(VisitingContext context, float value);
-        Expression LargeInteger(VisitingContext context, BigInteger value);
-        Expression Nil(VisitingContext context);
-        Expression ScaledDecimal(VisitingContext context, BigDecimal value);
-        Expression SmallInteger(VisitingContext context, int value);
-        Expression String(VisitingContext context, string value);
-        Expression Symbol(VisitingContext context, string value);
-        Expression True(VisitingContext context);
+        Expression Character(EncoderVisitor visitor, char value);
+        Expression False(EncoderVisitor visitor);
+        Expression FloatD(EncoderVisitor visitor, double value);
+        Expression FloatE(EncoderVisitor visitor, float value);
+        Expression LargeInteger(EncoderVisitor visitor, BigInteger value);
+        Expression Nil(EncoderVisitor visitor);
+        Expression ScaledDecimal(EncoderVisitor visitor, BigDecimal value);
+        Expression SmallInteger(EncoderVisitor visitor, int value);
+        Expression String(EncoderVisitor visitor, string value);
+        Expression Symbol(EncoderVisitor visitor, string value);
+        Expression True(EncoderVisitor visitor);
         Expression GetZero(Type type);
         Expression GetOne(Type type);
-        Expression GenericLiteral(VisitingContext context, string name, Expression value);
+        Expression GenericLiteral(EncoderVisitor visitor, string name, Expression value);
     }
 }

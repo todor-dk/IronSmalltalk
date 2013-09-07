@@ -14,8 +14,8 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
     {
         public Type DefiningType { get; private set; }
 
-        public MemberPrimitiveEncoder(VisitingContext context, IEnumerable<string> parameters, Type definingType)
-            : base(context, parameters)
+        public MemberPrimitiveEncoder(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType)
+            : base(visitor, parameters)
         {
             if (definingType == null)
                 throw new ArgumentNullException("definingType");
@@ -63,8 +63,8 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
     {
         public string MemberName { get; private set; }
 
-        public NamedMemberPrimitiveEncoder(VisitingContext context, IEnumerable<string> parameters, Type definingType, string memberName)
-            : base(context, parameters, definingType)
+        public NamedMemberPrimitiveEncoder(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType, string memberName)
+            : base(visitor, parameters, definingType)
         {
             if (String.IsNullOrWhiteSpace(memberName))
                 throw new ArgumentNullException("memberName");

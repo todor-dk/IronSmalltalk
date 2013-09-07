@@ -21,6 +21,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.Common.Internal;
 using IronSmalltalk.NativeCompiler.Internals;
 using IronSmalltalk.Runtime.Bindings;
 
@@ -31,7 +32,7 @@ namespace IronSmalltalk.NativeCompiler.Generators.Globals
     /// </summary>
     internal abstract class GlobalBindingGenerator : GeneratorBase
     {
-        internal GlobalBindingGenerator(NativeCompiler compiler)
+        protected GlobalBindingGenerator(NativeCompiler compiler)
             : base(compiler)
         {
         }
@@ -40,26 +41,45 @@ namespace IronSmalltalk.NativeCompiler.Generators.Globals
 
         internal abstract string BindingName { get; }
 
-        private static readonly Type[] AddBindingMethodParameterTypes = new Type[]
+        internal void GenerateGlobal(NameScopeGenerator scopeGenerator, ParameterExpression runtime, ParameterExpression scope, List<ParameterExpression> variables, List<Expression> createBindings, List<Expression> initializeBindings)
         {
-            typeof(SmalltalkRuntime), typeof(IronSmalltalk.Runtime.Bindings.SmalltalkNameScope), typeof(string)
-        };
+            // The method that will add the global binding, e.g. ... NativeLoadHelper.AddClassBinding(...);
+            MethodInfo addBindingMethod = this.GetAddBindingMethod();
+            // Create a temp var for each global binding object.
+            ParameterExpression variable = Expression.Parameter(addBindingMethod.ReturnType, this.BindingName);
+            variables.Add(variable);
+            // Add a statement to call that method and assign it to the temp var .... ClassBinding binding27 = NativeLoadHelper.AddClassBinding(runtime, scope, "...");
+            createBindings.Add(Expression.Assign(variable, Expression.Call(addBindingMethod, runtime, scope, Expression.Constant(this.BindingName, typeof(String)))));
 
-        internal MethodInfo GetAddBindingMethod()
-        {
-            Type helperType = typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper);
-            MethodInfo method = helperType.GetMethod(this.AddBindingMethodName, BindingFlags.Static | BindingFlags.Public, null, GlobalBindingGenerator.AddBindingMethodParameterTypes, null);
-            if (method == null)
-                throw new Exception(String.Format("Could not find static method {0} in class {1}.", this.AddBindingMethodName, helperType.FullName));
-            return method;
+            // Add a statement that will create the global object. This is relevant for clases and pools.
+            // Example ...  NativeLoadHelper.CreateClass(runtime, scope, binding27, "...", SmalltalkClass.InstanceStateEnum.Native, ...); 
+            IEnumerable<Expression> expression = this.GenerateCreateGlobalObjectExpression(runtime, scopeGenerator, scope, variable);
+            if (expression != null)
+                initializeBindings.AddRange(expression);
+            // Add optional annotations ... NativeLoadHelper.AnnotateObject(binding27, "...", "...");
+            this.GenerateAnnotations(initializeBindings, variable);
         }
 
-        internal virtual IEnumerable<Expression> GenerateCreateObject(ParameterExpression runtime, NameScopeGenerator scopeGenerator, ParameterExpression scope, ParameterExpression binding)
+        private MethodInfo GetAddBindingMethod()
+        {
+            return TypeUtilities.Method(typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper), this.AddBindingMethodName,
+                typeof(SmalltalkRuntime), typeof(IronSmalltalk.Runtime.Bindings.SmalltalkNameScope), typeof(string));
+        }
+
+        /// <summary>
+        /// Generate a statement that will create the global object. This is relevant for clases and pools.
+        /// </summary>
+        /// <param name="runtime">Parameter representing the SmalltalkRuntime.</param>
+        /// <param name="scopeGenerator">Generator for the current name scope.</param>
+        /// <param name="scope">Parameter representing the current name scope.</param>
+        /// <param name="binding">Parameter representing the global binding.</param>
+        /// <returns>A collection of expressions or null.</returns>
+        protected virtual IEnumerable<Expression> GenerateCreateGlobalObjectExpression(ParameterExpression runtime, NameScopeGenerator scopeGenerator, ParameterExpression scope, ParameterExpression binding)
         {
             return null;
         }
 
-        internal abstract void GenerateAnnotations(List<Expression> expressions, ParameterExpression binding);
+        protected abstract void GenerateAnnotations(List<Expression> expressions, ParameterExpression binding);
     }
 
     internal abstract class GlobalBindingGenerator<TBinding> : GlobalBindingGenerator
@@ -67,7 +87,7 @@ namespace IronSmalltalk.NativeCompiler.Generators.Globals
     {
         internal TBinding Binding { get; private set; }
 
-        internal GlobalBindingGenerator(NativeCompiler compiler, TBinding binding)
+        protected GlobalBindingGenerator(NativeCompiler compiler, TBinding binding)
             : base(compiler)
         {
             if (binding == null)
@@ -80,26 +100,15 @@ namespace IronSmalltalk.NativeCompiler.Generators.Globals
             get { return this.Binding.Name; }
         }
 
-        private static readonly Type[] AnnotateObjectParameterTypes = new Type[]
-        {
-            typeof(IDiscreteBinding), typeof(string), typeof(string)
-        };
+        protected static readonly MethodInfo AnnotateObjectMethod = TypeUtilities.Method(
+            typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper), "AnnotateObject",
+            typeof(IDiscreteBinding), typeof(string), typeof(string));
 
-        protected MethodInfo GetAnnotateObjectMethod()
+        protected override void GenerateAnnotations(List<Expression> expressions, ParameterExpression binding)
         {
-            Type helperType = typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper);
-            MethodInfo method = helperType.GetMethod("AnnotateObject", BindingFlags.Static | BindingFlags.Public, null, AnnotateObjectParameterTypes, null);
-            if (method == null)
-                throw new Exception(String.Format("Could not find static method AnnotateObject in class {0}.", helperType.FullName));
-            return method;
-        }
-
-        internal override void GenerateAnnotations(List<Expression> expressions, ParameterExpression binding)
-        {
-            MethodInfo method = this.GetAnnotateObjectMethod();
             foreach (KeyValuePair<string, string> pair in this.Binding.Annotations)
             {
-                expressions.Add(Expression.Call(method,
+                expressions.Add(Expression.Call(AnnotateObjectMethod,
                     binding,
                     Expression.Constant(pair.Key, typeof(string)),
                     Expression.Constant(pair.Value, typeof(string))));

@@ -108,8 +108,8 @@ namespace IronSmalltalk.NativeCompiler
             this.Parameters.Runtime.GlobalScope.Accept(globalScope);
 
             // Generate types from the result of the name scope visiting
-            MethodInfo extensionScopeInitializer = extensionScope.GenerateInitializerMethod();
-            MethodInfo globalScopeInitializer = globalScope.GenerateInitializerMethod();
+            MethodInfo extensionScopeInitializer = extensionScope.GenerateNameScopeInitializerMethod();
+            MethodInfo globalScopeInitializer = globalScope.GenerateNameScopeInitializerMethod();
             // Generate the entry point class, the one that creates the new Smalltalk runtime.
             RuntimeGenerator runtime = new RuntimeGenerator(this, extensionScopeInitializer, globalScopeInitializer);
             runtime.GenerateCreateRuntimeMethods();

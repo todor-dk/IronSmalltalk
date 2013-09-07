@@ -13,8 +13,8 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
 {
     public abstract class FieldPrimitiveEncoder : NamedMemberPrimitiveEncoder
     {
-        protected FieldPrimitiveEncoder(VisitingContext context, IEnumerable<string> parameters, Type definingType, string memberName)
-            : base(context, parameters, definingType, memberName)
+        protected FieldPrimitiveEncoder(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType, string memberName)
+            : base(visitor, parameters, definingType, memberName)
         {
         }
 
@@ -42,7 +42,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
                 {
                     // If the field is "const" or "static readonly" and it's a value type, the literal strategy may want to pre-box it.
                     if ((field.IsLiteral || field.IsInitOnly) && field.FieldType.IsValueType)
-                        return this.Compiler.LiteralEncoding.GenericLiteral(this.Context, String.Format("{0}.{1}", field.FieldType.Name, field.Name), Expression.Field(null, field));
+                        return this.Compiler.LiteralEncoding.GenericLiteral(this.Visitor, String.Format("{0}.{1}", field.FieldType.Name, field.Name), Expression.Field(null, field));
 
                     return Expression.Field(null, field);
                 }
@@ -67,8 +67,8 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
 
     public sealed class GetFieldPrimitiveEncoder : FieldPrimitiveEncoder
     {
-        private GetFieldPrimitiveEncoder(VisitingContext context, IEnumerable<string> parameters, Type definingType, string memberName)
-            : base(context, parameters, definingType, memberName)
+        private GetFieldPrimitiveEncoder(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType, string memberName)
+            : base(visitor, parameters, definingType, memberName)
         {
         }
 
@@ -77,16 +77,16 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
             return this.GenerateInvokeField(BindingFlags.GetField);
         }
 
-        public static Expression GeneratePrimitive(VisitingContext context, IEnumerable<string> parameters, Type definingType, string memberName)
+        public static Expression GeneratePrimitive(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType, string memberName)
         {
-            return (new GetFieldPrimitiveEncoder(context, parameters, definingType, memberName)).GenerateExpression();
+            return (new GetFieldPrimitiveEncoder(visitor, parameters, definingType, memberName)).GenerateExpression();
         }
     }
 
     public sealed class SetFieldPrimitiveEncoder : FieldPrimitiveEncoder
     {
-        private SetFieldPrimitiveEncoder(VisitingContext context, IEnumerable<string> parameters, Type definingType, string memberName)
-            : base(context, parameters, definingType, memberName)
+        private SetFieldPrimitiveEncoder(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType, string memberName)
+            : base(visitor, parameters, definingType, memberName)
         {
         }
 
@@ -95,9 +95,9 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
             return this.GenerateInvokeField(BindingFlags.SetField);
         }
 
-        public static Expression GeneratePrimitive(VisitingContext context, IEnumerable<string> parameters, Type definingType, string memberName)
+        public static Expression GeneratePrimitive(PrimitiveCallVisitor visitor, IEnumerable<string> parameters, Type definingType, string memberName)
         {
-            return (new SetFieldPrimitiveEncoder(context, parameters, definingType, memberName)).GenerateExpression();
+            return (new SetFieldPrimitiveEncoder(visitor, parameters, definingType, memberName)).GenerateExpression();
         }
     }
 }

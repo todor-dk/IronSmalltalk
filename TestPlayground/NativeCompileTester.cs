@@ -35,6 +35,7 @@ using IronSmalltalk.Runtime;
 using System.Linq.Expressions;
 using System.Dynamic;
 using System.Runtime.CompilerServices;
+using IronSmalltalk.Common.Internal;
 
 namespace TestPlayground
 {
@@ -101,7 +102,11 @@ namespace TestPlayground
             parameters.FileExtension = "dll";
             parameters.OutputDirectory = "c:\\temp";
             parameters.Product = "Iron Smalltalk Product";
+            parameters.AssemblyVersion = "1.2.3.4";
+            parameters.FileVersion = "1.2.3.4";
             parameters.ProductVersion = "1.2.3.4";
+            parameters.ProductTitle = "Iron Title";
+            parameters.ProductDescription = "Just a test of the Iron Smalltalk native compiler";
             parameters.RootNamespace = "IronSmalltalk.Test";
             parameters.Runtime = runtime;
             parameters.Trademark = "Iron(tm)";
@@ -116,7 +121,8 @@ namespace TestPlayground
         {
             Assembly assembly = Assembly.LoadFile("c:\\temp\\IronSt.dll");
             Type type = assembly.GetType("IronSmalltalk.Test.Smalltalk");
-            MethodInfo method = type.GetMethod("CreateRuntime", new Type[0]);
+            var name = assembly.GetName();
+            MethodInfo method = TypeUtilities.Method(type, "CreateRuntime");
             object runtime = method.Invoke(null, null);
 
             MessageBox.Show("SUCCESS!");
@@ -275,9 +281,7 @@ namespace TestPlayground
 
             public override DynamicMetaObject FallbackInvoke(DynamicMetaObject target, DynamicMetaObject[] args, DynamicMetaObject errorSuggestion)
             {
-                MethodInfo method = typeof(string).GetMethod("Format", 
-                    BindingFlags.ExactBinding | BindingFlags.Static | BindingFlags.InvokeMethod  | BindingFlags.Public,
-                    null, new Type[] { typeof(string), typeof(object) }, null);
+                MethodInfo method = TypeUtilities.Method(typeof(string), "Format", typeof(string), typeof(object));
                
                 var result = new DynamicMetaObject(
                     Expression.Call(method, Expression.Convert(target.Expression, typeof(string)), args[0].Expression),

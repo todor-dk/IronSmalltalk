@@ -22,6 +22,8 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using IronSmalltalk.Common.Internal;
+using IronSmalltalk.NativeCompiler.Generators.Behavior;
 using IronSmalltalk.NativeCompiler.Internals;
 using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Behavior;
@@ -44,10 +46,22 @@ namespace IronSmalltalk.NativeCompiler.Generators.Globals
 
         #region Class Types and Binding Creation
 
-        internal void GenerateTypes()
+        /// <summary>
+        /// Generate the types that are needed for the behavior of the class.
+        /// Those include:
+        /// ".Classes.ClassName"                            - Contains instance method implementations
+        /// ".Classes.ClassName.$Literals"                  - Static variables with literals that cannot be inilined in IL code
+        /// ".Classes.ClassName.$LiteralCallSites"          - Static variables with CallSites and Binders for "tricky" literals
+        /// ".Classes.ClassName.$CallSites"                 - Static variables with CallSites and Binders for polymorphic calls (every ST method call)
+        /// ".Classes.ClassName class"                      - Same as above, but the class side ...
+        /// ".Classes.ClassName class.$Literals"
+        /// ".Classes.ClassName class.$LiteralCallSites"
+        /// ".Classes.ClassName class.$CallSites"
+        /// </summary>
+        internal void GenerateBehaviorTypes()
         {
-            this.InstanceMethodGenerator.GenerateMethods();
-            this.ClassMethodGenerator.GenerateMethods();
+            this.InstanceMethodGenerator.GenerateBehaviors();
+            this.ClassMethodGenerator.GenerateBehaviors();
         }
 
         protected override string AddBindingMethodName
@@ -55,35 +69,25 @@ namespace IronSmalltalk.NativeCompiler.Generators.Globals
             get { return "AddClassBinding"; }
         }
 
-        private MethodInfo GetCreateObjectMethod()
-        {
-            Type helperType = typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper);
-            Type[] argTypes = new Type[]
-            {
-                typeof(SmalltalkRuntime), typeof(SmalltalkNameScope), typeof(ClassBinding), typeof(string), 
-                typeof(SmalltalkClass.InstanceStateEnum), typeof(string[]), typeof(string[]), typeof(string[]), typeof(string[]),
-                typeof(Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>), typeof(Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>)
-            };
-            MethodInfo method = helperType.GetMethod("CreateClass", BindingFlags.Static | BindingFlags.Public, null, argTypes, null);
-            if (method == null)
-                throw new Exception(String.Format("Could not find static method CreateClass in class {0}.", helperType.FullName));
-            return method;
-        }
+        private static readonly MethodInfo CreateClassMethod = TypeUtilities.Method(
+            typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper), "CreateClass",
+            typeof(SmalltalkRuntime), typeof(SmalltalkNameScope), typeof(ClassBinding), typeof(string),
+            typeof(SmalltalkClass.InstanceStateEnum), typeof(string[]), typeof(string[]), typeof(string[]), typeof(string[]),
+            typeof(Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>), typeof(Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>));
 
-        internal override IEnumerable<Expression> GenerateCreateObject(ParameterExpression runtime, NameScopeGenerator scopeGenerator, ParameterExpression scope, ParameterExpression binding)
+        protected override IEnumerable<Expression> GenerateCreateGlobalObjectExpression(ParameterExpression runtime, NameScopeGenerator scopeGenerator, ParameterExpression scope, ParameterExpression binding)
         {
-            MethodInfo method = this.GetCreateObjectMethod();
             return new Expression[] 
             { 
-                Expression.Call(method, runtime, scope, binding,
+                Expression.Call(ClassGenerator.CreateClassMethod, runtime, scope, binding,
                     Expression.Constant(((this.Binding.Value.SuperclassBinding == null) ? null : this.Binding.Value.SuperclassBinding.Name.Value), typeof(string)),
                     Expression.Constant(this.Binding.Value.InstanceState, typeof(IronSmalltalk.Runtime.SmalltalkClass.InstanceStateEnum)),
                     this.CreateExpressionArray(this.Binding.Value.ClassVariableBindings),
                     this.CreateExpressionArray(this.Binding.Value.InstanceVariableBindings),
                     this.CreateExpressionArray(this.Binding.Value.ClassInstanceVariableBindings),
                     this.CreateExpressionArray(this.Binding.Value.ImportedPoolBindings),
-                    this.ClassMethodGenerator.GetInitMethodsDelegate(scopeGenerator),
-                    this.InstanceMethodGenerator.GetInitMethodsDelegate(scopeGenerator))
+                    this.ClassMethodGenerator.GetMethodDictionaryInitializerDelegate(scopeGenerator),
+                    this.InstanceMethodGenerator.GetMethodDictionaryInitializerDelegate(scopeGenerator))
             };
         }
 
@@ -102,10 +106,14 @@ namespace IronSmalltalk.NativeCompiler.Generators.Globals
         }
 
 
-        internal void GenerateInitMethodDictionaries(TypeBuilder type)
+        /// <summary>
+        /// Generate initializer methods to initialize the contents of the method dictionaries.
+        /// Those are contained in a class named ".Initializers.ScopeName_MethodInitializers".
+        /// </summary>
+        internal void GenerateMethodDictionariesInitializer(TypeBuilder type)
         {
-            this.ClassMethodGenerator.GenerateInitMethodDictionaries(type);
-            this.InstanceMethodGenerator.GenerateInitMethodDictionaries(type);
+            this.ClassMethodGenerator.GenerateMethodDictionaryInitializer(type);
+            this.InstanceMethodGenerator.GenerateMethodDictionaryInitializer(type);
         }
 
         #endregion

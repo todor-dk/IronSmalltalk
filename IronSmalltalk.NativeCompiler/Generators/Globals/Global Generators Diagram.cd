@@ -1,56 +1,56 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="IronSmalltalk.NativeCompiler.Generators.Globals.ClassGenerator">
-    <Position X="4.75" Y="10" Width="2.75" />
+    <Position X="0.5" Y="9.25" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>ACAIgAAAAYAQAABACAACBAAAAAAAAQQEEAAJAAAAAAA=</HashCode>
+      <HashCode>AAAIAIAAAIIAAAAACAAABAAAAAAAAAQAEAAAAAAAAAA=</HashCode>
       <FileName>Generators\Globals\ClassGenerator.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.NativeCompiler.Generators.Globals.GlobalBindingGenerator">
-    <Position X="9.5" Y="2.5" Width="3.25" />
+    <Position X="5.25" Y="1.75" Width="3.25" />
     <TypeIdentifier>
-      <HashCode>AAIABAAAQIAAAAAACAADAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <HashCode>AAIABAAAAIAAAAAACAACAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Generators\Globals\GlobalBindingGenerator.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.NativeCompiler.Generators.Globals.GlobalBindingGenerator&lt;TBinding&gt;">
-    <Position X="9.75" Y="6.5" Width="2.75" />
+    <Position X="5.5" Y="5.75" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAAABAAAAAAAAAAAAAAGAAAAAAAAAAAAAAEAAAAAACA=</HashCode>
+      <HashCode>AAAABAAAAAAAAAAAAAACAAAAAAEAAAAAAAAAAAAAACA=</HashCode>
       <FileName>Generators\Globals\GlobalBindingGenerator.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.NativeCompiler.Generators.Globals.GlobalConstantGenerator">
-    <Position X="8.25" Y="12.75" Width="2.5" />
+    <Position X="4" Y="12" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAACAAAACAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Generators\Globals\GlobalConstantGenerator.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.NativeCompiler.Generators.Globals.GlobalGenerator&lt;TBinding&gt;">
-    <Position X="10" Y="10" Width="2.25" />
+    <Position X="5.75" Y="9.25" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Generators\Globals\GlobalGenerator.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.NativeCompiler.Generators.Globals.GlobalVariableGenerator">
-    <Position X="11.5" Y="12.75" Width="2.5" />
+    <Position X="7.25" Y="12" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAACAAAACAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Generators\Globals\GlobalVariableGenerator.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.NativeCompiler.Generators.Globals.PoolGenerator">
-    <Position X="14.75" Y="10" Width="3" />
+    <Position X="10.5" Y="9.25" Width="3" />
     <TypeIdentifier>
-      <HashCode>ACAAAQAAAIAQAAAACAAAAAAAAAAABAAAEAABAAAIABA=</HashCode>
+      <HashCode>AAAAAQAAAIAQAAAQCAAAAAABAAAAAAAAAAAAAAAIAAE=</HashCode>
       <FileName>Generators\Globals\PoolGenerator.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.NativeCompiler.Generators.GeneratorBase" Collapsed="true">
-    <Position X="10.25" Y="1.25" Width="1.75" />
+    <Position X="6" Y="0.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Generators\GeneratorBase.cs</FileName>

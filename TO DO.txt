@@ -8,3 +8,36 @@ Clean Up:
 
 Console Host:
 	Save to disk. See: ipy.exe -D -X:SaveAssemblies -X:StaticMethods msdnmag.py
+
+
+
+
+
+
+	            x.FindInterfaces;
+            x.FindMembers;
+            x.GetConstructor;
+            x.GetConstructors;
+            x.GetCustomAttribute;
+            x.GetCustomAttributes;
+            x.GetDefaultMembers;
+            x.GetEnumName;
+            x.GetEnumNames;
+            x.GetEnumValues;
+            x.GetEvent;
+            x.GetEvents;
+            x.GetField;
+            x.GetFields;
+            x.GetGenericArguments;
+            x.GetGenericParameterConstraints;
+            x.GetInterface;
+            x.GetInterfaceMap;
+            x.GetInterfaces;
+            x.GetMember;
+            x.GetMembers;
+            x.GetMethod;
+            x.GetMethods;
+            x.GetNestedType;
+            x.GetNestedTypes;
+            x.GetProperties;
+            x.GetProperty;

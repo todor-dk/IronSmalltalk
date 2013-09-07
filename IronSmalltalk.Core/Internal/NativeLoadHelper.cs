@@ -29,6 +29,7 @@ namespace IronSmalltalk.Runtime.Internal
 {
     public static class NativeLoadHelper
     {
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static void AddProtectedName(SmalltalkRuntime runtime, SmalltalkNameScope scope, string name)
         {
             if (runtime == null)
@@ -42,6 +43,7 @@ namespace IronSmalltalk.Runtime.Internal
                 scope.ProtectedNames.Add(symbol);
         }
 
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static ClassBinding AddClassBinding(SmalltalkRuntime runtime, SmalltalkNameScope scope, string name)
         {
             if (runtime == null)
@@ -56,6 +58,7 @@ namespace IronSmalltalk.Runtime.Internal
             return binding;
         }
 
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static PoolBinding AddPoolBinding(SmalltalkRuntime runtime, SmalltalkNameScope scope, string name)
         {
             if (runtime == null)
@@ -71,6 +74,7 @@ namespace IronSmalltalk.Runtime.Internal
             return binding;
         }
 
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static GlobalVariableBinding AddGlobalVariableBinding(SmalltalkRuntime runtime, SmalltalkNameScope scope, string name)
         {
             if (runtime == null)
@@ -86,6 +90,7 @@ namespace IronSmalltalk.Runtime.Internal
             return binding;
         }
 
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static GlobalConstantBinding AddGlobalConstantBinding(SmalltalkRuntime runtime, SmalltalkNameScope scope, string name)
         {
             if (runtime == null)
@@ -101,6 +106,7 @@ namespace IronSmalltalk.Runtime.Internal
             return binding;
         }
 
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static void CreateClass(SmalltalkRuntime runtime, SmalltalkNameScope scope, ClassBinding binding, string superclassName, 
             SmalltalkClass.InstanceStateEnum instanceState, string[] classVarNames, string[] instVarNames, string[] classInstVarNames, string[] importedPools,
             Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>> classMethodDicInitializer, Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>> instanceMethodDicInitializer )
@@ -180,6 +186,7 @@ namespace IronSmalltalk.Runtime.Internal
             binding.SetValue(new SmalltalkClass(runtime, binding.Name, superclass, instanceState, instVars, classVars, classInstVars, pools, instanceMethods, classMethods));
         }
 
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static void CreatePool(SmalltalkRuntime runtime, PoolBinding binding)
         {
             if (runtime == null)
@@ -190,6 +197,7 @@ namespace IronSmalltalk.Runtime.Internal
             binding.SetValue(new Pool(runtime, binding.Name));
         }
 
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static void AnnotateObject(IDiscreteBinding binding, string key, string value)
         {
             if (binding == null)
@@ -197,6 +205,7 @@ namespace IronSmalltalk.Runtime.Internal
             binding.Annotate(key, value);
         }
 
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static void AnnotateObject(CompiledInitializer initializer, string key, string value)
         {
             if (initializer == null)
@@ -204,6 +213,7 @@ namespace IronSmalltalk.Runtime.Internal
             initializer.Annotate(key, value);
         }
 
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static PoolVariableBinding CreatePoolVariableBinding(SmalltalkRuntime runtime, PoolBinding poolBinding, string name)
         {
             if (runtime == null)
@@ -217,6 +227,7 @@ namespace IronSmalltalk.Runtime.Internal
             return binding;
         }
 
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static PoolConstantBinding CreatePoolConstantBinding(SmalltalkRuntime runtime, PoolBinding poolBinding, string name)
         {
             if (runtime == null)
@@ -230,6 +241,7 @@ namespace IronSmalltalk.Runtime.Internal
             return binding;
         }
 
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static SmalltalkRuntime CreateRuntime(bool initialize, Action<SmalltalkRuntime, SmalltalkNameScope> extensionScopeInitializer, Action<SmalltalkRuntime, SmalltalkNameScope> globalScopeInitializer)
         {
             if (extensionScopeInitializer == null)
@@ -298,11 +310,13 @@ namespace IronSmalltalk.Runtime.Internal
 
         private static readonly Type[] InitializerDelegateTypes = new Type[] { typeof(object), typeof(ExecutionContext) };
 
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static CompiledInitializer AddProgramInitializer(SmalltalkRuntime runtime, SmalltalkNameScope scope, Type delegateType, string delegateName)
         {
             return NativeLoadHelper.AddInitializer(scope, InitializerType.ProgramInitializer, null, delegateType, delegateName);
         }
 
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static CompiledInitializer AddClassInitializer(SmalltalkRuntime runtime, SmalltalkNameScope scope, Type delegateType, string delegateName, string className)
         {
             ClassBinding binding = scope.GetClassBinding(className);
@@ -311,6 +325,7 @@ namespace IronSmalltalk.Runtime.Internal
             return NativeLoadHelper.AddInitializer(scope, InitializerType.ClassInitializer, binding, delegateType, delegateName);
         }
 
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static CompiledInitializer AddGlobalInitializer(SmalltalkRuntime runtime, SmalltalkNameScope scope, Type delegateType, string delegateName, string globalName)
         {
             GlobalVariableOrConstantBinding binding = scope.GetGlobalVariableOrConstantBinding(globalName);
@@ -319,6 +334,7 @@ namespace IronSmalltalk.Runtime.Internal
             return NativeLoadHelper.AddInitializer(scope, InitializerType.GlobalInitializer, binding, delegateType, delegateName);
         }
 
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static CompiledInitializer AddPoolInitializer(SmalltalkRuntime runtime, SmalltalkNameScope scope, Type delegateType, string delegateName, string poolName, string poolItemName)
         {
             PoolBinding poolBinding = scope.GetPoolBinding(poolName);
@@ -328,6 +344,40 @@ namespace IronSmalltalk.Runtime.Internal
             if (binding == null)
                 throw new ArgumentException(String.Format("Pool variable or constant named {0} does not exist in pool {1}.", poolItemName, poolName));
             return NativeLoadHelper.AddInitializer(scope, InitializerType.PoolVariableInitializer, binding, delegateType, delegateName);
+        }
+
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
+        public static void AddClassMethod(Dictionary<Symbol, CompiledMethod> dictionary, SmalltalkClass cls, string selector, Type containingType, string nativeName)
+        {
+            NativeLoadHelper.AddMethod(dictionary, cls, selector, containingType, nativeName, CompiledMethod.MethodType.Class);
+        }
+
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
+        public static void AddInstanceMethod(Dictionary<Symbol, CompiledMethod> dictionary, SmalltalkClass cls, string selector, Type containingType, string nativeName)
+        {
+            NativeLoadHelper.AddMethod(dictionary, cls, selector, containingType, nativeName, CompiledMethod.MethodType.Instance);
+        }
+
+        private static void AddMethod(Dictionary<Symbol, CompiledMethod> dictionary, SmalltalkClass cls, string selector, Type containingType, string nativeName, CompiledMethod.MethodType methodType)
+        {
+            if (dictionary == null)
+                throw new ArgumentNullException("dictionary");
+            if (cls == null)
+                throw new ArgumentNullException("cls");
+            if (selector == null)
+                throw new ArgumentNullException("selector");
+            if (containingType == null)
+                throw new ArgumentNullException("containingType");
+            if (nativeName == null)
+                throw new ArgumentNullException("nativeName");
+
+
+            Symbol sel = cls.Runtime.GetSymbol(selector);
+            MethodInfo nativeMethod = containingType.GetMethod(nativeName, BindingFlags.Public | BindingFlags.Static);
+            if (nativeMethod == null)
+                throw new MissingMethodException(containingType.FullName, nativeName);
+            NativeCompiledMethod method = new NativeCompiledMethod(cls, sel, methodType, nativeMethod);
+            dictionary.Add(sel, method);
         }
 
         private static CompiledInitializer AddInitializer(SmalltalkNameScope scope, InitializerType type, IDiscreteBinding binding, Type delegateType, string delegateName)

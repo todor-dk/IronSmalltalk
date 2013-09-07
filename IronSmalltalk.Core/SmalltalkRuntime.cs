@@ -17,6 +17,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using IronSmalltalk.Common.Internal;
 using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Bindings;
 using IronSmalltalk.Runtime.Internal;
@@ -300,6 +302,7 @@ namespace IronSmalltalk
         /// </summary>
         /// <param name="value">String value of the symbol.</param>
         /// <returns>An unique symbol with the requested string value.</returns>
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public Symbol GetSymbol(string value)
         {
             if (value == null)
@@ -307,7 +310,7 @@ namespace IronSmalltalk
 
             return this.SymbolTable.GetSymbol(value);
         }
-        
+
         #endregion
 
         /// <summary>

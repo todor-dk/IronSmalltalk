@@ -145,6 +145,10 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             return Expression.Return(this.Context.ReturnLabel, value, typeof(object));
         }
 
+        protected internal override void AddToVisitorChain(List<EncoderVisitor> list)
+        {
+            list.Add(this);
+        }
 
 
         #region Helpers 

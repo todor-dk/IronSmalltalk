@@ -27,7 +27,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 executionContext = target.Value as ExecutionContext;
             if (executionContext == null)
                 // If this is null, the binder was not used by a Smalltalk method. Or may be somebody passed null for the ExecutionContext, which is illegal too.
-                throw new ImplementationException("The SymbolCallSiteBinder can only be used in methods where the signature is (object, ExecutionContext, ...)");
+                throw new ImplementationException("The SymbolCallSiteBinder can only be used in methods where the signature is (ExecutionContext)");
 
             Symbol symbol = executionContext.Runtime.GetSymbol(this.SymbolKey);
 

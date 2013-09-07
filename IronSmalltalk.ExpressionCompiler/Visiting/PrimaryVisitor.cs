@@ -65,25 +65,25 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         public override Expression VisitCharacterLiteral(CharacterLiteralNode node)
         {
             this.IsConstant = true;
-            return this.Context.Compiler.LiteralEncoding.Character(this.Context, node.Token.Value);
+            return this.Context.Compiler.LiteralEncoding.Character(this, node.Token.Value);
         }
 
         public override Expression VisitFloatELiteral(FloatELiteralNode node)
         {
             this.IsConstant = true;
             if (node.NegativeSignToken == null)
-                return this.Context.Compiler.LiteralEncoding.FloatE(this.Context, node.Token.Value);
+                return this.Context.Compiler.LiteralEncoding.FloatE(this, node.Token.Value);
             else
-                return this.Context.Compiler.LiteralEncoding.FloatE(this.Context, -node.Token.Value);
+                return this.Context.Compiler.LiteralEncoding.FloatE(this, -node.Token.Value);
         }
 
         public override Expression VisitFloatDLiteral(FloatDLiteralNode node)
         {
             this.IsConstant = true;
             if (node.NegativeSignToken == null)
-                return this.Context.Compiler.LiteralEncoding.FloatD(this.Context, node.Token.Value);
+                return this.Context.Compiler.LiteralEncoding.FloatD(this, node.Token.Value);
             else
-                return this.Context.Compiler.LiteralEncoding.FloatD(this.Context, -node.Token.Value);
+                return this.Context.Compiler.LiteralEncoding.FloatD(this, -node.Token.Value);
         }
 
         public override Expression VisitIdentifierLiteral(IdentifierLiteralNode node)
@@ -96,47 +96,47 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         {
             this.IsConstant = true;
             if (node.NegativeSignToken == null)
-                return this.Context.Compiler.LiteralEncoding.LargeInteger(this.Context, node.Token.Value);
+                return this.Context.Compiler.LiteralEncoding.LargeInteger(this, node.Token.Value);
             else
-                return this.Context.Compiler.LiteralEncoding.LargeInteger(this.Context, -node.Token.Value);
+                return this.Context.Compiler.LiteralEncoding.LargeInteger(this, -node.Token.Value);
         }
 
         public override Expression VisitScaledDecimalLiteral(ScaledDecimalLiteralNode node)
         {
             this.IsConstant = true;
             if (node.NegativeSignToken == null)
-                return this.Context.Compiler.LiteralEncoding.ScaledDecimal(this.Context, node.Token.Value);
+                return this.Context.Compiler.LiteralEncoding.ScaledDecimal(this, node.Token.Value);
             else
-                return this.Context.Compiler.LiteralEncoding.ScaledDecimal(this.Context, -node.Token.Value);
+                return this.Context.Compiler.LiteralEncoding.ScaledDecimal(this, -node.Token.Value);
         }
 
         public override Expression VisitSelectorLiteral(SelectorLiteralNode node)
         {
             // #asUppercase or #with:with: 
             this.IsConstant = true;
-            return this.Context.Compiler.LiteralEncoding.Symbol(this.Context, node.Token.Value);
+            return this.Context.Compiler.LiteralEncoding.Symbol(this, node.Token.Value);
         }
 
         public override Expression VisitSmallIntegerLiteral(SmallIntegerLiteralNode node)
         {
             this.IsConstant = true;
             if (node.NegativeSignToken == null)
-                return this.Context.Compiler.LiteralEncoding.SmallInteger(this.Context, node.Token.Value);
+                return this.Context.Compiler.LiteralEncoding.SmallInteger(this, node.Token.Value);
             else
-                return this.Context.Compiler.LiteralEncoding.SmallInteger(this.Context, -node.Token.Value);
+                return this.Context.Compiler.LiteralEncoding.SmallInteger(this, -node.Token.Value);
         }
 
         public override Expression VisitStringLiteral(StringLiteralNode node)
         {
             this.IsConstant = true;
-            return this.Context.Compiler.LiteralEncoding.String(this.Context, node.Token.Value);
+            return this.Context.Compiler.LiteralEncoding.String(this, node.Token.Value);
         }
 
         public override Expression VisitSymbolLiteral(SymbolLiteralNode node)
         {
             // #'asUppercase' or #'this is a test'
             this.IsConstant = true;
-            return this.Context.Compiler.LiteralEncoding.Symbol(this.Context, node.Token.Value);
+            return this.Context.Compiler.LiteralEncoding.Symbol(this, node.Token.Value);
         }
 
         #endregion

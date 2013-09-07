@@ -32,6 +32,7 @@ namespace IronSmalltalk.Runtime
         /// <summary>
         /// The SmalltalkClass that this object is instance of.
         /// </summary>
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public readonly SmalltalkClass Class;
 
         /// <summary>
@@ -42,7 +43,13 @@ namespace IronSmalltalk.Runtime
         /// <summary>
         /// Array with the instance variables of the object.
         /// </summary>
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public readonly object[] InstanceVariables;
+
+        /// <summary>
+        /// Internal. The FieldInfo of the SmalltalkObject.InstanceVariables field.
+        /// </summary>
+        public static readonly FieldInfo InstanceVariablesField = TypeUtilities.Field(typeof(SmalltalkObject), "InstanceVariables");
 
         /// <summary>
         /// Create a new SmalltalkObject for a given SmalltalkClass.

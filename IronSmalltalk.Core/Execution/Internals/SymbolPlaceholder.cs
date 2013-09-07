@@ -10,6 +10,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals
     {
         public string Value { get; private set; }
 
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public SymbolPlaceholder(string value)
         {
             if (value == null)

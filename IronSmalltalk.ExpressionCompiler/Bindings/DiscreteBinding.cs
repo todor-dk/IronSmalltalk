@@ -52,36 +52,6 @@ namespace IronSmalltalk.ExpressionCompiler.Bindings
             //    DiscreteBinding<TBinding>.GetPropertyInfo);
         }
 
-        private static PropertyInfo _GetPropertyInfo;
-
-        /// <summary>
-        /// Proptery info for the get_Value property of the discrete variable binding.
-        /// </summary>
-        protected static PropertyInfo GetPropertyInfo
-        {
-            get
-            {
-                if (DiscreteBinding<TBinding>._GetPropertyInfo == null)
-                {
-                    // NB: We can't use GetProperty("Value") due to AmbiguousMatchException, therefore do stuff by hand
-                    IEnumerable<PropertyInfo> properties = typeof(TBinding).GetProperties(
-                        BindingFlags.ExactBinding | BindingFlags.FlattenHierarchy |
-                        BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public);
-                    // Filter only properties named "Value"
-                    properties = properties.Where(pi => (pi.Name == "Value"));
-                    // First try for a property declared directly in the defining type.
-                    DiscreteBinding<TBinding>._GetPropertyInfo = properties.Where(pi => (pi.DeclaringType == typeof(TBinding))).FirstOrDefault();
-                    // If not, it may be defined in the superclass, just take any property found (there should be just one)
-                    if (DiscreteBinding<TBinding>._GetPropertyInfo == null)
-                        DiscreteBinding<TBinding>._GetPropertyInfo = properties.FirstOrDefault();
-
-                    if (DiscreteBinding<TBinding>._GetPropertyInfo == null)
-                        throw new InvalidOperationException("Expected type to have getter property named Value");
-                }
-                return DiscreteBinding<TBinding>._GetPropertyInfo;
-            }
-        }
-
         private static PropertyInfo _SetPropertyInfo;
 
         /// <summary>

@@ -30,8 +30,12 @@ namespace IronSmalltalk.NativeCompiler
         public string AssemblyName { get; set; }
         public string FileExtension { get; set; }
         public bool EmitDebugSymbols { get; set; }
+        public string FileVersion { get; set; }
         public string Product { get; set; }
+        public string AssemblyVersion { get; set; }
         public string ProductVersion { get; set; }
+        public string ProductTitle { get; set; }
+        public string ProductDescription { get; set; }
         public string Company { get; set; }
         public string Copyright { get; set; }
         public string Trademark { get; set; }

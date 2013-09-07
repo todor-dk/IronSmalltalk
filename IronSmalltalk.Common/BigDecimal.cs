@@ -126,6 +126,7 @@ namespace IronSmalltalk.Common
         /// <example>
         /// new BigDecimal(1234500, 4) => 123.45s4
         /// </example>
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public BigDecimal(BigInteger numerator, int scale)
         {
             if (scale < 0)

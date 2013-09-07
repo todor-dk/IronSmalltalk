@@ -27,6 +27,7 @@ namespace IronSmalltalk.Runtime.Execution
     public class ExecutionContext
     {
         // Keep this as field ... for performace reasons. It's accessed very often!
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public readonly SmalltalkRuntime Runtime;
 
         public static readonly FieldInfo RuntimeField = TypeUtilities.Field(typeof(ExecutionContext), "Runtime");
