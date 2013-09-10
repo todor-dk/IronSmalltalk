@@ -9664,3 +9664,17 @@ AConstancts method!
 symbol4
 
 	^#Array!	
+	
+Global constant: 'GlobalConst'! 
+
+Global variable: 'GlobalVar'! 
+
+AConstancts method! 
+globalConst
+
+	^GlobalConst!
+	
+AConstancts method! 
+globalVar
+
+	^GlobalVar!	

@@ -23,6 +23,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using IronSmalltalk.Common.Internal;
+using IronSmalltalk.ExpressionCompiler;
 using IronSmalltalk.NativeCompiler.Generators;
 using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Behavior;
@@ -107,7 +108,28 @@ namespace IronSmalltalk.NativeCompiler.Generators.Initializers
             // BUG BUG BUG TO-DO ... compile the initializer!
 
             return Expression.Lambda<Func<object, ExecutionContext, object>>(self, name, new ParameterExpression[] { self, context });
-        } 
+        }
+
+        private InitializerCompiler _InitializerCompiler = null;
+        private InitializerCompiler InitializerCompiler
+        {
+            get
+            {
+                if (this._InitializerCompiler == null)
+                    this._InitializerCompiler = this.GetInitializerCompiler();
+                return this._InitializerCompiler;
+            }
+        }
+        private InitializerCompiler GetInitializerCompiler()
+        {
+            CompilerOptions options = new CompilerOptions();
+            options.DebugInfoService = null;    // BUG-BUG 
+            options.LiteralEncodingStrategy = this.LiteralEncodingStrategy;
+            options.DynamicCallStrategy = this.DynamicCallStrategy;
+            return new InitializerCompiler(this.Compiler.Parameters.Runtime, options,
+        }
+
+
 
         /// <summary>
         /// Generate an expression to call a helper method to add the initializer to the name scope.

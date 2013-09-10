@@ -121,9 +121,8 @@ namespace TestPlayground
         {
             Assembly assembly = Assembly.LoadFile("c:\\temp\\IronSt.dll");
             Type type = assembly.GetType("IronSmalltalk.Test.Smalltalk");
-            var name = assembly.GetName();
-            MethodInfo method = TypeUtilities.Method(type, "CreateRuntime");
-            object runtime = method.Invoke(null, null);
+            MethodInfo method = TypeUtilities.Method(type, "CreateRuntime", typeof(bool));
+            object runtime = method.Invoke(null, new object[] { true });
 
             MessageBox.Show("SUCCESS!");
         }

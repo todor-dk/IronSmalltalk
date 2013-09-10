@@ -209,9 +209,9 @@ namespace IronSmalltalk.NativeCompiler.Generators.Behavior
 
         private static readonly ConstructorInfo DictionarySymbolCompiledMethodCtor = TypeUtilities.Constructor(typeof(Dictionary<Symbol, CompiledMethod>), typeof(int));
 
-        private Expression<Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>> GenerateInitMethodDictionaryLambda(string name)
+        private Expression<Func<SmalltalkClass, Dictionary<Symbol, CompiledMethod>>> GenerateInitMethodDictionaryLambda(string name)
         {
-            ParameterExpression runtime = Expression.Parameter(typeof(SmalltalkRuntime), "runtime");
+            ParameterExpression cls = Expression.Parameter(typeof(SmalltalkClass), "cls");
             ParameterExpression dictionary = Expression.Parameter(typeof(Dictionary<Symbol, CompiledMethod>), "dictionary");
             ParameterExpression containingType = Expression.Parameter(typeof(Type), "containingType");
 
@@ -229,35 +229,36 @@ namespace IronSmalltalk.NativeCompiler.Generators.Behavior
                     containingType,
                     Expression.Constant(this.TypeBuilder, typeof(Type))));
 
-                // BUG BUG BUG TO-DO
-                //foreach (MethodInformation info in this.MethodsInfo)
-                //    expressions.Add(Expression.Call(dictionary, MethodGenerator.DictionarySymbolCompiledMethodAdd,
-                //        Expression.Call(runtime, SmalltalkRuntime.GetSymbolMethod,
-                //            Expression.Constant(info.Method.Selector.Value, typeof(string))),
-                //        Expression.New(MethodGenerator.NativeCompiledMethodCtor,
-                //            containingType,
-                //            Expression.Constant(info.MethodName, typeof(string)))));
+                foreach (MethodInformation info in this.MethodsInfo)
+                    expressions.Add(Expression.Call(this.AddMethodMethod,
+                        dictionary,
+                        cls,
+                        Expression.Constant(info.Method.Selector.Value, typeof(string)),
+                        containingType,
+                        Expression.Constant(info.MethodName, typeof(string))));
             }
 
             expressions.Add(dictionary);
 
-            return Expression.Lambda<Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>>(
-                Expression.Block(new ParameterExpression[] { dictionary, containingType }, expressions), name, new ParameterExpression[] { runtime });
+            return Expression.Lambda<Func<SmalltalkClass, Dictionary<Symbol, CompiledMethod>>>(
+                Expression.Block(new ParameterExpression[] { dictionary, containingType }, expressions), name, new ParameterExpression[] { cls });
         }
+
+        protected abstract MethodInfo AddMethodMethod { get; }
 
         /// <summary>
         /// Generate a delegate that can initialize the method dictionary for this generator.
         /// </summary>
         /// <param name="scopeGenerator"></param>
-        /// <returns>Returns a deletage of type: runtime => ScopeName_MethodInitializers.Init_ClassName_ClassMethods(runtime)</returns>
-        internal Expression<Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>> GetMethodDictionaryInitializerDelegate(NameScopeGenerator scopeGenerator)
+        /// <returns>Returns a deletage of type: cls => ScopeName_MethodInitializers.Init_ClassName_ClassMethods(cls)</returns>
+        internal Expression<Func<SmalltalkClass, Dictionary<Symbol, CompiledMethod>>> GetMethodDictionaryInitializerDelegate(NameScopeGenerator scopeGenerator)
         {
             // IMPROVE: Why can't we use this.InitMethodDictionariesMethod directly and need to do the extra lookup?
-            MethodInfo initializer = TypeUtilities.Method(scopeGenerator.MethodsInitializerType, this.InitMethodDictionariesMethod.Name, BindingFlags.Static | BindingFlags.NonPublic, typeof(SmalltalkRuntime));
+            MethodInfo initializer = TypeUtilities.Method(scopeGenerator.MethodsInitializerType, this.InitMethodDictionariesMethod.Name, BindingFlags.Static | BindingFlags.NonPublic, typeof(SmalltalkClass));
 
             // NB: This will create helper methods, but too much work to get around this ...
-            ParameterExpression runtime = Expression.Parameter(typeof(SmalltalkRuntime), "runtime");
-            return Expression.Lambda<Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>>(Expression.Call(initializer, runtime), runtime);
+            ParameterExpression cls = Expression.Parameter(typeof(SmalltalkClass), "cls");
+            return Expression.Lambda<Func<SmalltalkClass, Dictionary<Symbol, CompiledMethod>>>(Expression.Call(initializer, cls), cls);
         }
 
         TypeBuilder INativeStrategyClient.ContainingType
