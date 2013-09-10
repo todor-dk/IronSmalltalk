@@ -109,7 +109,7 @@ namespace IronSmalltalk.Runtime.Internal
         [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public static void CreateClass(SmalltalkRuntime runtime, SmalltalkNameScope scope, ClassBinding binding, string superclassName, 
             SmalltalkClass.InstanceStateEnum instanceState, string[] classVarNames, string[] instVarNames, string[] classInstVarNames, string[] importedPools,
-            Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>> classMethodDicInitializer, Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>> instanceMethodDicInitializer )
+            Func<SmalltalkClass, Dictionary<Symbol, CompiledMethod>> classMethodDicInitializer, Func<SmalltalkClass, Dictionary<Symbol, CompiledMethod>> instanceMethodDicInitializer)
         {
             if (runtime == null)
                 throw new ArgumentNullException("runtime");
@@ -179,11 +179,32 @@ namespace IronSmalltalk.Runtime.Internal
                 }
             }
             // Create method dics
-            ClassMethodDictionary classMethods = new ClassMethodDictionary(runtime, classMethodDicInitializer);
-            InstanceMethodDictionary instanceMethods = new InstanceMethodDictionary(runtime, instanceMethodDicInitializer);
+            MethodDictionaryInitializer clsMthInitializer = new MethodDictionaryInitializer(classMethodDicInitializer);
+            MethodDictionaryInitializer instMthInitializer = new MethodDictionaryInitializer(instanceMethodDicInitializer);
+            ClassMethodDictionary classMethods = new ClassMethodDictionary(runtime, clsMthInitializer.Initialize);
+            InstanceMethodDictionary instanceMethods = new InstanceMethodDictionary(runtime, instMthInitializer.Initialize);
 
             // 4. Finally, create the behavior object
-            binding.SetValue(new SmalltalkClass(runtime, binding.Name, superclass, instanceState, instVars, classVars, classInstVars, pools, instanceMethods, classMethods));
+            SmalltalkClass cls = new SmalltalkClass(runtime, binding.Name, superclass, instanceState, instVars, classVars, classInstVars, pools, instanceMethods, classMethods);
+            clsMthInitializer.Class = cls;
+            instMthInitializer.Class = cls;
+            binding.SetValue(cls);
+        }
+
+        private class MethodDictionaryInitializer
+        {
+            private readonly Func<SmalltalkClass, Dictionary<Symbol, CompiledMethod>> Initializer;
+            internal SmalltalkClass Class { get; set; }
+
+            public MethodDictionaryInitializer(Func<SmalltalkClass, Dictionary<Symbol, CompiledMethod>> initializer)
+            {
+                this.Initializer = initializer;
+            }
+
+            internal Dictionary<Symbol, CompiledMethod> Initialize(SmalltalkRuntime runtime)
+            {
+                return this.Initializer(this.Class);
+            }
         }
 
         [IronSmalltalk.Common.Internal.AccessedViaReflection]

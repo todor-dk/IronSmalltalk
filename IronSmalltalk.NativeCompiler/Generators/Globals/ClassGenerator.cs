@@ -73,7 +73,7 @@ namespace IronSmalltalk.NativeCompiler.Generators.Globals
             typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper), "CreateClass",
             typeof(SmalltalkRuntime), typeof(SmalltalkNameScope), typeof(ClassBinding), typeof(string),
             typeof(SmalltalkClass.InstanceStateEnum), typeof(string[]), typeof(string[]), typeof(string[]), typeof(string[]),
-            typeof(Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>), typeof(Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>>));
+            typeof(Func<SmalltalkClass, Dictionary<Symbol, CompiledMethod>>), typeof(Func<SmalltalkClass, Dictionary<Symbol, CompiledMethod>>));
 
         protected override IEnumerable<Expression> GenerateCreateGlobalObjectExpression(ParameterExpression runtime, NameScopeGenerator scopeGenerator, ParameterExpression scope, ParameterExpression binding)
         {
