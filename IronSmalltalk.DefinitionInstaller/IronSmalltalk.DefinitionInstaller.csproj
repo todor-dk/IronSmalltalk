@@ -109,10 +109,6 @@
     <None Include="Definitions\Installer Definitions Diagram.cd" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DLR\Microsoft.Dynamic\Microsoft.Dynamic.csproj">
-      <Project>{b1b06754-96c5-48fe-a517-1f67ce65eade}</Project>
-      <Name>Microsoft.Dynamic</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk.Common\IronSmalltalk.Common.csproj">
       <Project>{cbbba006-546a-4dff-95a9-d7b1544205ad}</Project>
       <Name>IronSmalltalk.Common</Name>
@@ -123,6 +119,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Dynamic">
+      <HintPath>..\DLR\Microsoft.Dynamic\bin\Debug\Microsoft.Dynamic.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>

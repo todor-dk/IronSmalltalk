@@ -61,14 +61,6 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DLR\Microsoft.Dynamic\Microsoft.Dynamic.csproj">
-      <Project>{b1b06754-96c5-48fe-a517-1f67ce65eade}</Project>
-      <Name>Microsoft.Dynamic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DLR\Microsoft.Scripting\Microsoft.Scripting.csproj">
-      <Project>{d4a87b34-2a94-4da7-ae80-a3be7e0b519a}</Project>
-      <Name>Microsoft.Scripting</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk.Common\IronSmalltalk.Common.csproj">
       <Project>{cbbba006-546a-4dff-95a9-d7b1544205ad}</Project>
       <Name>IronSmalltalk.Common</Name>
@@ -96,6 +88,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Read Me.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Dynamic, Version=1.1.0.30, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLR\Microsoft.Dynamic\bin\Debug\Microsoft.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting, Version=1.1.0.30, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLR\Microsoft.Scripting\bin\Debug\Microsoft.Scripting.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
