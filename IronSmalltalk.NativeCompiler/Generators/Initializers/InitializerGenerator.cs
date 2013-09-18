@@ -29,6 +29,8 @@ using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
 using IronSmalltalk.Runtime.Execution;
+using IronSmalltalk.ExpressionCompiler.BindingScopes;
+using System.Collections;
 
 namespace IronSmalltalk.NativeCompiler.Generators.Initializers
 {
@@ -122,11 +124,68 @@ namespace IronSmalltalk.NativeCompiler.Generators.Initializers
         }
         private InitializerCompiler GetInitializerCompiler()
         {
+            BindingScope globalScope;
+            BindingScope reservedScope;
+            switch (this.Initializer.Type)
+            {
+                case InitializerType.ProgramInitializer:
+                    globalScope = BindingScope.ForProgramInitializer(this.Compiler.Parameters.Runtime.GlobalScope);
+                    reservedScope = ReservedScope.ForProgramInitializer();
+                    break;
+                case InitializerType.GlobalInitializer:
+                    globalScope = BindingScope.ForGlobalInitializer(this.Compiler.Parameters.Runtime.GlobalScope);
+                    reservedScope = ReservedScope.ForGlobalInitializer();
+                    break;
+                case InitializerType.ClassInitializer:
+                    globalScope = BindingScope.ForClassInitializer((SmalltalkClass) this.Initializer.Binding.Value, this.Compiler.Parameters.Runtime.GlobalScope);
+                    reservedScope = ReservedScope.ForClassInitializer();
+                    break;
+                case InitializerType.PoolVariableInitializer:
+                    var x = ((IEnumerable<PoolBinding>) this.Compiler.Parameters.Runtime.Pools).FirstOrDefault();
+                    
+                    PoolBinding poolBinding = null;
+                    //                    foreach (PoolBinding pool in this.Compiler.Parameters.Runtime.Pools)
+                    //{
+                    //    if ((pool.Value != null) && pool.Value.Contains((PoolVariableOrConstantBinding)this.Initializer.Binding))
+
+
+                    //PoolBinding poolBinding = this.Compiler.Parameters.Runtime.GlobalScope.GetPoolBinding(((RuntimePoolItemInitializer) this.Initializer).PoolName);
+                    //if ((poolBinding == null) || (poolBinding.Value == null))
+                    //    throw new RuntimeCodeGenerationException(String.Format("Cannot find pool named {0}", this.PoolName)); // May be better exception type
+
+                    globalScope = BindingScope.ForPoolInitializer(poolBinding.Value, this.Compiler.Parameters.Runtime.GlobalScope);
+                    reservedScope = ReservedScope.ForPoolInitializer();
+
+
+
+                    //initializerCall = null;
+                    //foreach (PoolBinding pool in this.Compiler.Parameters.Runtime.Pools)
+                    //{
+                    //    if ((pool.Value != null) && pool.Value.Contains((PoolVariableOrConstantBinding)this.Initializer.Binding))
+                    //    {
+                    //        initializerCall = Expression.Call(InitializerGenerator.AddPoolInitializerMethod,
+                    //            runtime,
+                    //            scope,
+                    //            initializersType,
+                    //            Expression.Constant(this.MethodName, typeof(string)),
+                    //            Expression.Constant(pool.Name.Value, typeof(string)),
+                    //            Expression.Constant(this.Initializer.Binding.Name.Value, typeof(string)));
+                    //        break;
+                    //    }
+                    //}
+                    //if (initializerCall == null)
+                    //    return new Expression[0];
+                    break;
+                default:
+                    throw new Exception(String.Format("Unrecognized initializer type {0}", this.Initializer.Type));
+            }
+
+
             CompilerOptions options = new CompilerOptions();
             options.DebugInfoService = null;    // BUG-BUG 
-            options.LiteralEncodingStrategy = this.LiteralEncodingStrategy;
-            options.DynamicCallStrategy = this.DynamicCallStrategy;
-            return new InitializerCompiler(this.Compiler.Parameters.Runtime, options,
+            //options.LiteralEncodingStrategy = this.LiteralEncodingStrategy;
+            //options.DynamicCallStrategy = this.DynamicCallStrategy;
+            return new InitializerCompiler(this.Compiler.Parameters.Runtime, options, globalScope, reservedScope);
         }
 
 
