@@ -44,7 +44,7 @@ namespace IronSmalltalk.Runtime.Bindings
     /// the element name is a protected name.
     /// 
     /// Element lookup is by name, the inner scope first looking within its
-    /// own elements and then looking in the outer scope. The exeptions are
+    /// own elements and then looking in the outer scope. The exceptions are
     /// the GetLocalXXX functions, which do not look into the outer scopes.
     /// 
     /// A SmalltalkNameScope is read-only and cannot normally be modified.

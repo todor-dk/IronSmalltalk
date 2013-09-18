@@ -27,6 +27,8 @@ using IronSmalltalk.NativeCompiler.Generators.Globals;
 using IronSmalltalk.NativeCompiler.Generators.Initializers;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
+using IronSmalltalk.NativeCompiler.CompilationStrategies;
+using IronSmalltalk.ExpressionCompiler;
 
 namespace IronSmalltalk.NativeCompiler.Generators
 {
@@ -81,7 +83,7 @@ namespace IronSmalltalk.NativeCompiler.Generators
 
         void ISmalltalkNameScopeVisitor.Visit(CompiledInitializer initializer)
         {
-            this.Initializers.Add(new InitializerGenerator(this.Compiler, initializer));
+            this.Initializers.Add(InitializerGenerator.GetInitializerGenerator(this.Compiler, initializer));
         }
 
         #endregion
@@ -181,9 +183,28 @@ namespace IronSmalltalk.NativeCompiler.Generators
                 typeof(Object),
                 TypeAttributes.Class | TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.Abstract);
 
+            NativeStrategyClient nativeStrategyClient = new NativeStrategyClient(this.Compiler, this.InitializersTypeBuilder);
+            NativeLiteralEncodingStrategy nativeLiteralEncodingStrategy = new NativeLiteralEncodingStrategy(nativeStrategyClient);
+            NativeDynamicCallStrategy nativeDynamicCallStrategy = new NativeDynamicCallStrategy(nativeStrategyClient);
+
             HashSet<string> names = new HashSet<string>();
             foreach (InitializerGenerator generator in this.Initializers)
-                generator.GenerateInitializerMethod(this.InitializersTypeBuilder, names);
+                generator.GenerateInitializerMethod(this.InitializersTypeBuilder, nativeLiteralEncodingStrategy, nativeDynamicCallStrategy, names);
+
+            nativeLiteralEncodingStrategy.GenerateTypes();
+            nativeDynamicCallStrategy.GenerateTypes();
+        }
+
+        private class NativeStrategyClient : INativeStrategyClient
+        {
+            public NativeStrategyClient(NativeCompiler compiler, TypeBuilder containingType)
+            {
+                this.Compiler = compiler;
+                this.ContainingType = containingType;
+            }
+
+            public NativeCompiler Compiler { get; private set; }
+            public TypeBuilder ContainingType { get; private set; }
         }
 
         /// <summary>

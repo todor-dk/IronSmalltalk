@@ -252,11 +252,11 @@ namespace IronSmalltalk.Runtime
         public int ClassInstanceSize { get; private set; }
 
         /// <summary>
-        /// Recompiles the class which involces recalculating caches state.
+        /// Recompiles the class which involves recalculating caches state.
         /// </summary>
         /// <remarks>
         /// This flushes internal caches for the class and any affected 
-        /// classes (subclases or possible superclasses).
+        /// classes (subclasses or possible superclasses).
         /// 
         /// The process includes:
         /// - Resetting cached subclasses collection.
@@ -481,13 +481,13 @@ namespace IronSmalltalk.Runtime
             else if (this.InstanceState == InstanceStateEnum.ObjectIndexable)
                 return new SmalltalkObject.ObjectIndexableSmalltalkObject(this, 0);
             else if (this.InstanceState == InstanceStateEnum.Native)
-                throw new InvalidOperationException("Cannot instanciate object with native instance state");
+                throw new InvalidOperationException("Cannot instantiate object with native instance state");
             else
                 return new SmalltalkObject(this);
         }
 
         /// <summary>
-        /// Creat a new SmalltalkObject with the given number of unnamed instance variables.
+        /// Create a new SmalltalkObject with the given number of unnamed instance variables.
         /// </summary>
         /// <param name="objectSize">Number of unnamed instance variables. Must be 0 (zero) or larger.</param>
         /// <returns>

@@ -48,7 +48,7 @@ namespace IronSmalltalk.Runtime.Internal
     public class BlockResult //: Exception
     {
         /// <summary>
-        /// HomeContext identifying which mehtod actication created the block.
+        /// HomeContext identifying which method activation created the block.
         /// </summary>
         [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public readonly HomeContext HomeContext;
@@ -77,7 +77,7 @@ namespace IronSmalltalk.Runtime.Internal
         /// <summary>
         /// Create a new block result.
         /// </summary>
-        /// <param name="homeContext">HomeContext identifying which mehtod actication created the block.</param>
+        /// <param name="homeContext">HomeContext identifying which method activation created the block.</param>
         /// <param name="value">Value being returned.</param>
         [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public BlockResult(HomeContext homeContext, object value)

@@ -9,7 +9,7 @@ using IronSmalltalk.Runtime.Execution.Internals;
 
 namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 {
-    public class SymbolCallSiteBinder : DynamicMetaObjectBinder, ICallSiteBinderCacheItem<string>
+    public sealed class SymbolCallSiteBinder : DynamicMetaObjectBinder, ICallSiteBinderCacheItem<string>
     {
         public string SymbolKey { get; private set; }
 

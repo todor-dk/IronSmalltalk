@@ -53,13 +53,20 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
 
         protected Expression<Func<object, ExecutionContext, object>> Compile(SmalltalkRuntime runtime, BindingScope globalScope, BindingScope reservedScope, string initializerName)
         {
-            IDebugInfoService dis = ((this.DebugInfoService == null) || (this.DebugInfoService.SymbolDocument == null)) ? null : this.DebugInfoService;
-
             CompilerOptions options = new CompilerOptions();
-            options.DebugInfoService = dis;
+            options.DebugInfoService = this.GetDebugInfoService();
 
             InitializerCompiler compiler = new InitializerCompiler(runtime, options, globalScope, reservedScope);
             return compiler.CompileInitializer(this.ParseTree, initializerName);
+        }
+
+        public IDebugInfoService GetDebugInfoService()
+        {
+            if (this.DebugInfoService == null)
+                return null;
+            if (this.DebugInfoService.SymbolDocument == null)
+                return null;
+            return this.DebugInfoService;
         }
 
         public bool Validate(SmalltalkNameScope globalNameScope, IRuntimeCodeValidationErrorSink errorSink)

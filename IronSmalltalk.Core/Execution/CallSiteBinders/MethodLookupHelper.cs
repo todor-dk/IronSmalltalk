@@ -127,7 +127,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// <param name="cls">Class where to start searching for the method (unless superLookupScope) is set.</param>
         /// <param name="superLookupScope">If set, start the lookup from the superclass of this class.</param>
         /// <returns>Returns the compiled method for the given selector or null if none was found.</returns>
-        /// <remarks>If the method is not found, this functiond does not searches the instance side of the class.</remarks>
+        /// <remarks>If the method is not found, this functions does not searches the instance side of the class.</remarks>
         public static CompiledMethod LookupClassMethod(Symbol selector, ref SmalltalkClass cls, Symbol superLookupScope)
         {
             return MethodLookupHelper.LookupMethod(ref cls, superLookupScope, c =>
@@ -175,7 +175,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// This core method determines the class of an object.
         /// </summary>
         /// <param name="runtime">Required: SmalltalkRuntime containing the Smalltalk classes.</param>
-        /// <param name="receiver">Optional: Object whos class is to be determined.</param>
+        /// <param name="receiver">Optional: Object whose class is to be determined.</param>
         /// <param name="self">Required: Expression for the receiver.</param>
         /// <param name="arguments">Required: Currently not used.</param>
         /// <param name="restrictions">Restrictions for the given receiver.</param>
@@ -191,7 +191,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             if (receiver == null)
             {
                 cls = runtime.NativeTypeClassMap.UndefinedObject;
-                // If not explicitely mapped to a ST Class, fallback to the generic .Net mapping class.
+                // If not explicitly mapped to a ST Class, fallback to the generic .Net mapping class.
                 if (cls == null)
                     cls = runtime.NativeTypeClassMap.Native;
                 if (cls == null)
@@ -205,7 +205,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 cls = obj.Class;
                 if (cls.Runtime == runtime)
                 {
-                    // Restrictions lool like:
+                    // Restrictions look like:
                     // (self != null) && (self.GetType == typeof(SmalltalkObject) && (((SmalltalkObject)self).Class == cls)
                     restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(SmalltalkObject));
                     restrictions = restrictions.Merge(BindingRestrictions.GetExpressionRestriction(
@@ -226,7 +226,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 if (manager.Runtime == runtime)
                 {
                     cls = runtime.NativeTypeClassMap.Symbol;
-                    // Restrictions lool like:
+                    // Restrictions look like:
                     // (self != null) && (self.GetType == typeof(Symbol) && (((Symbol)self).Manager == manager)
                     restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(Symbol));
                     restrictions = restrictions.Merge(BindingRestrictions.GetExpressionRestriction(
@@ -247,7 +247,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 if (pool.Runtime == runtime)
                 {
                     cls = runtime.NativeTypeClassMap.Pool;
-                    // Restrictions lool like:
+                    // Restrictions look like:
                     // (self != null) && (self.GetType == typeof(Pool) && (((Pool)self).Runtime == runtime)
                     restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(Pool));
                     restrictions = restrictions.Merge(BindingRestrictions.GetExpressionRestriction(
@@ -274,7 +274,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                     cls = runtime.NativeTypeClassMap.False;
                     restrictionTest = Expression.IsFalse(Expression.Convert(self, typeof(bool)));
                 }
-                // Restrictions lool like:
+                // Restrictions look like:
                 // (self != null) && (self.GetType == typeof(Boolean) && ((Boolean)self)
                 // (self != null) && (self.GetType == typeof(Boolean) && !((Boolean)self)
                 restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(bool))
@@ -328,7 +328,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                     if (cls == null)
                         restrictions = null;
                     else
-                        // NB: Restriction below are no good for For class behavior. Caller must crete own restrictions if class behavior.
+                        // NB: Restriction below are no good for For class behavior. Caller must create own restrictions if class behavior.
                         restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(SmalltalkClass)); 
                 }
                 else
@@ -356,7 +356,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 Debug.Assert(receiver != null, "receiver != null");
                 Type type = receiver.GetType();
                 cls = runtime.NativeTypeClassMap.GetSmalltalkClass(type);
-                // If not explicitely mapped to a ST Class, fallback to the generic .Net mapping class.
+                // If not explicitly mapped to a ST Class, fallback to the generic .Net mapping class.
                 if (cls == null)
                     cls = runtime.NativeTypeClassMap.Native;
                 if (restrictions == null)

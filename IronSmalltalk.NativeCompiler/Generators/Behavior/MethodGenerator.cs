@@ -43,18 +43,7 @@ namespace IronSmalltalk.NativeCompiler.Generators.Behavior
             this.DynamicCallStrategy = new NativeDynamicCallStrategy(this);
         }
 
-        private MethodCompiler _MethodCompiler;
-        protected MethodCompiler MethodCompiler
-        {
-            get
-            {
-                if (this._MethodCompiler == null)
-                    this._MethodCompiler = this.GetMethodCompiler();
-                return this._MethodCompiler;
-            }
-        }
-
-        protected abstract MethodCompiler GetMethodCompiler();
+        protected abstract MethodCompiler GetMethodCompiler(MethodInformation method);
 
         private TypeBuilder _TypeBuilder;
         internal TypeBuilder TypeBuilder
@@ -99,14 +88,14 @@ namespace IronSmalltalk.NativeCompiler.Generators.Behavior
         /// <remarks>
         /// Generated:
         /// ".Classes.ClassName[ class]"                    - Contains method implementations
-        /// ".Classes.ClassName[ class].$Literals"          - Static variables with literals that cannot be inilined in IL code
+        /// ".Classes.ClassName[ class].$Literals"          - Static variables with literals that cannot be inlined in IL code
         /// ".Classes.ClassName[ class].$LiteralCallSites"  - Static variables with CallSites and Binders for "tricky" literals
         /// ".Classes.ClassName[ class].$CallSites"         - Static variables with CallSites and Binders for polymorphic calls (every ST method call)
         /// </remarks>
         /// </summary>
         internal void GenerateBehaviors()
         {
-            // ".Classes.ClassName[ class].$Literals"          - Static variables with literals that cannot be inilined in IL code
+            // ".Classes.ClassName[ class].$Literals"          - Static variables with literals that cannot be inlined in IL code
             // ".Classes.ClassName[ class].$LiteralCallSites"  - Static variables with CallSites and Binders for "tricky" literals
             this.LiteralEncodingStrategy.GenerateTypes();
             // ".Classes.ClassName[ class].$CallSites"         - Static variables with CallSites and Binders for polymorphic calls (every ST method call)
@@ -130,12 +119,11 @@ namespace IronSmalltalk.NativeCompiler.Generators.Behavior
 
         private LambdaExpression GenerateMethodLambda(MethodInformation method)
         {
-            this.DynamicCallStrategy.CurrentMethodName = method.MethodName;
-            return this.MethodCompiler.CompileMethodLambda(method.Method.ParseTree, this.Class, method.MethodName);
+            return this.GetMethodCompiler(method).CompileMethodLambda(method.Method.ParseTree, this.Class, method.MethodName);
         }
 
         /// <summary>
-        /// Generates a map of unuque method names and the corresponding compiled-methods.
+        /// Generates a map of unique method names and the corresponding compiled-methods.
         /// </summary>
         /// <returns></returns>
         private List<MethodInformation> GetMethodNameMap()
@@ -146,7 +134,7 @@ namespace IronSmalltalk.NativeCompiler.Generators.Behavior
             {
                 RuntimeCompiledMethod runtimeMethod = method as RuntimeCompiledMethod;
                 if (runtimeMethod == null)
-                    throw new Exception("Expected to see a RuntimeCompiledMethod"); // ... since we haved compiled everything ourself.
+                    throw new Exception("Expected to see a RuntimeCompiledMethod"); // ... since we have compiled everything ourself.
                 string name = MethodGenerator.GetUniqueName(map, this.Compiler.NativeGenerator.AsLegalMethodName(method.Selector.Value));
                 map.Add(name, MethodInformation.CreateMethodInformation(this.Compiler, name, runtimeMethod));
             }
@@ -166,7 +154,7 @@ namespace IronSmalltalk.NativeCompiler.Generators.Behavior
             return suggestion;
         }
 
-        private class MethodInformation
+        protected class MethodInformation
         {
             public static MethodInformation CreateMethodInformation(NativeCompiler compiler, string name, RuntimeCompiledMethod method)
             {
@@ -250,7 +238,7 @@ namespace IronSmalltalk.NativeCompiler.Generators.Behavior
         /// Generate a delegate that can initialize the method dictionary for this generator.
         /// </summary>
         /// <param name="scopeGenerator"></param>
-        /// <returns>Returns a deletage of type: cls => ScopeName_MethodInitializers.Init_ClassName_ClassMethods(cls)</returns>
+        /// <returns>Returns a delegate of type: cls => ScopeName_MethodInitializers.Init_ClassName_ClassMethods(cls)</returns>
         internal Expression<Func<SmalltalkClass, Dictionary<Symbol, CompiledMethod>>> GetMethodDictionaryInitializerDelegate(NameScopeGenerator scopeGenerator)
         {
             // IMPROVE: Why can't we use this.InitMethodDictionariesMethod directly and need to do the extra lookup?

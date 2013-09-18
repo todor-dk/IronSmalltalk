@@ -35,7 +35,7 @@ namespace IronSmalltalk.Common
                 return false;
             // This uses some of the logic in the lexical rules defined by the compiler,
             // but we want a lightweight function without too many dependencies,
-            // so we've taken the liberty to hardcode some stuff in here.
+            // so we've taken the liberty to hard-code some stuff in here.
             for (int i = 0; i < value.Length; i++)
             {
                 char c = value[i];

@@ -20,7 +20,7 @@ using System.Numerics;
 namespace IronSmalltalk.Runtime.Internal
 {
     /// <summary>
-    /// Unility class with methods called by Smalltalk code.
+    /// Utility class with methods called by Smalltalk code.
     /// </summary>
     public static class RuntimeHelper
     {

@@ -251,9 +251,9 @@ namespace IronSmalltalk.Common
         }
 
         /// <summary>
-        /// A human readable string repsesentation of the source location.
+        /// A human readable string representation of the source location.
         /// </summary>
-        /// <returns>A human readable string repsesentation of the source location.</returns>
+        /// <returns>A human readable string representation of the source location.</returns>
         public override string ToString()
         {
             return String.Format(System.Globalization.CultureInfo.CurrentCulture,

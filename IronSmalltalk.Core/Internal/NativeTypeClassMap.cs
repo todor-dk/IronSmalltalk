@@ -77,7 +77,7 @@ namespace IronSmalltalk.Runtime.Internal
         }
 
         /// <summary>
-        /// The SmalltalkClass for .Net types that do not explicitely map to other types. This is the fall-back class.
+        /// The SmalltalkClass for .Net types that do not explicitly map to other types. This is the fall-back class.
         /// </summary>
         public SmalltalkClass Native { get; private set; }
 
@@ -170,7 +170,7 @@ namespace IronSmalltalk.Runtime.Internal
                 return this.SystemType;
 
             // This is the interesting part ... ask the Smalltalk code to return the ST class for a .Net type
-            // IMPROVE: This has the potention to end in a loop if the ST code is not carefull enough not to ask
+            // IMPROVE: This has the potential to end in a loop if the ST code is not careful enough not to ask
             // for the class of a class that needs to be resolved by ST code. Add a recursive check or similar!
             // NB: If we do recursion test, we must be aware of multiple threads resolving the same class ... :-/
             dynamic runtime = this.Runtime;
@@ -327,7 +327,7 @@ namespace IronSmalltalk.Runtime.Internal
         }
 
         /// <summary>
-        /// Get and resoleve the .Net Type for the given type name.
+        /// Get and resolve the .Net Type for the given type name.
         /// </summary>
         /// <param name="name">Type-name of the .Net type to be resolved. See remarks.</param>
         /// <remarks>
@@ -399,8 +399,7 @@ namespace IronSmalltalk.Runtime.Internal
             if (NativeTypeClassMap.IstTypes.TryGetValue(name, out result))
             {
                 if (result == null)
-                    throw new SmalltalkDefinitionException(System.String.Format(
-                        "Cannot fint IronSmalltalk type {0}", name));
+                    throw new SmalltalkDefinitionException(System.String.Format("Cannot find IronSmalltalk type {0}", name));
                 return result;
             }
 
@@ -419,8 +418,7 @@ namespace IronSmalltalk.Runtime.Internal
 			}
 
             NativeTypeClassMap.IstTypes[name] = null;
-            throw new SmalltalkDefinitionException(System.String.Format(
-                                    "Cannot fint IronSmalltalk type {0}", name));
+            throw new SmalltalkDefinitionException(System.String.Format("Cannot find IronSmalltalk type {0}", name));
         }
     }
 }

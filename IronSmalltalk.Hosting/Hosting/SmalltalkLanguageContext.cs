@@ -31,6 +31,7 @@ using IronSmalltalk.Runtime.Execution;
 using IronSmalltalk.Runtime.Hosting;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Runtime;
+using IronSmalltalk.Common;
 
 namespace IronSmalltalk.Hosting.Hosting
 {
@@ -86,11 +87,11 @@ namespace IronSmalltalk.Hosting.Hosting
         }
 
         /// <summary>
-        /// The Guid that uniqualy identifies the IronSmalltalk language
+        /// The Guid that uniquely identifies the IronSmalltalk language
         /// </summary>
         public override Guid LanguageGuid
         {
-            get { return SmalltalkLanguageSetup.LanguageGuid; }
+            get { return GlobalConstants.LanguageGuid; }
         }
 
         /// <summary>
@@ -105,12 +106,12 @@ namespace IronSmalltalk.Hosting.Hosting
         }
 
         /// <summary>
-        /// The Guid that uniqualy identifies the vendor of the IronSmalltalk language, 
+        /// The Guid that uniquely identifies the vendor of the IronSmalltalk language, 
         /// i.e. that is the IronSmalltalk Project (because we don't do other languages).
         /// </summary>
         public override Guid VendorGuid
         {
-            get { return SmalltalkLanguageSetup.VendorGuid; }
+            get { return GlobalConstants.VendorGuid; }
         }
 
         /// <summary>

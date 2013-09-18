@@ -55,7 +55,7 @@ namespace IronSmalltalk.ExpressionCompiler.Bindings
         private static PropertyInfo _SetPropertyInfo;
 
         /// <summary>
-        /// Proptery info for the set_Value property of the discrete variable binding.
+        /// Property info for the set_Value property of the discrete variable binding.
         /// </summary>
         /// <remarks>
         /// This method should only be used by subclasses the are assignable binding 

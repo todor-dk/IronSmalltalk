@@ -96,7 +96,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals
             }
         }
 
-        /**** Smalltalk code for generationg the method signatures below ****
+        /**** Smalltalk code for generating the method signatures below ****
          
         str := WriteStream on: String new.
 

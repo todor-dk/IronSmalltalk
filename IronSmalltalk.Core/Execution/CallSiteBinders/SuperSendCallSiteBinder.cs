@@ -20,7 +20,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 {
     /// <summary>
     /// Call-Site-Binder for dynamic message super sends. 
-    /// This binder is responsible for binding the operationgs for message super sends.
+    /// This binder is responsible for binding the operations for message super sends.
     /// </summary>
     /// <remarks>
     /// Super-sends apply only to Smalltalk objects and is exclusive part of the Smalltalk 
@@ -50,7 +50,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// <summary>
         /// For super sends, return the name of the class ABOVE which to start the method lookup.
         /// </summary>
-        /// <returns>Return a class name or null to start the method lookup immedeately.</returns>
+        /// <returns>Return a class name or null to start the method lookup immediately.</returns>
         /// <example>
         /// Let's say a method in class Integer sends "super test".
         /// If this method returns #Integer, the method look-up will skip 

@@ -45,7 +45,7 @@ namespace IronSmalltalk.Common
 
         /// <summary>
         /// An integer which represents the total number of digits used to represent 
-        /// the fraction part of the decimal, including trailing zeroes.
+        /// the fraction part of the decimal, including trailing zeros.
         /// </summary>
         /// <example>
         /// The value 123.45600 has the scale 5. 
@@ -119,7 +119,7 @@ namespace IronSmalltalk.Common
         /// <summary>
         /// Initializes a new instance of the BigDecimal structure using a BigInteger numerator 
         /// value and a scale, which represents the number of digits in the denominator.
-        /// The BigDecimal is capable of prepresenting the specified number of fractional digits.
+        /// The BigDecimal is capable of representing the specified number of fractional digits.
         /// </summary>
         /// <param name="numerator">Numerator value.</param>
         /// <param name="scale">Number of denominator digits.</param>
@@ -233,7 +233,7 @@ namespace IronSmalltalk.Common
 
         /// <summary>
         /// Converts the numeric value of the current BigDecimal object
-        /// to its equivalent Smalltalk souce code string representation.
+        /// to its equivalent Smalltalk source code string representation.
         /// </summary>
         /// <returns>The source code string representation of the current BigDecimal value.</returns>
         public string ToSourceString()
@@ -349,7 +349,7 @@ namespace IronSmalltalk.Common
                     multiplier = BigInteger.Pow(10, m);
                 // NB: Not 100% sure how to handle rounding here. Examples:
                 // -1.26s asScaledDecimal: 1 => -1.3s   OK
-                // -1.25s asScaledDecimal: 1 => -1.2s   ISSUE! Rounds up to -1.2, but should we insted round to -1.3 to have symetric values?
+                // -1.25s asScaledDecimal: 1 => -1.2s   ISSUE! Rounds up to -1.2, but should we instead round to -1.3 to have symmetric values?
                 // -1.24s asScaledDecimal: 1 => -1.2s   OK
                 // 1.24s asScaledDecimal: 1 => 1.2s     OK
                 // 1.25s asScaledDecimal: 1 => 1.3s     OK, round up 1.3
@@ -382,7 +382,7 @@ namespace IronSmalltalk.Common
         /// <remarks>
         /// This function first converts both decimals to the same precision. 
         /// The operand with the highest precision dictates the outcoming precision.
-        /// The lambda function is passed the numerators (and not decimals themself) 
+        /// The lambda function is passed the numerators (and not decimals themselves) 
         /// of the operands as well as the scale (precision). The numerators
         /// are of same precision and can be used directly for any operations.
         /// </remarks>
@@ -424,7 +424,7 @@ namespace IronSmalltalk.Common
         /// <remarks>
         /// This function first converts both decimals to the same precision. 
         /// The operand with the highest precision dictates the outcoming precision.
-        /// The lambda function is passed the numerators (and not decimals themself) 
+        /// The lambda function is passed the numerators (and not decimals themselves) 
         /// of the operands as well as the scale (precision). The numerators
         /// are of same precision and can be used directly for any operations.
         /// </remarks>

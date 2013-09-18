@@ -63,8 +63,9 @@ namespace TestPlayground
             this.textSourceFiles.Text = String.Join("\r\n", paths);
             Properties.Settings.Default.LastNativePaths = this.textSourceFiles.Text;
             Properties.Settings.Default.Save();
-
-            var fileIns = paths.Select(p => new PathFileInInformation(p, System.Text.Encoding.UTF8, errorSink));
+           
+            var fileIns = paths.Select(p => new PathFileInInformation(p, System.Text.Encoding.UTF8, errorSink,
+                Expression.SymbolDocument(p, GlobalConstants.LanguageGuid, GlobalConstants.VendorGuid)));
             this.listErrors.Items.Clear();
             if (!fileIns.Any())
                 return;

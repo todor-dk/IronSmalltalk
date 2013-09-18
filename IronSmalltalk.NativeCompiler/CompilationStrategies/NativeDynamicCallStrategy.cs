@@ -18,8 +18,6 @@ namespace IronSmalltalk.NativeCompiler.CompilationStrategies
 {
     internal sealed class NativeDynamicCallStrategy : IDynamicCallStrategy
     {
-        internal string CurrentMethodName;
-
         private readonly CallSiteGenerator CallSiteGenerator;
 
         internal NativeDynamicCallStrategy(INativeStrategyClient client)

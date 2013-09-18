@@ -60,17 +60,10 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         public override Expression<Func<object, ExecutionContext, object>> VisitInitializer(InitializerNode node)
         {
-            ParameterExpression envParam = Expression.Parameter(typeof(ExecutionContext), "executionContext");
-            ParameterExpression selfParam = null;
-            NameBinding binding = this.GetBinding(SemanticConstants.Self);
-            if ((binding != null) && !binding.IsErrorBinding)
-                selfParam = binding.GenerateReadExpression(this) as ParameterExpression;
-            if (selfParam == null)
-                selfParam = Expression.Parameter(typeof(object), "self");
             Expression body = this.InternalVisitFunction(node);
 
-            return Expression.Lambda<Func<object, ExecutionContext, object>>(body, this.InitializerName, 
-                new ParameterExpression[] { selfParam, envParam } );
+            return Expression.Lambda<Func<object, ExecutionContext, object>>(body, this.InitializerName,
+                new ParameterExpression[] { (ParameterExpression)this.Context.Self, (ParameterExpression)this.Context.ExecutionContext });
         }
     }
 }
