@@ -24,7 +24,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 {
     /// <summary>
     /// Base class for the dynamic message send binder. 
-    /// This binder is responsible for binding the operationgs for message sends.
+    /// This binder is responsible for binding the operations for message sends.
     /// </summary>
     public abstract class MessageSendCallSiteBinderBase : SmalltalkDynamicMetaObjectBinder
     {
@@ -99,7 +99,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 // 
                 Expression[] dnuArgs = new Expression[] 
                 {
-                    Expression.Constant(runtime.GetSymbol(this.Selector), typeof(object)), // The selecor
+                    Expression.Constant(runtime.GetSymbol(this.Selector), typeof(object)), // The selector
                     Expression.NewArrayInit(typeof(object), args.Skip(1).Select(d => Expression.Convert(d.Expression, typeof(object)))) // The remeaining args as an array
                 };
                 // Look-up the #_doesNotUnderstand:arguments: method.
@@ -136,7 +136,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// <summary>
         /// For super sends, return the name of the class ABOVE which to start the method lookup.
         /// </summary>
-        /// <returns>Return a class name or null to start the method lookup immedeately.</returns>
+        /// <returns>Return a class name or null to start the method lookup immediately.</returns>
         protected virtual string GetSuperLookupScope()
         {
             return null;

@@ -81,7 +81,7 @@ namespace IronSmalltalk.Runtime.Internal
             //          NB: We use short lived weak references, meaning that the WeakReference.Target will be set to null
             //              as soon as the symbol can be GC'ed ... but this is before the finalizer is called
             //              and before we have a chance to clean up and remove the weak reference from the dictionary.
-            //      b. Very unlucky, GC occured between 1. and 2. before we managed to get hard reference to the symbol.
+            //      b. Very unlucky, GC occurred between 1. and 2. before we managed to get hard reference to the symbol.
             //         Otherwise, same logic as a. applies.
             // NB: As soon as we get here and <result> holds a reference to a symbol, there should be no way
             //     for the symbol to get GC'ed. Therefore the reference's Target property will stay valid and we are happy.
@@ -91,7 +91,7 @@ namespace IronSmalltalk.Runtime.Internal
                 //    objects, and this will happen very seldom, so performance is not considered a problem.
                 lock (this._Contents)
                 {
-                    // 5. In case that GC occured between 2. and 4. and the reference was 
+                    // 5. In case that GC occurred between 2. and 4. and the reference was 
                     //    removed by InternalRemoveSymbol(), get it one more time.
                     reference = this._Contents.GetOrAdd(value, key => new WeakReference(new Symbol(value, this), false));
                     // 6. As previously, check that the weak reference holds a symbol. If:

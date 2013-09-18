@@ -19,7 +19,7 @@ using System;
 namespace IronSmalltalk.Runtime.Internal
 {
     /// <summary>
-    /// Indicates an exception that occured due to a problem with the Smalltalk definitions,
+    /// Indicates an exception that occurred due to a problem with the Smalltalk definitions,
     /// for example some problems with the source code that was being installed.
     /// </summary>
     [Serializable]

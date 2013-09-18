@@ -22,7 +22,7 @@ using IronSmalltalk.Runtime.Execution.Dynamic;
 namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 {
     /// <summary>
-    /// Call-Site-Binder for nomal (non-super) dynamic message sends. 
+    /// Call-Site-Binder for normal (non-super) dynamic message sends. 
     /// This binder is responsible for binding the operations for message sends.
     /// </summary>
     public class MessageSendCallSiteBinder : MessageSendCallSiteBinderBase, ICallSiteBinderCacheItem<string>
@@ -56,7 +56,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 return base.Bind(target, args);
             else
                 // 2. For all other objects, ask the object to bind the operation and fallback to ST only if it's not successful.
-                // NB: Maybe we wan't to do binding BEFORE the object, so we can shadow its methods and not vice versa.
+                // NB: Maybe we want to do binding BEFORE the object, so we can shadow its methods and not vice versa.
                 return target.BindInvokeMember(this.InvokeMemberBinder, args);
         }
 

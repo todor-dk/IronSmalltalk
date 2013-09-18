@@ -21,7 +21,7 @@ using System.Runtime.CompilerServices;
 namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 {
     /// <summary>
-    /// CallSiteBinderCache caches the Smalltalk call-site-binders accross a SmalltalkRuntime.
+    /// CallSiteBinderCache caches the Smalltalk call-site-binders across a SmalltalkRuntime.
     /// </summary>
     /// <remarks>
     /// One CallSiteBinderCache exists per SmalltalkRuntime and the cached binders in it

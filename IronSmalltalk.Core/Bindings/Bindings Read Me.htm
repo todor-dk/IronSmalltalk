@@ -21,7 +21,7 @@
             Implementation Notes</h1>
         <p>
             The X3J20 standard requires quite flexible and dynamic discrete variable 
-            bindings, expecially when it comes to global variables. This documents some of 
+            bindings, especially when it comes to global variables. This documents some of 
             the aspects and workings of discrete bindings.</p>
         <h2>
             Global Bindings</h2>
@@ -168,7 +168,7 @@ element&gt;&gt;.</em></blockquote>
             <li>Create an unresolved binding instance each time a binding is needed. Have the 
                 binding know where it&#39;s used and how to replace itself with a concrete binding, 
                 i.e. have a delegate we can call.</li>
-            <li>Keep a list of the&nbsp;unresolve bindings as long as we are reading the 
+            <li>Keep a list of the&nbsp;unresolved bindings as long as we are reading the 
                 definitions.</li>
             <li>When definition phase has finished, but before running the initializers, process 
                 the list of temporary bindings.</li>
@@ -218,7 +218,7 @@ element&gt;&gt;.</em></blockquote>
             <li>Create a transaction object called <strong>InstallerContext</strong>. Preferably 
                 for concurrency, this object should block and disallow other changes to the 
                 environment while the operation is running.</li>
-            <li>File in the source code (interchange files) and process defintions creating <em>
+            <li>File in the source code (interchange files) and process definitions creating <em>
                 unresolved bindings</em> where needed.</li>
             <li>Resolve the unresolved bindings, and <span class="style1">fail</span> if there 
                 still are unresolved bindings left.</li>

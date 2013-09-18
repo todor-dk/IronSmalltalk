@@ -941,7 +941,7 @@ namespace IronSmalltalk.Runtime.Behavior
     }
 
     /// <summary>
-    /// A dictionary containing instance mehtods.
+    /// A dictionary containing instance methods.
     /// </summary>
     public class InstanceMethodDictionary : MethodDictionary
     {

@@ -25,7 +25,7 @@ namespace IronSmalltalk.Runtime
     /// </summary>
     /// <remarks>
     /// Some classes cannot create instances of a SmalltalkObject and 
-    /// either have built-in .Net types or wrap arround existing .Net types.
+    /// either have built-in .Net types or wrap around existing .Net types.
     /// </remarks>
     public partial class SmalltalkObject 
     {

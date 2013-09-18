@@ -34,7 +34,7 @@ namespace IronSmalltalk
     /// live objects and behaviors.
     /// 
     /// It is an object and several runtimes can co-exist in the same AppDomain. Two or more runtimes
-    /// should not interfeer with each other.
+    /// should not interfere with each other.
     /// 
     /// This is the root object for running any Smalltalk code. It contains many helper methods.
     /// </remarks>
@@ -314,7 +314,7 @@ namespace IronSmalltalk
         #endregion
 
         /// <summary>
-        /// This is internal metnod used by the Intaller to redefine the globals in the runtime.
+        /// This is internal method used by the Installer to redefine the globals in the runtime.
         /// </summary>
         /// <param name="scope">New globals scope containing the extension (IronSmalltalk defined) globals.</param>
         public void SetExtensionScope(SmalltalkNameScope scope)
@@ -326,7 +326,7 @@ namespace IronSmalltalk
         }
 
         /// <summary>
-        /// This is internal metnod used by the Intaller to redefine the globals in the runtime.
+        /// This is internal method used by the Installer to redefine the globals in the runtime.
         /// </summary>
         /// <param name="scope">New globals scope containing the global (end-user defined) globals.</param>
         public void SetGlobalScope(SmalltalkNameScope scope)

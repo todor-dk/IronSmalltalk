@@ -30,13 +30,12 @@ namespace IronSmalltalk.NativeCompiler.Generators.Behavior
         {
         }
 
-        protected override MethodCompiler GetMethodCompiler()
+        protected override MethodCompiler GetMethodCompiler(MethodInformation method)
         {
             CompilerOptions options = new CompilerOptions();
-            options.DebugInfoService = null;    // BUG-BUG 
+            options.DebugInfoService = method.Method.GetDebugInfoService();
             options.LiteralEncodingStrategy = this.LiteralEncodingStrategy;
             options.DynamicCallStrategy = this.DynamicCallStrategy;
-
             return new InstanceMethodCompiler(this.Compiler.Parameters.Runtime, options);
         }
 

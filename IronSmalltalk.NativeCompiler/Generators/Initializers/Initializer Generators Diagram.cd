@@ -1,17 +1,64 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="IronSmalltalk.NativeCompiler.Generators.Initializers.InitializerGenerator">
-    <Position X="3.75" Y="3.5" Width="2.5" />
+    <Position X="6.5" Y="3" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>ABAACACAAQAAAAAEAgAAAAAAAQAAAAAAAAECAAIABAA=</HashCode>
+      <HashCode>ABAAAAAAAAAAAAgEAgAAAAAAAAAAAAAAAAACAAYAAAA=</HashCode>
       <FileName>Generators\Initializers\InitializerGenerator.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.NativeCompiler.Generators.GeneratorBase">
-    <Position X="4.25" Y="0.75" Width="1.5" />
+    <Position X="6.75" Y="0.75" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Generators\GeneratorBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.NativeCompiler.Generators.Initializers.InitializerGenerator&lt;TInitializer&gt;">
+    <Position X="6.25" Y="6.75" Width="2.75" />
+    <NestedTypes>
+      <Class Name="IronSmalltalk.NativeCompiler.Generators.Initializers.InitializerGenerator&lt;TInitializer&gt;.NativeStrategyClient" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Generators\Initializers\InitializerGenerator.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAEACAAAAEAAAEAAAAAAAAAAAQABAA=</HashCode>
+      <FileName>Generators\Initializers\InitializerGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.NativeCompiler.Generators.Initializers.ProgramInitializerGenerator">
+    <Position X="1" Y="11.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAACAAAAAAABAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Generators\Initializers\ProgramInitializerGenerator.cs</FileName>
+      <NewMemberFileName>Generators\Initializers\InitializerGenerator.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.NativeCompiler.Generators.Initializers.GlobalInitializerGenerator">
+    <Position X="4.5" Y="11.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AggAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Generators\Initializers\GlobalInitializerGenerator.cs</FileName>
+      <NewMemberFileName>Generators\Initializers\InitializerGenerator.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.NativeCompiler.Generators.Initializers.ClassInitializerGenerator">
+    <Position X="8" Y="11.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAACIAAAA=</HashCode>
+      <FileName>Generators\Initializers\ClassInitializerGenerator.cs</FileName>
+      <NewMemberFileName>Generators\Initializers\InitializerGenerator.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.NativeCompiler.Generators.Initializers.PoolVariableInitializerGenerator">
+    <Position X="11.5" Y="11.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAACAAAAIAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Generators\Initializers\PoolVariableInitializerGenerator.cs</FileName>
+      <NewMemberFileName>Generators\Initializers\InitializerGenerator.cs</NewMemberFileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

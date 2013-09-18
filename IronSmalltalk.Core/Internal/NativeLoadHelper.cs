@@ -178,7 +178,7 @@ namespace IronSmalltalk.Runtime.Internal
                     pools.Add(pool);
                 }
             }
-            // Create method dics
+            // Create method dictionaries
             MethodDictionaryInitializer clsMthInitializer = new MethodDictionaryInitializer(classMethodDicInitializer);
             MethodDictionaryInitializer instMthInitializer = new MethodDictionaryInitializer(instanceMethodDicInitializer);
             ClassMethodDictionary classMethods = new ClassMethodDictionary(runtime, clsMthInitializer.Initialize);

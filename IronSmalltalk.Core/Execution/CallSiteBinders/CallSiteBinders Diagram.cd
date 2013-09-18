@@ -25,7 +25,7 @@
   <Class Name="IronSmalltalk.Runtime.Execution.CallSiteBinders.MethodLookupHelper">
     <Position X="7.25" Y="0.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAEBAAAIAAAAACAAAAEAAACAAAAAAAAAAABAAAAAAAE=</HashCode>
+      <HashCode>AAABAAAIAAAAAAAAAAEAAACAAAAAAAAAAAAAAAAAAAE=</HashCode>
       <FileName>Execution\CallSiteBinders\MethodLookupHelper.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -72,9 +72,24 @@
   <Class Name="IronSmalltalk.Runtime.Execution.CallSiteBinders.CallSiteBinderCache">
     <Position X="4.25" Y="0.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAACAAIAAAAAIEAAAAAAAAAEIAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAABAAACCAIAAAAAIEAAAAAAAAAAKBAA=</HashCode>
       <FileName>Execution\CallSiteBinders\CallSiteBinderCache.cs</FileName>
     </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.Runtime.Execution.CallSiteBinders.ArrayCallSiteBinder">
+    <Position X="22.5" Y="6" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAIAAAAAAAAIAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Execution\CallSiteBinders\ArrayCallSiteBinder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.Runtime.Execution.CallSiteBinders.SymbolCallSiteBinder">
+    <Position X="18" Y="6" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAACAAAAAAAAAAIAAAAIAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Execution\CallSiteBinders\SymbolCallSiteBinder.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

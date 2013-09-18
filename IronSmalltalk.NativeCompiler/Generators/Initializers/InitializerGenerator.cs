@@ -31,36 +31,66 @@ using IronSmalltalk.Runtime.Bindings;
 using IronSmalltalk.Runtime.Execution;
 using IronSmalltalk.ExpressionCompiler.BindingScopes;
 using System.Collections;
+using IronSmalltalk.ExpressionCompiler.Runtime;
+using IronSmalltalk.NativeCompiler.CompilationStrategies;
 
 namespace IronSmalltalk.NativeCompiler.Generators.Initializers
 {
     /// <summary>
     /// Generates initializers (class, global (variable/constant), pool item (variable/constant) and program).
     /// </summary>
-    internal sealed class InitializerGenerator : GeneratorBase
+    internal abstract class InitializerGenerator : GeneratorBase
     {
-        private readonly CompiledInitializer Initializer;
+        internal static InitializerGenerator GetInitializerGenerator(NativeCompiler compiler, CompiledInitializer initializer)
+        {
+            if (initializer == null)
+                throw new ArgumentNullException("initializer");
+            switch (initializer.Type)
+            {
+                case InitializerType.ProgramInitializer:
+                    RuntimeProgramInitializer programInitializer = initializer as RuntimeProgramInitializer;
+                    if (programInitializer == null)
+                        throw new Exception("Expected to see a RuntimeProgramInitializer"); // ... since we have compiled everything ourself.
+                    return new ProgramInitializerGenerator(compiler, programInitializer);
+                case InitializerType.GlobalInitializer:
+                    RuntimeGlobalInitializer globalInitializer = initializer as RuntimeGlobalInitializer;
+                    if (globalInitializer == null)
+                        throw new Exception("Expected to see a RuntimeGlobalInitializer"); // ... since we have compiled everything ourself.
+                    return new GlobalInitializerGenerator(compiler, globalInitializer);
+                case InitializerType.ClassInitializer:
+                    RuntimeGlobalInitializer classInitializer = initializer as RuntimeGlobalInitializer;
+                    if (classInitializer == null)
+                        throw new Exception("Expected to see a RuntimeGlobalInitializer"); // ... since we have compiled everything ourself.
+                    return new ClassInitializerGenerator(compiler, classInitializer);
+                case InitializerType.PoolVariableInitializer:
+                    RuntimePoolItemInitializer poolItemInitializer = initializer as RuntimePoolItemInitializer;
+                    if (poolItemInitializer == null)
+                        throw new Exception("Expected to see a RuntimePoolItemInitializer"); // ... since we have compiled everything ourself.
+                    return new PoolVariableInitializerGenerator(compiler, poolItemInitializer);
+                default:
+                    throw new Exception(String.Format("Unrecognized initializer type {0}", initializer.Type));
+            }
+        }
 
-        internal InitializerGenerator(NativeCompiler compiler, CompiledInitializer initializer)
+        internal InitializerGenerator(NativeCompiler compiler)
             : base(compiler)
         {
-            this.Initializer = initializer;
         }
+
+        protected string MethodName { get; private set; }
 
         /// <summary>
         /// Generate initializer methods with the logic of each initializer.
         /// Those are contained in a class named ".Initializers.ScopeName_Initializers".
         /// </summary>
-        internal void GenerateInitializerMethod(TypeBuilder type, ISet<string> names)
+        internal void GenerateInitializerMethod(TypeBuilder type, NativeLiteralEncodingStrategy nativeLiteralEncodingStrategy, NativeDynamicCallStrategy nativeDynamicCallStrategy, ISet<string> names)
         {
             string name = this.GetInitializerName(names);
             this.MethodName = name;
             MethodBuilder method = type.DefineMethod(name, MethodAttributes.Public | MethodAttributes.Static);
-            var lambda = this.GenerateInitializerLambda(name);
+            var lambda = this.GenerateInitializerLambda(nativeLiteralEncodingStrategy, nativeDynamicCallStrategy, name);
             lambda.CompileToMethod(method, this.Compiler.NativeGenerator.DebugInfoGenerator);
         }
-
-        private string MethodName;
 
         private string GetInitializerName(ISet<string> names)
         {
@@ -80,115 +110,9 @@ namespace IronSmalltalk.NativeCompiler.Generators.Initializers
             return name;
         }
 
-        private string GetInitializerNameSuggestion()
-        {
-            switch (this.Initializer.Type)
-            {
-                case InitializerType.ProgramInitializer:
-                    return "Program_Initializer";
-                case InitializerType.GlobalInitializer:
-                    return String.Format("{0}_Global_Initializer", this.Initializer.Binding.Name.Value);
-                case InitializerType.ClassInitializer:
-                    return String.Format("{0}_Class_Initializer", this.Initializer.Binding.Name.Value);
-                case InitializerType.PoolVariableInitializer:
-                    foreach (PoolBinding pool in this.Compiler.Parameters.Runtime.Pools)
-                    {
-                        if ((pool.Value != null) && pool.Value.Contains((PoolVariableOrConstantBinding) this.Initializer.Binding))
-                            return String.Format("{0}_{1}_PoolVariable_Initializer", pool.Name.Value, this.Initializer.Binding.Name.Value);
-                    }
-                    return String.Format("{0}_PoolVariable_Initializer", this.Initializer.Binding.Name.Value); // Just in case ...
-                default:
-                    throw new InvalidOperationException();
-            }
-        }
+        protected abstract string GetInitializerNameSuggestion();
 
-        private Expression<Func<object, ExecutionContext, object>> GenerateInitializerLambda(string name)
-        {
-            ParameterExpression self = Expression.Parameter(typeof(object), "self");
-            ParameterExpression context = Expression.Parameter(typeof(ExecutionContext), "executionContext");
-
-            // BUG BUG BUG TO-DO ... compile the initializer!
-
-            return Expression.Lambda<Func<object, ExecutionContext, object>>(self, name, new ParameterExpression[] { self, context });
-        }
-
-        private InitializerCompiler _InitializerCompiler = null;
-        private InitializerCompiler InitializerCompiler
-        {
-            get
-            {
-                if (this._InitializerCompiler == null)
-                    this._InitializerCompiler = this.GetInitializerCompiler();
-                return this._InitializerCompiler;
-            }
-        }
-        private InitializerCompiler GetInitializerCompiler()
-        {
-            BindingScope globalScope;
-            BindingScope reservedScope;
-            switch (this.Initializer.Type)
-            {
-                case InitializerType.ProgramInitializer:
-                    globalScope = BindingScope.ForProgramInitializer(this.Compiler.Parameters.Runtime.GlobalScope);
-                    reservedScope = ReservedScope.ForProgramInitializer();
-                    break;
-                case InitializerType.GlobalInitializer:
-                    globalScope = BindingScope.ForGlobalInitializer(this.Compiler.Parameters.Runtime.GlobalScope);
-                    reservedScope = ReservedScope.ForGlobalInitializer();
-                    break;
-                case InitializerType.ClassInitializer:
-                    globalScope = BindingScope.ForClassInitializer((SmalltalkClass) this.Initializer.Binding.Value, this.Compiler.Parameters.Runtime.GlobalScope);
-                    reservedScope = ReservedScope.ForClassInitializer();
-                    break;
-                case InitializerType.PoolVariableInitializer:
-                    var x = ((IEnumerable<PoolBinding>) this.Compiler.Parameters.Runtime.Pools).FirstOrDefault();
-                    
-                    PoolBinding poolBinding = null;
-                    //                    foreach (PoolBinding pool in this.Compiler.Parameters.Runtime.Pools)
-                    //{
-                    //    if ((pool.Value != null) && pool.Value.Contains((PoolVariableOrConstantBinding)this.Initializer.Binding))
-
-
-                    //PoolBinding poolBinding = this.Compiler.Parameters.Runtime.GlobalScope.GetPoolBinding(((RuntimePoolItemInitializer) this.Initializer).PoolName);
-                    //if ((poolBinding == null) || (poolBinding.Value == null))
-                    //    throw new RuntimeCodeGenerationException(String.Format("Cannot find pool named {0}", this.PoolName)); // May be better exception type
-
-                    globalScope = BindingScope.ForPoolInitializer(poolBinding.Value, this.Compiler.Parameters.Runtime.GlobalScope);
-                    reservedScope = ReservedScope.ForPoolInitializer();
-
-
-
-                    //initializerCall = null;
-                    //foreach (PoolBinding pool in this.Compiler.Parameters.Runtime.Pools)
-                    //{
-                    //    if ((pool.Value != null) && pool.Value.Contains((PoolVariableOrConstantBinding)this.Initializer.Binding))
-                    //    {
-                    //        initializerCall = Expression.Call(InitializerGenerator.AddPoolInitializerMethod,
-                    //            runtime,
-                    //            scope,
-                    //            initializersType,
-                    //            Expression.Constant(this.MethodName, typeof(string)),
-                    //            Expression.Constant(pool.Name.Value, typeof(string)),
-                    //            Expression.Constant(this.Initializer.Binding.Name.Value, typeof(string)));
-                    //        break;
-                    //    }
-                    //}
-                    //if (initializerCall == null)
-                    //    return new Expression[0];
-                    break;
-                default:
-                    throw new Exception(String.Format("Unrecognized initializer type {0}", this.Initializer.Type));
-            }
-
-
-            CompilerOptions options = new CompilerOptions();
-            options.DebugInfoService = null;    // BUG-BUG 
-            //options.LiteralEncodingStrategy = this.LiteralEncodingStrategy;
-            //options.DynamicCallStrategy = this.DynamicCallStrategy;
-            return new InitializerCompiler(this.Compiler.Parameters.Runtime, options, globalScope, reservedScope);
-        }
-
-
+        protected abstract Expression<Func<object, ExecutionContext, object>> GenerateInitializerLambda(NativeLiteralEncodingStrategy nativeLiteralEncodingStrategy, NativeDynamicCallStrategy nativeDynamicCallStrategy, string name);
 
         /// <summary>
         /// Generate an expression to call a helper method to add the initializer to the name scope.
@@ -197,66 +121,62 @@ namespace IronSmalltalk.NativeCompiler.Generators.Initializers
         /// <param name="initializer">Parameter representing the variable where to store the initializer.</param>
         /// <param name="runtime">Parameter representing the SmalltalkRuntime.</param>
         /// <param name="scope">Parameter representing the NameScope.</param>
-        /// <param name="initializersType">Parameter representing a variable with the type containing the initializor methods.</param>
+        /// <param name="initializersType">Parameter representing a variable with the type containing the initializer methods.</param>
         /// <returns></returns>
-        internal IEnumerable<Expression> GenerateCreateInitializer(ParameterExpression initializer, ParameterExpression runtime, ParameterExpression scope, ParameterExpression initializersType)
-        {
-            MethodCallExpression initializerCall;
+        internal abstract IEnumerable<Expression> GenerateCreateInitializer(ParameterExpression initializer, ParameterExpression runtime, ParameterExpression scope, ParameterExpression initializersType);
+    }
 
-            switch (this.Initializer.Type)
-            {
-                case InitializerType.ProgramInitializer:
-                    initializerCall = Expression.Call(InitializerGenerator.AddProgramInitializerMethod,
-                        runtime,
-                        scope,
-                        initializersType,
-                        Expression.Constant(this.MethodName, typeof(string)));
-                    break;
-                case InitializerType.GlobalInitializer:
-                    initializerCall = Expression.Call(InitializerGenerator.AddGlobalInitializerMethod,
-                        runtime,
-                        scope,
-                        initializersType,
-                        Expression.Constant(this.MethodName, typeof(string)),
-                        Expression.Constant(this.Initializer.Binding.Name.Value, typeof(string)));
-                    break;
-                case InitializerType.ClassInitializer:
-                    initializerCall = Expression.Call(InitializerGenerator.AddClassInitializerMethod,
-                        runtime,
-                        scope,
-                        initializersType,
-                        Expression.Constant(this.MethodName, typeof(string)),
-                        Expression.Constant(this.Initializer.Binding.Name.Value, typeof(string)));
-                    break;
-                case InitializerType.PoolVariableInitializer:
-                    initializerCall = null;
-                    foreach (PoolBinding pool in this.Compiler.Parameters.Runtime.Pools)
-                    {
-                        if ((pool.Value != null) && pool.Value.Contains((PoolVariableOrConstantBinding)this.Initializer.Binding))
-                        {
-                            initializerCall = Expression.Call(InitializerGenerator.AddPoolInitializerMethod,
-                                runtime,
-                                scope,
-                                initializersType,
-                                Expression.Constant(this.MethodName, typeof(string)),
-                                Expression.Constant(pool.Name.Value, typeof(string)),
-                                Expression.Constant(this.Initializer.Binding.Name.Value, typeof(string)));
-                            break;
-                        }
-                    }
-                    if (initializerCall == null)
-                        return new Expression[0];
-                    break;
-                default:
-                    throw new Exception(String.Format("Unrecognized initializer type {0}", this.Initializer.Type));
-            }
+    internal abstract class InitializerGenerator<TInitializer> : InitializerGenerator
+        where TInitializer : RuntimeCompiledInitializer
+    {
+        protected readonly TInitializer Initializer;
+        
+        internal InitializerGenerator(NativeCompiler compiler, TInitializer initializer)
+            : base(compiler)
+        {
+            if (initializer == null)
+                throw new ArgumentNullException("initializer");
+            this.Initializer = initializer;
+        }
+
+        protected abstract InitializerCompiler GetInitializerCompiler(NativeLiteralEncodingStrategy nativeLiteralEncodingStrategy, NativeDynamicCallStrategy nativeDynamicCallStrategy);
+
+        protected InitializerCompiler GetInitializerCompiler(BindingScope globalScope, BindingScope reservedScope, NativeLiteralEncodingStrategy nativeLiteralEncodingStrategy, NativeDynamicCallStrategy nativeDynamicCallStrategy)
+        {
+            CompilerOptions options = new CompilerOptions();
+            options.DebugInfoService = this.Initializer.GetDebugInfoService();
+            options.LiteralEncodingStrategy = nativeLiteralEncodingStrategy;
+            options.DynamicCallStrategy = nativeDynamicCallStrategy;
+
+            return new InitializerCompiler(this.Compiler.Parameters.Runtime, options, globalScope, reservedScope);
+        }
+
+        protected override Expression<Func<object, ExecutionContext, object>> GenerateInitializerLambda(NativeLiteralEncodingStrategy nativeLiteralEncodingStrategy, NativeDynamicCallStrategy nativeDynamicCallStrategy, string name)
+        {
+            return this.GetInitializerCompiler(nativeLiteralEncodingStrategy, nativeDynamicCallStrategy).CompileInitializer(this.Initializer.ParseTree, name);
+        }
+
+        /// <summary>
+        /// Generate an expression to call a helper method to add the initializer to the name scope.
+        /// Example: CompiledInitializer initializer = NativeLoadHelper.AddClassInitializer(runtime, scope, delegateType, "BigDecimal_Class_Initializer", "BigDecimal");
+        /// </summary>
+        /// <param name="initializer">Parameter representing the variable where to store the initializer.</param>
+        /// <param name="runtime">Parameter representing the SmalltalkRuntime.</param>
+        /// <param name="scope">Parameter representing the NameScope.</param>
+        /// <param name="initializersType">Parameter representing a variable with the type containing the initializer methods.</param>
+        /// <returns></returns>
+        internal override IEnumerable<Expression> GenerateCreateInitializer(ParameterExpression initializer, ParameterExpression runtime, ParameterExpression scope, ParameterExpression initializersType)
+        {
+            MethodCallExpression initializerCall = this.GenerateInitializerCall(runtime, scope, initializersType);
+            if (initializerCall == null)
+                return new Expression[0];
 
             List<Expression> expressions = new List<Expression>();
             expressions.Add(Expression.Assign(initializer, initializerCall));
 
             foreach (KeyValuePair<string, string> pair in this.Initializer.Annotations)
             {
-                expressions.Add(Expression.Call(InitializerGenerator.AnnotateObjectMethod,
+                expressions.Add(Expression.Call(InitializerGenerator <TInitializer>.AnnotateObjectMethod,
                     initializer,
                     Expression.Constant(pair.Key, typeof(string)),
                     Expression.Constant(pair.Value, typeof(string))));
@@ -265,21 +185,7 @@ namespace IronSmalltalk.NativeCompiler.Generators.Initializers
             return expressions;
         }
 
-        private static readonly MethodInfo AddProgramInitializerMethod = TypeUtilities.Method(
-            typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper), "AddProgramInitializer",
-            typeof(SmalltalkRuntime), typeof(SmalltalkNameScope), typeof(Type), typeof(string));
-
-        private static readonly MethodInfo AddClassInitializerMethod = TypeUtilities.Method(
-            typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper), "AddClassInitializer",
-            typeof(SmalltalkRuntime), typeof(SmalltalkNameScope), typeof(Type), typeof(string), typeof(string));
-
-        private static readonly MethodInfo AddGlobalInitializerMethod = TypeUtilities.Method(
-            typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper), "AddGlobalInitializer",
-            typeof(SmalltalkRuntime), typeof(SmalltalkNameScope), typeof(Type), typeof(string), typeof(string));
-
-        private static readonly MethodInfo AddPoolInitializerMethod = TypeUtilities.Method(
-            typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper), "AddPoolInitializer",
-            typeof(SmalltalkRuntime), typeof(SmalltalkNameScope), typeof(Type), typeof(string), typeof(string), typeof(string));
+        protected abstract MethodCallExpression GenerateInitializerCall(ParameterExpression runtime, ParameterExpression scope, ParameterExpression initializersType);
 
         private static readonly MethodInfo AnnotateObjectMethod = TypeUtilities.Method(
             typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper), "AnnotateObject",

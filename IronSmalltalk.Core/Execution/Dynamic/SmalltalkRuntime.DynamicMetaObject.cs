@@ -63,7 +63,7 @@ namespace IronSmalltalk
         /// <remarks>
         /// The code is highly optimized and it inlines direct access to the discrete binding instead of accessing it every time.
         /// 
-        /// If we create binding versioning, we must add restrctions as well to take the version into account.
+        /// If we create binding versioning, we must add restrictions as well to take the version into account.
         /// </remarks>
         public override DynamicMetaObject BindGetMember(GetMemberBinder binder)
         {

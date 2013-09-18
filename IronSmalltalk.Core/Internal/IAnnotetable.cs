@@ -19,7 +19,7 @@ using System.Collections.Generic;
 namespace IronSmalltalk.Runtime.Internal
 {
     /// <summary>
-    /// Inteface that describes objects that are annotetable.
+    /// Interface that describes objects that are annotetable.
     /// </summary>
     public interface IAnnotetable
     {

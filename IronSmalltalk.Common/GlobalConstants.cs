@@ -15,6 +15,7 @@
 */
 
 
+using System;
 namespace IronSmalltalk.Common
 {
     /// <summary>
@@ -36,5 +37,16 @@ namespace IronSmalltalk.Common
         /// 3.5.4 Keywords - Keyword Postfix
         /// </summary>
         public const char KeywordPostfix = ':';
+
+        /// <summary>
+        /// The Guid that uniquely identifies the IronSmalltalk language
+        /// </summary>
+        public static readonly Guid LanguageGuid = new Guid("E9653E63-112C-4865-A7F4-CDB8800C0E6E");
+
+        /// <summary>
+        /// The Guid that uniquely identifies the vendor of the IronSmalltalk language, 
+        /// i.e. that is the IronSmalltalk Project (because we don't do other languages).
+        /// </summary>
+        public static readonly Guid VendorGuid = new Guid("621750CA-32CD-4FC2-AEE5-B148B0D853D2");
     }
 }

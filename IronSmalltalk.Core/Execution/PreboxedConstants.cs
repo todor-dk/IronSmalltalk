@@ -179,7 +179,7 @@ namespace IronSmalltalk.Runtime.Execution
 
         #endregion
 
-        #region Dougle Float
+        #region Double Float
 
         public static Expression GetConstant(Double value)
         {
@@ -8617,7 +8617,7 @@ namespace IronSmalltalk.Runtime.Execution
 
         #endregion
 
-        #region 16-bit Ingeger
+        #region 16-bit Integer
 
         public static Expression GetConstant(Int16 value)
         {

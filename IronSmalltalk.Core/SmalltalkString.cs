@@ -58,7 +58,7 @@ namespace IronSmalltalk.Runtime
         /// Create a new SmalltalkString object based on the given contents.
         /// </summary>
         /// <param name="contents">Contents to initialize the SmalltalkString with.</param>
-        /// <param name="copyContents">Indicates if the contetns are copied or stored directly (shared).</param>
+        /// <param name="copyContents">Indicates if the contents are copied or stored directly (shared).</param>
         public SmalltalkString(char[] contents, bool copyContents)
         {
             if (copyContents)
