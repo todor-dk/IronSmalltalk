@@ -36,6 +36,7 @@ namespace IronSmalltalk.NativeCompiler.Generators.Behavior
             options.DebugInfoService = method.Method.GetDebugInfoService();
             options.LiteralEncodingStrategy = this.LiteralEncodingStrategy;
             options.DynamicCallStrategy = this.DynamicCallStrategy;
+            options.DiscreteBindingEncodingStrategy = this.DiscreteBindingEncodingStrategy;
             return new ClassMethodCompiler(this.Compiler.Parameters.Runtime, options);
         }
 

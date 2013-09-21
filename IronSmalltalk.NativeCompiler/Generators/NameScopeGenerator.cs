@@ -184,15 +184,17 @@ namespace IronSmalltalk.NativeCompiler.Generators
                 TypeAttributes.Class | TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.Abstract);
 
             NativeStrategyClient nativeStrategyClient = new NativeStrategyClient(this.Compiler, this.InitializersTypeBuilder);
-            NativeLiteralEncodingStrategy nativeLiteralEncodingStrategy = new NativeLiteralEncodingStrategy(nativeStrategyClient);
-            NativeDynamicCallStrategy nativeDynamicCallStrategy = new NativeDynamicCallStrategy(nativeStrategyClient);
+            NativeLiteralEncodingStrategy literalEncodingStrategy = new NativeLiteralEncodingStrategy(nativeStrategyClient);
+            NativeDynamicCallStrategy dynamicCallStrategy = new NativeDynamicCallStrategy(nativeStrategyClient);
+            NativeDiscreteBindingEncodingStrategy discreteBindingEncodingStrategy = new NativeDiscreteBindingEncodingStrategy(nativeStrategyClient);
 
             HashSet<string> names = new HashSet<string>();
             foreach (InitializerGenerator generator in this.Initializers)
-                generator.GenerateInitializerMethod(this.InitializersTypeBuilder, nativeLiteralEncodingStrategy, nativeDynamicCallStrategy, names);
+                generator.GenerateInitializerMethod(this.InitializersTypeBuilder, literalEncodingStrategy, dynamicCallStrategy, discreteBindingEncodingStrategy, names);
 
-            nativeLiteralEncodingStrategy.GenerateTypes();
-            nativeDynamicCallStrategy.GenerateTypes();
+            literalEncodingStrategy.GenerateTypes();
+            dynamicCallStrategy.GenerateTypes();
+            discreteBindingEncodingStrategy.GenerateTypes();
         }
 
         private class NativeStrategyClient : INativeStrategyClient

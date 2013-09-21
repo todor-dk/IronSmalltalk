@@ -41,15 +41,39 @@ namespace IronSmalltalk.ExpressionCompiler.Bindings
 
         public override System.Linq.Expressions.Expression GenerateReadExpression(IBindingClient client)
         {
-            // BUG BUG Must re-implement ...
+            return client.DiscreteBindingEncodingStrategy.GetReadExpression<DiscreteBinding<TBinding>, TBinding>(client, this);
+        }
 
-            return Expression.Convert(Expression.Constant(this.Binding.Name.Value, typeof(string)), typeof(object));
+        public abstract string Moniker { get; }
 
-            //if (this.IsConstantValueBinding)
-            //    return Expression.Constant(this.Binding.Value, typeof(object));
-            //return Expression.Property(
-            //    Expression.Constant(this.Binding, typeof(TBinding)),
-            //    DiscreteBinding<TBinding>.GetPropertyInfo);
+        private static PropertyInfo _GetPropertyInfo;
+
+        /// <summary>
+        /// Property info for the get_Value property of the discrete variable binding.
+        /// </summary>
+        public static PropertyInfo GetPropertyInfo
+        {
+            get
+            {
+                if (DiscreteBinding<TBinding>._GetPropertyInfo == null)
+                {
+                    // NB: We can't use GetProperty("Value") due to AmbiguousMatchException, therefore do stuff by hand
+                    IEnumerable<PropertyInfo> properties = typeof(TBinding).GetProperties(
+                        BindingFlags.ExactBinding | BindingFlags.FlattenHierarchy |
+                        BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public);
+                    // Filter only properties named "Value"
+                    properties = properties.Where(pi => (pi.Name == "Value"));
+                    // First try for a property declared directly in the defining type.
+                    DiscreteBinding<TBinding>._GetPropertyInfo = properties.Where(pi => (pi.DeclaringType == typeof(TBinding))).FirstOrDefault();
+                    // If not, it may be defined in the superclass, just take any property found (there should be just one)
+                    if (DiscreteBinding<TBinding>._GetPropertyInfo == null)
+                        DiscreteBinding<TBinding>._GetPropertyInfo = properties.FirstOrDefault();
+
+                    if (DiscreteBinding<TBinding>._GetPropertyInfo == null)
+                        throw new InvalidOperationException("Expected type to have getter property named Value");
+                }
+                return DiscreteBinding<TBinding>._GetPropertyInfo;
+            }
         }
 
         private static PropertyInfo _SetPropertyInfo;

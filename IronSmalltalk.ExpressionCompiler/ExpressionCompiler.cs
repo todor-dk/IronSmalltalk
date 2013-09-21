@@ -47,9 +47,11 @@ namespace IronSmalltalk.ExpressionCompiler
 
         protected SmalltalkRuntime Runtime { get; private set; }
 
-        public ILiteralEncodingStrategy LiteralEncoding { get; private set; }
+        public ILiteralEncodingStrategy LiteralEncodingStrategy { get; private set; }
 
         public IDynamicCallStrategy DynamicCallStrategy { get; private set; }
+
+        public IDiscreteBindingEncodingStrategy DiscreteBindingEncodingStrategy { get; private set; }
 
         public CompilerOptions CompilerOptions { get; private set; }
 
@@ -68,8 +70,9 @@ namespace IronSmalltalk.ExpressionCompiler
             this.Runtime = runtime;
             this.CompilerOptions = compilerOptions;
             this.DebugInfoService = compilerOptions.DebugInfoService; // Optional, null is OK
-            this.LiteralEncoding = compilerOptions.LiteralEncodingStrategy ?? new LiteralEncodingStrategy();
+            this.LiteralEncodingStrategy = compilerOptions.LiteralEncodingStrategy ?? new LiteralEncodingStrategy();
             this.DynamicCallStrategy = compilerOptions.DynamicCallStrategy ?? new DynamicCallStrategy();
+            this.DiscreteBindingEncodingStrategy = compilerOptions.DiscreteBindingEncodingStrategy ?? new DiscreteBindingEncodingStrategy();
         }
 
         public Expression AddDebugInfo(Expression expression, IParseNode node)

@@ -9678,3 +9678,8 @@ AConstancts method!
 globalVar
 
 	^GlobalVar!	
+	
+AConstancts method! 
+setGlobalVar
+
+	GlobalVar := 1.!

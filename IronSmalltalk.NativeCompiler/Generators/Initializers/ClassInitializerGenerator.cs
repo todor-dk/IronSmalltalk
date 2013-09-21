@@ -28,11 +28,11 @@ namespace IronSmalltalk.NativeCompiler.Generators.Initializers
             return String.Format("{0}_Class_Initializer", this.Initializer.Binding.Name.Value);
         }
 
-        protected override InitializerCompiler GetInitializerCompiler(NativeLiteralEncodingStrategy nativeLiteralEncodingStrategy, NativeDynamicCallStrategy nativeDynamicCallStrategy)
+        protected override InitializerCompiler GetInitializerCompiler(NativeLiteralEncodingStrategy literalEncodingStrategy, NativeDynamicCallStrategy dynamicCallStrategy, NativeDiscreteBindingEncodingStrategy discreteBindingEncodingStrategy)
         {
             BindingScope globalScope = BindingScope.ForClassInitializer((SmalltalkClass)this.Initializer.Binding.Value, this.Compiler.Parameters.Runtime.GlobalScope);
             BindingScope reservedScope = ReservedScope.ForClassInitializer();
-            return this.GetInitializerCompiler(globalScope, reservedScope, nativeLiteralEncodingStrategy, nativeDynamicCallStrategy);
+            return this.GetInitializerCompiler(globalScope, reservedScope, literalEncodingStrategy, dynamicCallStrategy, discreteBindingEncodingStrategy);
         }
 
         protected override MethodCallExpression GenerateInitializerCall(ParameterExpression runtime, ParameterExpression scope, ParameterExpression initializersType)

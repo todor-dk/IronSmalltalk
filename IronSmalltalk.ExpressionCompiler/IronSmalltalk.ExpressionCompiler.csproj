@@ -63,8 +63,10 @@
     <Compile Include="InstanceMethodCompiler.cs" />
     <Compile Include="Internals\BindingCodeGeneraionException.cs" />
     <Compile Include="Internals\CodeGenerationErrors.cs" />
+    <Compile Include="Internals\DiscreteBindingEncodingStrategy.cs" />
     <Compile Include="Internals\DynamicCallStrategy.cs" />
     <Compile Include="Internals\ExceptionHelper.cs" />
+    <Compile Include="Internals\IDiscreteBindingEncodingStrategy.cs" />
     <Compile Include="Internals\IDynamicCallStrategy.cs" />
     <Compile Include="Internals\ILiteralEncodingStrategy.cs" />
     <Compile Include="Internals\InternalCodeGenerationException.cs" />

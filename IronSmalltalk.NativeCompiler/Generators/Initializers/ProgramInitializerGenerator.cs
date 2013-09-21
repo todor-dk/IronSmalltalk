@@ -27,11 +27,11 @@ namespace IronSmalltalk.NativeCompiler.Generators.Initializers
             return "Program_Initializer";
         }
 
-        protected override InitializerCompiler GetInitializerCompiler(NativeLiteralEncodingStrategy nativeLiteralEncodingStrategy, NativeDynamicCallStrategy nativeDynamicCallStrategy)
+        protected override InitializerCompiler GetInitializerCompiler(NativeLiteralEncodingStrategy literalEncodingStrategy, NativeDynamicCallStrategy dynamicCallStrategy, NativeDiscreteBindingEncodingStrategy discreteBindingEncodingStrategy)
         {
             BindingScope globalScope = BindingScope.ForProgramInitializer(this.Compiler.Parameters.Runtime.GlobalScope);
             BindingScope reservedScope = ReservedScope.ForProgramInitializer();
-            return this.GetInitializerCompiler(globalScope, reservedScope, nativeLiteralEncodingStrategy, nativeDynamicCallStrategy);
+            return this.GetInitializerCompiler(globalScope, reservedScope, literalEncodingStrategy, dynamicCallStrategy, discreteBindingEncodingStrategy);
         }
 
         protected override MethodCallExpression GenerateInitializerCall(ParameterExpression runtime, ParameterExpression scope, ParameterExpression initializersType)

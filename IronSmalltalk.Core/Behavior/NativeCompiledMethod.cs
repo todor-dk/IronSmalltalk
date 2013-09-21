@@ -23,9 +23,10 @@ namespace IronSmalltalk.Runtime.Behavior
         public override Expression GetExpression(Expression self, Expression executionContext, IEnumerable<Expression> arguments)
         {
             List<Expression> args = new List<Expression>();
+            args.Add(self);
             args.Add(executionContext);
             args.AddRange(arguments);
-            return Expression.Call(self, this.NativeMethod, args);
+            return Expression.Call(this.NativeMethod, args);
         }
     }
 }

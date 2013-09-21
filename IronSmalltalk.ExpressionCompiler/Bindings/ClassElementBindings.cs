@@ -21,24 +21,35 @@ using IronSmalltalk.Runtime;
 using RTB = IronSmalltalk.Runtime.Bindings;
 using GlobalVariableBinding = IronSmalltalk.ExpressionCompiler.Bindings.GlobalVariableBinding;
 using IronSmalltalk.Common.Internal;
+using IronSmalltalk.Runtime.Execution.CallSiteBinders;
 
 
 namespace IronSmalltalk.ExpressionCompiler.Bindings
 {
     public sealed class ClassVariableBinding : DiscreteBinding<RTB.ClassVariableBinding>, IAssignableBinding
     {
-        public ClassVariableBinding(string name, RTB.ClassVariableBinding binding)
+        public SmalltalkClass Class { get; private set; }
+
+        public ClassVariableBinding(string name, SmalltalkClass cls, RTB.ClassVariableBinding binding)
             : base(name, binding)
         {
+            if (cls == null)
+                throw new ArgumentNullException("cls");
+            this.Class = cls;
         }
 
         public Expression GenerateAssignExpression(Expression value, IBindingClient client)
         {
             return Expression.Assign(
                 Expression.Property(
-                    Expression.Constant(this.Binding, typeof(GlobalVariableBinding)),
+                    client.DiscreteBindingEncodingStrategy.GetBindingExpression<ClassVariableBinding, RTB.ClassVariableBinding>(client, this),
                     GlobalVariableBinding.SetPropertyInfo),
                 value);
+        }
+
+        public override string Moniker
+        {
+            get { return DiscreteBindingCallSiteBinderBase.GetMoniker(this.Class, this.Binding); }
         }
     }
 

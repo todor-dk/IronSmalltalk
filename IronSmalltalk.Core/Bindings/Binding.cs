@@ -75,6 +75,7 @@ namespace IronSmalltalk.Runtime.Bindings
         /// <summary>
         /// The value of the binding.
         /// </summary>
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public TValue Value
         {
             get { return this._Value; }
