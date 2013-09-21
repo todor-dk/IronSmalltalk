@@ -21,6 +21,7 @@ using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.Compiler.Visiting;
 using IronSmalltalk.ExpressionCompiler.Bindings;
+using IronSmalltalk.ExpressionCompiler.Internals;
 
 namespace IronSmalltalk.ExpressionCompiler.Visiting
 {
@@ -36,16 +37,24 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         {
             get { return this.Context.Self; }
         }
-
-
         Expression IBindingClient.TrueExpression
         {
-            get { return this.Context.Compiler.LiteralEncoding.True(this); }
+            get { return this.Context.Compiler.LiteralEncodingStrategy.True(this); }
         }
 
         Expression IBindingClient.FalseExpression
         {
-            get { return this.Context.Compiler.LiteralEncoding.False(this); }
+            get { return this.Context.Compiler.LiteralEncodingStrategy.False(this); }
+        }
+
+        IDiscreteBindingEncodingStrategy IBindingClient.DiscreteBindingEncodingStrategy
+        {
+            get { return this.Context.Compiler.DiscreteBindingEncodingStrategy; }
+        }
+
+        Expression IBindingClient.ExecutionContextExpression
+        {
+            get { return this.Context.ExecutionContext; }
         }
 
         /// <summary>

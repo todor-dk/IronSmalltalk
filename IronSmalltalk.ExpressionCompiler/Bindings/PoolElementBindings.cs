@@ -14,6 +14,8 @@
  * **************************************************************************
 */
 
+using IronSmalltalk.Runtime.Execution.CallSiteBinders;
+using System;
 using System.Linq.Expressions;
 using RTB = IronSmalltalk.Runtime.Bindings;
 
@@ -21,26 +23,41 @@ namespace IronSmalltalk.ExpressionCompiler.Bindings
 {
     public sealed class PoolVariableBinding : DiscreteBinding<RTB.PoolVariableBinding>, IAssignableBinding
     {
-        public PoolVariableBinding(string name, RTB.PoolVariableBinding binding)
+        public RTB.PoolBinding PoolBinding { get; private set; }
+
+        public PoolVariableBinding(string name, RTB.PoolBinding poolBinding, RTB.PoolVariableBinding binding)
             : base(name, binding)
         {
+            if (poolBinding == null)
+                throw new ArgumentNullException("poolBinding");
+            this.PoolBinding = poolBinding;
         }
 
         public System.Linq.Expressions.Expression GenerateAssignExpression(System.Linq.Expressions.Expression value, IBindingClient client)
         {
             return Expression.Assign(
                 Expression.Property(
-                    Expression.Constant(this.Binding, typeof(RTB.PoolVariableBinding)),
+                    client.DiscreteBindingEncodingStrategy.GetBindingExpression<PoolVariableBinding, RTB.PoolVariableBinding>(client, this),
                     PoolVariableBinding.SetPropertyInfo),
                 value);
+        }
+
+        public override string Moniker
+        {
+            get { return DiscreteBindingCallSiteBinderBase.GetMoniker(this.PoolBinding, this.Binding); }
         }
     }
 
     public sealed class PoolConstantBinding : DiscreteBinding<RTB.PoolConstantBinding>
     {
-        public PoolConstantBinding(string name, RTB.PoolConstantBinding binding)
+        public RTB.PoolBinding PoolBinding { get; private set; }
+
+        public PoolConstantBinding(string name, RTB.PoolBinding poolBinding, RTB.PoolConstantBinding binding)
             : base(name, binding)
         {
+            if (poolBinding == null)
+                throw new ArgumentNullException("poolBinding");
+            this.PoolBinding = poolBinding;
         }
 
         /// <summary>
@@ -50,6 +67,11 @@ namespace IronSmalltalk.ExpressionCompiler.Bindings
         public override bool IsConstantValueBinding
         {
             get { return true; }
+        }
+
+        public override string Moniker
+        {
+            get { return DiscreteBindingCallSiteBinderBase.GetMoniker(this.PoolBinding, this.Binding); }
         }
     }
 

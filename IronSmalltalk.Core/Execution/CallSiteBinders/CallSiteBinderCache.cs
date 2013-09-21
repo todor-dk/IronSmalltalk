@@ -37,7 +37,12 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             = new CallSiteBinderCacheTable<string, ConstantSendCallSiteBinder>(CallSiteBinderCache.CommonSelectors, StringComparer.InvariantCulture);
         private readonly CallSiteBinderCacheTable<string, SymbolCallSiteBinder> SymbolCache
             = new CallSiteBinderCacheTable<string, SymbolCallSiteBinder>(null, StringComparer.InvariantCulture);
-
+        private readonly CallSiteBinderCacheTable<string, DiscreteBindingVariableValueCallSiteBinder> DiscreteVariableBindingCache
+            = new CallSiteBinderCacheTable<string, DiscreteBindingVariableValueCallSiteBinder>(null, StringComparer.InvariantCulture);
+        private readonly CallSiteBinderCacheTable<string, DiscreteBindingConstantValueCallSiteBinder> DiscreteConstantBindingCache
+            = new CallSiteBinderCacheTable<string, DiscreteBindingConstantValueCallSiteBinder>(null, StringComparer.InvariantCulture);
+        private readonly CallSiteBinderCacheTable<string, DiscreteBindingObjectCallSiteBinder> DiscreteObjectBindingCache
+            = new CallSiteBinderCacheTable<string, DiscreteBindingObjectCallSiteBinder>(null, StringComparer.InvariantCulture);
 
         /// <summary>
         /// Cached ObjectClassCallSiteBinder.
@@ -50,10 +55,10 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         public readonly ObjectClassCallSiteBinder ObjectClassCallSiteBinder = new ObjectClassCallSiteBinder();
 
         /// <summary>
-        /// Selectors of messages we concider common and worth caching agresively.
+        /// Selectors of messages we consider common and worth caching aggressively.
         /// </summary>
         /// <remarks>
-        /// The list below was creating by examining an existing Smalltalk sourcecode
+        /// The list below was creating by examining an existing Smalltalk source code
         /// and determining the most often sent messages (as number of call-sites).
         /// </remarks>
         public static readonly string[] CommonSelectors = new string[] {
@@ -125,6 +130,39 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         public static ObjectClassCallSiteBinder GetObjectClassBinder()
         {
             return CallSiteBinderCache.Current.ObjectClassCallSiteBinder;
+        }
+
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
+        public static DiscreteBindingVariableValueCallSiteBinder GetDiscreteVariableBinding(string moniker)
+        {
+            if (moniker == null)
+                throw new ArgumentNullException();
+            DiscreteBindingVariableValueCallSiteBinder binder = CallSiteBinderCache.Current.DiscreteVariableBindingCache.GetBinder(moniker);
+            if (binder == null)
+                binder = CallSiteBinderCache.Current.DiscreteVariableBindingCache.AddBinder(new DiscreteBindingVariableValueCallSiteBinder(moniker));
+            return binder;
+        }
+
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
+        public static DiscreteBindingConstantValueCallSiteBinder GetDiscreteConstantBinding(string moniker)
+        {
+            if (moniker == null)
+                throw new ArgumentNullException();
+            DiscreteBindingConstantValueCallSiteBinder binder = CallSiteBinderCache.Current.DiscreteConstantBindingCache.GetBinder(moniker);
+            if (binder == null)
+                binder = CallSiteBinderCache.Current.DiscreteConstantBindingCache.AddBinder(new DiscreteBindingConstantValueCallSiteBinder(moniker));
+            return binder;
+        }
+
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
+        public static DiscreteBindingObjectCallSiteBinder GetDiscreteObjectBinding(string moniker)
+        {
+            if (moniker == null)
+                throw new ArgumentNullException();
+            DiscreteBindingObjectCallSiteBinder binder = CallSiteBinderCache.Current.DiscreteObjectBindingCache.GetBinder(moniker);
+            if (binder == null)
+                binder = CallSiteBinderCache.Current.DiscreteObjectBindingCache.AddBinder(new DiscreteBindingObjectCallSiteBinder(moniker));
+            return binder;
         }
     }
 }

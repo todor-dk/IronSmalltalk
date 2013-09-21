@@ -29,6 +29,7 @@ namespace IronSmalltalk.NativeCompiler.Generators.Behavior
         internal readonly SmalltalkClass Class;
         protected readonly NativeLiteralEncodingStrategy LiteralEncodingStrategy;
         protected readonly NativeDynamicCallStrategy DynamicCallStrategy;
+        protected readonly NativeDiscreteBindingEncodingStrategy DiscreteBindingEncodingStrategy;
 
         protected MethodGenerator(NativeCompiler compiler, SmalltalkClass cls, MethodDictionary methods)
             : base(compiler)
@@ -41,6 +42,7 @@ namespace IronSmalltalk.NativeCompiler.Generators.Behavior
             this.Methods = methods;
             this.LiteralEncodingStrategy = new NativeLiteralEncodingStrategy(this);
             this.DynamicCallStrategy = new NativeDynamicCallStrategy(this);
+            this.DiscreteBindingEncodingStrategy = new NativeDiscreteBindingEncodingStrategy(this);
         }
 
         protected abstract MethodCompiler GetMethodCompiler(MethodInformation method);
@@ -100,6 +102,8 @@ namespace IronSmalltalk.NativeCompiler.Generators.Behavior
             this.LiteralEncodingStrategy.GenerateTypes();
             // ".Classes.ClassName[ class].$CallSites"         - Static variables with CallSites and Binders for polymorphic calls (every ST method call)
             this.DynamicCallStrategy.GenerateTypes();
+            // ".Classes.ClassName[ class].$BindingCallSites"  - Static variables with CallSites and Binders for discrete bindings
+            this.DiscreteBindingEncodingStrategy.GenerateTypes();
 
             // Generates a method in ".Classes.ClassName[ class]" for each defined IronSmalltalk method.
             foreach (MethodInformation method in this.MethodsInfo)

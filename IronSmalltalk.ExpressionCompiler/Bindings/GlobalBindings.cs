@@ -14,6 +14,7 @@
  * **************************************************************************
 */
 
+using IronSmalltalk.Runtime.Execution.CallSiteBinders;
 using System.Linq.Expressions;
 using RTB = IronSmalltalk.Runtime.Bindings;
 
@@ -26,6 +27,11 @@ namespace IronSmalltalk.ExpressionCompiler.Bindings
             : base(name, binding)
         {
         }
+
+        public override string Moniker
+        {
+            get { return DiscreteBindingCallSiteBinderBase.GetMoniker(this.Binding); }
+        }
     }
 
     public sealed class GlobalVariableBinding : GlobalBinding<RTB.GlobalVariableBinding>, IAssignableBinding
@@ -37,10 +43,9 @@ namespace IronSmalltalk.ExpressionCompiler.Bindings
 
         public System.Linq.Expressions.Expression GenerateAssignExpression(System.Linq.Expressions.Expression value, IBindingClient client)
         {
-
             return Expression.Assign(
                 Expression.Property(
-                    Expression.Constant(this.Binding, typeof(RTB.GlobalVariableBinding)),
+                    client.DiscreteBindingEncodingStrategy.GetBindingExpression<GlobalVariableBinding, RTB.GlobalVariableBinding>(client, this),
                     GlobalVariableBinding.SetPropertyInfo), 
                 value);
         }

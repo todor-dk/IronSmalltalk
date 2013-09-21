@@ -71,9 +71,9 @@ namespace IronSmalltalk.ExpressionCompiler.BindingScopes
                         if (result != null)
                             return new ErrorBinding(name, CodeGenerationErrors.PoolVariableNotUnique);
                         if (binding is RTB.PoolConstantBinding)
-                            result = new PoolConstantBinding(name, (RTB.PoolConstantBinding)binding);
+                            result = new PoolConstantBinding(name, poolBinding, (RTB.PoolConstantBinding)binding);
                         else
-                            result = new PoolVariableBinding(name, (RTB.PoolVariableBinding)binding);
+                            result = new PoolVariableBinding(name, poolBinding, (RTB.PoolVariableBinding)binding);
                     }
                 }
             }

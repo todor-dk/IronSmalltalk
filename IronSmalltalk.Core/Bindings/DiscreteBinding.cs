@@ -63,8 +63,8 @@ namespace IronSmalltalk.Runtime.Bindings
         /// </summary>
         /// <remarks>
         /// If this property returns true and a client tries to set the value of the binding to null,
-        /// then the HasBeenSet property will stay unchanges. Normally HasBeenSet will be set to true
-        /// when a client sets the value of the binding (iregardles of null or not null).
+        /// then the HasBeenSet property will stay unchanged. Normally HasBeenSet will be set to true
+        /// when a client sets the value of the binding (irregardless of null or not null).
         /// </remarks>
         protected virtual bool RequiresValue
         {
@@ -143,6 +143,7 @@ namespace IronSmalltalk.Runtime.Bindings
         /// The "new" keywords is needed due to technical reasons. 
         /// The Value.get method is semantically identical to the base class' method.
         /// </remarks>
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public new object Value
         {
             get { return this._Value; }

@@ -42,7 +42,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
                 {
                     // If the field is "const" or "static readonly" and it's a value type, the literal strategy may want to pre-box it.
                     if ((field.IsLiteral || field.IsInitOnly) && field.FieldType.IsValueType)
-                        return this.Compiler.LiteralEncoding.GenericLiteral(this.Visitor, String.Format("{0}.{1}", field.FieldType.Name, field.Name), Expression.Field(null, field));
+                        return this.Compiler.LiteralEncodingStrategy.GenericLiteral(this.Visitor, String.Format("{0}.{1}", field.FieldType.Name, field.Name), Expression.Field(null, field));
 
                     return Expression.Field(null, field);
                 }

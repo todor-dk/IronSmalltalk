@@ -126,6 +126,7 @@ namespace IronSmalltalk.Runtime.Bindings
         /// The "new" keywords is needed due to technical reasons. 
         /// The Value.get method is semantically identical to the base class' method.
         /// </remarks>
+        [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public new object Value
         {
             get { return this._Value; }

@@ -84,6 +84,8 @@ namespace IronSmalltalk.ExpressionCompiler.Bindings
         Expression SelfExpression { get; }
         Expression TrueExpression { get; }
         Expression FalseExpression { get; }
+        Expression ExecutionContextExpression { get; }
+        IDiscreteBindingEncodingStrategy DiscreteBindingEncodingStrategy { get; }
     }
 
     public interface IAssignableBinding

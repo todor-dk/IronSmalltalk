@@ -693,7 +693,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates a generic (non-numeric) object Greather-Than comparison expression.
+        /// Generates a generic (non-numeric) object Greater-Than comparison expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         private Expression GreatherThan()
@@ -1009,12 +1009,12 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
 
         private Expression GetZero(Type type)
         {
-            return this.Compiler.LiteralEncoding.GetZero(type);
+            return this.Compiler.LiteralEncodingStrategy.GetZero(type);
         }
 
         private Expression GetOne(Type type)
         {
-            return this.Compiler.LiteralEncoding.GetOne(type);
+            return this.Compiler.LiteralEncodingStrategy.GetOne(type);
         }
 
         #endregion

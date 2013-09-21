@@ -83,12 +83,12 @@ namespace IronSmalltalk.NativeCompiler.Generators.Initializers
         /// Generate initializer methods with the logic of each initializer.
         /// Those are contained in a class named ".Initializers.ScopeName_Initializers".
         /// </summary>
-        internal void GenerateInitializerMethod(TypeBuilder type, NativeLiteralEncodingStrategy nativeLiteralEncodingStrategy, NativeDynamicCallStrategy nativeDynamicCallStrategy, ISet<string> names)
+        internal void GenerateInitializerMethod(TypeBuilder type, NativeLiteralEncodingStrategy literalEncodingStrategy, NativeDynamicCallStrategy dynamicCallStrategy, NativeDiscreteBindingEncodingStrategy discreteBindingEncodingStrategy, ISet<string> names)
         {
             string name = this.GetInitializerName(names);
             this.MethodName = name;
             MethodBuilder method = type.DefineMethod(name, MethodAttributes.Public | MethodAttributes.Static);
-            var lambda = this.GenerateInitializerLambda(nativeLiteralEncodingStrategy, nativeDynamicCallStrategy, name);
+            var lambda = this.GenerateInitializerLambda(literalEncodingStrategy, dynamicCallStrategy, discreteBindingEncodingStrategy, name);
             lambda.CompileToMethod(method, this.Compiler.NativeGenerator.DebugInfoGenerator);
         }
 
@@ -112,7 +112,7 @@ namespace IronSmalltalk.NativeCompiler.Generators.Initializers
 
         protected abstract string GetInitializerNameSuggestion();
 
-        protected abstract Expression<Func<object, ExecutionContext, object>> GenerateInitializerLambda(NativeLiteralEncodingStrategy nativeLiteralEncodingStrategy, NativeDynamicCallStrategy nativeDynamicCallStrategy, string name);
+        protected abstract Expression<Func<object, ExecutionContext, object>> GenerateInitializerLambda(NativeLiteralEncodingStrategy literalEncodingStrategy, NativeDynamicCallStrategy dynamicCallStrategy, NativeDiscreteBindingEncodingStrategy discreteBindingEncodingStrategy, string name);
 
         /// <summary>
         /// Generate an expression to call a helper method to add the initializer to the name scope.
@@ -139,21 +139,22 @@ namespace IronSmalltalk.NativeCompiler.Generators.Initializers
             this.Initializer = initializer;
         }
 
-        protected abstract InitializerCompiler GetInitializerCompiler(NativeLiteralEncodingStrategy nativeLiteralEncodingStrategy, NativeDynamicCallStrategy nativeDynamicCallStrategy);
+        protected abstract InitializerCompiler GetInitializerCompiler(NativeLiteralEncodingStrategy literalEncodingStrategy, NativeDynamicCallStrategy dynamicCallStrategy, NativeDiscreteBindingEncodingStrategy discreteBindingEncodingStrategy);
 
-        protected InitializerCompiler GetInitializerCompiler(BindingScope globalScope, BindingScope reservedScope, NativeLiteralEncodingStrategy nativeLiteralEncodingStrategy, NativeDynamicCallStrategy nativeDynamicCallStrategy)
+        protected InitializerCompiler GetInitializerCompiler(BindingScope globalScope, BindingScope reservedScope, NativeLiteralEncodingStrategy literalEncodingStrategy, NativeDynamicCallStrategy dynamicCallStrategy, NativeDiscreteBindingEncodingStrategy discreteBindingEncodingStrategy)
         {
             CompilerOptions options = new CompilerOptions();
             options.DebugInfoService = this.Initializer.GetDebugInfoService();
-            options.LiteralEncodingStrategy = nativeLiteralEncodingStrategy;
-            options.DynamicCallStrategy = nativeDynamicCallStrategy;
+            options.LiteralEncodingStrategy = literalEncodingStrategy;
+            options.DynamicCallStrategy = dynamicCallStrategy;
+            options.DiscreteBindingEncodingStrategy = discreteBindingEncodingStrategy;
 
             return new InitializerCompiler(this.Compiler.Parameters.Runtime, options, globalScope, reservedScope);
         }
 
-        protected override Expression<Func<object, ExecutionContext, object>> GenerateInitializerLambda(NativeLiteralEncodingStrategy nativeLiteralEncodingStrategy, NativeDynamicCallStrategy nativeDynamicCallStrategy, string name)
+        protected override Expression<Func<object, ExecutionContext, object>> GenerateInitializerLambda(NativeLiteralEncodingStrategy literalEncodingStrategy, NativeDynamicCallStrategy dynamicCallStrategy, NativeDiscreteBindingEncodingStrategy discreteBindingEncodingStrategy, string name)
         {
-            return this.GetInitializerCompiler(nativeLiteralEncodingStrategy, nativeDynamicCallStrategy).CompileInitializer(this.Initializer.ParseTree, name);
+            return this.GetInitializerCompiler(literalEncodingStrategy, dynamicCallStrategy, discreteBindingEncodingStrategy).CompileInitializer(this.Initializer.ParseTree, name);
         }
 
         /// <summary>

@@ -47,10 +47,12 @@ namespace IronSmalltalk.ExpressionCompiler.BindingScopes
             this.Pool.TryGetValue(name, out binding);
             if (binding != null)
             {
+                RTB.PoolBinding poolBinding = this.Pool.Runtime.GlobalScope.GetPoolBinding(this.Pool.Name);
+                System.Diagnostics.Debug.Assert(poolBinding != null, String.Format("Could not find pool binding named {0}.", this.Pool.Name.Value));
                 if (binding is RTB.PoolConstantBinding)
-                    result = new PoolConstantBinding(name, (RTB.PoolConstantBinding)binding);
+                    result = new PoolConstantBinding(name, poolBinding, (RTB.PoolConstantBinding)binding);
                 else
-                    result = new PoolVariableBinding(name, (RTB.PoolVariableBinding)binding);
+                    result = new PoolVariableBinding(name, poolBinding, (RTB.PoolVariableBinding)binding);
             }
             return result; // null means try outer scope.
         }

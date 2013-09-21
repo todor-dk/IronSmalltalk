@@ -44,6 +44,7 @@
     <Compile Include="CompilationStrategies\IBinderDefinition.cs" />
     <Compile Include="CompilationStrategies\INativeStrategyClient.cs" />
     <Compile Include="CompilationStrategies\LiteralGenerator.cs" />
+    <Compile Include="CompilationStrategies\NativeDiscreteBindingEncodingStrategy.cs" />
     <Compile Include="Generators\Globals\ClassGenerator.cs" />
     <Compile Include="Generators\Behavior\ClassMethodGenerator.cs" />
     <Compile Include="Generators\Initializers\ClassInitializerGenerator.cs" />

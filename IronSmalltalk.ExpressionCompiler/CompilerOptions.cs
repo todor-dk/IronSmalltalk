@@ -30,6 +30,11 @@ namespace IronSmalltalk.ExpressionCompiler
         public IDynamicCallStrategy DynamicCallStrategy { get; set; }
 
         /// <summary>
+        /// Strategy for encoding reading and writing of discrete bindings.
+        /// </summary>
+        public IDiscreteBindingEncodingStrategy DiscreteBindingEncodingStrategy { get; set; }
+
+        /// <summary>
         /// Name scope for resolution of globals.
         /// </summary>
         /// <remarks>

@@ -53,9 +53,9 @@ namespace IronSmalltalk.ExpressionCompiler.BindingScopes
             RTB.ClassVariableBinding binding;
             while (cls != null)
             {
-                this.Class.ClassVariableBindings.TryGetValue(name, out binding);
+                cls.ClassVariableBindings.TryGetValue(name, out binding);
                 if (binding != null)
-                    return new ClassVariableBinding(name, binding);
+                    return new ClassVariableBinding(name, cls, binding);
                 cls = cls.Superclass;
             }
             return null; // null means try outer scope.
