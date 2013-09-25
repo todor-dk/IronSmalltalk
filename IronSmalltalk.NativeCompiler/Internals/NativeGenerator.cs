@@ -66,8 +66,6 @@ namespace IronSmalltalk.NativeCompiler.Internals
             this.AssemblyBuilder.DefineVersionInfoResource();
             
             this.ModuleBuilder = this.AssemblyBuilder.DefineDynamicModule(this.AssemblyName.Name,  filename, this.Parameters.EmitDebugSymbols);
-
-            var a = this.AssemblyBuilder.ManifestModule;
         }
 
         private static readonly ConstructorInfo AssemblyFileVersionCtor = TypeUtilities.Constructor(
@@ -156,8 +154,25 @@ namespace IronSmalltalk.NativeCompiler.Internals
                 if (!type.IsCreated())
                     type.CreateType();                    
             }
+            PortableExecutableKinds exeType;
+            switch (this.Parameters.AssemblyType)
+            {
+                case NativeCompilerParameters.AssemblyTypeEnum.Exe:
+                    exeType = PortableExecutableKinds.Preferred32Bit;
+                    break;
+                case NativeCompilerParameters.AssemblyTypeEnum.Exe32:
+                    exeType = PortableExecutableKinds.Required32Bit;
+                    break;
+                case NativeCompilerParameters.AssemblyTypeEnum.Exe64:
+                    exeType = PortableExecutableKinds.PE32Plus;
+                    break;
+                case NativeCompilerParameters.AssemblyTypeEnum.Dll:
+                default:
+                    exeType = PortableExecutableKinds.ILOnly;
+                    break;
+            }
             string filename = System.IO.Path.GetFileName(this.OutputPath);
-            this.AssemblyBuilder.Save(filename, PortableExecutableKinds.ILOnly, ImageFileMachine.I386);
+            this.AssemblyBuilder.Save(filename, exeType | PortableExecutableKinds.ILOnly, ImageFileMachine.I386);
         }
 
         internal TypeBuilder DefineType(string name, Type parent, TypeAttributes attr)

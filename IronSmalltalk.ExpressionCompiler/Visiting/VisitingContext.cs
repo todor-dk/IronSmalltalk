@@ -29,6 +29,7 @@ using IronSmalltalk.ExpressionCompiler.BindingScopes;
 using IronSmalltalk.ExpressionCompiler.Internals;
 using IronSmalltalk.Runtime.Execution.Internals;
 using IronSmalltalk.Runtime.Internal;
+using IronSmalltalk.ExpressionCompiler.Primitives;
 
 namespace IronSmalltalk.ExpressionCompiler.Visiting
 {
@@ -126,7 +127,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             if (this._ReturnLabel != null)
                 result = Expression.Label(this._ReturnLabel, result);
 
-            // Somebody requested the home context used for block returns ... we must handle this correcty with try ... catch ...
+            // Somebody requested the home context used for block returns ... we must handle this correctly with try ... catch ...
             if (this._HomeContext != null)
             {
                 // Semantics:
@@ -135,7 +136,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
                 // {
                 //      return <<result>>;
                 // } 
-                // .... this is how we would like to have it ... if we could. CLR limitations do not allow filters in dynamic methos ....
+                // .... this is how we would like to have it ... if we could. CLR limitations do not allow filters in dynamic methods ....
                 // catch (BlockResult blockResult) where (blockResult.HomeContext == homeContext)       ... the where semantics are not part of C#
                 // {
                 //      return blockResult.Result;
@@ -187,6 +188,11 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         public Expression CompileGetClass(Expression receiver)
         {
             return this.Compiler.DynamicCallStrategy.CompileGetClass(this, receiver, this.ExecutionContext);
+        }
+
+        public Expression CompileDynamicConvert(Expression parameter, Type type, Conversion conversion)
+        {
+            return this.Compiler.DynamicCallStrategy.CompileDynamicConvert(this, parameter, type, conversion);
         }
 
         private int BlockNumber = 0;

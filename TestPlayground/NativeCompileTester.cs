@@ -100,7 +100,7 @@ namespace TestPlayground
             parameters.Company = "Iron Company";
             parameters.Copyright = "Copy(right)";
             parameters.EmitDebugSymbols = true;
-            parameters.FileExtension = "dll";
+            parameters.AssemblyType = IronSmalltalk.NativeCompiler.NativeCompilerParameters.AssemblyTypeEnum.Exe32;
             parameters.OutputDirectory = "c:\\temp";
             parameters.Product = "Iron Smalltalk Product";
             parameters.AssemblyVersion = "1.2.3.4";

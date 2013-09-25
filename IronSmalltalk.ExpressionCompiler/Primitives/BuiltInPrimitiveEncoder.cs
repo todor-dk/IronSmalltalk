@@ -278,7 +278,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         #region **** Numeric Operations ****
         #region ISO/IEC 10967 Integer Operations
         /// <summary>
-        /// Generates an Interger Equals (ISO/IEC 10967 integer operation eqI) expression.
+        /// Generates an Integer Equals (ISO/IEC 10967 integer operation eqI) expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         /// <remarks>
@@ -291,7 +291,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates an Interger Less-Than (ISO/IEC 10967 integer operation lssI) expression.
+        /// Generates an Integer Less-Than (ISO/IEC 10967 integer operation lssI) expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         private Expression IntegerLessThan()
@@ -300,7 +300,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates an Interger Less-Than-Or-Equal (ISO/IEC 10967 integer operation leqI) expression.
+        /// Generates an Integer Less-Than-Or-Equal (ISO/IEC 10967 integer operation leqI) expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         private Expression IntegerLessThanOrEqual()
@@ -309,7 +309,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates an Interger Greather-Than (ISO/IEC 10967 integer operation gtrI) expression.
+        /// Generates an Integer Greater-Than (ISO/IEC 10967 integer operation gtrI) expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         private Expression IntegerGreatherThan()
@@ -318,7 +318,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates an Interger Greather-Than-Or-Equal (ISO/IEC 10967 integer operation geqI) expression.
+        /// Generates an Integer Greater-Than-Or-Equal (ISO/IEC 10967 integer operation geqI) expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         private Expression IntegerGreatherThanOrEqual()
@@ -327,7 +327,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates an Interger Addition (ISO/IEC 10967 integer operation addI) expression.
+        /// Generates an Integer Addition (ISO/IEC 10967 integer operation addI) expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         /// <remarks>For bounded values, the expression throws an OverflowException on overflow.</remarks>
@@ -337,7 +337,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates an Interger Subtraction (ISO/IEC 10967 integer operation subI) expression.
+        /// Generates an Integer Subtraction (ISO/IEC 10967 integer operation subI) expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         /// <remarks>For bounded values, the expression throws an OverflowException on overflow.</remarks>
@@ -347,7 +347,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates an Interger Multiplication (ISO/IEC 10967 integer operation mulI) expression.
+        /// Generates an Integer Multiplication (ISO/IEC 10967 integer operation mulI) expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         /// <remarks>For bounded values, the expression throws an OverflowException on overflow.</remarks>
@@ -357,7 +357,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates an Interger Division (ISO/IEC 10967 integer operation divI-t) with truncation towards zero expression.
+        /// Generates an Integer Division (ISO/IEC 10967 integer operation divI-t) with truncation towards zero expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         /// <remarks>For bounded values, the expression throws an OverflowException on overflow. When dividing by zero, the expression throws a DivideByZeroException.</remarks>
@@ -367,7 +367,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates an Interger Division (ISO/IEC 10967 integer operation divI-f) with flooring truncation towards negative infinity expression.
+        /// Generates an Integer Division (ISO/IEC 10967 integer operation divI-f) with flooring truncation towards negative infinity expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         /// <remarks>For bounded values, the expression throws an OverflowException on overflow. When dividing by zero, the expression throws a DivideByZeroException.</remarks>
@@ -377,7 +377,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates an Interger Remainder (ISO/IEC 10967 operation remI-t) with truncation towards zero expression.
+        /// Generates an Integer Remainder (ISO/IEC 10967 operation remI-t) with truncation towards zero expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         /// <remarks>For bounded values, the expression throws an OverflowException on overflow. When dividing by zero, the expression throws a DivideByZeroException.</remarks>
@@ -387,7 +387,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates an Interger Remainder (ISO/IEC 10967 operation remI-f) with flooring truncation towards negative infinity expression.
+        /// Generates an Integer Remainder (ISO/IEC 10967 operation remI-f) with flooring truncation towards negative infinity expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         /// <remarks>For bounded values, the expression throws an OverflowException on overflow. When dividing by zero, the expression throws a DivideByZeroException.</remarks>
@@ -397,7 +397,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates an Interger Negation (ISO/IEC 10967 operation negI) operation expression.
+        /// Generates an Integer Negation (ISO/IEC 10967 operation negI) operation expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 1 elements.</returns>
         /// <remarks>For bounded values, the expression throws an OverflowException on overflow.</remarks>
@@ -410,7 +410,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         #region Integer operations .... not part of ISO/IEC 10967
 
         /// <summary>
-        /// Generates an Interger Bit-Shift operation expression.
+        /// Generates an Integer Bit-Shift operation expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         /// <remarks>
@@ -436,7 +436,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates an Interger Bit-And operation expression.
+        /// Generates an Integer Bit-And operation expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         private Expression IntegerBitAnd()
@@ -445,7 +445,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates an Interger Bit-Or operation expression.
+        /// Generates an Integer Bit-Or operation expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         private Expression IntegerBitOr()
@@ -454,7 +454,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates an Interger Bit-Xor operation expression.
+        /// Generates an Integer Bit-Xor operation expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         private Expression IntegerBitXor()
@@ -497,7 +497,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates a Float Greather-Than (ISO/IEC 10967 float operation gtrF) expression.
+        /// Generates a Float Greater-Than (ISO/IEC 10967 float operation gtrF) expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         private Expression FloatGreatherThan()
@@ -506,7 +506,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates a Float Greather-Than-Or-Equal (ISO/IEC 10967 float operation geqF) expression.
+        /// Generates a Float Greater-Than-Or-Equal (ISO/IEC 10967 float operation geqF) expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         private Expression FloatGreatherThanOrEqual()
@@ -599,7 +599,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates a generic number Greather-Than comparison expression.
+        /// Generates a generic number Greater-Than comparison expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         private Expression NumberGreatherThan()
@@ -608,7 +608,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates a generic number Greather-Than-Or-Equal comparison expression.
+        /// Generates a generic number Greater-Than-Or-Equal comparison expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         private Expression NumberGreatherThanOrEqual()
@@ -702,7 +702,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         }
 
         /// <summary>
-        /// Generates a generic (non-numeric) object Greather-Than-Or-Equal comparison expression.
+        /// Generates a generic (non-numeric) object Greater-Than-Or-Equal comparison expression.
         /// </summary>
         /// <returns>An Expression with the logic necessary to perform the operation. Null if 'this.Parameters' does not contain exactly 2 elements.</returns>
         private Expression GreatherThanOrEqual()
@@ -944,7 +944,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
         /// 
         /// </summary>
         /// <param name="value">Value to be shifted. It must have the same type as the "type" parameter.</param>
-        /// <param name="shift">Shift value. Positive = left, netagive = right. It must be of type "System.Int32".</param>
+        /// <param name="shift">Shift value. Positive = left, negative = right. It must be of type "System.Int32".</param>
         /// <param name="type">Type if the value to be shifted and of the zero value.</param>
         /// <param name="bits">Number of significant bits in the integer type. Negative if type is signed.</param>
         /// <param name="zero">Value of 0 (zero). It must have the same type as the "type" parameter.</param>
@@ -960,7 +960,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
             else
             {
                 // Some integer with limited precision ... must handle delicately with self-made overflow checks. 
-                // NB: Logic here executes only if shift is greather than zero.
+                // NB: Logic here executes only if shift is greater than zero.
                 // C# overflow check semantics ... example for int (32 bit):
                 //  if (value < 0)
                 //      throw constant OverflowException();         // Handle negatives in Smalltalk (X3J20 says "undefined" for this)

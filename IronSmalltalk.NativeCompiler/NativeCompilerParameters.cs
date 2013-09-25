@@ -28,7 +28,7 @@ namespace IronSmalltalk.NativeCompiler
         public string RootNamespace { get; set; }
         public string OutputDirectory { get; set; }
         public string AssemblyName { get; set; }
-        public string FileExtension { get; set; }
+        public AssemblyTypeEnum AssemblyType { get; set; }
         public bool EmitDebugSymbols { get; set; }
         public string FileVersion { get; set; }
         public string Product { get; set; }
@@ -45,5 +45,29 @@ namespace IronSmalltalk.NativeCompiler
             return (NativeCompilerParameters) this.MemberwiseClone();
         }
 
+        public enum AssemblyTypeEnum
+        {
+            /// <summary>
+            /// The resulting assembly will be a DLL containing only managed code.
+            /// </summary>
+            Dll,
+            /// <summary>
+            /// The resulting assembly will en an EXE preferring to run 32-bit, but capable of running 64-bit as well.
+            /// </summary>
+            Exe,
+            /// <summary>
+            /// The resulting assembly will en an EXE running in 32-bit mode.
+            /// </summary>
+            Exe32,
+            /// <summary>
+            /// The resulting assembly will en an EXE running in 64-bit mode.
+            /// </summary>
+            Exe64
+        }
+
+        public string FileExtension
+        {
+            get { return (this.AssemblyType == AssemblyTypeEnum.Dll) ? "dll" : "exe"; }
+        }
     }
 }

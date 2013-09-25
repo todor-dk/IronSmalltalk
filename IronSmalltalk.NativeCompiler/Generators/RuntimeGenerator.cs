@@ -58,8 +58,36 @@ namespace IronSmalltalk.NativeCompiler.Generators
                 typeof(Object),
                 TypeAttributes.Class | TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.Abstract);
 
-            this.GenerateCreateRuntime(false);
-            this.GenerateCreateRuntime(true);
+            if (this.Compiler.Parameters.AssemblyType == NativeCompilerParameters.AssemblyTypeEnum.Dll)
+            {
+                // DLLs have two public overloaded methods called CreateRuntime().
+                this.GenerateCreateRuntime(false);
+                this.GenerateCreateRuntime(true);
+            }
+            else
+            {
+                // For EXEs, create a main method that calls the CreateRuntime
+                MethodBuilder createRuntime = this.GenerateCreateRuntime(false);
+
+                MethodBuilder main = this.Type.DefineMethod("Main",
+                    MethodAttributes.Private | MethodAttributes.Static | MethodAttributes.HideBySig,
+                    CallingConventions.Standard,
+                    typeof(void),
+                    new Type[] { });
+
+                // Add [STAThread]
+                CustomAttributeBuilder caBuilder = new CustomAttributeBuilder(
+						TypeUtilities.Constructor(typeof(STAThreadAttribute)),
+						new object[] { });
+                main.SetCustomAttribute(caBuilder);
+
+                ILGenerator ilGen = main.GetILGenerator();
+                ilGen.Emit(OpCodes.Call, createRuntime);
+                ilGen.Emit(OpCodes.Pop); // Discard the result form CreateRuntime()
+                ilGen.Emit(OpCodes.Ret);    
+
+                this.Compiler.NativeGenerator.AssemblyBuilder.SetEntryPoint(main);
+            }
         }
 
         private static readonly ConstructorInfo ScopeInitializerDelegateCtor = TypeUtilities.Constructor(
@@ -68,7 +96,7 @@ namespace IronSmalltalk.NativeCompiler.Generators
         private static readonly MethodInfo CreateRuntimeMethod = TypeUtilities.Method(typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper),
             "CreateRuntime", typeof(bool), typeof(Action<SmalltalkRuntime, SmalltalkNameScope>), typeof(Action<SmalltalkRuntime, SmalltalkNameScope>));
 
-        private void GenerateCreateRuntime(bool hasInitializeParameter)
+        private MethodBuilder GenerateCreateRuntime(bool hasInitializeParameter)
         {
             Type[] argTypes = hasInitializeParameter ? new Type[] { typeof(bool) } : new Type[] { };
             MethodBuilder method = this.Type.DefineMethod("CreateRuntime", MethodAttributes.Public | MethodAttributes.Static,
@@ -97,6 +125,8 @@ namespace IronSmalltalk.NativeCompiler.Generators
             // Call the method (on the stack: bool, Action<SmalltalkRuntime, SmalltalkNameScope>, Action<SmalltalkRuntime, SmalltalkNameScope>
             ilGen.Emit(OpCodes.Call, RuntimeGenerator.CreateRuntimeMethod);             // Call NativeLoadHelper.CreateRuntime();
             ilGen.Emit(OpCodes.Ret);                                                    // Return the result
+
+            return method;
         }
     }
 }
