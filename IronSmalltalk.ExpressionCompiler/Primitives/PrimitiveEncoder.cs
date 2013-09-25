@@ -87,92 +87,48 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
 
         protected Expression Convert(Expression parameter, Type type, Conversion conversion)
         {
+            // Special cases that are easy to handle
             if (type == null)
                 return parameter;
             else if (type == typeof(object))
                 return Expression.Convert(parameter, typeof(object));
 
+            // This is the tricky part .... 
+            //
+            // Example that will NOT WORK:
+            //      Int16 i16 = 123;
+            //      Object o16 = i16;
+            //      Int32 i32 = (Int32) o16     // *** FAILS *** ... even if object currently has an Int16, it's an object and no cast to Int32!
+            //  
+            // Example that works:
+            //      Int16 i16 = 123;
+            //      Object o16 = i16;
+            //      Int32 i32 = (Int16) o16     // OK! First cast Object=>Int16 then IMPLICIT cast Int16=>Int32
+            //
+            // VERY IMPORTANT!!!!
+            //      This should ONLY do implicit conversion AND NO EXPLICIT conversions.
+            //      If we do explicit conversion, we are screwed because the value 
+            //      will loose precision - and this is critical show stopper!
+            //
+            // C# Pseudocode Example ... cast to Int32:
+            //      if (obj is Int32)
+            //          return (Int32) obj;
+            //      else
+            //          return (Int32) ((dynamic) obj);     // This uses a CallSite and a C# CallSiteBinder to do the cast.
+            //
+            Expression castConvert;
             if ((conversion & Conversion.Checked) == Conversion.Checked)
-                return Expression.ConvertChecked(parameter, type);
+                castConvert = Expression.ConvertChecked(parameter, type);
             else
-                return Expression.Convert(parameter, type);
+                castConvert = Expression.Convert(parameter, type);
+            Expression dynamicConvert = this.Visitor.Context.CompileDynamicConvert(parameter, type, conversion);
 
-// We'll need a way to do the conversion in a decent manner
-#if BUGBUG
-            Type limitingType = (parameter.Value != null) ? parameter.Value.GetType() : parameter.LimitType;
-            if ((limitingType == null) || (limitingType == typeof(object)))
-            {
-                if ((conversion & Conversion.Checked) == Conversion.Checked)
-                    return Expression.ConvertChecked(parameter.Expression, type);
-                else
-                    return Expression.Convert(parameter.Expression, type);
-            }
-            else
-            {
-                // This is the tricky part .... 
-                //
-                // Example that will NOT WORK:
-                //      Int16 i16 = 123;
-                //      Object o16 = i16;
-                //      Int32 i32 = (Int32) o16     // *** FAILS *** ... even if object currently has an Int16, it's an object and no cast to Int32!
-                //  
-                // Example that works:
-                //      Int16 i16 = 123;
-                //      Object o16 = i16;
-                //      Int32 i32 = (Int16) o16     // OK! First cast Object=>Int16 then IMPLICIT cast Int16=>Int32
-                //
-                // VERY IMPORTANT!!!!
-                //      This should ONLY do implicit covertion AND NO EXPLICIT conversions.
-                //      If we do explicit conversion, we are screwed because the value 
-                //      will loose precision - and this is critical show stopper!
-
-                // 1. Create an polymorphic inlined cache restrictions ... as long as the arguments are of the given type,
-                //      we can "hardcode" the cast into the expression code (there is no way to do dynamic cast - cast is a static thing)
-                if (restrictions == null)
-                    restrictions = BindingRestrictions.Empty;
-                if (parameter.Restrictions != null)
-                    restrictions = restrictions.Merge(parameter.Restrictions);
-                restrictions = restrictions.Merge(BindingRestrictions.GetTypeRestriction(parameter.Expression, limitingType));
-
-                if (limitingType == type)
-                {
-                    // No need for double cast ... the argument is already in the given type.
-                    if ((conversion & Conversion.Checked) == Conversion.Checked)
-                        return Expression.ConvertChecked(parameter.Expression, type);
-                    else
-                        return Expression.Convert(parameter.Expression, type);
-                }
-                else
-                {
-                    // This is the place where we have to do the conversion. 
-
-                    // The DLR does not provide an easy helper function. So we have two options:
-                    //  1. Write the logic for what converts implicitely to what (incl. dynamic cast). Too much work currently.
-                    //  2. Use the C# binder to do the work. We actually WANT the same semantics as C#, so that's OK. But we depend on them :-/
-
-                    Microsoft.CSharp.RuntimeBinder.CSharpBinderFlags flags = Microsoft.CSharp.RuntimeBinder.CSharpBinderFlags.None;
-                    if ((conversion & Conversion.Checked) == Conversion.Checked)
-                        flags = flags | Microsoft.CSharp.RuntimeBinder.CSharpBinderFlags.CheckedContext;
-                    if ((conversion & Conversion.Explicit) == Conversion.Explicit)
-                        flags = flags | Microsoft.CSharp.RuntimeBinder.CSharpBinderFlags.ConvertExplicit;
-                    // Create a C# convert binder. Currently, this is not cached, but we could do this in the future.
-                    ConvertBinder bndr = (ConvertBinder)Microsoft.CSharp.RuntimeBinder.Binder.Convert(flags, type, typeof(PrimitiveHelper));
-                    DynamicMetaObject conversionResult = bndr.Bind(parameter, null);
-
-                    if (conversionResult == null)
-                        throw new InvalidOperationException("We did not expect the C# ConvertBinder.Bind to return null");
-
-                    // Must merge the restrictions returned by the C# ConvertBinder.Bind.
-                    // We will most probably have 'the same' restriction already, but the DLR will remove the duplicate
-                    if (restrictions == null)
-                        restrictions = BindingRestrictions.Empty;
-                    if (conversionResult.Restrictions != null)
-                        restrictions = restrictions.Merge(conversionResult.Restrictions);
-                    // The result is easy ... the Expression return by the C# ConvertBinder.Bind
-                    return conversionResult.Expression;
-                }
-            }
-#endif
+            return Expression.Condition(
+                // Improve: The "is" test can be optimized for reference types, e.g.
+                //      if ((obj is String) || (obj == null))   ... Null always casts to reference type
+                Expression.TypeIs(parameter, type), 
+                castConvert,
+                dynamicConvert);
         }
 
         /// <summary>
@@ -221,21 +177,6 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
             throw new PrimitiveInternalException(CodeGenerationErrors.WrongNumberOfParameters);
         }
 
-        [Flags]
-        protected enum Conversion
-        {
-            /// <summary>
-            /// The conversion happens in a checked context. 
-            /// The conversion throws an exception if the target type is overflowed.
-            /// </summary>
-            Checked = 1,
-
-            /// <summary>
-            /// The conversion is explicit, contrary to an implicit conversion.
-            /// </summary>
-            Explicit = 2
-        }
-
         public static Expression EncodeReferenceEquals(Expression a, Expression b)
         {
             return PrimitiveEncoder.EncodeReferenceEquals(a, b, PreboxedConstants.True_Expression, PreboxedConstants.False_Expression);
@@ -254,5 +195,21 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
                     trueValue,
                     falseValue));
         }
+    }
+
+
+    [Flags]
+    public enum Conversion
+    {
+        /// <summary>
+        /// The conversion happens in a checked context. 
+        /// The conversion throws an exception if the target type is overflowed.
+        /// </summary>
+        Checked = 1,
+
+        /// <summary>
+        /// The conversion is explicit, contrary to an implicit conversion.
+        /// </summary>
+        Explicit = 2
     }
 }

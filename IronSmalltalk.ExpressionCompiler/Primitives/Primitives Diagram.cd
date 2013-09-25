@@ -72,13 +72,6 @@
   </Class>
   <Class Name="IronSmalltalk.ExpressionCompiler.Primitives.PrimitiveEncoder">
     <Position X="6.25" Y="0.5" Width="2.75" />
-    <NestedTypes>
-      <Enum Name="IronSmalltalk.ExpressionCompiler.Primitives.PrimitiveEncoder.Conversion" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Primitives\PrimitiveEncoder.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Enum>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAAAAAFAAwEAAAAACIAAAAAAAgAAAAAAAIAAgAAAAAA=</HashCode>
       <FileName>Primitives\PrimitiveEncoder.cs</FileName>

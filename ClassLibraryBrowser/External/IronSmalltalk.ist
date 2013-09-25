@@ -9683,3 +9683,7 @@ AConstancts method!
 setGlobalVar
 
 	GlobalVar := 1.!
+	
+Global initializer!
+
+	Transcript show: 'Hello World'.!

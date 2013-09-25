@@ -13,6 +13,8 @@ using IronSmalltalk.ExpressionCompiler.Internals;
 using IronSmalltalk.ExpressionCompiler.Visiting;
 using IronSmalltalk.Runtime.Execution;
 using IronSmalltalk.Runtime.Execution.Internals;
+using IronSmalltalk.ExpressionCompiler.Primitives;
+using System.Dynamic;
 
 namespace IronSmalltalk.NativeCompiler.CompilationStrategies
 {
@@ -20,9 +22,12 @@ namespace IronSmalltalk.NativeCompiler.CompilationStrategies
     {
         private readonly CallSiteGenerator CallSiteGenerator;
 
+        private readonly INativeStrategyClient Client;
+
         internal NativeDynamicCallStrategy(INativeStrategyClient client)
         {
             this.CallSiteGenerator = new CallSiteGenerator(client, "$CallSites");
+            this.Client = client;
         }
 
         internal void GenerateTypes()
@@ -210,5 +215,73 @@ namespace IronSmalltalk.NativeCompiler.CompilationStrategies
             }
         }
 
+
+
+        public Expression CompileDynamicConvert(VisitingContext context, Expression parameter, Type type, ExpressionCompiler.Primitives.Conversion conversion)
+        {
+            // This is the tricky part .... 
+            //
+            // Example that will NOT WORK:
+            //      Int16 i16 = 123;
+            //      Object o16 = i16;
+            //      Int32 i32 = (Int32) o16     // *** FAILS *** ... even if object currently has an Int16, it's an object and no cast to Int32!
+            //  
+            // Example that works:
+            //      Int16 i16 = 123;
+            //      Object o16 = i16;
+            //      Int32 i32 = (Int16) o16     // OK! First cast Object=>Int16 then IMPLICIT cast Int16=>Int32
+            //
+            // VERY IMPORTANT!!!!
+            //      This should ONLY do implicit conversion AND NO EXPLICIT conversions.
+            //      If we do explicit conversion, we are screwed because the value 
+            //      will loose precision - and this is critical show stopper!
+            //
+            // C# Pseudocode Example ... cast to Int32:
+            //      if (obj is Int32)
+            //          return (Int32) obj;
+            //      else
+            //          return (Int32) ((dynamic) obj);     // This uses a CallSite and a C# CallSiteBinder to do the cast.
+            //
+            // The DLR does not provide an easy helper function. So we have two options:
+            //  1. Write the logic for what converts implicitly to what (incl. dynamic cast). Too much work currently.
+            //  2. Use the C# binder to do the work. We actually WANT the same semantics as C#, so that's OK. But we depend on them :-/
+
+            Microsoft.CSharp.RuntimeBinder.CSharpBinderFlags flags = Microsoft.CSharp.RuntimeBinder.CSharpBinderFlags.None;
+            if ((conversion & Conversion.Checked) == Conversion.Checked)
+                flags = flags | Microsoft.CSharp.RuntimeBinder.CSharpBinderFlags.CheckedContext;
+            if ((conversion & Conversion.Explicit) == Conversion.Explicit)
+                flags = flags | Microsoft.CSharp.RuntimeBinder.CSharpBinderFlags.ConvertExplicit;
+            // Create a C# convert binder. Currently, this is not cached, but we could do this in the future.
+            ConvertBinderDefinition binder = new ConvertBinderDefinition(this.Client.Compiler.GetDynamicConvertBinder(type, flags));
+            // Create a call site
+            Type delegateType = typeof(Func<,,>).MakeGenericType(typeof(CallSite), parameter.Type, type);
+            Type siteType = typeof(CallSite<>).MakeGenericType(delegateType);
+
+            Expression callSite = this.CallSiteGenerator.CreateCallSite(binder, delegateType, siteType, String.Format("({0})", type.Name));
+
+            FieldInfo target = TypeUtilities.Field(siteType, "Target", BindingFlags.Instance | BindingFlags.Public);
+            MethodInfo invoke = TypeUtilities.Method(delegateType, "Invoke");
+
+            // siteExpr.Target.Invoke(siteExpr, parameter)
+            return Expression.Call(
+                Expression.Field(callSite, target),
+                invoke,
+                callSite, parameter);
+        }
+
+        private class ConvertBinderDefinition : IBinderDefinition
+        {
+            private readonly FieldInfo BinderField;
+
+            public ConvertBinderDefinition(FieldInfo binderField)
+            {
+                this.BinderField = binderField;
+            }
+
+            public void GenerateBinderInitializer(ILGenerator ilgen)
+            {
+                ilgen.Emit(OpCodes.Ldsfld, this.BinderField);
+            }
+        }
     }
 }

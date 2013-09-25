@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using IronSmalltalk.ExpressionCompiler.Visiting;
+using IronSmalltalk.ExpressionCompiler.Primitives;
 namespace IronSmalltalk.ExpressionCompiler.Internals
 {
     public interface IDynamicCallStrategy
@@ -10,5 +11,6 @@ namespace IronSmalltalk.ExpressionCompiler.Internals
         Expression CompileDynamicCall(VisitingContext context, string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, string superLookupScope, Expression receiver, Expression executionContext, Expression argument);
         Expression CompileDynamicCall(VisitingContext context, string selector, string nativeName, int argumentCount, bool isSuperSend, bool isConstantReceiver, string superLookupScope, Expression receiver, Expression executionContext, IEnumerable<Expression> arguments);
         Expression CompileGetClass(VisitingContext context, Expression receiver, Expression executionContext);
+        Expression CompileDynamicConvert(VisitingContext context, Expression parameter, Type type, Conversion conversion);
     }
 }
