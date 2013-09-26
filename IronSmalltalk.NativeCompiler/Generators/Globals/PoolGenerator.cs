@@ -51,7 +51,10 @@ namespace IronSmalltalk.NativeCompiler.Generators.Globals
             MethodBuilder method = type.DefineMethod(name, MethodAttributes.Assembly | MethodAttributes.Static);
 
             var lambda = this.GeneratePoolInitializerLambda(name);
-            lambda.CompileToMethod(method, this.Compiler.NativeGenerator.DebugInfoGenerator);
+            if (this.Compiler.NativeGenerator.DebugInfoGenerator == null)
+                lambda.CompileToMethod(method);
+            else
+                lambda.CompileToMethod(method, this.Compiler.NativeGenerator.DebugInfoGenerator);
 
             this.InitializerMethod = method;
         }

@@ -87,7 +87,12 @@ namespace IronSmalltalk.Runtime.Bindings
 
         public SmalltalkNameScope Copy()
         {
-            SmalltalkNameScope result = new SmalltalkNameScope(this.Runtime, this.OuterScope);
+            return this.Copy(this.OuterScope);
+        }
+
+        public SmalltalkNameScope Copy(SmalltalkNameScope outerScope)
+        {
+            SmalltalkNameScope result = new SmalltalkNameScope(this.Runtime, outerScope);
             result.Classes.AddRange(this.Classes);
             result.GlobalConstants.AddRange(this.GlobalConstants);
             result.GlobalVariables.AddRange(this.GlobalVariables);

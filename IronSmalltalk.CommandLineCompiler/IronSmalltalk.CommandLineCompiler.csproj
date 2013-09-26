@@ -1,26 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2681C5C9-CF05-4381-8D34-894106A08EC2}</ProjectGuid>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IronSmalltalk.Console</RootNamespace>
-    <AssemblyName>ist</AssemblyName>
+    <RootNamespace>IronSmalltalk.CommandLineCompiler</RootNamespace>
+    <AssemblyName>istc</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>%24/IronSmalltalk/IronSmalltalk.ConsoleHost</SccProjectName>
-    <SccLocalPath>.</SccLocalPath>
-    <SccAuxPath>https://tfs.codeplex.com/tfs/tfs08</SccAuxPath>
-    <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -28,37 +25,32 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ConsoleHost.cs" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommandLineCompiler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SmalltalkCommandLine.cs" />
-    <Compile Include="SmalltalkCommandLineCommand.cs" />
-    <Compile Include="SmalltalkConsoleOptions.cs" />
-    <Compile Include="SmalltalkOptionsParser.cs" />
-    <Compile Include="SmalltalkScriptHost.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\ClassLibraryBrowser\External\IronSmalltalk.ist">
-      <Link>IronSmalltalk.ist</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IronSmalltalk.Common\IronSmalltalk.Common.csproj">
@@ -69,35 +61,26 @@
       <Project>{8c1ef7f5-b3af-401b-9223-e10ef00ebae6}</Project>
       <Name>IronSmalltalk.Compiler</Name>
     </ProjectReference>
+    <ProjectReference Include="..\IronSmalltalk.Core\IronSmalltalk.Runtime.csproj">
+      <Project>{876ab5db-133a-47dc-b912-62511e312ed6}</Project>
+      <Name>IronSmalltalk.Runtime</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk.DefinitionInstaller\IronSmalltalk.DefinitionInstaller.csproj">
       <Project>{0bf739ef-002c-4b90-a06b-5e6639fad2cf}</Project>
       <Name>IronSmalltalk.DefinitionInstaller</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IronSmalltalk.Hosting\IronSmalltalk.Hosting.csproj">
-      <Project>{c3a588ae-808a-4a8e-b460-18faab3f6d20}</Project>
-      <Name>IronSmalltalk.Hosting</Name>
     </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk.InterchangeInstaller\IronSmalltalk.InterchangeInstaller.csproj">
       <Project>{33cc4f2a-e078-4130-89e1-f48752acab38}</Project>
       <Name>IronSmalltalk.InterchangeInstaller</Name>
     </ProjectReference>
+    <ProjectReference Include="..\IronSmalltalk.NativeCompiler\IronSmalltalk.NativeCompiler.csproj">
+      <Project>{4de504d2-9e38-4eed-b1c6-9c6e04186b2d}</Project>
+      <Name>IronSmalltalk.NativeCompiler</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IronSmalltalk\IronSmalltalk.csproj">
       <Project>{f03c018b-b9ad-4d3c-a1ba-f459bc544c97}</Project>
       <Name>IronSmalltalk</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Read Me.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.Dynamic, Version=1.1.0.30, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DLR\Microsoft.Dynamic\bin\Debug\Microsoft.Dynamic.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Scripting, Version=1.1.0.30, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DLR\Microsoft.Scripting\bin\Debug\Microsoft.Scripting.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

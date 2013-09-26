@@ -1,4 +1,20 @@
-﻿using System;
+﻿/*
+ * **************************************************************************
+ *
+ * Copyright (c) The IronSmalltalk Project. 
+ *
+ * This source code is subject to terms and conditions of the 
+ * license agreement found in the solution directory. 
+ * See: $(SolutionDir)\License.htm ... in the root of this distribution.
+ * By using this source code in any fashion, you are agreeing 
+ * to be bound by the terms of the license agreement.
+ *
+ * You must not remove this notice, or any other, from this software.
+ *
+ * **************************************************************************
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -55,7 +71,10 @@ namespace IronSmalltalk.NativeCompiler.CompilationStrategies
             NewArrayExpression array = Expression.NewArrayInit(typeof(object), this.DefinedLiterals.Select(def => def.Initializer));
             LambdaExpression lambda = Expression.Lambda(array, true);
             MethodBuilder methodBuilder = this.LiteralsType.DefineMethod("InitializeLiterals", MethodAttributes.Private | MethodAttributes.Static);
-            lambda.CompileToMethod(methodBuilder, this.Client.Compiler.NativeGenerator.DebugInfoGenerator);
+            if (this.Client.Compiler.NativeGenerator.DebugInfoGenerator == null)
+                lambda.CompileToMethod(methodBuilder);
+            else
+                lambda.CompileToMethod(methodBuilder, this.Client.Compiler.NativeGenerator.DebugInfoGenerator);
             // ... and fromt his array we generate the constructor by emitting IL code by hand :/
             ConstructorBuilder ctor = this._LiteralsType.DefineConstructor(
                 MethodAttributes.Private | MethodAttributes.Static, CallingConventions.Standard, new Type[0]);

@@ -21,7 +21,7 @@ namespace IronSmalltalk.InterchangeInstaller
     /// <summary>
     /// Special installer context for handling the IronSmalltalk class library.
     /// This is responsible for installing definitions into the extension-scope,
-    /// as oposite to normal user code that ends up in the global scope.
+    /// as opposite to normal user code that ends up in the global scope.
     /// </summary>
 
     public class InternalInstallerContext : InterchangeInstallerContext
@@ -43,6 +43,7 @@ namespace IronSmalltalk.InterchangeInstaller
             if (this.NameScope == null)
                 throw new InvalidOperationException("Install phase has not commenced.");
             this.Runtime.SetExtensionScope(this.NameScope);
+            this.Runtime.SetGlobalScope(this.Runtime.GlobalScope.Copy(this.NameScope));
         }
     }
 }

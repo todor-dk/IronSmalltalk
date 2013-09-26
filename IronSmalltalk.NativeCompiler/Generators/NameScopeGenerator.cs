@@ -223,7 +223,7 @@ namespace IronSmalltalk.NativeCompiler.Generators
                 TypeAttributes.Class | TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.Abstract);
 
             // Create the initializer method ... internal static void InitializeScope(SmalltalkRuntime runtime, SmalltalkNameScope scope)
-            MethodBuilder method = this.ScopeInitializerTypeBuilder.DefineMethod("InitializeScope", MethodAttributes.Assembly | MethodAttributes.Static);
+            MethodBuilder method = this.ScopeInitializerTypeBuilder.DefineMethod("InitializeScope", MethodAttributes.Static | MethodAttributes.Assembly);
 
             // Define parameters
             ParameterExpression runtime = Expression.Parameter(typeof(SmalltalkRuntime), "runtime");
@@ -265,7 +265,10 @@ namespace IronSmalltalk.NativeCompiler.Generators
                 Expression.Block(variables, expressions), method.Name, new ParameterExpression[] { runtime, scope });
 
             // Compile the lambda into method. This is the name scope initializer method.
-            lambda.CompileToMethod(method, this.Compiler.NativeGenerator.DebugInfoGenerator);
+            if (this.Compiler.NativeGenerator.DebugInfoGenerator == null)
+                lambda.CompileToMethod(method);
+            else
+                lambda.CompileToMethod(method, this.Compiler.NativeGenerator.DebugInfoGenerator);
 
             return method;
         }
