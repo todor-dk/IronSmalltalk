@@ -39,6 +39,7 @@ namespace IronSmalltalk.NativeCompiler
         public string Company { get; set; }
         public string Copyright { get; set; }
         public string Trademark { get; set; }
+        public bool IsBaseLibrary { get; set; }
 
         internal NativeCompilerParameters Copy()
         {

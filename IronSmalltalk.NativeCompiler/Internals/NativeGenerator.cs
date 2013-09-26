@@ -147,7 +147,7 @@ namespace IronSmalltalk.NativeCompiler.Internals
             this.AssemblyBuilder.SetCustomAttribute(new CustomAttributeBuilder(NativeGenerator.DebuggableAttributeCtor, argValues));
         }
 
-        internal void SaveAssembly()
+        internal string SaveAssembly()
         {
             foreach (TypeBuilder type in this.DefinedTypes)
             {
@@ -173,6 +173,8 @@ namespace IronSmalltalk.NativeCompiler.Internals
             }
             string filename = System.IO.Path.GetFileName(this.OutputPath);
             this.AssemblyBuilder.Save(filename, exeType | PortableExecutableKinds.ILOnly, ImageFileMachine.I386);
+
+            return this.OutputPath;
         }
 
         internal TypeBuilder DefineType(string name, Type parent, TypeAttributes attr)

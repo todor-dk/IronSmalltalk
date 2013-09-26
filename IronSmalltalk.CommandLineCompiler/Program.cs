@@ -17,15 +17,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IronSmalltalk.NativeCompiler.CompilationStrategies
+namespace IronSmalltalk.CommandLineCompiler
 {
-    internal interface INativeStrategyClient
+    class Program
     {
-        NativeCompiler Compiler { get; }
-        TypeBuilder ContainingType { get; }
+        static void Main(string[] args)
+        {
+            Console.WriteLine();
+            string path = CommandLineCompiler.Compile(args);
+            if (path != null)
+                Console.WriteLine("Assembly saved to:\n{0}", path);
+        }
     }
 }

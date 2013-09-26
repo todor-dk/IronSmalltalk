@@ -86,9 +86,9 @@ namespace TestPlayground
             //}
 
             var runtime = new SmalltalkRuntime();
-            var compilerService = new FileInService(runtime, true, fis => new NativeCompilerInterchangeInstallerContext(fis.Runtime));
+            var compilerService = new FileInService(runtime, true, fis => new InternalInstallerContext(fis.Runtime));
 
-            NativeCompilerInterchangeInstallerContext installer = (NativeCompilerInterchangeInstallerContext) compilerService.Read(fileIns);
+            InterchangeInstallerContext installer = compilerService.Read(fileIns);
 
             installer.ErrorSink = new InstallErrorSink();
             installer.InstallMetaAnnotations = compilerService.InstallMetaAnnotations;
@@ -100,7 +100,7 @@ namespace TestPlayground
             parameters.Company = "Iron Company";
             parameters.Copyright = "Copy(right)";
             parameters.EmitDebugSymbols = true;
-            parameters.AssemblyType = IronSmalltalk.NativeCompiler.NativeCompilerParameters.AssemblyTypeEnum.Exe32;
+            parameters.AssemblyType = IronSmalltalk.NativeCompiler.NativeCompilerParameters.AssemblyTypeEnum.Dll;
             parameters.OutputDirectory = "c:\\temp";
             parameters.Product = "Iron Smalltalk Product";
             parameters.AssemblyVersion = "1.2.3.4";
@@ -126,14 +126,6 @@ namespace TestPlayground
             object runtime = method.Invoke(null, new object[] { true });
 
             MessageBox.Show("SUCCESS!");
-        }
-
-        public class NativeCompilerInterchangeInstallerContext : InterchangeInstallerContext
-        {
-            public NativeCompilerInterchangeInstallerContext(SmalltalkRuntime runtime)
-                : base(runtime)
-            {
-            }
         }
 
         private class InstallErrorSink : IInstallErrorSink
@@ -175,64 +167,7 @@ namespace TestPlayground
                 this.Tester.AddError(type.ToString(), start, end, message);
             }
         }
-
-        private class Installer : IInterchangeFileInProcessor
-        {
-            private List<GlobalDefinition> _globals = new List<GlobalDefinition>();
-            private List<ClassDefinition> _classes = new List<ClassDefinition>();
-            private List<PoolDefinition> _pools = new List<PoolDefinition>();
-
-            private List<PoolValueDefinition> _poolVariables = new List<PoolValueDefinition>();
-            private List<MethodDefinition> _methods = new List<MethodDefinition>();
-            private List<InitializerDefinition> _initializers = new List<InitializerDefinition>();
-            private List<Tuple<SmalltalkClass, ISourceReference>> _newClasses = new List<Tuple<SmalltalkClass, ISourceReference>>();
-
-            public bool FileInClass(ClassDefinition definition)
-            {
-                this._classes.Add(definition);
-                return true;
-            }
-
-            public bool FileInGlobal(GlobalDefinition definition)
-            {
-                this._globals.Add(definition);
-                return true;
-            }
-
-            public bool FileInGlobalInitializer(GlobalInitializer initializer)
-            {
-                return true;
-            }
-
-            public bool FileInMethod(MethodDefinition definition)
-            {
-                this._methods.Add(definition);
-                return true;
-            }
-
-            public bool FileInPool(PoolDefinition definition)
-            {
-                this._pools.Add(definition);
-                return true;
-            }
-
-            public bool FileInPoolVariable(PoolValueDefinition definition)
-            {
-                this._poolVariables.Add(definition);
-                return true;
-            }
-
-            public bool FileInPoolVariableInitializer(PoolVariableInitializer initializer)
-            {
-                return true;
-            }
-
-            public bool FileInProgramInitializer(ProgramInitializer initializer)
-            {
-                return true;
-            }
-        }
-
+        
         private void buttonAddFiles_Click(object sender, EventArgs e)
         {
             if (this.openFileDialog.ShowDialog(this) != System.Windows.Forms.DialogResult.OK)

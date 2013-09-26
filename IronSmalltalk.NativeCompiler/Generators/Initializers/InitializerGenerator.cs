@@ -89,7 +89,10 @@ namespace IronSmalltalk.NativeCompiler.Generators.Initializers
             this.MethodName = name;
             MethodBuilder method = type.DefineMethod(name, MethodAttributes.Public | MethodAttributes.Static);
             var lambda = this.GenerateInitializerLambda(literalEncodingStrategy, dynamicCallStrategy, discreteBindingEncodingStrategy, name);
-            lambda.CompileToMethod(method, this.Compiler.NativeGenerator.DebugInfoGenerator);
+            if (this.Compiler.NativeGenerator.DebugInfoGenerator == null)
+                lambda.CompileToMethod(method);
+            else
+                lambda.CompileToMethod(method, this.Compiler.NativeGenerator.DebugInfoGenerator);
         }
 
         private string GetInitializerName(ISet<string> names)

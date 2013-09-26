@@ -44,9 +44,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{DC3634F0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{238BEABC-FCC9-46BE-B607-6F01A272C5A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronSmalltalk.CommandLineCompiler", "IronSmalltalk.CommandLineCompiler\IronSmalltalk.CommandLineCompiler.csproj", "{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 15
+		SccNumberOfProjects = 16
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs08
 		SccLocalPath0 = .
@@ -88,6 +90,7 @@ Global
 		SccProjectName11 = Unit\u0020Tests
 		SccLocalPath11 = Unit\u0020Tests
 		SccProjectUniqueName12 = IronSmalltalk.ConsoleHost\\IronSmalltalk.ConsoleHost.csproj
+		SccProjectTopLevelParentUniqueName12 = IronSmalltalk.sln
 		SccProjectName12 = IronSmalltalk.ConsoleHost
 		SccLocalPath12 = IronSmalltalk.ConsoleHost
 		SccProjectUniqueName13 = IronSmalltalk.ExpressionCompiler\\IronSmalltalk.ExpressionCompiler.csproj
@@ -96,6 +99,10 @@ Global
 		SccProjectUniqueName14 = IronSmalltalk.NativeCompiler\\IronSmalltalk.NativeCompiler.csproj
 		SccProjectName14 = IronSmalltalk.NativeCompiler
 		SccLocalPath14 = IronSmalltalk.NativeCompiler
+		SccProjectUniqueName15 = IronSmalltalk.CommandLineCompiler\\IronSmalltalk.CommandLineCompiler.csproj
+		SccProjectTopLevelParentUniqueName15 = IronSmalltalk.sln
+		SccProjectName15 = IronSmalltalk.CommandLineCompiler
+		SccLocalPath15 = IronSmalltalk.CommandLineCompiler
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = IronSmalltalk.vsmdi
@@ -398,17 +405,36 @@ Global
 		{4DE504D2-9E38-4EED-B1C6-9C6E04186B2D}.SilverlightRelease|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4DE504D2-9E38-4EED-B1C6-9C6E04186B2D}.SilverlightRelease|Mixed Platforms.Build.0 = Release|Any CPU
 		{4DE504D2-9E38-4EED-B1C6-9C6E04186B2D}.SilverlightRelease|x86.ActiveCfg = Release|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.Release|x86.ActiveCfg = Release|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.SilverlightDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.SilverlightDebug|Any CPU.Build.0 = Debug|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.SilverlightDebug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.SilverlightDebug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.SilverlightDebug|x86.ActiveCfg = Debug|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.SilverlightRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.SilverlightRelease|Any CPU.Build.0 = Release|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.SilverlightRelease|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.SilverlightRelease|Mixed Platforms.Build.0 = Release|Any CPU
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58}.SilverlightRelease|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F91C2FA4-535B-40BF-9B1D-E7B5FD785F6F} = {DC3634F0-F47C-4E52-8D17-F276CDFA3193}
+		{2681C5C9-CF05-4381-8D34-894106A08EC2} = {DC3634F0-F47C-4E52-8D17-F276CDFA3193}
+		{49EF1775-796B-4FE8-9C09-FEB9D8F9FF58} = {DC3634F0-F47C-4E52-8D17-F276CDFA3193}
 		{A24D704B-9A15-47FE-A14B-BB860B14AA5B} = {238BEABC-FCC9-46BE-B607-6F01A272C5A6}
 		{164CB761-F466-4C76-B3F1-31537BD787E7} = {238BEABC-FCC9-46BE-B607-6F01A272C5A6}
 		{59F64346-DE49-45FC-933E-8F74784DBD2D} = {238BEABC-FCC9-46BE-B607-6F01A272C5A6}
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

@@ -20,12 +20,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("IronSmalltalk.Common")]
+[assembly: AssemblyTitle("IronSmalltalk Common Types")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("IronSmalltalk.Common")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
+[assembly: AssemblyCompany("The IronSmalltalk Project")]
+[assembly: AssemblyProduct("IronSmalltalk")]
+[assembly: AssemblyCopyright("Copyright © The IronSmalltalk Project 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -44,7 +44,8 @@ namespace IronSmalltalk.NativeCompiler
 		/// Parameter object that contains the information about the Smalltalk runtime
 		/// as well as additional parameters that govern the native assembly generation.
 		/// </param>
-		public static void GenerateNativeAssembly(NativeCompilerParameters parameters)
+        /// <returns>The path to the newly generated assembly.</returns>
+		public static string GenerateNativeAssembly(NativeCompilerParameters parameters)
 		{
 			if (parameters == null)
 				throw new ArgumentNullException("parameters");
@@ -59,7 +60,7 @@ namespace IronSmalltalk.NativeCompiler
 				throw new ArgumentNullException("parameters.AssemblyName");
 
 			NativeCompiler compiler = new NativeCompiler(parameters);
-			compiler.Generate();
+			return compiler.Generate();
 		}
 
 
@@ -114,7 +115,7 @@ namespace IronSmalltalk.NativeCompiler
 		/// <summary>
 		/// The main method - responsible for generation of the assembly
 		/// </summary>
-		private void Generate()
+		private string Generate()
 		{
 			// Visit the name scopes in the runtime.
 			NameScopeGenerator extensionScope = new NameScopeGenerator(this, "ExtensionScope", true);
@@ -202,7 +203,7 @@ Width="{x:Static s:Double.MaxValue}"
 Dictionary<Symbol, CompiledMethod>
 		   */
 
-			this.NativeGenerator.SaveAssembly();
+			return this.NativeGenerator.SaveAssembly();
 		}    
 
         internal FieldInfo GetDynamicConvertBinder(Type type, Microsoft.CSharp.RuntimeBinder.CSharpBinderFlags flags)

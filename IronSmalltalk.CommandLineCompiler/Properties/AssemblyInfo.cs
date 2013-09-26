@@ -1,4 +1,4 @@
-/*
+﻿/*
  * **************************************************************************
  *
  * Copyright (c) The IronSmalltalk Project. 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("IronSmalltalk DLR Hosting Support")]
+[assembly: AssemblyTitle("IronSmalltalk Command Line Compiler")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The IronSmalltalk Project")]
@@ -35,7 +35,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("5ae9e56c-6a91-48a0-8d7e-93edcff1bd9d")]
+[assembly: Guid("69be8bf8-e75a-4445-9ec8-868e8edd14f7")]
 
 // Version information for an assembly consists of the following four values:
 //
