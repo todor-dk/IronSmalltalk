@@ -310,7 +310,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             if (binding == null)
                 throw new CodeGenerationException(String.Format("Could not find global binding {0}. This may indicate a bug in our code.", this.Moniker));
             return Expression.Property(
-                Expression.Constant(binding, this.ReturnType),
+                Expression.Constant(binding, binding.GetType()),
                 DiscreteBindingCallSiteBinderBase.GetPropertyInfo(binding.GetType())); 
         }
     }
@@ -343,7 +343,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             IDiscreteBinding binding = this.GetBindingStrategy.GetBinding(executionContext);
             if (binding == null)
                 throw new CodeGenerationException(String.Format("Could not find global binding {0}. This may indicate a bug in our code.", this.Moniker));
-            return Expression.Constant(binding, this.ReturnType);
+            return Expression.Constant(binding, binding.GetType());
         }
     }
 }
