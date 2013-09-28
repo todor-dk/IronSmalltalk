@@ -228,6 +228,7 @@ namespace IronSmalltalk.NativeCompiler.Generators.Behavior
             ParameterExpression cls = Expression.Parameter(typeof(SmalltalkClass), "cls");
             ParameterExpression dictionary = Expression.Parameter(typeof(Dictionary<Symbol, CompiledMethod>), "dictionary");
             ParameterExpression containingType = Expression.Parameter(typeof(Type), "containingType");
+            ParameterExpression method = Expression.Parameter(typeof(CompiledMethod), "method");
 
             List<Expression> expressions = new List<Expression>();
 
@@ -244,19 +245,33 @@ namespace IronSmalltalk.NativeCompiler.Generators.Behavior
                     Expression.Constant(this.TypeBuilder, typeof(Type))));
 
                 foreach (MethodInformation info in this.MethodsInfo)
-                    expressions.Add(Expression.Call(this.AddMethodMethod,
-                        dictionary,
-                        cls,
-                        Expression.Constant(info.Method.Selector.Value, typeof(string)),
-                        containingType,
-                        Expression.Constant(info.MethodName, typeof(string))));
+                {
+                    expressions.Add(Expression.Assign(method,
+                        Expression.Call(this.AddMethodMethod,
+                            dictionary,
+                            cls,
+                            Expression.Constant(info.Method.Selector.Value, typeof(string)),
+                            containingType,
+                            Expression.Constant(info.MethodName, typeof(string)))));
+                    foreach (KeyValuePair<string, string> pair in info.Method.Annotations)
+                    {
+                        expressions.Add(Expression.Call(MethodGenerator.AnnotateObjectMethod,
+                            method,
+                            Expression.Constant(pair.Key, typeof(string)),
+                            Expression.Constant(pair.Value, typeof(string))));
+                    }
+                }
             }
 
             expressions.Add(dictionary);
 
             return Expression.Lambda<Func<SmalltalkClass, Dictionary<Symbol, CompiledMethod>>>(
-                Expression.Block(new ParameterExpression[] { dictionary, containingType }, expressions), name, new ParameterExpression[] { cls });
+                Expression.Block(new ParameterExpression[] { dictionary, containingType, method }, expressions), name, new ParameterExpression[] { cls });
         }
+
+        private static readonly MethodInfo AnnotateObjectMethod = TypeUtilities.Method(
+            typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper), "AnnotateObject",
+            typeof(CompiledCode), typeof(string), typeof(string));
 
         protected abstract MethodInfo AddMethodMethod { get; }
 

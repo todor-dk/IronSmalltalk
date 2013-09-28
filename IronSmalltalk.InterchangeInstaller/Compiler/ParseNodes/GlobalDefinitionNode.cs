@@ -32,7 +32,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
 
         public GlobalDefinitionNode(StringToken globalName)
         {
-            this.GlobalName = globalName; // Null OK ... in case error occured
+            this.GlobalName = globalName; // Null OK ... in case error occurred
         }
 
         /// <summary>

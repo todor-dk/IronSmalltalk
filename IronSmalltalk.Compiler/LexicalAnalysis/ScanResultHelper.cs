@@ -23,7 +23,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
     /// on definitions defined in "ANSI NCITS 319-1998 (R2007)" (X3J20).
     /// </summary>
     /// <remarks>
-    /// The reason for having a seperate file is, in case there's a
+    /// The reason for having a separate file is, in case there's a
     /// difference between .Net and the X3J20 definition, we only 
     /// have to change things here, and not go trough "business code" 
     /// in the compiler classes.
@@ -341,8 +341,8 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         AssignmentOperatorCharacter1,
         HashedDelimiter,
         ReturnOperator,
-        NegativeSign, // Special case, only if preferred insted of BinaryCharacter
-        VerticalBar, // Special case, only if preferred insted of BinaryCharacter
+        NegativeSign, // Special case, only if preferred instead of BinaryCharacter
+        VerticalBar, // Special case, only if preferred instead of BinaryCharacter
         EndOfFile,
         Undefined
     }

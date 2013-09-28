@@ -95,6 +95,7 @@
     <Compile Include="Execution\Internals\SymbolPlaceholder.cs" />
     <Compile Include="Execution\PreboxedConstants.cs" />
     <Compile Include="Internal\NativeLoadHelper.cs" />
+    <Compile Include="Internal\ScopeInitializerAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Execution\CallSiteBinders\CallSiteBinderCache.cs" />
     <Compile Include="Execution\CallSiteBinders\ConstantSendCallSiteBinder.cs" />

@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using IronSmalltalk.Compiler.LexicalTokens;
+using IronSmalltalk.Compiler.SemanticAnalysis;
 
 namespace IronSmalltalk.Compiler.SemanticNodes
 {
@@ -67,7 +68,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     }
 
     /// <summary>
-    /// The StatementSequenceNode represents statenent optionally followed by another statement.
+    /// The StatementSequenceNode represents statement optionally followed by another statement.
     /// Those are defined in X3J20 as "statements ::= expression ['.' [statements]]".
     /// </summary>
     public partial class StatementSequenceNode : StatementNode, IStatementParentNode
@@ -141,7 +142,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
                 if (this.Period == null)
                     return this.Expression.PrintString();
                 else
-                    return this.Expression.PrintString() + ".";
+                    return this.Expression.PrintString() + SemanticConstants.StatementDelimiter;
             }
         }
     }

@@ -23,7 +23,7 @@ namespace IronSmalltalk.Compiler.Visiting
     /// A valid parse tree node follows the semantic rules defined in the X3J20 section 3.4.
     /// An invalid parse tree node is usually do to incomplete or somehow invalid source code;
     /// We do allow parsing of of invalid source code and return impartial nodes for use in
-    /// development tools (e.g. dynamic code highlightning), but obviously such incomplete
+    /// development tools (e.g. dynamic code highlighting), but obviously such incomplete
     /// parse tree node cannot be used for generating runtime code - this is what this class tells us.
     /// </summary>
     public class ParseTreeValidatingVisitor : ParseTreeVisitor<bool>
@@ -312,7 +312,7 @@ namespace IronSmalltalk.Compiler.Visiting
         }
 
         /// <summary>
-        /// Visits the Variable Reference (as oposite to declaraion) node.
+        /// Visits the Variable Reference (as opposite to declaration) node.
         /// </summary>
         /// <param name="node">The node to visit.</param>
         public override bool VisitVariableReferencele(VariableReferenceleNode node)

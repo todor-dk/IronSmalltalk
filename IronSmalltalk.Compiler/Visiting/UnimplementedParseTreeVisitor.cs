@@ -24,8 +24,8 @@ namespace IronSmalltalk.Compiler.Visiting
     /// the parse tree nodes defined in X3J20 section 3.4,
     /// i.e. the parse tree nodes for methods and initializers
     /// and that throws NotImplementedException for each method.
-    /// This is usefull if only part of the parse tree needs to be
-    /// visited and ensures the rest fails if accidently visited.
+    /// This is useful if only part of the parse tree needs to be
+    /// visited and ensures the rest fails if accidentally visited.
     /// </summary>
     public abstract class UnimplementedParseTreeVisitor<TResult> : IParseTreeVisitor<TResult>
     {
@@ -169,7 +169,7 @@ namespace IronSmalltalk.Compiler.Visiting
         }
 
         /// <summary>
-        /// Visits the Variable Reference (as oposite to declaraion) node.
+        /// Visits the Variable Reference (as opposite to declaration) node.
         /// </summary>
         /// <param name="node">The node to visit.</param>
         public virtual TResult VisitVariableReferencele(VariableReferenceleNode node)

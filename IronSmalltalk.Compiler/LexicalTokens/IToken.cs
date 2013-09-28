@@ -20,7 +20,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
 {
     /// <summary>
     /// A token object, modeling the description in "ANSI INCITS 319-1998 (R2007)",
-    /// chapter "3.5 Lexical Grammer". 
+    /// chapter "3.5 Lexical Grammar". 
     /// </summary>
     public interface IToken
     {

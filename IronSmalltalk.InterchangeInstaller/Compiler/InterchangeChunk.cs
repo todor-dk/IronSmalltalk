@@ -24,7 +24,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
 {
     /// <summary>
     /// This class represents a piece of source code in the interchange file.
-    /// The code represents exctly one chunk of source, and is delimited by a "elementSeparator",
+    /// The code represents exactly one chunk of source, and is delimited by a "elementSeparator",
     /// as defined in X3J20 "4.1 Interchange Format BNF Syntax".
     /// </summary>
     /// <remarks>
@@ -51,7 +51,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
         /// The source code string that is contained in this chunk.
         /// </summary>
         /// <remarks>
-        /// Double exclamation points (double !!) that may occurer have be escaped and converted to a single one. 
+        /// Double exclamation points (double !!) that may occurred, have been escaped and converted to a single one. 
         /// </remarks>
         public string SourceChunk { get; private set; }
 
@@ -129,7 +129,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
         #endregion
 
         /// <summary>
-        /// Convert a relative source chunk string position to absolute intechange file position.
+        /// Convert a relative source chunk string position to absolute interchange file position.
         /// </summary>
         /// <param name="position">Position relative to the source chunk string.</param>
         /// <returns>Absolute position in the interchange format source code file where this chunk originated from.</returns>
@@ -143,7 +143,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
         }
 
         /// <summary>
-        /// Convert a relative source chunk string position to absolute intechange file position.
+        /// Convert a relative source chunk string position to absolute interchange file position.
         /// </summary>
         /// <param name="position">Position relative to the source chunk string.</param>
         /// <returns>Absolute position in the interchange format source code file where this chunk originated from.</returns>

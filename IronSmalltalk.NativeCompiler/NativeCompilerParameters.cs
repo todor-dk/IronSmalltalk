@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,6 +41,7 @@ namespace IronSmalltalk.NativeCompiler
         public string Copyright { get; set; }
         public string Trademark { get; set; }
         public bool IsBaseLibrary { get; set; }
+        public MethodInfo ExtensionScopeInitializer { get; set; }
 
         internal NativeCompilerParameters Copy()
         {

@@ -17,6 +17,8 @@
 using System;
 using System.Collections.Generic;
 using IronSmalltalk.Compiler.LexicalTokens;
+using IronSmalltalk.Compiler.LexicalAnalysis;
+using IronSmalltalk.Compiler.SemanticAnalysis;
 
 namespace IronSmalltalk.Compiler.SemanticNodes
 {
@@ -97,9 +99,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
             else
             {
                 if (this.Period == null)
-                    return "^" + this.Expression.PrintString();
+                    return LexicalConstants.ReturnOperator + this.Expression.PrintString();
                 else
-                    return "^" + this.Expression.PrintString() + ".";
+                    return LexicalConstants.ReturnOperator + this.Expression.PrintString() + SemanticConstants.StatementDelimiter;
             }
         }
     }

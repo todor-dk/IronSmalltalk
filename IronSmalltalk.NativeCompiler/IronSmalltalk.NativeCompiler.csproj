@@ -51,6 +51,7 @@
     <Compile Include="Generators\Initializers\GlobalInitializerGenerator.cs" />
     <Compile Include="Generators\Initializers\PoolVariableInitializerGenerator.cs" />
     <Compile Include="Generators\Initializers\ProgramInitializerGenerator.cs" />
+    <Compile Include="Generators\StandardLibraryGenerator.cs" />
     <Compile Include="Internals\Extensions.cs" />
     <Compile Include="Generators\GeneratorBase.cs" />
     <Compile Include="Generators\Globals\GlobalBindingGenerator.cs" />

@@ -24,14 +24,14 @@ namespace IronSmalltalk.Compiler.LexicalTokens
     /// Hashed string token as described in X3J20 "3.5.9 Hashed String".
     /// </summary>
     /// <remarks>
-    /// The string value excludes the preceeding '#' hash char, string delimiters or double/escape quotes.
+    /// The string value excludes the preceding '#' hash char, string delimiters or double/escape quotes.
     /// </remarks>
     public class HashedStringToken : LiteralToken<string>
     {
         /// <summary>
         /// Creates a new hashed string token.
         /// </summary>
-        /// <param name="value">String value excluding the preceeding '#' hash char, string delimiters or double/escape quotes.</param>
+        /// <param name="value">String value excluding the preceding '#' hash char, string delimiters or double/escape quotes.</param>
         public HashedStringToken(string value)
             : base(value)
         {

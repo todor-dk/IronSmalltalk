@@ -325,7 +325,7 @@ namespace IronSmalltalk.DefinitionInstaller
             
             if (this.ErrorSink != null)
                 this.ErrorSink.AddInstallError(errorMessage, sourceReference);
-            // This value has no mening to us, but makes it easier for senders to use us and return <false> directly.
+            // This value has no meaning to us, but makes it easier for senders to use us and return <false> directly.
             return false; 
         }
 

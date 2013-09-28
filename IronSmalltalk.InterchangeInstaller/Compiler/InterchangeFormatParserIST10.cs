@@ -39,6 +39,9 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
     {
         protected override SmalltalkClass.InstanceStateEnum? GetInstanceState(InterchangeFormatProcessor processor, IParseErrorSink parseErrorSink, ISourceCodeReferenceService sourceCodeService)
         {
+            // TODO : Move constants out of code into a the InterchangeFormatConstants class
+            // TODO : Move error messages out of code into a the InterchangeFormatErrors class
+
             if (this.IndexedInstanceVariables.Value == "native")
                 return SmalltalkClass.InstanceStateEnum.Native;
             return base.GetInstanceState(processor, parseErrorSink, sourceCodeService);

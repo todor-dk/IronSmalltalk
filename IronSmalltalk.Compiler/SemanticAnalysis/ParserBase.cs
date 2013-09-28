@@ -58,8 +58,8 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
         {
             if (offendingToken == null)
                 throw new ArgumentNullException("offendingToken");
-            else
-                this.ReportParserError(node, offendingToken.StartPosition, offendingToken.StopPosition, parseErrorMessage, offendingToken);
+            
+            this.ReportParserError(node, offendingToken.StartPosition, offendingToken.StopPosition, parseErrorMessage, offendingToken);
         }
 
         /// <summary>

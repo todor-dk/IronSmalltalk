@@ -41,6 +41,8 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
 
         protected internal virtual InterchangeVersionIdentifierNode ParseVersionId()
         {
+            // TODO : Move constants out of code into a the InterchangeFormatConstants class
+
             // PARSE: <interchangeVersionIdentifier> ::= 'Smalltalk' 'interchangeVersion:' <versionId>
             //      <versionId> ::= quotedString
             InterchangeVersionIdentifierNode result = this.CreateInterchangeVersionIdentifierNode();
@@ -78,6 +80,9 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
 
         protected internal virtual InterchangeUnitNode ParseInterchangeElement(InterchangeElementNode nodeForAnnotation)
         {
+            // TODO : Move constants out of code into a the InterchangeFormatConstants class 
+            // TODO : Move error messages out of code into a the InterchangeFormatErrors class
+
             // PARSE: <interchangeElement> ::= <classDefinition> | <classInitialization> | <globalDefinition> |
             //      <globalValueInitialization> | <poolDefinition> | <poolVariableDefinition> | <poolValueInitialization> |
             //      <methodDefinition> | <classMethodDefinition> | <programInitialization> | comment <elementSeparator>
@@ -170,6 +175,9 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
 
         protected virtual AnnotationNode ParseAnnotation(InterchangeElementNode nodeForAnnotation)
         {
+            // TODO : Move constants out of code into a the InterchangeFormatConstants class
+            // TODO : Move error messages out of code into a the InterchangeFormatErrors class
+
             // PARSE: <annotation> ::= ’Annotation’ ’key:’ quotedString ’value:’ quotedString <elementSeparator>
             AnnotationNode result = this.CreateAnnotationNode(nodeForAnnotation);
             Token token = this.GetNextTokenxx();
@@ -193,8 +201,8 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
             if (!(token is EofToken))
             {
                 this.ReportParserError(result, "Unexpected code found after annotation value.", token);
-                result.Key = null; // This is to avoid somethind like: Annotation key: 'x' value: 'y' crash: 'yes'.
-                result.Value = null; // This is to avoid somethind like: Annotation key: 'x' value: 'y' crash: 'yes'.
+                result.Key = null; // This is to avoid something like: Annotation key: 'x' value: 'y' crash: 'yes'.
+                result.Value = null; // This is to avoid something like: Annotation key: 'x' value: 'y' crash: 'yes'.
                 return result;
             }
 
@@ -208,6 +216,9 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
 
         protected virtual ClassDefinitionNode ParseClassDefinition()
         {
+            // TODO : Move constants out of code into a the InterchangeFormatConstants class
+            // TODO : Move error messages out of code into a the InterchangeFormatErrors class
+
             // PARSE: <classDefinition> ::= ’Class’ ’named:’ <classNameString> 
             //      ’superclass:’ <superclassNameString>
             //      ’indexedInstanceVariables:’ <indexableInstVarType>
@@ -311,6 +322,9 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
 
         protected virtual GlobalVariableDefinitionNode ParseGlobalVariableDefinition()
         {
+            // TODO : Move constants out of code into a the InterchangeFormatConstants class
+            // TODO : Move error messages out of code into a the InterchangeFormatErrors class
+
             // PARSE: <globalDefinition> ::= ’Global’ ’variable:’ <globalNameString> <elementSeparator>
             Token token = this.GetNextTokenxx();
             StringToken name = token as StringToken;

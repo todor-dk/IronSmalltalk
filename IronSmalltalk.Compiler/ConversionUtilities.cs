@@ -125,7 +125,7 @@ namespace IronSmalltalk.Compiler
                     // NB: I find this X3J20 requirement stupid, I would rather return the double every time.
                     // Good for both ... return one with most precision
                     if (((double)floatE) == floatD)
-                        return floatE;  // No precision loss ... return the smalles float
+                        return floatE;  // No precision loss ... return the smallest float
                     else
                         return floatD;  // Loss of precision ... return the one with the largest precision.
                 }
@@ -151,13 +151,13 @@ namespace IronSmalltalk.Compiler
         /// Convert the given decimal part strings to a BigDecimal object.
         /// </summary>
         /// <param name="integerDigits">
-        /// Integer digits string, e.g. for "12.34s5" this param contains "12".
+        /// Integer digits string, e.g. for "12.34s5" this parameter contains "12".
         /// </param>
         /// <param name="decimalDigits">
-        /// Optional. Decimal digits string, e.g. for "12.34s5" this param contains "34", for "12s5" is is null or empty str.
+        /// Optional. Decimal digits string, e.g. for "12.34s5" this parameter contains "34", for "12s5" is is null or empty string.
         /// </param>
         /// <param name="fractionalDigits">
-        /// Optional. Fraction digits string, e.g. for "12.34s5" this param contains "5", for "12.34s" is is null or empty str.
+        /// Optional. Fraction digits string, e.g. for "12.34s5" this parameter contains "5", for "12.34s" is is null or empty string.
         /// </param>
         /// <param name="errorMessage">Return error message/description.</param>
         /// <returns>Return BigDecimal object.</returns>
@@ -199,7 +199,7 @@ namespace IronSmalltalk.Compiler
             int scale = 0;
             if ((fractionalDigits.Length != 0) && !Int32.TryParse(fractionalDigits, out scale))
                 goto Error;
-            scale = Math.Max(scale, decimalDigits.Length); // X3J20 says minimum number of digits, but we allow more if explicitely given.
+            scale = Math.Max(scale, decimalDigits.Length); // X3J20 says minimum number of digits, but we allow more if explicitly given.
             if ((scale < 0) || (scale > BigDecimal.MaxScale))
                 goto Error;
 

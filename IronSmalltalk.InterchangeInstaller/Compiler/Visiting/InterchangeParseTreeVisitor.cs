@@ -21,7 +21,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.Visiting
     /// <summary>
     /// Base class that implements the protocol for visiting
     /// the parse tree nodes defined in X3J20 section 4.1,
-    /// i.e. the parse tree nodes from the interchange format specitication.
+    /// i.e. the parse tree nodes from the interchange format specification.
     /// </summary>
     public abstract class InterchangeParseTreeVisitor<TResult> : IInterchangeParseTreeVisitor<TResult>
     {

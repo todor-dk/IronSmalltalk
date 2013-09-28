@@ -23,7 +23,7 @@ namespace IronSmalltalk.DefinitionInstaller
         public const string ClassReservedName = "The name is a reserved identifier and cannot be used as class name.";
         public const string ClassNameNotUnique = "A global already exists with the given name.";
         public const string ClassNameProtected = "The class name is protected global name and cannot be shadowed.";
-        public const string ClassInvalidSuperclass = "Cannot find difinition of superclass.";
+        public const string ClassInvalidSuperclass = "Cannot find definition of superclass.";
         public const string ClassClassVariableNotIdentifier = "Invalid class variable name. Must be an identifier.";
         public const string ClassClassVariableNotUnique = "Duplicate class variable name. Names must be unique within class variables.";
         public const string ClassInstanceVariableNotIdentifier = "Invalid instance variable name. Must be an identifier.";

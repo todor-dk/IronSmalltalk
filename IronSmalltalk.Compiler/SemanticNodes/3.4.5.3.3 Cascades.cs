@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using IronSmalltalk.Compiler.LexicalTokens;
+using IronSmalltalk.Compiler.SemanticAnalysis;
 
 namespace IronSmalltalk.Compiler.SemanticNodes
 {
@@ -27,7 +28,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     public partial class CascadeMessageSequenceNode : SemanticNode, IMessageSequenceParentNode, ICascadeMessageSequenceParentNode
     {
         /// <summary>
-        /// Token representing the semicolon used to delimit cascase message sequences.
+        /// Token representing the semicolon used to delimit cascade message sequences.
         /// </summary>
         public SpecialCharacterToken Semicolon { get; private set; }
 
@@ -52,7 +53,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// Create a new cascade message sequence.
         /// </summary>
         /// <param name="parent">Parent node that defines this cascade message node.</param>
-        /// <param name="token">Token representing the semicolon used to delimit cascase message sequences.</param>
+        /// <param name="token">Token representing the semicolon used to delimit cascade message sequences.</param>
         protected internal CascadeMessageSequenceNode(ICascadeMessageSequenceParentNode parent, SpecialCharacterToken token)
         {
 #if DEBUG
@@ -113,7 +114,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
             if (this.Semicolon == null)
                 str = "?semicolon? ";
             else
-                str = "; ";
+                str = SemanticConstants.CascadeDelimiter + " ";
 
             if (this.Messages == null)
                 str = str + "?messages?";

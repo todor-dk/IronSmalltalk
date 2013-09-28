@@ -51,6 +51,8 @@ namespace IronSmalltalk.InterchangeInstaller
             if (runtime == null)
                 throw new ArgumentNullException("runtime");
 
+            // TODO : Move constants out of code into a the InterchangeFormatConstants class
+
             this.Runtime = runtime;
             this.VersionServicesMap = new Dictionary<string, InterchangeVersionService>();
             this.VersionServicesMap.Add("1.0", new InterchangeVersionService10());

@@ -17,6 +17,8 @@
 using System;
 using System.Collections.Generic;
 using IronSmalltalk.Compiler.LexicalTokens;
+using IronSmalltalk.Compiler.SemanticAnalysis;
+using IronSmalltalk.Compiler.LexicalAnalysis;
 
 namespace IronSmalltalk.Compiler.SemanticNodes
 {
@@ -36,13 +38,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         public SpecialCharacterToken RightBracket { get; private set; }
 
         /// <summary>
-        /// The vertical bar after the block arguments. This exists only if args are present.
+        /// The vertical bar after the block arguments. This exists only if arguments are present.
         /// </summary>
         public VerticalBarToken ArgumentsBar { get; private set; }
 
         /// <summary>
         /// Collection of block arguments for this block.
-        /// The calection is empty if no arguments are defined.
+        /// The collection is empty if no arguments are defined.
         /// </summary>
         public List<BlockArgumentNode> Arguments { get; private set; }
 
@@ -52,7 +54,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         public IPrimaryParentNode Parent { get; private set; }
 
         /// <summary>
-        /// Create and intialize a block node.
+        /// Create and initialize a block node.
         /// </summary>
         /// <param name="parent">The parent node to the block node.</param>
         /// <param name="token">Token for the left / opening square bracket of the block.</param>
@@ -90,7 +92,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
 
             this.Arguments.Clear();
             this.Arguments.AddRange(arguments);
-            this.ArgumentsBar = argumentsBar; // OK with null if no args. or illegal source
+            this.ArgumentsBar = argumentsBar; // OK with null if no arguments or illegal source
             this.RightBracket = rightBracket; // OK with null if illegal source
         }
 
@@ -134,33 +136,40 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         public override string PrintString()
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            sb.Append("[");
+            sb.Append(SemanticConstants.BlockStartDelimiter);
             foreach(BlockArgumentNode arg in this.Arguments)
             {
-                sb.Append(" :");
+                sb.Append(' ');
+                sb.Append(SemanticConstants.BlockArgumentPrefix);
                 if (arg.Token == null)
                     sb.Append("?name?");
                 else
                     sb.Append(arg.Token.Value);
             }
             if (this.Arguments.Count != 0)
-                sb.Append(" |");
+            {
+                sb.Append(' ');
+                sb.Append(LexicalConstants.VerticalBar);
+            }
 
             if (this.Temporaries.Count != 0)
             {
-                sb.Append(" |");
-                foreach(TemporaryVariableNode tmp in this.Temporaries)
+                sb.Append(' ');
+                sb.Append(LexicalConstants.VerticalBar);
+                foreach (TemporaryVariableNode tmp in this.Temporaries)
                 {
-                    sb.Append(" ");
+                    sb.Append(' ');
                     if (tmp.Token == null)
                         sb.Append("?name?");
                     else
                         sb.Append(tmp.Token.Value);
                 }
-                sb.Append(" |");
+                sb.Append(' ');
+                sb.Append(LexicalConstants.VerticalBar);
             }
 
-            sb.Append(" ... ]"); // We don't print the statements 
+            sb.Append(" ... "); // We don't print the statements 
+            sb.Append(SemanticConstants.BlockEndDelimiter);
 
             return sb.ToString();
         }
@@ -177,7 +186,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         public BlockNode Parent { get; private set; }
 
         /// <summary>
-        /// Colon that preceeds the argument name.
+        /// Colon that precedes the argument name.
         /// </summary>
         public SpecialCharacterToken Colon { get; private set; }
 
@@ -185,7 +194,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// Create a new block argument.
         /// </summary>
         /// <param name="parent">Block closure that defines the argument node.</param>
-        /// <param name="colon">Colon that preceeds the argument name.</param>
+        /// <param name="colon">Colon that precedes the argument name.</param>
         /// <param name="token">Identifier token containing the name of the argument.</param>
         protected internal BlockArgumentNode(BlockNode parent, SpecialCharacterToken colon, IdentifierToken token)
             : base(token)

@@ -30,7 +30,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     /// This has a sequence of 4 messages: #asUppercase, #first, #codePoint and #'+' (binary plus).
     /// 
     /// IronSmalltalk uses a linked list sequence to represent the sequence of message.
-    /// The combination of legal sequences is definex in X3J20 "3.4.5.3 Messages".
+    /// The combination of legal sequences is defined in X3J20 "3.4.5.3 Messages".
     /// 
     /// Following sequences (subclasses) are identified:
     /// - UnaryBinaryKeywordMessageSequenceNode : unary_message+ binary_message* [keyword_message] 
@@ -41,9 +41,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     ///     ... a keyword message.
     ///     
     /// - UnaryMessageSequenceNode : unary_message* 
-    ///     ... a unary message, followed by a unuary message (sequence) ... as part of binary arguments
+    ///     ... a unary message, followed by a unary message (sequence) ... as part of binary arguments
     /// - UnaryBinaryMessageSequenceNode : unary_message* binary_message*
-    ///     ... a unary message, followed by a unuary or binary message (sequence) ... as part of keyword arguments
+    ///     ... a unary message, followed by a unary or binary message (sequence) ... as part of keyword arguments
     /// - BinaryMessageSequenceNode : binary_message*
     ///     ... a binary message, followed by a binary message (sequence) ... as part of keyword arguments       
     /// 

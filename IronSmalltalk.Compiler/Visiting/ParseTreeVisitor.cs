@@ -18,511 +18,511 @@ using IronSmalltalk.Compiler.SemanticNodes;
 
 namespace IronSmalltalk.Compiler.Visiting
 {
-    /// <summary>
-    /// Base class that implements the protocol for visiting
-    /// the parse tree nodes defined in X3J20 section 3.4,
-    /// i.e. the parse tree nodes for methods and initializers.
-    /// </summary>
-    public abstract class ParseTreeVisitor<TResult> : IParseTreeVisitor<TResult>
-    {
-        /// <summary>
-        /// Visits the Semantic Node. This is the default visit, in case no other implementation.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitSemanticNode(SemanticNode node)
-        {
-            // Naive brute force implementation
-            foreach (IParseNode child in node.GetChildNodes())
-            {
-                if (child is SemanticNode)
-                    ((SemanticNode)child).Accept(this);
-            }
-
-            return default(TResult); // The default naive implementation
-        }
-
-        #region 3.4.1 Functions
-
-        /// <summary>
-        /// Visits the Temporary Variable node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitTemporaryVariable(TemporaryVariableNode node)
-	    {
-            return default(TResult); // The default naive implementation
-	    }
-
-        #endregion
-        
-        #region 3.4.2 Methods
-
-        /// <summary>
-        /// Visits the Method node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitMethod(MethodNode node)
+	/// <summary>
+	/// Base class that implements the protocol for visiting
+	/// the parse tree nodes defined in X3J20 section 3.4,
+	/// i.e. the parse tree nodes for methods and initializers.
+	/// </summary>
+	public abstract class ParseTreeVisitor<TResult> : IParseTreeVisitor<TResult>
+	{
+		/// <summary>
+		/// Visits the Semantic Node. This is the default visit, in case no other implementation.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitSemanticNode(SemanticNode node)
 		{
-            foreach (MethodArgumentNode arg in node.Arguments)
-                arg.Accept(this);
+			// Naive brute force implementation
+			foreach (IParseNode child in node.GetChildNodes())
+			{
+				if (child is SemanticNode)
+					((SemanticNode)child).Accept(this);
+			}
 
-            foreach (TemporaryVariableNode tmp in node.Temporaries)
-                tmp.Accept(this);
-
-            if (node.Primitive != null)
-                node.Primitive.Accept(this);
-
-            if (node.Statements != null)
-                node.Statements.Accept(this);
-
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Method Argument node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitMethodArgument(MethodArgumentNode node)
+		#region 3.4.1 Functions
+
+		/// <summary>
+		/// Visits the Temporary Variable node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitTemporaryVariable(TemporaryVariableNode node)
 		{
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        #endregion
+		#endregion
+		
+		#region 3.4.2 Methods
 
-        #region 3.4.3 Initializers (Expressions)
-
-        /// <summary>
-        /// Visits the Initializer (Expression) node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitInitializer(InitializerNode node)
+		/// <summary>
+		/// Visits the Method node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitMethod(MethodNode node)
 		{
-            foreach (TemporaryVariableNode tmp in node.Temporaries)
-                tmp.Accept(this);
+			foreach (MethodArgumentNode arg in node.Arguments)
+				arg.Accept(this);
 
-            if (node.Statements != null)
-                node.Statements.Accept(this);
+			foreach (TemporaryVariableNode tmp in node.Temporaries)
+				tmp.Accept(this);
 
-            return default(TResult); // The default naive implementation
+			if (node.Primitive != null)
+				node.Primitive.Accept(this);
+
+			if (node.Statements != null)
+				node.Statements.Accept(this);
+
+			return default(TResult); // The default naive implementation
 		}
 
-        #endregion
-        
-        #region 3.4.4 Blocks
-
-        /// <summary>
-        /// Visits the Block node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitBlock(BlockNode node)
+		/// <summary>
+		/// Visits the Method Argument node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitMethodArgument(MethodArgumentNode node)
 		{
-            foreach (BlockArgumentNode arg in node.Arguments)
-                arg.Accept(this);
-
-            foreach (TemporaryVariableNode tmp in node.Temporaries)
-                tmp.Accept(this);
-
-            if (node.Statements != null)
-                node.Statements.Accept(this);
-
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Block Argument node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitBlockArgument(BlockArgumentNode node)
+		#endregion
+
+		#region 3.4.3 Initializers (Expressions)
+
+		/// <summary>
+		/// Visits the Initializer (Expression) node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitInitializer(InitializerNode node)
 		{
-            return default(TResult); // The default naive implementation
+			foreach (TemporaryVariableNode tmp in node.Temporaries)
+				tmp.Accept(this);
+
+			if (node.Statements != null)
+				node.Statements.Accept(this);
+
+			return default(TResult); // The default naive implementation
 		}
 
-        #endregion
+		#endregion
+		
+		#region 3.4.4 Blocks
 
-        #region 3.4.5 Statements
-
-        /// <summary>
-        /// Visits the Statement Sequence node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitStatementSequence(StatementSequenceNode node)
+		/// <summary>
+		/// Visits the Block node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitBlock(BlockNode node)
 		{
-            if (node.Expression != null)
-                node.Expression.Accept(this);
-            if (node.NextStatement != null)
-                node.NextStatement.Accept(this);
+			foreach (BlockArgumentNode arg in node.Arguments)
+				arg.Accept(this);
 
-            return default(TResult); // The default naive implementation
+			foreach (TemporaryVariableNode tmp in node.Temporaries)
+				tmp.Accept(this);
+
+			if (node.Statements != null)
+				node.Statements.Accept(this);
+
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Return Statement node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitReturnStatement(ReturnStatementNode node)
+		/// <summary>
+		/// Visits the Block Argument node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitBlockArgument(BlockArgumentNode node)
 		{
-            if (node.Expression != null)
-                node.Expression.Accept(this);
-
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        #endregion
+		#endregion
 
-        #region 3.4.5.2 Expressions
+		#region 3.4.5 Statements
 
-        /// <summary>
-        /// Visits the Assignment node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitAssignment(AssignmentNode node)
+		/// <summary>
+		/// Visits the Statement Sequence node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitStatementSequence(StatementSequenceNode node)
 		{
-            if (node.Target != null)
-                node.Target.Accept(this);
+			if (node.Expression != null)
+				node.Expression.Accept(this);
+			if (node.NextStatement != null)
+				node.NextStatement.Accept(this);
 
-            if (node.Expression != null)
-                node.Expression.Accept(this);
-
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Basic Expression node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitBasicExpression(BasicExpressionNode node)
+		/// <summary>
+		/// Visits the Return Statement node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitReturnStatement(ReturnStatementNode node)
 		{
-            if (node.Primary != null)
-                node.Primary.Accept(this);
+			if (node.Expression != null)
+				node.Expression.Accept(this);
 
-            if (node.Messages != null)
-                node.Messages.Accept(this);
-
-            if (node.CascadeMessages != null)
-                node.CascadeMessages.Accept(this);
-
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Cascade Message Sequence node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitCascadeMessageSequence(CascadeMessageSequenceNode node)
+		#endregion
+
+		#region 3.4.5.2 Expressions
+
+		/// <summary>
+		/// Visits the Assignment node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitAssignment(AssignmentNode node)
 		{
-            if (node.Messages != null)
-                node.Messages.Accept(this);
+			if (node.Target != null)
+				node.Target.Accept(this);
 
-            if (node.NextCascade != null)
-                node.NextCascade.Accept(this);
+			if (node.Expression != null)
+				node.Expression.Accept(this);
 
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Parenthesized Expression node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitParenthesizedExpression(ParenthesizedExpressionNode node)
+		/// <summary>
+		/// Visits the Basic Expression node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitBasicExpression(BasicExpressionNode node)
 		{
-            if (node.Expression != null)
-                node.Expression.Accept(this);
+			if (node.Primary != null)
+				node.Primary.Accept(this);
 
-            return default(TResult); // The default naive implementation
+			if (node.Messages != null)
+				node.Messages.Accept(this);
+
+			if (node.CascadeMessages != null)
+				node.CascadeMessages.Accept(this);
+
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Variable Reference (as oposite to declaraion) node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitVariableReferencele(VariableReferenceleNode node)
+		/// <summary>
+		/// Visits the Cascade Message Sequence node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitCascadeMessageSequence(CascadeMessageSequenceNode node)
 		{
-            return default(TResult); // The default naive implementation
+			if (node.Messages != null)
+				node.Messages.Accept(this);
+
+			if (node.NextCascade != null)
+				node.NextCascade.Accept(this);
+
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Assignment Target node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitAssignmentTarget(AssignmentTargetNode node)
+		/// <summary>
+		/// Visits the Parenthesized Expression node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitParenthesizedExpression(ParenthesizedExpressionNode node)
 		{
-            return default(TResult); // The default naive implementation
+			if (node.Expression != null)
+				node.Expression.Accept(this);
+
+			return default(TResult); // The default naive implementation
 		}
 
-        #endregion
-
-        #region 3.4.5.3 Messages Sequences
-
-        /// <summary>
-        /// Visits the Unary Message Sequence node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitUnaryMessageSequence(UnaryMessageSequenceNode node)
+		/// <summary>
+		/// Visits the Variable Reference (as opposite to declaration) node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitVariableReferencele(VariableReferenceleNode node)
 		{
-            if (node.Message != null)
-                node.Message.Accept(this);
-
-            if (node.NextMessage != null)
-                node.NextMessage.Accept(this);
-
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Unary-Binary Message Sequence node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitUnaryBinaryMessageSequence(UnaryBinaryMessageSequenceNode node)
+		/// <summary>
+		/// Visits the Assignment Target node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitAssignmentTarget(AssignmentTargetNode node)
 		{
-            if (node.Message != null)
-                node.Message.Accept(this);
-
-            if (node.NextMessage != null)
-                node.NextMessage.Accept(this);
-
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Unary-Binary-Keyword Message Sequence node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitUnaryBinaryKeywordMessageSequence(UnaryBinaryKeywordMessageSequenceNode node)
+		#endregion
+
+		#region 3.4.5.3 Messages Sequences
+
+		/// <summary>
+		/// Visits the Unary Message Sequence node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitUnaryMessageSequence(UnaryMessageSequenceNode node)
 		{
-            if (node.Message != null)
-                node.Message.Accept(this);
+			if (node.Message != null)
+				node.Message.Accept(this);
 
-            if (node.NextMessage != null)
-                node.NextMessage.Accept(this);
+			if (node.NextMessage != null)
+				node.NextMessage.Accept(this);
 
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Binary Message Sequence node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitBinaryMessageSequence(BinaryMessageSequenceNode node)
+		/// <summary>
+		/// Visits the Unary-Binary Message Sequence node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitUnaryBinaryMessageSequence(UnaryBinaryMessageSequenceNode node)
 		{
-            if (node.Message != null)
-                node.Message.Accept(this);
+			if (node.Message != null)
+				node.Message.Accept(this);
 
-            if (node.NextMessage != null)
-                node.NextMessage.Accept(this);
+			if (node.NextMessage != null)
+				node.NextMessage.Accept(this);
 
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Binary-Keyword Message Sequence node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitBinaryKeywordMessageSequence(BinaryKeywordMessageSequenceNode node)
+		/// <summary>
+		/// Visits the Unary-Binary-Keyword Message Sequence node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitUnaryBinaryKeywordMessageSequence(UnaryBinaryKeywordMessageSequenceNode node)
 		{
-            if (node.Message != null)
-                node.Message.Accept(this);
+			if (node.Message != null)
+				node.Message.Accept(this);
 
-            if (node.NextMessage != null)
-                node.NextMessage.Accept(this);
+			if (node.NextMessage != null)
+				node.NextMessage.Accept(this);
 
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Keyword Message Sequence node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitKeywordMessageSequence(KeywordMessageSequenceNode node)
+		/// <summary>
+		/// Visits the Binary Message Sequence node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitBinaryMessageSequence(BinaryMessageSequenceNode node)
 		{
-            if (node.Message != null)
-                node.Message.Accept(this);
+			if (node.Message != null)
+				node.Message.Accept(this);
 
-            return default(TResult); // The default naive implementation
+			if (node.NextMessage != null)
+				node.NextMessage.Accept(this);
+
+			return default(TResult); // The default naive implementation
 		}
 
-        #endregion
-
-        #region 3.4.5.3 Messages
-
-        /// <summary>
-        /// Visits the Unary Message node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitUnaryMessage(UnaryMessageNode node)
+		/// <summary>
+		/// Visits the Binary-Keyword Message Sequence node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitBinaryKeywordMessageSequence(BinaryKeywordMessageSequenceNode node)
 		{
-            return default(TResult); // The default naive implementation
+			if (node.Message != null)
+				node.Message.Accept(this);
+
+			if (node.NextMessage != null)
+				node.NextMessage.Accept(this);
+
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Binary Message node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitBinaryMessage(BinaryMessageNode node)
+		/// <summary>
+		/// Visits the Keyword Message Sequence node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitKeywordMessageSequence(KeywordMessageSequenceNode node)
 		{
-            if (node.Argument != null)
-                node.Argument.Accept(this);
+			if (node.Message != null)
+				node.Message.Accept(this);
 
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Keyword Message node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitKeywordMessage(KeywordMessageNode node)
-		{
-            foreach (KeywordArgumentNode arg in node.Arguments)
-                arg.Accept(this);
+		#endregion
 
-            return default(TResult); // The default naive implementation
+		#region 3.4.5.3 Messages
+
+		/// <summary>
+		/// Visits the Unary Message node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitUnaryMessage(UnaryMessageNode node)
+		{
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Binary Message Argument node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitBinaryArgument(BinaryArgumentNode node)
+		/// <summary>
+		/// Visits the Binary Message node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitBinaryMessage(BinaryMessageNode node)
 		{
-            if (node.Primary != null)
-                node.Primary.Accept(this);
+			if (node.Argument != null)
+				node.Argument.Accept(this);
 
-            if (node.Messages != null)
-                node.Messages.Accept(this);
-
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Keyword Message Argument node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitKeywordArgument(KeywordArgumentNode node)
+		/// <summary>
+		/// Visits the Keyword Message node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitKeywordMessage(KeywordMessageNode node)
 		{
-            if (node.Primary != null)
-                node.Primary.Accept(this);
+			foreach (KeywordArgumentNode arg in node.Arguments)
+				arg.Accept(this);
 
-            if (node.Messages != null)
-                node.Messages.Accept(this);
-
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        #endregion
-
-        #region 3.4.6 Literals 
-
-        /// <summary>
-        /// Visits the Small Integer Literal node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitSmallIntegerLiteral(SmallIntegerLiteralNode node)
+		/// <summary>
+		/// Visits the Binary Message Argument node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitBinaryArgument(BinaryArgumentNode node)
 		{
-            return default(TResult); // The default naive implementation
+			if (node.Primary != null)
+				node.Primary.Accept(this);
+
+			if (node.Messages != null)
+				node.Messages.Accept(this);
+
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Large Integer Literal node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitLargeIntegerLiteral(LargeIntegerLiteralNode node)
+		/// <summary>
+		/// Visits the Keyword Message Argument node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitKeywordArgument(KeywordArgumentNode node)
 		{
-            return default(TResult); // The default naive implementation
+			if (node.Primary != null)
+				node.Primary.Accept(this);
+
+			if (node.Messages != null)
+				node.Messages.Accept(this);
+
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the FloatD Literal node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitFloatDLiteral(FloatDLiteralNode node)
+		#endregion
+
+		#region 3.4.6 Literals 
+
+		/// <summary>
+		/// Visits the Small Integer Literal node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitSmallIntegerLiteral(SmallIntegerLiteralNode node)
 		{
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the FloatE Literal node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitFloatELiteral(FloatELiteralNode node)
-        {
-            return default(TResult); // The default naive implementation
-        }
-
-        /// <summary>
-        /// Visits the Scaled Decimal Literal node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitScaledDecimalLiteral(ScaledDecimalLiteralNode node)
+		/// <summary>
+		/// Visits the Large Integer Literal node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitLargeIntegerLiteral(LargeIntegerLiteralNode node)
 		{
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Character Literal node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitCharacterLiteral(CharacterLiteralNode node)
+		/// <summary>
+		/// Visits the FloatD Literal node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitFloatDLiteral(FloatDLiteralNode node)
 		{
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Identifier Literal node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitIdentifierLiteral(IdentifierLiteralNode node)
+		/// <summary>
+		/// Visits the FloatE Literal node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitFloatELiteral(FloatELiteralNode node)
 		{
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Selector Literal node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitSelectorLiteral(SelectorLiteralNode node)
+		/// <summary>
+		/// Visits the Scaled Decimal Literal node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitScaledDecimalLiteral(ScaledDecimalLiteralNode node)
 		{
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the String Literal node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitStringLiteral(StringLiteralNode node)
+		/// <summary>
+		/// Visits the Character Literal node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitCharacterLiteral(CharacterLiteralNode node)
 		{
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Symbol Literal node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitSymbolLiteral(SymbolLiteralNode node)
+		/// <summary>
+		/// Visits the Identifier Literal node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitIdentifierLiteral(IdentifierLiteralNode node)
 		{
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        /// <summary>
-        /// Visits the Array Literal node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitArrayLiteral(ArrayLiteralNode node)
+		/// <summary>
+		/// Visits the Selector Literal node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitSelectorLiteral(SelectorLiteralNode node)
 		{
-            foreach (LiteralNode item in node.Elements)
-                item.Accept(this);
-
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-        #endregion
-
-        /// <summary>
-        /// Visits the Primitive Call node.
-        /// </summary>
-        /// <param name="node">The node to visit.</param>
-        public virtual TResult VisitPrimitiveCall(PrimitiveCallNode node)
+		/// <summary>
+		/// Visits the String Literal node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitStringLiteral(StringLiteralNode node)
 		{
-            return default(TResult); // The default naive implementation
+			return default(TResult); // The default naive implementation
 		}
 
-    }
+		/// <summary>
+		/// Visits the Symbol Literal node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitSymbolLiteral(SymbolLiteralNode node)
+		{
+			return default(TResult); // The default naive implementation
+		}
+
+		/// <summary>
+		/// Visits the Array Literal node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitArrayLiteral(ArrayLiteralNode node)
+		{
+			foreach (LiteralNode item in node.Elements)
+				item.Accept(this);
+
+			return default(TResult); // The default naive implementation
+		}
+
+		#endregion
+
+		/// <summary>
+		/// Visits the Primitive Call node.
+		/// </summary>
+		/// <param name="node">The node to visit.</param>
+		public virtual TResult VisitPrimitiveCall(PrimitiveCallNode node)
+		{
+			return default(TResult); // The default naive implementation
+		}
+
+	}
 
 }

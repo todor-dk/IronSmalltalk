@@ -193,6 +193,6 @@ namespace IronSmalltalk.NativeCompiler.Generators.Initializers
 
         private static readonly MethodInfo AnnotateObjectMethod = TypeUtilities.Method(
             typeof(IronSmalltalk.Runtime.Internal.NativeLoadHelper), "AnnotateObject",
-            typeof(CompiledInitializer), typeof(string), typeof(string));
+            typeof(CompiledCode), typeof(string), typeof(string));
     }
 }

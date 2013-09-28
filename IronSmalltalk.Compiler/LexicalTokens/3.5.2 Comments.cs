@@ -34,7 +34,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         {
 #if DEBUG
             if (comment.IndexOf(LexicalConstants.CommentDelimiter) != -1)
-                throw new ArgumentException("comment"); // No delimitors inside comment text!
+                throw new ArgumentException("comment"); // No delimiters inside comment text!
 #endif
         }
 
