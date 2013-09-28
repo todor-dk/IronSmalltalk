@@ -56,7 +56,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     /// Literal node that contains a single constant value,
     /// i.e. literals except for array literals.
     /// </summary>
-    /// <typeparam name="TToken">Type of the lireral token.</typeparam>
+    /// <typeparam name="TToken">Type of the literal token.</typeparam>
     public abstract class SingleValueLiteralNode<TToken> : LiteralNode
         where TToken : ILiteralToken
     {

@@ -248,7 +248,7 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
             {
                 this.ReportParserError(parent, SemanticErrors.MissingMethodArgument, token);
                 this.ResidueToken = token;
-                // NB: MethodArgumentNode must be able to handle null for arg. name token.
+                // NB: MethodArgumentNode must be able to handle null for argument name token.
                 return new MethodArgumentNode(parent, null);
             }
             return new MethodArgumentNode(parent, (IdentifierToken)token);
@@ -360,7 +360,7 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
             {
                 this.ReportParserError(parent, SemanticErrors.MissingBlockArgument, token);
                 this.ResidueToken = token;
-                // NB: BlockArgumentNode must be able to handle null for arg. name token.
+                // NB: BlockArgumentNode must be able to handle null for argument name token.
                 return new BlockArgumentNode(parent, colon, null);
             }
             return new BlockArgumentNode(parent, colon, (IdentifierToken)token);
@@ -586,7 +586,7 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
                 return result;
             }
 
-            // Ensure the parenthese are properly closed.
+            // Ensure the parentheses are properly closed.
             token = this.GetNextTokenxx(Preference.Default);
             SpecialCharacterToken rightParenthesis = null;
             if (Parser.IsClosingParenthesis(token))
@@ -614,7 +614,7 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
         /// <param name="token">First token of the message node. If the token is message token, it is returned in the residueToken parameter.</param>
         /// <returns>Message sequence node or null if the given token is not a message token.</returns>
         /// <remarks>
-        /// This mehtod does not registers errors if the given token is not a message token.
+        /// This method does not registers errors if the given token is not a message token.
         /// The 'offending' token is returned in the residueToken parameter, and it is 
         /// responsibility of the called to determine what to do.
         /// </remarks>
@@ -1029,7 +1029,7 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
                     LiteralNode element = this.ParseLiteral(result, token);
                     if (element == null)
                     {
-                        // Report error in souce code ... here, it must be a literal
+                        // Report error in source code ... here, it must be a literal
                         this.ReportParserError(result, SemanticErrors.UnrecognizedLiteral, token);
                         result.SetContents(elements, null);
                         return result;

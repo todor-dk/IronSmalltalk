@@ -93,12 +93,12 @@ namespace IronSmalltalk.InterchangeInstaller
         }
 
         /// <summary>
-        /// Retereive the next interchange chunk from the processor and parse it as a method.
+        /// Retrieve the next interchange chunk from the processor and parse it as a method.
         /// </summary>
         /// <param name="processor">Interchange format processor that can provide the interchange chunk for parsing.</param>
         /// <param name="sourceCodeService"></param>
         /// <remarks>
-        /// The parser used here is capable of parsing interchange chunks containg methods that follow the 
+        /// The parser used here is capable of parsing interchange chunks containing methods that follow the 
         /// interchange version standard that this version service is supporting.
         /// </remarks>
         /// <returns>MethodNode representing the parsed method source.</returns>
@@ -118,12 +118,12 @@ namespace IronSmalltalk.InterchangeInstaller
         }
 
         /// <summary>
-        /// Retereive the next interchange chunk from the processor and parse it as an initializer.
+        /// Retrieve the next interchange chunk from the processor and parse it as an initializer.
         /// </summary>
         /// <param name="processor">Interchange format processor that can provide the interchange chunk for parsing.</param>
         /// <param name="sourceCodeService"></param>
         /// <remarks>
-        /// The parser used here is capable of parsing interchange chunks containg initializers that follow the 
+        /// The parser used here is capable of parsing interchange chunks containing initializers that follow the 
         /// interchange version standard that this version service is supporting.
         /// </remarks>
         /// <returns>InitializerNode representing the parsed initializer source.</returns>
@@ -146,10 +146,10 @@ namespace IronSmalltalk.InterchangeInstaller
         /// Create and return a parser capable of parsing methods and initializers.
         /// </summary>
         /// <remarks>
-        /// The parser returned here is capable of parsing interchange chunks containg methods and initializers 
+        /// The parser returned here is capable of parsing interchange chunks containing methods and initializers 
         /// that follow the interchange version standard that this version service is supporting.
         /// </remarks>
-        /// <returns>Parser for parsing method and initilizers.</returns>
+        /// <returns>Parser for parsing method and initializers.</returns>
         protected virtual Parser GetFunctionParser()
         {
             Parser parser = new Parser();
@@ -211,9 +211,9 @@ namespace IronSmalltalk.InterchangeInstaller
         }
 
         /// <summary>
-        /// Report that an error has occured during parsing of the source code.
+        /// Report that an error has occurred during parsing of the source code.
         /// </summary>
-        /// <param name="processor">Interchange format processor whos error-sink is used to report the error.</param>
+        /// <param name="processor">Interchange format processor whose error-sink is used to report the error.</param>
         /// <param name="parseErrorMessage">Error message.</param>
         protected void ReportError(InterchangeFormatProcessor processor, string parseErrorMessage)
         {
@@ -224,7 +224,7 @@ namespace IronSmalltalk.InterchangeInstaller
         }
 
         /// <summary>
-        /// Get the next interchage chunk to be processor.
+        /// Get the next interchange chunk to be processor.
         /// </summary>
         /// <param name="processor">Interchange format processor that contains the interchange sources.</param>
         /// <returns></returns>

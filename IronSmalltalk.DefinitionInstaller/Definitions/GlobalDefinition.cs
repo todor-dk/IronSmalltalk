@@ -59,7 +59,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
             IDiscreteGlobalBinding existingBinding = installer.GetLocalGlobalBinding(name);
             if (existingBinding != null)
                 return installer.ReportError(this.Name, InstallerErrors.GlobalNameNotUnique);
-            // 3. No global defined in the inner scope, but chech the scopes (inner or outer) for protected names like Object etc.
+            // 3. No global defined in the inner scope, but check the scopes (inner or outer) for protected names like Object etc.
             if (installer.IsProtectedName(name))
                 return installer.ReportError(this.Name, InstallerErrors.GlobalNameProtected);
             if (IronSmalltalk.Common.GlobalConstants.ReservedIdentifiers.Contains(this.Name.Value))

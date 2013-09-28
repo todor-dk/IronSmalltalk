@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using IronSmalltalk.Compiler.LexicalTokens;
+using IronSmalltalk.Compiler.SemanticAnalysis;
 
 namespace IronSmalltalk.Compiler.SemanticNodes
 {
@@ -96,12 +97,12 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         public override string PrintString()
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            sb.Append("<");
+            sb.Append(SemanticConstants.PrimitiveOpeningDelimiter);
             if (this.ApiConvention != null)
                 sb.Append(this.ApiConvention.Value);
             foreach (Token token in this.ApiParameters)
                 sb.AppendFormat(" {0}", token.SourceString);
-            sb.Append(">");
+            sb.Append(SemanticConstants.PrimitiveClosingDelimiter);
             return sb.ToString();
         }
     }

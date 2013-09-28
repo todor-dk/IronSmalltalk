@@ -25,7 +25,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
     /// as described in X3J20 "3.5.10 Quoted Selector",
     /// except that unquoted selectors are only allowed inside literal arrays.
     /// 
-    /// This is an extension to X3J20 lexical grammer, so we can read array literals.
+    /// This is an extension to X3J20 lexical grammar, so we can read array literals.
     /// Example: #( with:with: ) .... should be read as: #( #with:with: )
     /// </summary>
     public class UnquotedSelectorToken : LiteralToken<string>, ILiteralArrayIdentifierToken

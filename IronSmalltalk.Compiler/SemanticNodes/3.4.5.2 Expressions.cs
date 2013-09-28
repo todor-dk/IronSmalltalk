@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
+using IronSmalltalk.Compiler.LexicalAnalysis;
 
 namespace IronSmalltalk.Compiler.SemanticNodes
 {
@@ -138,17 +139,18 @@ namespace IronSmalltalk.Compiler.SemanticNodes
             else
                 str = this.Target.PrintString();
 
+            str = str + " " + LexicalConstants.AssignmentOperator + " ";
             if (this.Expression == null)
-                str = str + " := ?expression?";
+                str = str + "?expression?";
             else
-                str = str + " := " + this.Expression.PrintString();
+                str = str + this.Expression.PrintString();
 
             return str;
         }
     }
 
     /// <summary>
-    /// The parenthesized expression is a parse node representing an expression enclodes in parentheses.
+    /// The parenthesized expression is a parse node representing an expression enclosed in parentheses.
     /// It is defined in X3J20 as: '(' expression ')'.
     /// </summary>
     public partial class ParenthesizedExpressionNode : SemanticNode, IPrimaryNode
@@ -159,14 +161,14 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         public SpecialCharacterToken LeftParenthesis { get; private set; }
 
         /// <summary>
-        /// Right closingparenthesis of the parenthesized expression.
+        /// Right closing parenthesis of the parenthesized expression.
         /// </summary>
         public SpecialCharacterToken RightParenthesis { get; private set; }
 
         /// <summary>
         /// Expression that's being enclosed by the parentheses.
         /// Under normal circumstances this is always present. 
-        /// It is null only if illegal source code was enclountered.
+        /// It is null only if illegal source code was encountered.
         /// </summary>
         public ExpressionNode Expression { get; private set; }
 
@@ -186,7 +188,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
             if (parent == null)
                 throw new ArgumentNullException("parent");
             if (!Parser.IsOpeningParenthesis(token))
-                // We do expect the caller to this method to have ensured that we are actually parsing a parethesis.
+                // We do expect the caller to this method to have ensured that we are actually parsing a parenthesis.
                 throw new InvalidParserOperationException("Expected opening parenthesis token ... '('");
 #endif
             this.Parent = parent;
@@ -197,7 +199,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// Initializes the node after being parsed by the parser.
         /// </summary>
         /// <param name="expression">Expression that's being enclosed by the parentheses.</param>
-        /// <param name="rightParenthesis">Right closingparenthesis of the parenthesized expression.</param>
+        /// <param name="rightParenthesis">Right closing parenthesis of the parenthesized expression.</param>
         protected internal void SetContents(ExpressionNode expression, SpecialCharacterToken rightParenthesis)
         {
             if (expression == null)
@@ -242,7 +244,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
             if (this.Expression == null)
                 return "(?expression?)";
             else
-                return "(" + this.Expression.PrintString() + ")";
+                return SemanticConstants.OpeningParenthesis + this.Expression.PrintString() + SemanticConstants.ClosingParenthesis;
         }
     }
 

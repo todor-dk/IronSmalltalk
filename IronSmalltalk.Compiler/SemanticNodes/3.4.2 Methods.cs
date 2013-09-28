@@ -43,7 +43,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         public PrimitiveCallNode Primitive { get; private set; }
 
         /// <summary>
-        /// Create and intialize a method node.
+        /// Create and initialize a method node.
         /// </summary>
         protected internal MethodNode()
         {

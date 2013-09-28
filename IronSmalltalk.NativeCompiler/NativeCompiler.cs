@@ -58,6 +58,10 @@ namespace IronSmalltalk.NativeCompiler
 				throw new ArgumentNullException("parameters.OutputDirectory");
 			if (String.IsNullOrWhiteSpace(parameters.AssemblyName))
 				throw new ArgumentNullException("parameters.AssemblyName");
+            if (parameters.IsBaseLibrary && (parameters.AssemblyType != NativeCompilerParameters.AssemblyTypeEnum.Dll))
+                throw new ArgumentException("parameters.IsBaseLibrary requires parameters.AssemblyType = AssemblyTypeEnum.Dll");
+            if (parameters.IsBaseLibrary && !parameters.Runtime.GlobalScope.IsEmpty)
+                throw new ArgumentException("parameters.IsBaseLibrary requires parameters.Runtime.GlobalScope to be empty");
 
 			NativeCompiler compiler = new NativeCompiler(parameters);
 			return compiler.Generate();
@@ -117,94 +121,53 @@ namespace IronSmalltalk.NativeCompiler
 		/// </summary>
 		private string Generate()
 		{
-			// Visit the name scopes in the runtime.
-			NameScopeGenerator extensionScope = new NameScopeGenerator(this, "ExtensionScope", true);
-			this.Parameters.Runtime.ExtensionScope.Accept(extensionScope);
-			NameScopeGenerator globalScope = new NameScopeGenerator(this, "GlobalScope", false);
-			this.Parameters.Runtime.GlobalScope.Accept(globalScope);
-
-			// Generate types from the result of the name scope visiting
-			MethodInfo extensionScopeInitializer = extensionScope.GenerateNameScopeInitializerMethod();
-			MethodInfo globalScopeInitializer = globalScope.GenerateNameScopeInitializerMethod();
-			// Generate the entry point class, the one that creates the new Smalltalk runtime.
-			RuntimeGenerator runtime = new RuntimeGenerator(this, extensionScopeInitializer, globalScopeInitializer);
-			runtime.GenerateCreateRuntimeMethods();
+            if (this.Parameters.IsBaseLibrary)
+                this.GenerateStanradLibrary();
+            else
+                this.GenerateCustomLibrary();
 
             this.GenerateDynamicConverterBinderInitializers();
-
-
-			/* Order should be:
-			 * 1. Create Global Bindings
-			 * 2. Create Objects (for global bindings)
-			 * 3. Create Pool Variable Bindings
-			 * 
-			 * 
-			 *             
-				this.CreateTemporaryNameSpace();
-				
-				if (!this.CreateGlobalBindings())
-					return false;
-				if (!this.CreateGlobalObjects())
-					return false;
-				if (!this.ValidateGlobalObjects())
-					return false;
-				if (!this.CreatePoolVariableBindings())
-					return false;
-				if (!this.ValidateMethods())
-					return false;
-				if (!this.ValidateInitializers())
-					return false;
-			if (!this.CreateMethods())
-				return false;
-			if (!this.CreateInitializers())
-				return false;
-			if (!this.AddAnnotation())      ** Methods + Initializers
-				return false;
-
-				this.ReplaceSmalltalkContextNameSpace();
-				return this.RecompileClasses(); // Must be after ReplaceSmalltalkContextNameSpace(), otherwise class cannot find subclasses.
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-N-Space.
-	Globals
-		Constant
-		Variable
-	Classes
-	Pools
-	
-	
-
-
-C:\Users\tt\Documents\Visual Studio 2010\Projects\IronSmalltalk\ClassLibraryBrowser\External\IronSmalltalk.ist
-
-
-
-
-’!’ | ’%’ | ’&’’ | ’*’ | ’+’ | ’,’’ | ’/’ | ’<’ | ’=’ | ’>’ | ’?’ | ’@’ | ’\’ | ’~’ | ’|’ | ’-’
-
-
- ' !"#$%&''()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~'
-
- "#$'(),.:;[]^_`{}
-
-
-
-public static void AnnotateObject(IDiscreteGlobalBinding binding, string key, string value)
-
-
-{x:Static sys:Double.MaxValue}
-
-Width="{x:Static s:Double.MaxValue}"
-
-
-Dictionary<Symbol, CompiledMethod>
-		   */
-
 			return this.NativeGenerator.SaveAssembly();
-		}    
+		}
+
+        private void GenerateCustomLibrary()
+        {
+            // Visit the name scopes in the runtime.
+            NameScopeGenerator extensionScope = null, globalScope = null;  
+            if (this.Parameters.ExtensionScopeInitializer == null)
+            {
+                extensionScope = new NameScopeGenerator(this, "ExtensionScope", true);
+                this.Parameters.Runtime.ExtensionScope.Accept(extensionScope);
+            }
+            globalScope = new NameScopeGenerator(this, "GlobalScope", false);
+            this.Parameters.Runtime.GlobalScope.Accept(globalScope);
+
+            // Generate types from the result of the name scope visiting
+            MethodInfo extensionScopeInitializer, globalScopeInitializer;
+            if (this.Parameters.ExtensionScopeInitializer == null)
+                extensionScopeInitializer = extensionScope.GenerateNameScopeInitializerMethod();
+            else
+                extensionScopeInitializer = this.Parameters.ExtensionScopeInitializer;
+            globalScopeInitializer = globalScope.GenerateNameScopeInitializerMethod();
+            // Generate the entry point class, the one that creates the new Smalltalk runtime.
+            RuntimeGenerator runtime = new RuntimeGenerator(this, extensionScopeInitializer, globalScopeInitializer);
+            runtime.GenerateCreateRuntimeMethods();
+        }
+
+        private void GenerateStanradLibrary()
+        {
+            System.Diagnostics.Debug.Assert(this.Parameters.Runtime.GlobalScope.IsEmpty);
+
+            // Visit the name scopes in the runtime.
+            NameScopeGenerator scope = new NameScopeGenerator(this, "StandardScope", true);
+            this.Parameters.Runtime.ExtensionScope.Accept(scope);
+
+            // Generate types from the result of the name scope visiting
+            MethodInfo scopeInitializer = scope.GenerateNameScopeInitializerMethod();
+            // Generate the entry point class, the one that creates the new Smalltalk runtime.
+            StandardLibraryGenerator library = new StandardLibraryGenerator(this, scopeInitializer);
+            library.GenerateEntryMethod();
+        }    
 
         internal FieldInfo GetDynamicConvertBinder(Type type, Microsoft.CSharp.RuntimeBinder.CSharpBinderFlags flags)
         {

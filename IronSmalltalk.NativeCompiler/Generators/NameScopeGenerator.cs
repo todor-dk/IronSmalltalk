@@ -270,6 +270,8 @@ namespace IronSmalltalk.NativeCompiler.Generators
             else
                 lambda.CompileToMethod(method, this.Compiler.NativeGenerator.DebugInfoGenerator);
 
+            this.ScopeInitializerTypeBuilder.CreateType();
+
             return method;
         }
 

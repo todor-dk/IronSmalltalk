@@ -36,14 +36,14 @@ namespace IronSmalltalk.InterchangeInstaller
     /// The InterchangeFormatProcessor works on a TextReader that contains the source code
     /// to be installed. It reads the source code, processes elements in it and notifies
     /// the given IInterchangeFileInProcessor for each element that is encountered in the
-    /// code. It is up to the IInterchangeFileInProcessor to do something usefull with 
+    /// code. It is up to the IInterchangeFileInProcessor to do something useful with 
     /// the given meta objects describing each filed-in element.
     /// 
     /// The InterchangeFormatProcessor is given a map of version identifiers and
     /// InterchangeVersionService objects. The InterchangeVersionService objects is
     /// responsible to handle differences between interchange versions. The X3J20
     /// defines only a single version, but we may extend this with IronSmalltalk
-    /// sepecific information. The InterchangeVersionService is responsible for
+    /// specific information. The InterchangeVersionService is responsible for
     /// returning a parser compatible with the given version and handle other 
     /// version differences.
     /// 
@@ -65,7 +65,7 @@ namespace IronSmalltalk.InterchangeInstaller
 
         /// <summary>
         /// The IInterchangeFileInProcessor that will be notified for each element found in the source code.
-        /// It is up to the IInterchangeFileInProcessor to do something usefull with the given meta objects 
+        /// It is up to the IInterchangeFileInProcessor to do something useful with the given meta objects 
         /// describing each filed-in element.
         /// </summary>
         public IInterchangeFileInProcessor FileInProcessor { get; private set; }
@@ -199,7 +199,7 @@ namespace IronSmalltalk.InterchangeInstaller
         public IEnumerable<SourceReference<string>> ParseIdentifierList(StringToken token, IParseErrorSink parseErrorSink, ISourceCodeReferenceService sourceCodeService)
         {
             if (this.VersionService == null)
-                throw new InvalidOperationException("Processor cannor be used if version service is not set.");
+                throw new InvalidOperationException("Processor cannot be used if version service is not set.");
             return this.VersionService.ParseIdentifierList(token, parseErrorSink, sourceCodeService);
         }
 
@@ -211,7 +211,7 @@ namespace IronSmalltalk.InterchangeInstaller
         public MethodNode ParseMethod(out ISourceCodeReferenceService sourceCodeService)
         {
             if (this.VersionService == null)
-                throw new InvalidOperationException("Processor cannor be used if version service is not set.");
+                throw new InvalidOperationException("Processor cannot be used if version service is not set.");
             return this.VersionService.ParseMethod(this, out sourceCodeService);
         }
 
@@ -223,7 +223,7 @@ namespace IronSmalltalk.InterchangeInstaller
         public InitializerNode ParseInitializer(out ISourceCodeReferenceService sourceCodeService)
         {
             if (this.VersionService == null)
-                throw new InvalidOperationException("Processor cannor be used if version service is not set.");
+                throw new InvalidOperationException("Processor cannot be used if version service is not set.");
             return this.VersionService.ParseInitializer(this, out sourceCodeService);
         }
 
@@ -261,7 +261,7 @@ namespace IronSmalltalk.InterchangeInstaller
         /// </summary>
         /// <remarks>
         /// This method is responsible for reading the interchange chunks 
-        /// that are delimited by the ! delimitor and escape double !! characters.
+        /// that are delimited by the ! delimiter and escape double !! characters.
         /// </remarks>
         /// <returns>Returns an InterchangeChunk representing the source code for the chunk.</returns>
         internal InterchangeChunk GetNextChunk()

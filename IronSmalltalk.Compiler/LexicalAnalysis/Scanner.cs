@@ -159,7 +159,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         /// <summary>
         /// Returns a token for a comment, as defined in X3J20 "3.5.2 Comments"
         /// </summary>
-        /// <returns>A comment token containing the comment text (excluding the delimitors).</returns>
+        /// <returns>A comment token containing the comment text (excluding the delimiters).</returns>
         private CommentToken GetComment()
         {
             // commentDelimiter ::= '"'
@@ -255,7 +255,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
 
                         if (this.ScanResult.IsAssignmentOperatorCharacter2())
                         {
-                            // It was identifier folowed by assignment
+                            // It was identifier followed by assignment
                             this.Back(); // Go back to where the identifier ended, we marked with Mark().
                             return this.ReturnSuccess(new IdentifierToken(this.Buffer.ToString()));
                         }
@@ -289,8 +289,8 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
             // binarySelector ::= binaryCharacter+
 
             // NB: X3J20 writes: "If a negative <number literal> follows a binary selector there must 
-            // intervening white space." I read this as if the user have ommited the white space, 
-            // then we regard this as a binary operator and a positive numner,e.g. "x --3" is 3 tokens: 
+            // intervening white space." I read this as if the user have omitted the white space, 
+            // then we regard this as a binary operator and a positive number,e.g. "x --3" is 3 tokens: 
             // "x", "--", "3". The user can choose to write "x- -3", which gives: "x", "-", "-3".
 
 #if DEBUG
@@ -323,8 +323,8 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
 
         /// <summary>
         /// Helper function to determine, if the current character is negative sign. 
-        /// To quallify, the current character must be negative sign (minus),
-        /// optionally followed by whitepsaces and MUST be followed by a digit.
+        /// To qualify, the current character must be negative sign (minus),
+        /// optionally followed by whitespaces and MUST be followed by a digit.
         /// </summary>
         /// <returns></returns>
         private bool IsNegativeSign(bool currentIsPeak)
@@ -486,7 +486,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         }
 
         /// <summary>
-        /// Helper function to GetNumber() for rading radix integer, e.g. 16r200.
+        /// Helper function to GetNumber() for reading radix integer, e.g. 16r200.
         /// </summary>
         /// <remarks>
         /// If we get here, we are reading a "radigInteger", and we've read up to the 'r'.
@@ -514,7 +514,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
             // Try to parse the <radixSpecifier> to integer.
             bool success;
             int radix = ConversionUtilities.ConvertSmallInteger(radixSpecifier, out success);
-            // Check if successfull. It must be between 2 and 36 (both inclusive).
+            // Check if successful. It must be between 2 and 36 (both inclusive).
             if ((!success) || (radix < 2) || (radix > 36))
                 return this.ReturnError(new SmallIntegerToken(0), String.Format(LexicalErrors.InvalidRadix, radixSpecifier));
 
@@ -549,21 +549,21 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
                                     (LexicalConstants.FirstLetterDigit + radix - 11).ToString(CultureInfo.InvariantCulture)));
                     }
 
-                    // OK, it's not a digit or uppercase letter ... must be somethig else. We are done reading the integer.
+                    // OK, it's not a digit or uppercase letter ... must be something else. We are done reading the integer.
                     return this.GetIntegerToken(this.Buffer.ToString(), radix);
                 }
             }
         }
 
         /// <summary>
-        /// Helper function to GetNumber() for rading floats or scaled decinals, e.g. 12.12e4 or 12.34s4.
+        /// Helper function to GetNumber() for reading floats or scaled decimals, e.g. 12.12e4 or 12.34s4.
         /// </summary>
         /// <remarks>
         /// If we get here, we are reading either a float or a scaled decimal that contains a decimal.
         /// In either case, and we've read up to the decimal separator '.' and need to process the decimal digits here.
         /// If we encounter 'e' | 'd' | 'q', we are dealing with float, and branch to the corresponding helper function.
         /// If we encounter 's', we are dealing with scaled decimal, and branch to the corresponding helper function.
-        /// If we encounter anything else than decimals, we are done reading, and returm a float token.
+        /// If we encounter anything else than decimals, we are done reading, and return a float token.
         /// </remarks>
         /// <param name="integerDigits">The first "digits" part of the "mantissa", i.e. digits up to the '.' decimal separator.</param>
         /// <returns>A numeric token for the float or scaled decimal.</returns>
@@ -630,7 +630,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         }
 
         /// <summary>
-        /// Helper function to GetNumber() and GetFloatOrScaledDecimal() for rading floats, e.g. 12.12e4.
+        /// Helper function to GetNumber() and GetFloatOrScaledDecimal() for reading floats, e.g. 12.12e4.
         /// </summary>
         /// <remarks>
         /// If we get here, we are reading a float with exponent and we've done reading up to the exponent letter.
@@ -688,7 +688,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         }
 
         /// <summary>
-        /// Helper function to GetNumber() and GetFloatOrScaledDecimal() for rading scaled decimals, e.g. 12.34s5.
+        /// Helper function to GetNumber() and GetFloatOrScaledDecimal() for reading scaled decimals, e.g. 12.34s5.
         /// </summary>
         /// <remarks>
         /// If we get here, we are reading a scaled decimal and we've done reading up to the 's' letter.
@@ -750,8 +750,8 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         /// <summary>
         /// Creates an IntegerToken for given digits in a given numeric base.
         /// </summary>
-        /// <param name="integerDigits">Integer digits string, e.g. for "16r200" this param contains "200".</param>
-        /// <param name="radix">Numeric base, e.g. for "16r200" this param contains 16.</param>
+        /// <param name="integerDigits">Integer digits string, e.g. for "16r200" this parameter contains "200".</param>
+        /// <param name="radix">Numeric base, e.g. for "16r200" this parameter contains 16.</param>
         /// <returns>An integer token.</returns>
         private Token GetIntegerToken(string integerDigits, int radix)
         {
@@ -768,10 +768,10 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         /// <summary>
         /// Create a FloatToken for the given float parts.
         /// </summary>
-        /// <param name="integerDigits">Integer digits string, e.g. for "12.34e-5" this param contains "12".</param>
-        /// <param name="decimalDigits">Decimal digits string, e.g. for "12.34e-5" this param contains "34".</param>
-        /// <param name="exponentDigits">Exponent digits string, e.g. for "12.34e-5" this param contains "5".</param>
-        /// <param name="negativeExponent">Is the exponent negative? E.g. for "12.34e-5" this param is set to true.</param>
+        /// <param name="integerDigits">Integer digits string, e.g. for "12.34e-5" this parameter contains "12".</param>
+        /// <param name="decimalDigits">Decimal digits string, e.g. for "12.34e-5" this parameter contains "34".</param>
+        /// <param name="exponentDigits">Exponent digits string, e.g. for "12.34e-5" this parameter contains "5".</param>
+        /// <param name="negativeExponent">Is the exponent negative? E.g. for "12.34e-5" this parameter is set to true.</param>
         /// <param name="exponentLetter">The exponent letter 'e' or '\0' if no exponent. It dictates the type of float.</param>
         /// <returns>A float token.</returns>
         private Token GetFloatToken(string integerDigits, string decimalDigits, string exponentDigits, bool negativeExponent, char exponentLetter)
@@ -807,13 +807,13 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         /// Create a ScaledDecimalToken for the given scaled decimal parts.
         /// </summary>
         /// <param name="integerDigits">
-        /// Integer digits string, e.g. for "12.34s5" this param contains "12".
+        /// Integer digits string, e.g. for "12.34s5" this parameter contains "12".
         /// </param>
         /// <param name="decimalDigits">
-        /// Optional. Decimal digits string, e.g. for "12.34s5" this param contains "34", for "12s5" is is null or empty str.
+        /// Optional. Decimal digits string, e.g. for "12.34s5" this parameter contains "34", for "12s5" is is null or empty string.
         /// </param>
         /// <param name="fractionalDigits">
-        /// Optional. Fraction digits string, e.g. for "12.34s5" this param contains "5", for "12.34s" is is null or empty str.
+        /// Optional. Fraction digits string, e.g. for "12.34s5" this parameter contains "5", for "12.34s" is is null or empty string.
         /// </param>
         /// <returns>A scaled decimal token.</returns>
         private ScaledDecimalToken GetScaledDecimalToken(string integerDigits, string decimalDigits, string fractionalDigits)
@@ -1057,7 +1057,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
 
 
         /// <summary>
-        /// This is an extension to X3J20 lexical grammer, so we can read array literals.
+        /// This is an extension to X3J20 lexical grammar, so we can read array literals.
         /// Example: #( with:with: ) .... should be read as: #( #with:with: )
         /// </summary>
         /// <returns>
@@ -1236,7 +1236,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         /// to be able to Mark() a position, read progressing in the stream and go Back() to the mark.
         /// </summary>
         /// <remarks>
-        /// Not the best implementation, but simple. No nested Mark() operations supporten. 
+        /// Not the best implementation, but simple. No nested Mark() operations supported. 
         /// </remarks>
         private class CharReader
         {

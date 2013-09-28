@@ -65,7 +65,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     /// </summary>
     /// <remarks>
     /// We have this class so we can differentiate between parse nodes defines
-    /// in X3J20 3.4 (methods, initializers) and ohter parse nodes that derive
+    /// in X3J20 3.4 (methods, initializers) and other parse nodes that derive
     /// from the base ParseNode (e.g. the interchange nodes X3J20 4.1). 
     /// </remarks>
     public abstract partial class SemanticNode : ParseNode

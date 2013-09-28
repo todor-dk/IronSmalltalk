@@ -84,7 +84,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
 
     /// <summary>
     /// Temporary variable node represent temporary variable declaration inside a functions;
-    /// that is vars inside the vertical bars in methods, blocks and intializers.
+    /// that is vars inside the vertical bars in methods, blocks and initializers.
     /// </summary>
     public partial class TemporaryVariableNode : VariableNode
     {

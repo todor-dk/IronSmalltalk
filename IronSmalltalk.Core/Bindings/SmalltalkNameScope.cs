@@ -85,6 +85,19 @@ namespace IronSmalltalk.Runtime.Bindings
             this.OuterScope = outerScope;
         }
 
+        public bool IsEmpty
+        {
+            get
+            {
+                return (this.ProtectedNames.Count == 0) &&
+                    (this.Classes.Count == 0) &&
+                    (this.Pools.Count == 0) &&
+                    (this.GlobalVariables.Count == 0) &&
+                    (this.GlobalConstants.Count == 0) &&
+                    (this.Initializers.Count == 0);
+            }
+        }
+
         public SmalltalkNameScope Copy()
         {
             return this.Copy(this.OuterScope);

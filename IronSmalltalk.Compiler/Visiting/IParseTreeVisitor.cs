@@ -126,7 +126,7 @@ namespace IronSmalltalk.Compiler.Visiting
         TResult VisitParenthesizedExpression(ParenthesizedExpressionNode node);
 
         /// <summary>
-        /// Visits the Variable Reference (as oposite to declaraion) node.
+        /// Visits the Variable Reference (as opposite to declaration) node.
         /// </summary>
         /// <param name="node">The node to visit.</param>
         TResult VisitVariableReferencele(VariableReferenceleNode node);

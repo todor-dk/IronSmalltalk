@@ -120,6 +120,8 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         public override string PrintString()
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            sb.Append(SemanticConstants.LiteralArrayPrefix);
+            sb.Append(SemanticConstants.OpeningParenthesis);
             sb.Append("#(");
             bool first = true;
             foreach (LiteralNode elem in this.Elements)
@@ -129,14 +131,14 @@ namespace IronSmalltalk.Compiler.SemanticNodes
                 first = false;
                 sb.Append(elem.PrintString());
             }
-            sb.Append(")");
+            sb.Append(SemanticConstants.ClosingParenthesis);
             return sb.ToString();
         }
     }
 
     /// <summary>
     /// Special case, used only with arrays. 
-    /// This is in case ppl. write: #(true asUppercase).
+    /// This is in case people write: #(true asUppercase).
     /// </summary>
     public partial class IdentifierLiteralNode : LiteralNode
     {

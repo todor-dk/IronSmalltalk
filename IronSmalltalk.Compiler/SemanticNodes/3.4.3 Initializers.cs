@@ -26,7 +26,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     public partial class InitializerNode : FunctionNode
     {
         /// <summary>
-        /// Create and intialize an initializer node.
+        /// Create and initialize an initializer node.
         /// </summary>
         protected internal InitializerNode()
         {

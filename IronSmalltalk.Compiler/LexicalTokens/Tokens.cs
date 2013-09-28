@@ -21,15 +21,15 @@ namespace IronSmalltalk.Compiler.LexicalTokens
 {
     /// <summary>
     /// Token base class. The tokens here are described in "ANSI INCITS 319-1998 (R2007)",
-    /// chapter "3.5 Lexical Grammer". The class hierarchy is modeled on this chapter.
+    /// chapter "3.5 Lexical Grammar". The class hierarchy is modeled on this chapter.
     /// </summary>
     /// <remarks>
     /// IMPORTANT IMPLEMENTATION NOTES:
-    /// The Token class is the base class for all tokens. The heirarchy below models roughly 
+    /// The Token class is the base class for all tokens. The hierarchy below models roughly 
     /// the definitions in the X3J20 document.
     /// 
     /// HOWEVER:
-    /// The class hieararchy has subclasses and common base classes. But we
+    /// The class hierarchy has subclasses and common base classes. But we
     /// MUST AVOID having concrete classes inheriting from other concrete classes.
     /// 
     /// For example, QuotedSelectorToken could inherit from HashedStringToken,
@@ -39,11 +39,11 @@ namespace IronSmalltalk.Compiler.LexicalTokens
     /// RATIONALE:
     /// The parser ofter have to make choices depending on the type of token, 
     /// do one thing if string, other ting if selector token. If selector inherited
-    /// from string, the parser would have to test someting like:
+    /// from string, the parser would have to test something like:
     ///     if ((token is StringToken) &amp; !(token is QuotedSelectorToken))
     /// ... which is cumbersome to write and prone to errors. We would like
     /// to simplify things for the users of the Token class hierarchy,
-    /// therefore NO concrete classes inheritence. Keep it simple:
+    /// therefore NO concrete classes inheritance. Keep it simple:
     ///     if (token is StringToken)
     /// 
     /// If we need common functionality, inject an abstract class above the concrete
@@ -128,7 +128,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
     public class EofToken : Token
     {
         /// <summary>
-        /// Create a new Enf-Of-File Token.
+        /// Create a new End-Of-File Token.
         /// </summary>
         public EofToken()
         {

@@ -23,7 +23,7 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
     /// for certain cases described in "ANSI NCITS 319-1998 (R2007)" (X3J20).
     /// </summary>
     /// <remarks>
-    /// The reason for having a seperate file is, in case there's a
+    /// The reason for having a separate file is, in case there's a
     /// difference between .Net and the X3J20 definition, we only 
     /// have to change things here, and not go trough "business code" 
     /// in the compiler classes.
@@ -208,7 +208,7 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
 
         /// <summary>
         /// Test if the token is opening delimiter for Primitive API call statement.
-        /// This is IronSmalltalk extension to the grammer.
+        /// This is IronSmalltalk extension to the grammar.
         /// </summary>
         /// <param name="token">Token to perform the test on.</param>
         /// <returns>True, if the test succeeds, otherwise false.</returns>
@@ -223,7 +223,7 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
 
         /// <summary>
         /// Test if the token is closing delimiter for Primitive API call statement.
-        /// This is IronSmalltalk extension to the grammer.
+        /// This is IronSmalltalk extension to the grammar.
         /// </summary>
         /// <param name="token">Token to perform the test on.</param>
         /// <returns>True, if the test succeeds, otherwise false.</returns>

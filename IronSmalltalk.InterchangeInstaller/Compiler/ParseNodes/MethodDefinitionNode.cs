@@ -62,7 +62,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
             //      <method definition> <elementSeparator>
 
             // The methodSourceCodeService is used for translation positions inside the method body,
-            // while the sourceCodeService is used for the method declaraion (e.g. "Integer method").
+            // while the sourceCodeService is used for the method declaration (e.g. "Integer method").
             // In reality, most bugs will be in the method source code and therefore report errors
             // via the methodSourceCodeService.
             ISourceCodeReferenceService methodSourceCodeService;
@@ -99,7 +99,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         protected override MethodDefinition CreateDefinition(InterchangeFormatProcessor processor, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, MethodNode parseTree)
         {
             // The methodSourceCodeService is used for translation positions inside the method body,
-            // while the sourceCodeService is used for the method declaraion (e.g. "Integer method").
+            // while the sourceCodeService is used for the method declaration (e.g. "Integer method").
             // In reality, most bugs will be in the method source code and therefore report errors
             // via the methodSourceCodeService.
 
@@ -124,7 +124,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         protected override MethodDefinition CreateDefinition(InterchangeFormatProcessor processor, ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, MethodNode parseTree)
         {
             // The methodSourceCodeService is used for translation positions inside the method body,
-            // while the sourceCodeService is used for the method declaraion (e.g. "Integer method").
+            // while the sourceCodeService is used for the method declaration (e.g. "Integer method").
             // In reality, most bugs will be in the method source code and therefore report errors
             // via the methodSourceCodeService.
 

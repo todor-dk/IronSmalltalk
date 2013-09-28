@@ -73,7 +73,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DebugInfoService.cs" />
     <Compile Include="Definitions\BindableDefinition.cs" />
     <Compile Include="Definitions\ClassDefinition.cs" />
     <Compile Include="Definitions\ClassMethodDefinition.cs" />

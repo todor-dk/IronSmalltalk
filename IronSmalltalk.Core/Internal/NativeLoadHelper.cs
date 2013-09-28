@@ -227,7 +227,7 @@ namespace IronSmalltalk.Runtime.Internal
         }
 
         [IronSmalltalk.Common.Internal.AccessedViaReflection]
-        public static void AnnotateObject(CompiledInitializer initializer, string key, string value)
+        public static void AnnotateObject(CompiledCode initializer, string key, string value)
         {
             if (initializer == null)
                 throw new ArgumentNullException("initializer");
@@ -278,6 +278,7 @@ namespace IronSmalltalk.Runtime.Internal
             SmalltalkNameScope scope = runtime.ExtensionScope.Copy();
             extensionScopeInitializer(runtime, scope);
             runtime.SetExtensionScope(scope);
+            runtime.SetGlobalScope(runtime.GlobalScope.Copy(scope));
             NativeLoadHelper.RecompileClasses(scope);
             if (initialize)
                 scope.ExecuteInitializers(executionContext);
@@ -368,18 +369,18 @@ namespace IronSmalltalk.Runtime.Internal
         }
 
         [IronSmalltalk.Common.Internal.AccessedViaReflection]
-        public static void AddClassMethod(Dictionary<Symbol, CompiledMethod> dictionary, SmalltalkClass cls, string selector, Type containingType, string nativeName)
+        public static NativeCompiledMethod AddClassMethod(Dictionary<Symbol, CompiledMethod> dictionary, SmalltalkClass cls, string selector, Type containingType, string nativeName)
         {
-            NativeLoadHelper.AddMethod(dictionary, cls, selector, containingType, nativeName, CompiledMethod.MethodType.Class);
+            return NativeLoadHelper.AddMethod(dictionary, cls, selector, containingType, nativeName, CompiledMethod.MethodType.Class);
         }
 
         [IronSmalltalk.Common.Internal.AccessedViaReflection]
-        public static void AddInstanceMethod(Dictionary<Symbol, CompiledMethod> dictionary, SmalltalkClass cls, string selector, Type containingType, string nativeName)
+        public static NativeCompiledMethod AddInstanceMethod(Dictionary<Symbol, CompiledMethod> dictionary, SmalltalkClass cls, string selector, Type containingType, string nativeName)
         {
-            NativeLoadHelper.AddMethod(dictionary, cls, selector, containingType, nativeName, CompiledMethod.MethodType.Instance);
+            return NativeLoadHelper.AddMethod(dictionary, cls, selector, containingType, nativeName, CompiledMethod.MethodType.Instance);
         }
 
-        private static void AddMethod(Dictionary<Symbol, CompiledMethod> dictionary, SmalltalkClass cls, string selector, Type containingType, string nativeName, CompiledMethod.MethodType methodType)
+        private static NativeCompiledMethod AddMethod(Dictionary<Symbol, CompiledMethod> dictionary, SmalltalkClass cls, string selector, Type containingType, string nativeName, CompiledMethod.MethodType methodType)
         {
             if (dictionary == null)
                 throw new ArgumentNullException("dictionary");
@@ -399,6 +400,7 @@ namespace IronSmalltalk.Runtime.Internal
                 throw new MissingMethodException(containingType.FullName, nativeName);
             NativeCompiledMethod method = new NativeCompiledMethod(cls, sel, methodType, nativeMethod);
             dictionary.Add(sel, method);
+            return method;
         }
 
         private static CompiledInitializer AddInitializer(SmalltalkNameScope scope, InitializerType type, IDiscreteBinding binding, Type delegateType, string delegateName)

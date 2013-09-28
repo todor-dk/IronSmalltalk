@@ -24,14 +24,14 @@ namespace IronSmalltalk.Compiler.LexicalTokens
     /// Quoted selector token as described in X3J20 "3.5.10 Quoted Selector".
     /// </summary>
     /// <remarks>
-    /// The string value excludes the preceeding '#' hash char.
+    /// The string value excludes the preceding '#' hash char.
     /// </remarks>
     public class QuotedSelectorToken : LiteralToken<string>
     {
         /// <summary>
         /// Create a new quoted selector token.
         /// </summary>
-        /// <param name="value">String value of the selector, excluding the preceeding '#' hash char.</param>
+        /// <param name="value">String value of the selector, excluding the preceding '#' hash char.</param>
         public QuotedSelectorToken(string value)
             : base(value)
         {
