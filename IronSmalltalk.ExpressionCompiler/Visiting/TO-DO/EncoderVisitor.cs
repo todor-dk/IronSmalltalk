@@ -33,6 +33,8 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         protected internal abstract Expression Return(Expression value);
 
+        protected internal abstract Expression ReturnLocal(Expression value);
+
         Expression IBindingClient.SelfExpression
         {
             get { return this.Context.Self; }
@@ -69,6 +71,11 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         }
 
         protected internal abstract void AddToVisitorChain(List<EncoderVisitor> list);
+
+        internal virtual Expression TempValue
+        {
+            get { return this.Context.TempValue; }
+        }
     }
 
     public abstract class EncoderVisitor<TResult> : EncoderVisitor, IParseTreeVisitor<TResult>
@@ -307,6 +314,19 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         protected internal override Expression Return(Expression value)
         {
             return this.EnclosingVisitor.Return(value);
+        }
+
+        protected internal override Expression ReturnLocal(Expression value)
+        {
+            return this.EnclosingVisitor.ReturnLocal(value);
+        }
+
+        internal override Expression TempValue
+        {
+            get
+            {
+                return this.EnclosingVisitor.TempValue;
+            }
         }
 
         protected internal override void AddToVisitorChain(List<EncoderVisitor> list)

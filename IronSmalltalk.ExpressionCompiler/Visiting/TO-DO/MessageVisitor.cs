@@ -143,7 +143,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         public override Expression VisitUnaryMessage(Compiler.SemanticNodes.UnaryMessageNode node)
         {
-            return this.Context.CompileDynamicCall(node.SelectorToken.Value, node.SelectorToken.Value,
+            return this.Context.CompileDynamicCall(this, node.SelectorToken.Value, node.SelectorToken.Value,
                 this.IsSuperSend, this.IsConstantReceiver, this.Receiver);
         }
 
@@ -153,7 +153,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             if (node.SelectorToken.Value == "==")
                 return this.InlineIdentityTest(this.Receiver, argument);
             else
-                return this.Context.CompileDynamicCall(node.SelectorToken.Value, node.SelectorToken.Value,
+                return this.Context.CompileDynamicCall(this, node.SelectorToken.Value, node.SelectorToken.Value,
                     this.IsSuperSend, this.IsConstantReceiver, this.Receiver, argument);
         }
 
@@ -168,6 +168,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
                 arguments[i] = node.Arguments[i].Accept(this);
 
             return this.Context.CompileDynamicCall(
+                this,
                 selector.ToString(), 
                 node.SelectorTokens[0].Value.Substring(0, node.SelectorTokens[0].Value.Length - 1),
                 node.Arguments.Count,
@@ -494,24 +495,24 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
                 Expression.Assign(dStart, start),
                 Expression.Assign(dStep, Expression.Convert(step, typeof(object))),
                 Expression.IfThen(
-                    Expression.IsTrue(Expression.Convert(this.Context.CompileDynamicCall("=", dStep, PreboxedConstants.Int32_00000000_Expression), typeof(bool))),
+                    Expression.IsTrue(Expression.Convert(this.Context.CompileDynamicCall(this, "=", dStep, PreboxedConstants.Int32_00000000_Expression), typeof(bool))),
                     Expression.Throw(Expression.New(typeof(ArgumentOutOfRangeException)), typeof(object))),
                 Expression.IfThenElse(
-                    Expression.IsTrue(Expression.Convert(this.Context.CompileDynamicCall(">", dStep, PreboxedConstants.Int32_00000000_Expression), typeof(bool))),
+                    Expression.IsTrue(Expression.Convert(this.Context.CompileDynamicCall(this, ">", dStep, PreboxedConstants.Int32_00000000_Expression), typeof(bool))),
                     Expression.Loop(
                         Expression.IfThenElse(
-                            Expression.IsTrue(Expression.Convert(this.Context.CompileDynamicCall(">", dStart, stop), typeof(bool))),
+                            Expression.IsTrue(Expression.Convert(this.Context.CompileDynamicCall(this, ">", dStart, stop), typeof(bool))),
                             Expression.Break(exitLabel, nilBinding.GenerateReadExpression(this)),
                             Expression.Block(
                                 dynamicOperation,
-                                Expression.Assign(dStart, this.Context.CompileDynamicCall("+", dStart, dStep))))),
+                                Expression.Assign(dStart, this.Context.CompileDynamicCall(this, "+", dStart, dStep))))),
                     Expression.Loop(
                         Expression.IfThenElse(
-                            Expression.IsTrue(Expression.Convert(this.Context.CompileDynamicCall(">", stop, dStart), typeof(bool))),
+                            Expression.IsTrue(Expression.Convert(this.Context.CompileDynamicCall(this, ">", stop, dStart), typeof(bool))),
                             Expression.Break(exitLabel, nilBinding.GenerateReadExpression(this)),
                             Expression.Block(
                                 dynamicOperation,
-                                Expression.Assign(dStart, this.Context.CompileDynamicCall("+", dStart, dStep)))))));
+                                Expression.Assign(dStart, this.Context.CompileDynamicCall(this, "+", dStart, dStep)))))));
 
             return Expression.Block(
                 new ParameterExpression[] { iStart, iStop, iStep, iNA, dStart, dStep },

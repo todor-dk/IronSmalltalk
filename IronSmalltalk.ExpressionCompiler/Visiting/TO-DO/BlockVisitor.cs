@@ -128,6 +128,13 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         public override Expression VisitBlock(BlockNode node)
         {
             Expression result = base.VisitBlock(node);
+
+            // Somebody requested to return
+            if (this._ReturnLabel != null)
+                result = Expression.Label(this._ReturnLabel, result);
+
+            if (this._TempValue != null)
+                result = Expression.Block(new ParameterExpression[] { this._TempValue }, result);
             string lambdaName = this.Context.GetLambdaName(this, node);
             LambdaExpression lambda = Expression.Lambda(result, lambdaName, true, this.Arguments.Select(binding => (ParameterExpression)binding.Expression));
             return Expression.Convert(lambda, typeof(object));
@@ -135,7 +142,37 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         protected internal override Expression Return(Expression value)
         {
-            return Expression.Throw(Expression.New(BlockResult.ConstructorInfo, this.Context.HomeContext, value), typeof(object));
+            if (this.Context.Compiler.CompilerOptions.LightweightExceptions)
+                return this.ReturnLocal(Expression.New(BlockResult.ConstructorInfo, this.Context.HomeContext, value));
+            else
+                return Expression.Throw(Expression.New(BlockResult.ConstructorInfo, this.Context.HomeContext, value), typeof(object));
+        }
+
+        protected internal override Expression ReturnLocal(Expression value)
+        {
+            return Expression.Return(this.ReturnLabel, value, typeof(object));
+        }
+
+        private ParameterExpression _TempValue;
+        internal override Expression TempValue
+        {
+            get
+            {
+                if (this._TempValue == null)
+                    this._TempValue = Expression.Variable(typeof(object), "_TempValue");
+                return this._TempValue;
+            }
+        }
+
+        private LabelTarget _ReturnLabel;
+        public LabelTarget ReturnLabel
+        {
+            get
+            {
+                if (this._ReturnLabel == null)
+                    this._ReturnLabel = Expression.Label(typeof(object), "return");
+                return this._ReturnLabel;
+            }
         }
     }
 

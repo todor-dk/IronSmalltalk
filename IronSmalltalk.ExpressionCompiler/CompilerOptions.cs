@@ -27,6 +27,10 @@ namespace IronSmalltalk.ExpressionCompiler
 {
     public class CompilerOptions
     {
+        public CompilerOptions()
+        {
+            this.LightweightExceptions = true;
+        }
         /// <summary>
         /// Service providing information necessary to emit 
         /// debugging symbol information for a source file.
@@ -64,5 +68,10 @@ namespace IronSmalltalk.ExpressionCompiler
         /// Set this to true if multiple runtimes should be supported.
         /// </summary>
         public bool CheckRuntimeInstance { get; set; }
+
+        /// <summary>
+        /// If set, support for lightweight exceptions is enabled.
+        /// </summary>
+        public bool LightweightExceptions { get; set; }
     }
 }
