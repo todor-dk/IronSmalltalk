@@ -1,28 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.MethodVisitor">
-    <Position X="5" Y="13" Width="2.75" />
+    <Position X="5" Y="14.5" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAQAAAgQAAAAAAAAAAAAAAACIAAAAAAAQAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAACIAAAAAAAQAAAAA=</HashCode>
       <FileName>Visiting\TO-DO\MethodVisitor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.InitializerVisitor">
-    <Position X="8.5" Y="13" Width="5" />
+    <Position X="8.5" Y="14.5" Width="5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAgABAAAAAAAAAAAAAACAAAAACAAQAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAgABAAAAAAAAAAAAAACAAAAAAAAQAAAAA=</HashCode>
       <FileName>Visiting\TO-DO\InitializerVisitor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.RootEncoderVisitor&lt;TResult, TNode&gt;">
-    <Position X="8" Y="5.25" Width="2.5" />
+    <Position X="8" Y="6.75" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>CABAACAAAgggAAAAAgAAAAAAIAAACAAAAAAAEAAABAA=</HashCode>
+      <HashCode>GABAACAAIgggAAAAAgAAAAAAIAAACAAAAAAAEAAABAA=</HashCode>
       <FileName>Visiting\TO-DO\RootEncoderVisitor.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Context" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.EncoderVisitor&lt;TResult&gt;" Collapsed="true">
-    <Position X="6.25" Y="3.5" Width="1.5" />
+    <Position X="6.25" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ARAAAAQQAgAwKcBACMAIEwBRAAiIAACABBwIAQAAKUA=</HashCode>
       <FileName>Visiting\TO-DO\EncoderVisitor.cs</FileName>
@@ -32,37 +35,44 @@
   <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.EncoderVisitor">
     <Position X="6.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CAAACAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAA=</HashCode>
+      <HashCode>GAAACAAAIgAAAAAAAIAAAAIAABAAAAAAAAAAEAAAAAE=</HashCode>
       <FileName>Visiting\TO-DO\EncoderVisitor.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.BlockVisitorBase">
-    <Position X="1.5" Y="6.75" Width="1.5" />
+    <Position X="1.5" Y="8.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CAAAACAAAAgAAAAAAAAAAAAAIAAACAAAIAAAAAAAAQA=</HashCode>
       <FileName>Visiting\TO-DO\BlockVisitor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.BlockVisitor">
-    <Position X="2.75" Y="10.75" Width="1.5" />
+    <Position X="2.75" Y="12.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAQA=</HashCode>
+      <HashCode>EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAQA=</HashCode>
       <FileName>Visiting\TO-DO\BlockVisitor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.InlineBlockVisitor">
-    <Position X="0.5" Y="10.75" Width="1.5" />
+    <Position X="0.5" Y="12.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAEAA=</HashCode>
       <FileName>Visiting\TO-DO\BlockVisitor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.NestedEncoderVisitor&lt;TResult&gt;" Collapsed="true">
-    <Position X="1.5" Y="5.25" Width="1.5" />
+    <Position X="1.5" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAg=</HashCode>
+      <HashCode>GAAAAAAAIgAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAg=</HashCode>
       <FileName>Visiting\TO-DO\EncoderVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.VisitingContext">
+    <Position X="12.5" Y="6.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAEAAAACAAUhAAQMBAAAAAgAYACACCAAACA=</HashCode>
+      <FileName>Visiting\VisitingContext.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

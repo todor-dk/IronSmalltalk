@@ -58,6 +58,8 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             this.SuperLookupScope = superLookupScope;
             this._ReturnLabel = null; // Lazy init
             this._HomeContext = null; // Lazy init
+            this._TempValue = null; // Lazy init
+
             this.CodeName = codeName;
         }
 
@@ -121,6 +123,17 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             }
         }
 
+        private ParameterExpression _TempValue;
+        internal Expression TempValue
+        {
+            get
+            {
+                if (this._TempValue == null)
+                    this._TempValue = Expression.Variable(typeof(object), "_TempValue");
+                return this._TempValue;
+            }
+        }
+
         public Expression GeneratePrologAndEpilogue(Expression result)
         {
             // Somebody requested explicit return
@@ -130,59 +143,105 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             // Somebody requested the home context used for block returns ... we must handle this correctly with try ... catch ...
             if (this._HomeContext != null)
             {
-                // Semantics:
-                // HomeContext homeContext = new HomeContext();     ... however, this is lazy init'ed
-                // try
-                // {
-                //      return <<result>>;
-                // } 
-                // .... this is how we would like to have it ... if we could. CLR limitations do not allow filters in dynamic methods ....
-                // catch (BlockResult blockResult) where (blockResult.HomeContext == homeContext)       ... the where semantics are not part of C#
-                // {
-                //      return blockResult.Result;
-                // }
-                // .... therefore the following implementation ....
-                // catch (BlockResult blockResult)
-                // {
-                //      if (blockResult.HomeContext == homeContext)
-                //          return blockResult.Result;
-                //      else
-                //          throw;
-                // }
 
-                ParameterExpression blockResult = Expression.Parameter(typeof(BlockResult), "blockResult");
-                CatchBlock catchBlock = Expression.Catch(
-                    blockResult,
-                    Expression.Condition(
-                        Expression.ReferenceEqual(Expression.Field(blockResult, BlockResult.HomeContextField), this._HomeContextVariable),
-                        Expression.Field(blockResult, BlockResult.ValueField),
-                        Expression.Rethrow(typeof(object))));
 
-                result = Expression.Block(new ParameterExpression[] { this._HomeContextVariable }, Expression.TryCatch(result, catchBlock));
+                if (this.Compiler.CompilerOptions.LightweightExceptions)
+                {
+                    result = Expression.Block(new ParameterExpression[] { this._HomeContextVariable }, result);
+                }
+                else
+                {
+                    // Semantics:
+                    // HomeContext homeContext = new HomeContext();     ... however, this is lazy init'ed
+                    // try
+                    // {
+                    //      return <<result>>;
+                    // } 
+                    // .... this is how we would like to have it ... if we could. CLR limitations do not allow filters in dynamic methods ....
+                    // catch (BlockResult blockResult) where (blockResult.HomeContext == homeContext)       ... the where semantics are not part of C#
+                    // {
+                    //      return blockResult.Result;
+                    // }
+                    // .... therefore the following implementation ....
+                    // catch (BlockResult blockResult)
+                    // {
+                    //      if (blockResult.HomeContext == homeContext)
+                    //          return blockResult.Result;
+                    //      else
+                    //          throw;
+                    // }
+                    ParameterExpression blockResult = Expression.Parameter(typeof(BlockResult), "blockResult");
+                    CatchBlock catchBlock = Expression.Catch(
+                        blockResult,
+                        Expression.Condition(
+                            Expression.ReferenceEqual(Expression.Field(blockResult, BlockResult.HomeContextField), this._HomeContextVariable),
+                            Expression.Field(blockResult, BlockResult.ValueField),
+                            Expression.Rethrow(typeof(object))));
+
+                    result = Expression.Block(new ParameterExpression[] { this._HomeContextVariable }, Expression.TryCatch(result, catchBlock));
+                }
             }
+
+            if (this._TempValue != null)
+                result = Expression.Block(new ParameterExpression[] { this._TempValue }, result);
 
             return result;
         }
 
-        public Expression CompileDynamicCall(string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, Expression receiver)
+        public Expression CompileDynamicCall(EncoderVisitor visitor, string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, Expression receiver)
         {
-            return this.Compiler.DynamicCallStrategy.CompileDynamicCall(this, selector, nativeName, isSuperSend, isConstantReceiver, this.SuperLookupScope, receiver, this.ExecutionContext);
+            return this.CompileLightweightExceptionCheck(visitor,
+                this.Compiler.DynamicCallStrategy.CompileDynamicCall(this, selector, nativeName, isSuperSend, isConstantReceiver, this.SuperLookupScope, receiver, this.ExecutionContext));
         }
 
-        public Expression CompileDynamicCall(string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, Expression receiver, Expression argument)
+        public Expression CompileDynamicCall(EncoderVisitor visitor, string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, Expression receiver, Expression argument)
         {
-            return this.Compiler.DynamicCallStrategy.CompileDynamicCall(this, selector, nativeName, isSuperSend, isConstantReceiver, this.SuperLookupScope, receiver, this.ExecutionContext, argument);
+            return this.CompileLightweightExceptionCheck(visitor,
+                this.Compiler.DynamicCallStrategy.CompileDynamicCall(this, selector, nativeName, isSuperSend, isConstantReceiver, this.SuperLookupScope, receiver, this.ExecutionContext, argument));
         }
 
-        public Expression CompileDynamicCall(string selector, string nativeName, int argumentCount, bool isSuperSend, bool isConstantReceiver, Expression receiver, IEnumerable<Expression> arguments)
+        public Expression CompileDynamicCall(EncoderVisitor visitor, string selector, string nativeName, int argumentCount, bool isSuperSend, bool isConstantReceiver, Expression receiver, IEnumerable<Expression> arguments)
         {
-            return this.Compiler.DynamicCallStrategy.CompileDynamicCall(this, selector, nativeName, argumentCount, isSuperSend, isConstantReceiver, this.SuperLookupScope, receiver, this.ExecutionContext, arguments);
+            return this.CompileLightweightExceptionCheck(visitor,
+                this.Compiler.DynamicCallStrategy.CompileDynamicCall(this, selector, nativeName, argumentCount, isSuperSend, isConstantReceiver, this.SuperLookupScope, receiver, this.ExecutionContext, arguments));
         }
 
         // Helper for normal send binary messages - because it's used often when inlining
-        public Expression CompileDynamicCall(string selector, Expression receiver, Expression argument)
+        public Expression CompileDynamicCall(EncoderVisitor visitor, string selector, Expression receiver, Expression argument)
         {
-            return this.Compiler.DynamicCallStrategy.CompileDynamicCall(this, selector, selector, false, false, this.SuperLookupScope, receiver, this.ExecutionContext, argument);
+            return this.CompileLightweightExceptionCheck(visitor,
+                this.Compiler.DynamicCallStrategy.CompileDynamicCall(this, selector, selector, false, false, this.SuperLookupScope, receiver, this.ExecutionContext, argument));
+        }
+
+        private Expression CompileLightweightExceptionCheck(EncoderVisitor visitor, Expression expression)
+        {
+            if (!this.Compiler.CompilerOptions.LightweightExceptions)
+                return expression;
+
+            // Improve ... this needs clean-up and refactore to use polymorphism
+            if (visitor.TempValue == this._TempValue)
+            {
+                var na = this.HomeContext; // Init needed stuff
+                return Expression.Block(
+                    Expression.Assign(visitor.TempValue, expression),
+                    Expression.IfThen(
+                        Expression.TypeIs(visitor.TempValue, typeof(BlockResult)),
+                        Expression.IfThenElse(
+                            // Improve ... unnecessary test if the  methods doesn't declare blocks.
+                            Expression.Equal(Expression.Field(Expression.Convert(visitor.TempValue, typeof(BlockResult)), BlockResult.HomeContextField), this._HomeContextVariable),
+                            visitor.ReturnLocal(Expression.Field(Expression.Convert(visitor.TempValue, typeof(BlockResult)), BlockResult.ValueField)),
+                            visitor.ReturnLocal(visitor.TempValue))),
+                    visitor.TempValue);
+            }
+            else
+            {
+                return Expression.Block(
+                    Expression.Assign(visitor.TempValue, expression),
+                    Expression.IfThen(
+                        Expression.TypeIs(visitor.TempValue, typeof(BlockResult)),
+                        visitor.ReturnLocal(visitor.TempValue)),
+                    visitor.TempValue);
+            }
         }
 
         public Expression CompileGetClass(Expression receiver)
