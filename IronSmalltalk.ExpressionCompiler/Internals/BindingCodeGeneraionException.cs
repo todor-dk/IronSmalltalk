@@ -33,14 +33,20 @@ namespace IronSmalltalk.ExpressionCompiler.Internals
         public BindingCodeGeneraionException(string message, SemanticNode node)
             : this(message)
         {
-            this.Node = node;
+            this.SetErrorLocation(node);
         }
         public BindingCodeGeneraionException(NameBinding binding, SemanticNode node)
-            : this((binding is IErrorBinding) ? ((IErrorBinding)binding).ErrorDescription : CodeGenerationErrors.UndefinedBinding, node)
+            : this(BindingCodeGeneraionException.GetErrorDescription(binding), node)
         {
         }
 
-        [NonSerialized]
-        public SemanticNode Node;
+        private static string GetErrorDescription(NameBinding binding)
+        {
+            if (binding == null)
+                return CodeGenerationErrors.UndefinedBinding;
+            return String.Format("{0} {1}", 
+                binding.Name, 
+                (binding is IErrorBinding) ? ((IErrorBinding)binding).ErrorDescription : CodeGenerationErrors.UndefinedBinding);
+        }
     }
 }

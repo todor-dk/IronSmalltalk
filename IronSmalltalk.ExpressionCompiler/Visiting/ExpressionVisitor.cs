@@ -27,8 +27,8 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
     {
         public bool IsConstant { get; private set; }
 
-        public ExpressionVisitor(EncoderVisitor enclosingVisitor)
-            : base(enclosingVisitor)
+        public ExpressionVisitor(EncoderVisitor parentVisitor)
+            : base(parentVisitor)
         {
             this.IsConstant = false;
         }
@@ -43,7 +43,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         public override Expression VisitAssignment(AssignmentNode node)
         {
-            NameBinding target = this.GetBinding(node.Target.Token.Value);
+            NameBinding target = this.Context.GetBinding(node.Target.Token.Value);
             if (target.IsErrorBinding)
                 throw new BindingCodeGeneraionException(target, node);
             if (!(target is IAssignableBinding))
@@ -100,7 +100,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             }
             else if (visitor.IsSuperSend)
             {
-                throw (new SemanticCodeGenerationException(CodeGenerationErrors.SuperNotFollowedByMessage)).SetNode(node);
+                throw (new SemanticCodeGenerationException(CodeGenerationErrors.SuperNotFollowedByMessage)).SetErrorLocation(node);
             }
 
             return result;
@@ -151,7 +151,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         private Expression EncodeInlineWhile(BlockNode conditionBlock, BlockNode valueBlock, bool whileFalse)
         {
-            NameBinding nilBinding = this.GetBinding(SemanticConstants.Nil);
+            NameBinding nilBinding = this.Context.GetBinding(SemanticConstants.Nil);
             Expression conditionExpression = Expression.Convert(conditionBlock.Accept(new InlineBlockVisitor(this)), typeof(bool));
             // No, it's not an error ... if the <conditionExpression> evaluates to true, we terminate
             if (whileFalse)

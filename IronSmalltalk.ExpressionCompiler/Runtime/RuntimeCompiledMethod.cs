@@ -134,11 +134,11 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
             }
             catch (IronSmalltalk.ExpressionCompiler.Primitives.Exceptions.PrimitiveInvalidTypeException ex)
             {
-                return RuntimeCompiledMethod.ReportError(errorSink, ex.GetNode(), ex.Message);
+                return RuntimeCompiledMethod.ReportError(errorSink, ex.GetErrorLocation(), ex.Message);
             }
             catch (SemanticCodeGenerationException ex)
             {
-                return RuntimeCompiledMethod.ReportError(errorSink, ex.GetNode(), ex.Message);
+                return RuntimeCompiledMethod.ReportError(errorSink, ex.GetErrorLocation(), ex.Message);
             }
             catch (IronSmalltalk.Runtime.Internal.SmalltalkDefinitionException ex)
             {
@@ -154,33 +154,48 @@ namespace IronSmalltalk.ExpressionCompiler.Runtime
             //}
         }
 
+        private static bool ReportError(IRuntimeCodeValidationErrorSink errorSink, ErrorLocation errorLocation, string errorMessage)
+        {
+            if (errorLocation == null)
+                return RuntimeCompiledMethod.ReportError(errorSink, SourceLocation.Invalid, SourceLocation.Invalid, errorMessage);
+            else
+                return RuntimeCompiledMethod.ReportError(errorSink, errorLocation.Start, errorLocation.End, errorMessage);
+        }
+
         private static bool ReportError(IRuntimeCodeValidationErrorSink errorSink, SemanticNode node, string errorMessage)
         {
-            if (errorSink != null)
+            if (errorSink == null)
+                return false;
+
+            SourceLocation start = SourceLocation.Invalid;
+            SourceLocation end = SourceLocation.Invalid;
+            if (node != null)
             {
-                SourceLocation start = SourceLocation.Invalid;
-                SourceLocation end = SourceLocation.Invalid;
-                if (node != null)
+                var tokens = node.GetTokens();
+                if ((tokens != null) && tokens.Any())
                 {
-                    var tokens = node.GetTokens();
+                    start = tokens.Min(t => t.StartPosition);
+                    end = tokens.Max(t => t.StopPosition);
+                }
+                foreach (var sn in node.GetChildNodes())
+                {
+                    tokens = sn.GetTokens();
                     if ((tokens != null) && tokens.Any())
                     {
-                        start = tokens.Min(t => t.StartPosition);
-                        end = tokens.Max(t => t.StopPosition);
-                    }
-                    foreach (var sn in node.GetChildNodes())
-                    {
-                        tokens = sn.GetTokens();
-                        if ((tokens != null) && tokens.Any())
-                        {
-                            start = start.Min(tokens.Min(t => t.StartPosition));
-                            end = end.Max(tokens.Max(t => t.StopPosition));
-                        }
+                        start = start.Min(tokens.Min(t => t.StartPosition));
+                        end = end.Max(tokens.Max(t => t.StopPosition));
                     }
                 }
-
-                errorSink.ReportError(errorMessage, start, end);
             }
+
+            return RuntimeCompiledMethod.ReportError(errorSink, start, end, errorMessage);
+        }
+
+        private static bool ReportError(IRuntimeCodeValidationErrorSink errorSink, SourceLocation start, SourceLocation end, string errorMessage)
+        {
+            if (errorSink != null)
+                errorSink.ReportError(errorMessage, start, end);
+
             return false;
         }
 

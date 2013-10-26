@@ -48,11 +48,11 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         /// </summary>
         public MethodVisitor MethodVisitor { get; private set; }
 
-        public PrimitiveCallVisitor(MethodVisitor enclosingVisitor, bool hasFallbackCode)
-            : base(enclosingVisitor)
+        public PrimitiveCallVisitor(MethodVisitor parentVisitor, bool hasFallbackCode)
+            : base(parentVisitor)
         {
             this.HasFallbackCode = hasFallbackCode;
-            this.MethodVisitor = enclosingVisitor;
+            this.MethodVisitor = parentVisitor;
         }
 
         /// <summary>
@@ -73,18 +73,18 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             }
             catch (CodeGenerationException ex)
             {
-                ex.SetNode(node);
+                ex.SetErrorLocation(node);
                 throw;
             }
 
             // We need to handle void returns, because Smalltalk always needs a valid receiver.
-            NameBinding selfBinding = this.MethodVisitor.GetBinding(SemanticConstants.Self);
+            NameBinding selfBinding = this.MethodVisitor.Context.GetBinding(SemanticConstants.Self);
             if (primitiveCall.Type == typeof(void))
                 primitiveCall = Expression.Block(primitiveCall, selfBinding.GenerateReadExpression(this));
             else if (primitiveCall.Type != typeof(object))
                 primitiveCall = Expression.Convert(primitiveCall, typeof(object));
             // A successful primitive call must return directly without executing any other statements.
-            primitiveCall = this.Return(primitiveCall);
+            primitiveCall = this.Context.Return(primitiveCall);
 
             List<Expression> result = new List<Expression>();
             if (this.HasFallbackCode)
@@ -128,14 +128,6 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             return result;
         }
 
-        private Expression GeneratePrimitiveExpression(Compiler.SemanticNodes.PrimitiveCallNode node)
-        {
-            Expression primitiveCall = this.InternalGeneratePrimitiveExpression(node);
-            if (primitiveCall == null)
-                throw new PrimitiveSemanticException(CodeGenerationErrors.UnexpectedCallingconvention);
-            return primitiveCall;
-        }
-
         /// <summary>
         /// This generates the expression needed to do a primitive call. This is the main worker method!
         /// </summary>
@@ -168,8 +160,8 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         ///     Type_Name       ::= CSharp_TypeName | CorLib_TypeName | IST_TypeName | Qualified_TypeName
         ///     CSharp_TypeName     ::= "One of the C# build-in type (aliases), e.g. 'bool', 'int', 'float' etc."
         ///     CorLib_TypeName     ::= "Name of a type in mscorlib. No need for assembly information"
-        ///     IST_TypeName        ::= '_' Name    "Typename prefixed with _ (underscore), for cenvenience for not having to include assembly info etc."
-        ///     Qualified_TypeName  ::= "Assembly quaified type name. Used for everything else than the above 3 categories."
+        ///     IST_TypeName        ::= '_' Name    "Type name prefixed with _ (underscore), for convenience for not having to include assembly info etc."
+        ///     Qualified_TypeName  ::= "Assembly qualified type name. Used for everything else than the above 3 categories."
         ///     
         /// Number of primitive parameters:
         ///     BuiltInPrimitive        1+  (Primitive_Name + Prim_Arg*)
@@ -181,7 +173,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         ///     GetFieldValue           2   (Defining_Type + Field_Name)
         ///     SetFieldValue           2   (Defining_Type + Field_Name)
         /// </remarks>
-        private Expression InternalGeneratePrimitiveExpression(Compiler.SemanticNodes.PrimitiveCallNode node)
+        private Expression GeneratePrimitiveExpression(Compiler.SemanticNodes.PrimitiveCallNode node)
         {
             IEnumerable<string> parameters = node.ApiParameters.Select(token => token.Value);
 
@@ -208,7 +200,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             if (node.ApiConvention.Value == "set_field:")
                 return SetFieldPrimitiveEncoder.GeneratePrimitive(this, parameters, definingType, memberName);
             else
-                throw new PrimitiveSemanticException(CodeGenerationErrors.UnexpectedCallingconvention);
+                throw new PrimitiveSemanticException(CodeGenerationErrors.UnexpectedCallingconvention).SetErrorLocation(node);
         }
 
         /// <summary>
@@ -222,7 +214,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             // Get the type that is expected to implement the member we are looking for.
             Type definingType = NativeTypeClassMap.GetType(definingTypeName);
             if (definingType == null)
-                throw new PrimitiveInvalidTypeException(String.Format(CodeGenerationErrors.WrongTypeName, definingTypeName)).SetNode(node);
+                throw new PrimitiveInvalidTypeException(String.Format(CodeGenerationErrors.WrongTypeName, definingTypeName)).SetErrorLocation(node);
             return definingType;
         }
     }

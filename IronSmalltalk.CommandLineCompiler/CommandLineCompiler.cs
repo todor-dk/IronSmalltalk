@@ -35,9 +35,10 @@ namespace IronSmalltalk.CommandLineCompiler
     {
         private static string PrintUsage()
         {
-            string exeName = typeof(CommandLineCompiler).Assembly.GetName().Name;
-            Console.WriteLine(@"IronSmalltalk Command Line Compiler
+            CommandLineCompiler.PrintCopyrightMessage();
 
+            string exeName = typeof(CommandLineCompiler).Assembly.GetName().Name;
+            Console.WriteLine(@"
 Usage: {0} <Options> <SourceFiles>
 
 Options: 
@@ -81,6 +82,9 @@ Options:
                             This requires -target dll.
                             This option is incompatible with -classlibrary
                             and automatically adds -noclasslibrary.
+-nologo                     Optional. Suppress compiler copyright message.
+-quiet                      Optional. Do not display information messages.
+                            Short form: -q
 
                 - UNMANEGED RESOURCE INFO OPTIONS -
 -company <str>              Optional. Company that produced the file.
@@ -108,11 +112,21 @@ Example:
             return null;
         }
 
+        private static void PrintCopyrightMessage()
+        {
+            Assembly assembly = typeof(CommandLineCompiler).Assembly;
+            Console.WriteLine();
+            Console.WriteLine("IronSmalltalk Command Line Compiler Version {0}", assembly.GetName().Version);
+            Console.WriteLine("Copyright (C) The IronSmalltalk Project. All rights reserved.");
+        }
+
         internal static string Compile(string[] args)
         {
             if (args == null)
                 return CommandLineCompiler.PrintUsage();
 
+            bool showCopyrightMessage = true;
+            bool printParameters = true;
             string classLibrary = null;
             bool installMetaAnnotations = false;
             NativeCompilerParameters parameters = new NativeCompilerParameters();
@@ -137,7 +151,7 @@ Example:
                     }
                     else if ((option == "o") || (option == "out"))
                     {
-                        parameters.OutputDirectory = arg;
+                        parameters.OutputDirectory = Path.GetFullPath(arg);
                     }
                     else if ((option == "t") || (option == "target"))
                     {
@@ -158,7 +172,7 @@ Example:
                         string cl = arg.Trim();
                         if (String.IsNullOrWhiteSpace(cl))
                             return CommandLineCompiler.PrintUsage();
-                        classLibrary = cl;
+                        classLibrary = Path.GetFullPath(cl);
                     }
                     else if ((option == "v") || (option == "version"))
                     {
@@ -235,11 +249,46 @@ Example:
                     else if (option == "noclasslibrary")
                     {
                         classLibrary = "";
+                        option = null;
+                    }
+                    else if (option == "nologo")
+                    {
+                        showCopyrightMessage = false;
+                        option = null;
+                    }
+                    else if ((option == "q") || (option == "quiet"))
+                    {
+                        printParameters = false;
+                        option = null;
+                    }
+                    else if (option == "istscl")
+                    {
+                        // Undocumented parameter .... shortcut to set the parameters for compiling the 
+                        // IronSmalltalk Standard Class Library. Pats are relative to the .Net project.
+                        parameters.AssemblyName = "IronSmalltalk.ClassLibrary";
+                        parameters.AssemblyName = "IronSmalltalk.ClassLibrary";
+                        parameters.OutputDirectory = Path.GetFullPath(".");
+                        parameters.AssemblyType = NativeCompilerParameters.AssemblyTypeEnum.Dll;
+                        classLibrary = "";
+                        parameters.AssemblyVersion = typeof(CommandLineCompiler).Assembly.GetName().Version.ToString();
+                        parameters.FileVersion = parameters.AssemblyVersion;
+                        parameters.ProductVersion = parameters.AssemblyVersion;
+                        parameters.IsBaseLibrary = true;
+                        parameters.Company = "The IronSmalltalk Project";
+                        parameters.Copyright = "Copyright © The IronSmalltalk Project 2013";
+                        parameters.Product = "IronSmalltalk";
+                        parameters.ProductTitle = "IronSmalltalk Standard Class Library";
+                        parameters.ProductDescription = "IronSmalltalk Standard Class Library";
+#if DEBUG
+                        parameters.EmitDebugSymbols = true;
+#endif
+                        option = null;
+                        sourceFiles.Add(Path.GetFullPath(@"..\..\..\ClassLibraryBrowser\External\IronSmalltalk.ist"));
                     }
                 }
                 else
                 {
-                    sourceFiles.Add(arg);
+                    sourceFiles.Add(Path.GetFullPath(arg));
                 }
             }
 
@@ -259,16 +308,84 @@ Example:
 
             try
             {
+                if (showCopyrightMessage)
+                    CommandLineCompiler.PrintCopyrightMessage();
+
                 if (!CommandLineCompiler.GetStandardClassLibraryEntryPoint(parameters, classLibrary))
                     return null;
 
-                return CommandLineCompiler.Compile(parameters, installMetaAnnotations, sourceFiles);
+                if (!Directory.Exists(parameters.OutputDirectory))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Output Directory does not exists.");
+                    return null;
+                }
+
+                if (printParameters)
+                    CommandLineCompiler.PrintParameters(parameters, installMetaAnnotations, sourceFiles);
+
+                string path = CommandLineCompiler.Compile(parameters, installMetaAnnotations, sourceFiles);
+                if (path == null)
+                    return null;
+
+                if (printParameters)
+                    Console.WriteLine("Assembly saved to:\n    {0}", path);
+
+                return path;
             }
             catch (FileNotFoundException ex)
             {
                 Console.WriteLine("Error: {0}", ex.Message);
                 return null;
             }
+        }
+
+        private static void PrintParameters(NativeCompilerParameters parameters, bool installMetaAnnotations, IEnumerable<string> sourceFiles)
+        {
+            string classLibrary = "N/A";
+            if (!parameters.IsBaseLibrary)
+                classLibrary = parameters.ExtensionScopeInitializer.DeclaringType.Assembly.Location;
+            Console.WriteLine(@"
+Assembly Name:    {0}
+Namespace:        {1}
+Output Location:  {2}
+Target Type:      {3}
+Class Library:    {4}
+Debug Info:       {5}
+Meta Annotations: {6}
+IST Base Library: {7}
+Assembly Version: {8}
+Company:          {9}
+Copyright:        {10}
+Description:      {11}
+File Version:     {12}
+Product:          {13}
+Product Title:    {14}
+Product Version:  {15}
+Trademark:        {16}
+Source Files:", 
+            parameters.AssemblyName,
+            parameters.RootNamespace,
+            parameters.OutputDirectory,
+            parameters.AssemblyType,
+            classLibrary,
+            parameters.EmitDebugSymbols,
+            installMetaAnnotations,
+            parameters.IsBaseLibrary,
+            parameters.AssemblyVersion,
+            parameters.Company,
+            parameters.Copyright,
+            parameters.ProductDescription,
+            parameters.FileVersion,
+            parameters.Product,
+            parameters.ProductTitle,
+            parameters.ProductVersion,
+            parameters.Trademark);
+
+            foreach (string file in sourceFiles)
+                Console.WriteLine("    " + file);
+
+            Console.WriteLine();
         }
 
         private static string Compile(NativeCompilerParameters parameters, bool installMetaAnnotations, IEnumerable<string> sourceFiles)
@@ -279,7 +396,7 @@ Example:
                 SymbolDocumentInfo symbolDocument = null;
                 if (parameters.EmitDebugSymbols)
                     symbolDocument = Expression.SymbolDocument(sourceFile, GlobalConstants.LanguageGuid, GlobalConstants.VendorGuid);
-                PathFileInInformation fileIn = new PathFileInInformation(sourceFile, System.Text.Encoding.UTF8, new ErrorSink(sourceFile), symbolDocument);
+                PathFileInInformation fileIn = new PathFileInInformation(sourceFile, System.Text.Encoding.UTF8, new FileInErrorSink(sourceFile), symbolDocument);
                 fileIns.Add(fileIn);
             }
 
@@ -303,6 +420,12 @@ Example:
                 parameters.IsBaseLibrary ? new InternalInstallerContext(fis.Runtime) : new InterchangeInstallerContext(fis.Runtime));
 
             InterchangeInstallerContext installer = compilerService.Read(fileIns);
+
+            foreach (var fileIn in fileIns)
+            {
+                if (((FileInErrorSink)fileIn.ErrorSink).HadError)
+                    return null;    // Some of the source file had errors, do not attempt the rest - it's meaningless
+            }
 
             installer.ErrorSink = new InstallErrorSink();
             installer.InstallMetaAnnotations = compilerService.InstallMetaAnnotations;
@@ -368,17 +491,21 @@ Example:
         }
 
 
-        private class ErrorSink : IronSmalltalk.Internals.ErrorSinkBase
+        private class FileInErrorSink : IronSmalltalk.Internals.ErrorSinkBase
         {
             private readonly string SourceFile;
 
-            public ErrorSink(string sourceFile)
+            public bool HadError { get; private set; }
+
+            public FileInErrorSink(string sourceFile)
             {
                 this.SourceFile = sourceFile;
+                this.HadError = false;
             }
 
             protected override void ReportError(string message, SourceLocation start, SourceLocation end, IronSmalltalk.Internals.ErrorSinkBase.ErrorType type, params object[] offenders)
             {
+                this.HadError = true;
                 this.ReportError(String.Format("{0} ({1} --> {2})\n\r{3} Error: {4}",
                     this.SourceFile, start, end, type, message));
             }

@@ -59,13 +59,13 @@ namespace IronSmalltalk.ExpressionCompiler
             if (arguments == null)
                 throw new ArgumentNullException("arguments");
 
-            VisitingContext context = this.GetVisitingContext(parseTree, cls, self, executionContext, arguments);
+            RootCompilationContext context = this.GetCompilationContext(parseTree, cls, self, executionContext, arguments);
             MethodVisitor visitor = new MethodVisitor(context);
             Expression code = parseTree.Accept(visitor);
             return code;
         }
 
-        protected abstract VisitingContext GetVisitingContext(MethodNode parseTree, SmalltalkClass cls, Expression self, Expression executionContext, Expression[] arguments);
+        protected abstract RootCompilationContext GetCompilationContext(MethodNode parseTree, SmalltalkClass cls, Expression self, Expression executionContext, Expression[] arguments);
 
         public LambdaExpression CompileMethodLambda(MethodNode parseTree, SmalltalkClass cls, string methodName)
         {

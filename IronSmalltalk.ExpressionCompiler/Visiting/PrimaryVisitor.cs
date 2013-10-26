@@ -27,8 +27,8 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         public bool IsSuperSend { get; private set; }
         public bool IsConstant { get; private set; }
  
-        public PrimaryVisitor(EncoderVisitor enclosingVisitor)
-            : base(enclosingVisitor)
+        public PrimaryVisitor(EncoderVisitor parentVisitor)
+            : base(parentVisitor)
         {
             this.IsConstant = false;
         }
@@ -45,7 +45,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         public override Expression VisitVariableReferencele(VariableReferenceleNode node)
         {
-            NameBinding target = this.GetBinding(node.Token.Value);
+            NameBinding target = this.Context.GetBinding(node.Token.Value);
             if (target.IsErrorBinding)
                 throw new BindingCodeGeneraionException(target, node);
             this.IsSuperSend = (node.Token.Value == SemanticConstants.Super);

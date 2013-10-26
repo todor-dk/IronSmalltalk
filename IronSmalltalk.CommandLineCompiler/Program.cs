@@ -24,12 +24,11 @@ namespace IronSmalltalk.CommandLineCompiler
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            Console.WriteLine();
             string path = CommandLineCompiler.Compile(args);
-            if (path != null)
-                Console.WriteLine("Assembly saved to:\n{0}", path);
+            if (path == null)
+                Environment.Exit(-1); // Error
         }
     }
 }

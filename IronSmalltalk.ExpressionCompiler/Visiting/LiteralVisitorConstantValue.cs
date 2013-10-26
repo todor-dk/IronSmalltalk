@@ -21,8 +21,8 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 {
     public class LiteralVisitorConstantValue : NestedEncoderVisitor<object>
     {
-        public LiteralVisitorConstantValue(EncoderVisitor enclosingVisitor)
-            : base(enclosingVisitor)
+        public LiteralVisitorConstantValue(EncoderVisitor parentVisitor)
+            : base(parentVisitor)
         {
         }
 

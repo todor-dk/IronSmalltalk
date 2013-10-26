@@ -238,7 +238,7 @@ namespace IronSmalltalk.NativeCompiler.CompilationStrategies
 
             List<Expression> args = new List<Expression>();
             args.Add(callSite);
-            args.Add(visitor.Context.ExecutionContext);
+            args.Add(visitor.Context.ExecutionContextArgument);
 
             FieldInfo target = TypeUtilities.Field(siteType, "Target", BindingFlags.Instance | BindingFlags.Public);
             MethodInfo invoke = TypeUtilities.Method(delegateType, "Invoke");

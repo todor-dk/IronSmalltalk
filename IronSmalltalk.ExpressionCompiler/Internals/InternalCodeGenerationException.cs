@@ -20,8 +20,8 @@ using IronSmalltalk.Runtime.Execution.Internals;
 namespace IronSmalltalk.ExpressionCompiler.Internals
 {
     /// <summary>
-    /// Exception that occured during code generation and indicates some internal
-    /// inconsistenct. Normally, this should not be thrown.
+    /// Exception that occurred during code generation and indicates some internal
+    /// inconsistency. Normally, this should not be thrown.
     /// </summary>
     public class InternalCodeGenerationException: CodeGenerationException
     {

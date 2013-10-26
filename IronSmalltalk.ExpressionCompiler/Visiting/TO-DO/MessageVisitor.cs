@@ -46,8 +46,8 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         public bool CascadeSuperSend { get; private set; }
         public bool CascadeConstantReceiver { get; private set; }
 
-        public MessageVisitor(EncoderVisitor enclosingVisitor, Expression receiver, bool superSend, bool constantReceiver, bool hasCascadeMessages)
-            : base(enclosingVisitor)
+        public MessageVisitor(EncoderVisitor parentVisitor, Expression receiver, bool superSend, bool constantReceiver, bool hasCascadeMessages)
+            : base(parentVisitor)
         {
             if (receiver == null)
                 throw new ArgumentNullException();
@@ -190,7 +190,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             if (node.Messages != null)
                 result = node.Messages.Accept(new MessageVisitor(this, result, visitor.IsSuperSend, visitor.IsConstant, false));
             else if (visitor.IsSuperSend)
-                throw (new SemanticCodeGenerationException(CodeGenerationErrors.SuperNotFollowedByMessage)).SetNode(node);
+                throw (new SemanticCodeGenerationException(CodeGenerationErrors.SuperNotFollowedByMessage)).SetErrorLocation(node);
 
             return result;
         }
@@ -203,7 +203,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             if (node.Messages != null)
                 result = node.Messages.Accept(new MessageVisitor(this, result, visitor.IsSuperSend, visitor.IsConstant, false));
             else if (visitor.IsSuperSend)
-                throw (new SemanticCodeGenerationException(CodeGenerationErrors.SuperNotFollowedByMessage)).SetNode(node);
+                throw (new SemanticCodeGenerationException(CodeGenerationErrors.SuperNotFollowedByMessage)).SetErrorLocation(node);
 
             return result;
         }
@@ -298,7 +298,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         private Expression InlineIfTrueIfFalse(Compiler.SemanticNodes.BlockNode trueBlock, Compiler.SemanticNodes.BlockNode falseBlock)
         {
-            NameBinding nilBinding = this.GetBinding(SemanticConstants.Nil);
+            NameBinding nilBinding = this.Context.GetBinding(SemanticConstants.Nil);
             Expression testExpression = Expression.Convert(this.Receiver, typeof(bool));
             Expression trueExpression;
             if (trueBlock != null)
@@ -318,7 +318,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         private Expression InlineAnd(Compiler.SemanticNodes.BlockNode block)
         {
-            NameBinding falseBinding = this.GetBinding(SemanticConstants.False);
+            NameBinding falseBinding = this.Context.GetBinding(SemanticConstants.False);
             Expression testExpression = Expression.Convert(this.Receiver, typeof(bool));
             Expression blockExpression = block.Accept(new InlineBlockVisitor(this));
             Expression result = Expression.Condition(testExpression, blockExpression, falseBinding.GenerateReadExpression(this), typeof(object));
@@ -328,7 +328,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         private Expression InlineOr(Compiler.SemanticNodes.BlockNode block)
         {
-            NameBinding trueBinding = this.GetBinding(SemanticConstants.True);
+            NameBinding trueBinding = this.Context.GetBinding(SemanticConstants.True);
             Expression testExpression = Expression.Convert(this.Receiver, typeof(bool));
             Expression blockExpression = block.Accept(new InlineBlockVisitor(this));
             Expression result = Expression.Condition(testExpression, trueBinding.GenerateReadExpression(this), blockExpression, typeof(object));
@@ -438,7 +438,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         Exit:
              */
 
-            NameBinding nilBinding = this.GetBinding(SemanticConstants.Nil);
+            NameBinding nilBinding = this.Context.GetBinding(SemanticConstants.Nil);
             LabelTarget exitLabel = Expression.Label(typeof(void));
             LabelTarget overflowLabel = Expression.Label(typeof(void));
 

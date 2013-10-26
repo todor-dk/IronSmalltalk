@@ -50,7 +50,7 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
             get { return this.Context.Compiler; }
         }
 
-        public VisitingContext Context
+        public CompilationContext Context
         {
             get { return this.Visitor.Context; }
         }
@@ -163,7 +163,8 @@ namespace IronSmalltalk.ExpressionCompiler.Primitives
             if (argumentTypes == null)
                 throw new ArgumentNullException("argumentTypes"); 
             
-            Expression[] arguments = this.Context.Arguments.Cast<Expression>().ToArray();
+            // Arguments exists only at the method / initializer level ... not in blocks
+            Expression[] arguments = this.Context.RootContext.MethodArguments.Cast<Expression>().ToArray();
             if (arguments == null)
                 arguments = PrimitiveEncoder.EmptyArguments;
 

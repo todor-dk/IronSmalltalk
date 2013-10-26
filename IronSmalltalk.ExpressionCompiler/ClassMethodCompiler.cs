@@ -41,14 +41,14 @@ namespace IronSmalltalk.ExpressionCompiler
         {
         }
 
-        protected override VisitingContext GetVisitingContext(MethodNode parseTree, SmalltalkClass cls, Expression self, Expression executionContext, Expression[] arguments)
+        protected override RootCompilationContext GetCompilationContext(MethodNode parseTree, SmalltalkClass cls, Expression self, Expression executionContext, Expression[] arguments)
         {
             SmalltalkNameScope globalNameScope = this.CompilerOptions.GlobalNameScope ?? this.Runtime.GlobalScope;
 
             BindingScope globalScope = BindingScope.ForClassMethod(cls, globalNameScope);
             BindingScope reservedScope = ReservedScope.ForClassMethod();
 
-            return new VisitingContext(this, globalScope, reservedScope, self, executionContext, arguments, cls.Name, parseTree.Selector);
+            return new RootCompilationContext(this, globalScope, reservedScope, self, executionContext, arguments, cls.Name, parseTree.Selector);
         }
     }
 }

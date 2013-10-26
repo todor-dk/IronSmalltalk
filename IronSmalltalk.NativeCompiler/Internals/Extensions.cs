@@ -88,7 +88,14 @@ namespace IronSmalltalk.NativeCompiler.Internals
         {
             if (self == null)
                 throw new ArgumentNullException();
-            return (NativeLiteralEncodingStrategy.NativeLiteralArrayVisitor) self.GetVisitorChain().Reverse().FirstOrDefault(visitor => visitor is NativeLiteralEncodingStrategy.NativeLiteralArrayVisitor);
+            EncoderVisitor visitor = self;
+            while (visitor != null)
+            {
+                if (visitor is NativeLiteralEncodingStrategy.NativeLiteralArrayVisitor)
+                    return (NativeLiteralEncodingStrategy.NativeLiteralArrayVisitor) visitor;
+                visitor = visitor.ParentVisitor;
+            }
+            return null;
         }
     }
 }
