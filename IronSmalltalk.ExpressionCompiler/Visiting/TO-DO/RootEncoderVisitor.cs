@@ -37,22 +37,9 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
     public abstract class RootEncoderVisitor<TResult, TNode> : EncoderVisitor<TResult>
         where TNode : FunctionNode
     {
-        /// <summary>
-        /// Binding lookup scope with locally defined identifiers, e.g. arguments and temporary variables.
-        /// </summary>
-        protected BindingScope LocalScope { get; private set; }
+        protected readonly RootCompilationContext _Context;
 
-        /// <summary>
-        /// Collection of temporary variables bindings. We need this to define the vars in the AST block.
-        /// </summary>
-        protected readonly List<TemporaryBinding> Temporaries = new List<TemporaryBinding>();
-
-
-
-
-        private VisitingContext _Context;
-
-        public override VisitingContext Context
+        public override CompilationContext Context
         {
             get { return this._Context; }
         }
@@ -60,13 +47,17 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         /// <summary>
         /// Create a new root-function (method or initializer) visitor.
         /// </summary>
-        protected RootEncoderVisitor(VisitingContext context)
+        protected RootEncoderVisitor(RootCompilationContext context)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
 
             this._Context = context;
-            this.LocalScope = new BindingScope();
+        }
+
+        public override EncoderVisitor ParentVisitor
+        {
+            get { return null; }
         }
 
         protected Expression InternalVisitFunction(TNode node)
@@ -74,10 +65,12 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             if (node == null)
                 throw new ArgumentNullException();
             if (!node.Accept(ParseTreeValidatingVisitor.Current))
-                throw (new SemanticCodeGenerationException(CodeGenerationErrors.InvalidCode)).SetNode(node);
+                throw (new SemanticCodeGenerationException(CodeGenerationErrors.InvalidCode)).SetErrorLocation(node);
 
             this.DefineArguments(node);
-            this.DefineTemporaries(node);
+
+            foreach (TemporaryVariableNode tmp in node.Temporaries)
+                this.Context.DefineTemporary(tmp.Token.Value);
 
             StatementVisitor na;
             List<Expression> expressions = this.GenerateExpressions(node, out na);
@@ -93,22 +86,10 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             }
 #endif
 
-            Expression result;
-            if ((this.Temporaries.Count == 0) && (expressions.Count == 1))
-                result = expressions[0];
-            else
-                result = Expression.Block(this.Temporaries.Select(binding => binding.Expression), expressions);
-
-            return this.Context.GeneratePrologAndEpilogue(result);
+            return this.Context.GeneratePrologAndEpilogue(expressions);
         }
 
         protected abstract void DefineArguments(TNode node);
-
-        protected void DefineTemporaries(FunctionNode node)
-        {
-            foreach (TemporaryVariableNode tmp in node.Temporaries)
-                this.DefineTemporary(tmp.Token.Value);
-        }
 
         protected virtual List<Expression> GenerateExpressions(TNode node, out StatementVisitor visitor)
         {
@@ -122,66 +103,5 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
                 expressions = new List<Expression>();
             return expressions;
         }
-
-        protected internal override NameBinding GetBinding(string name)
-        {
-            NameBinding result = this.Context.ReservedScope.GetBinding(name);
-            if (result != null)
-                return result;
-
-            result = this.LocalScope.GetBinding(name);
-            if (result != null)
-                return result;
-
-            result = this.Context.GlobalScope.GetBinding(name);
-            if (result != null)
-                return result;
-
-            return new ErrorBinding(name);
-        }
-
-        protected internal override Expression Return(Expression value)
-        {
-            return Expression.Return(this.Context.ReturnLabel, value, typeof(object));
-        }
-
-        protected internal override Expression ReturnLocal(Expression value)
-        {
-            return Expression.Return(this.Context.ReturnLabel, value, typeof(object));
-        }
-
-        protected internal override void AddToVisitorChain(List<EncoderVisitor> list)
-        {
-            list.Add(this);
-        }
-
-
-        #region Helpers 
-
-        protected void DefineTemporary(string name)
-        {
-            TemporaryBinding temporary = new TemporaryBinding(name);
-            this.Temporaries.Add(temporary);
-            this.LocalScope.DefineBinding(temporary);
-        }
-
-        protected void DefineArgument(string name)
-        {
-            this.DefineArgument(new ArgumentBinding(name));
-        }
-
-        protected void DefineArgument(string name, Expression expression)
-        {
-            this.DefineArgument(new ArgumentBinding(name, expression));
-        }
-
-        protected void DefineArgument(ArgumentBinding argument)
-        {
-            if (argument == null)
-                throw new ArgumentNullException();
-            this.LocalScope.DefineBinding(argument);
-        }
-
-        #endregion
     }
 }

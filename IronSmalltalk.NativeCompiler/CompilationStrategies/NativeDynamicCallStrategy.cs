@@ -51,25 +51,25 @@ namespace IronSmalltalk.NativeCompiler.CompilationStrategies
             this.CallSiteGenerator.GenerateCallSitesType();
         }
 
-        Expression IDynamicCallStrategy.CompileDynamicCall(VisitingContext context, string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, string superLookupScope, Expression receiver, Expression executionContext)
+        Expression IDynamicCallStrategy.CompileDynamicCall(CompilationContext context, string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, string superLookupScope, Expression receiver, Expression executionContext)
         {
             Expression callSite = this.CreateCallSite(0, selector, nativeName, isSuperSend, isConstantReceiver, superLookupScope);
             return this.CompileDynamicCall(callSite, receiver, executionContext, new Expression[] { });
         }
 
-        Expression IDynamicCallStrategy.CompileDynamicCall(VisitingContext context, string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, string superLookupScope, Expression receiver, Expression executionContext, Expression argument)
+        Expression IDynamicCallStrategy.CompileDynamicCall(CompilationContext context, string selector, string nativeName, bool isSuperSend, bool isConstantReceiver, string superLookupScope, Expression receiver, Expression executionContext, Expression argument)
         {
             Expression callSite = this.CreateCallSite(1, selector, nativeName, isSuperSend, isConstantReceiver, superLookupScope);
             return this.CompileDynamicCall(callSite, receiver, executionContext, new Expression[] { argument });
         }
 
-        Expression IDynamicCallStrategy.CompileDynamicCall(VisitingContext context, string selector, string nativeName, int argumentCount, bool isSuperSend, bool isConstantReceiver, string superLookupScope, Expression receiver, Expression executionContext, IEnumerable<Expression> arguments)
+        Expression IDynamicCallStrategy.CompileDynamicCall(CompilationContext context, string selector, string nativeName, int argumentCount, bool isSuperSend, bool isConstantReceiver, string superLookupScope, Expression receiver, Expression executionContext, IEnumerable<Expression> arguments)
         {
             Expression callSite = this.CreateCallSite(argumentCount, selector, nativeName, isSuperSend, isConstantReceiver, superLookupScope);
             return this.CompileDynamicCall(callSite, receiver, executionContext, arguments);
         }
 
-        Expression IDynamicCallStrategy.CompileGetClass(VisitingContext context, Expression receiver, Expression executionContext)
+        Expression IDynamicCallStrategy.CompileGetClass(CompilationContext context, Expression receiver, Expression executionContext)
         {
             IBinderDefinition binder = new ClassBinderDefinition();
 
@@ -233,7 +233,7 @@ namespace IronSmalltalk.NativeCompiler.CompilationStrategies
 
 
 
-        public Expression CompileDynamicConvert(VisitingContext context, Expression parameter, Type type, ExpressionCompiler.Primitives.Conversion conversion)
+        public Expression CompileDynamicConvert(CompilationContext context, Expression parameter, Type type, ExpressionCompiler.Primitives.Conversion conversion)
         {
             // This is the tricky part .... 
             //

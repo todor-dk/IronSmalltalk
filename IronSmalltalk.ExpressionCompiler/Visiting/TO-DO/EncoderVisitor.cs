@@ -27,13 +27,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 {
     public abstract class EncoderVisitor : IBindingClient
     {
-        public abstract VisitingContext Context { get; }
-
-        protected internal abstract NameBinding GetBinding(string name);
-
-        protected internal abstract Expression Return(Expression value);
-
-        protected internal abstract Expression ReturnLocal(Expression value);
+        public abstract CompilationContext Context { get; }
 
         Expression IBindingClient.SelfExpression
         {
@@ -56,26 +50,10 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         Expression IBindingClient.ExecutionContextExpression
         {
-            get { return this.Context.ExecutionContext; }
+            get { return this.Context.ExecutionContextArgument; }
         }
 
-        /// <summary>
-        /// Get the chain of visitors with the root visitor as the first item and this visitor as the last item.
-        /// </summary>
-        /// <returns>Returns the chain of visitors with the root visitor as the first item and this visitor as the last item.</returns>
-        public IReadOnlyList<EncoderVisitor> GetVisitorChain()
-        {
-            List<EncoderVisitor> result = new List<EncoderVisitor>();
-            this.AddToVisitorChain(result);
-            return result;
-        }
-
-        protected internal abstract void AddToVisitorChain(List<EncoderVisitor> list);
-
-        internal virtual Expression TempValue
-        {
-            get { return this.Context.TempValue; }
-        }
+        public abstract EncoderVisitor ParentVisitor { get; }
     }
 
     public abstract class EncoderVisitor<TResult> : EncoderVisitor, IParseTreeVisitor<TResult>
@@ -292,47 +270,23 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
     public abstract class NestedEncoderVisitor<TResult> : EncoderVisitor<TResult>
     {
-        public EncoderVisitor EnclosingVisitor { get; private set; }
+        private readonly EncoderVisitor _ParentVisitor;
 
-        protected NestedEncoderVisitor(EncoderVisitor enclosingVisitor)
+        public override EncoderVisitor ParentVisitor 
         {
-            if (enclosingVisitor == null)
+            get { return this._ParentVisitor; }
+        }
+
+        protected NestedEncoderVisitor(EncoderVisitor parentVisitor)
+        {
+            if (parentVisitor == null)
                 throw new ArgumentNullException();
-            this.EnclosingVisitor = enclosingVisitor;
+            this._ParentVisitor = parentVisitor;
         }
 
-        public override VisitingContext Context
+        public override CompilationContext Context
         {
-            get { return this.EnclosingVisitor.Context; }
-        }
-
-        protected internal override NameBinding GetBinding(string name)
-        {
-            return this.EnclosingVisitor.GetBinding(name);
-        }
-
-        protected internal override Expression Return(Expression value)
-        {
-            return this.EnclosingVisitor.Return(value);
-        }
-
-        protected internal override Expression ReturnLocal(Expression value)
-        {
-            return this.EnclosingVisitor.ReturnLocal(value);
-        }
-
-        internal override Expression TempValue
-        {
-            get
-            {
-                return this.EnclosingVisitor.TempValue;
-            }
-        }
-
-        protected internal override void AddToVisitorChain(List<EncoderVisitor> list)
-        {
-            this.EnclosingVisitor.AddToVisitorChain(list);
-            list.Add(this);
+            get { return this.ParentVisitor.Context; }
         }
     }
 }

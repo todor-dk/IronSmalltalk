@@ -31,7 +31,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
     {
         public string InitializerName { get; private set; }
 
-        public InitializerVisitor(VisitingContext context, string initializerName)
+        public InitializerVisitor(RootCompilationContext context, string initializerName)
             : base(context)
         {
             this.InitializerName = initializerName;
@@ -48,9 +48,9 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
             if (expressions.Count == 0)
             {
-                NameBinding binding = this.GetBinding(SemanticConstants.Self);
+                NameBinding binding = this.Context.GetBinding(SemanticConstants.Self);
                 if (binding.IsErrorBinding)
-                    binding = this.GetBinding(SemanticConstants.Nil);
+                    binding = this.Context.GetBinding(SemanticConstants.Nil);
                 expressions.Add(binding.GenerateReadExpression(this));
             }
 
@@ -63,7 +63,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             Expression body = this.InternalVisitFunction(node);
 
             return Expression.Lambda<Func<object, ExecutionContext, object>>(body, this.InitializerName,
-                new ParameterExpression[] { (ParameterExpression)this.Context.Self, (ParameterExpression)this.Context.ExecutionContext });
+                new ParameterExpression[] { (ParameterExpression)this.Context.Self, (ParameterExpression)this.Context.ExecutionContextArgument });
         }
     }
 }

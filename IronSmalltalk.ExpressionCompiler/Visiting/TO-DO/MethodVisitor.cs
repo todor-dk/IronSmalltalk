@@ -30,7 +30,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 {
     public class MethodVisitor : RootEncoderVisitor<Expression, MethodNode>
     {
-        public MethodVisitor(VisitingContext context)
+        public MethodVisitor(RootCompilationContext context)
             : base(context)
         {
         }
@@ -38,7 +38,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         protected override void DefineArguments(MethodNode node)
         {
             for (int i = 0; i < node.Arguments.Count; i++)
-                this.DefineArgument(node.Arguments[i].Token.Value, this.Context.Arguments[i]);
+                this.Context.DefineArgument(node.Arguments[i].Token.Value, this._Context.MethodArguments[i]);
         }
 
         protected override List<Expression> GenerateExpressions(MethodNode node, out StatementVisitor visitor)
@@ -52,7 +52,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             if ((node.Primitive == null) && ((expressions.Count == 0) || !visitor.HasReturned))
             {
                 // If no explicit return, a method must return self. 
-                NameBinding binding = this.GetBinding(SemanticConstants.Self);
+                NameBinding binding = this.Context.GetBinding(SemanticConstants.Self);
                 expressions.Add(binding.GenerateReadExpression(this));
             }
 
@@ -69,11 +69,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
         internal NameBinding GetLocalVariable(string name)
         {
-            NameBinding result = this.LocalScope.GetBinding(name);
-            if (result != null)
-                return result;
-
-            return new ErrorBinding(name);
+            return this.Context.GetLocalVariable(name);
         }
     }
 }

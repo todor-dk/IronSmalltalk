@@ -151,6 +151,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
         {
             if (position.Position < 0)
                 return position;
+
             // patch source positions due to '!' char escaping.
             int escapedChars = this.SourceChunk.Take(position.Position).Count(ch => ch == InterchangeFormatConstants.ElementSeparator);
             int abspos = this.StartPosition.Position + position.Position + escapedChars;

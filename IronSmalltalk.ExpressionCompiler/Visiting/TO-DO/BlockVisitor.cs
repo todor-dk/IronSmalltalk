@@ -30,64 +30,34 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
 
     public abstract class BlockVisitorBase : NestedEncoderVisitor<Expression>
     {
-        protected BindingScope LocalScope { get; private set; }
-        protected readonly List<ArgumentBinding> Arguments = new List<ArgumentBinding>();
-        protected readonly List<TemporaryBinding> Temporaries = new List<TemporaryBinding>();
 
-        public BlockVisitorBase(EncoderVisitor enclosingVisitor)
-            : base(enclosingVisitor)
+        public BlockVisitorBase(EncoderVisitor parentVisitor)
+            : base(parentVisitor)
         {
-            this.LocalScope = new BindingScope();
-        }
-
-        protected void DefineTemporary(string name)
-        {
-            TemporaryBinding temporary = new TemporaryBinding(name);
-            this.Temporaries.Add(temporary);
-            this.LocalScope.DefineBinding(temporary);
-        }
-
-        protected virtual void DefineArgument(string name)
-        {
-            this.DefineArgument(new ArgumentBinding(name));
-        }
-
-        protected virtual void DefineArgument(ArgumentBinding argument)
-        {
-            if (argument == null)
-                throw new ArgumentNullException();
-            this.Arguments.Add(argument);
-            this.LocalScope.DefineBinding(argument);
-        }
-
-        protected internal override NameBinding GetBinding(string name)
-        {
-            NameBinding result;
-            result = this.Context.ReservedScope.GetBinding(name);
-            if (result != null)
-                return result;
-
-            result = this.LocalScope.GetBinding(name);
-            if (result != null)
-                return result;
-
-            return base.GetBinding(name);
         }
 
         public override Expression VisitBlock(Compiler.SemanticNodes.BlockNode node)
         {
             for (int i = 0; i < node.Arguments.Count; i++)
-                this.DefineArgument(node.Arguments[i].Token.Value);
+            {
+                string name = node.Arguments[i].Token.Value;
+                // This is used by the inlined blocks.
+                // If already defined, do not define it twice ... because it's given externally. 
+                // See: DefineExternalArgument
+                if (this.Context.LocalScope.GetBinding(name) != null)
+                    continue;
+                this.Context.DefineArgument(name);
+            }
 
             foreach (TemporaryVariableNode tmp in node.Temporaries)
-                this.DefineTemporary(tmp.Token.Value);
+                this.Context.DefineTemporary(tmp.Token.Value);
 
             List<Expression> expressions = new List<Expression>();
 
-            NameBinding nilBinding = this.GetBinding(SemanticConstants.Nil);
+            NameBinding nilBinding = this.Context.GetBinding(SemanticConstants.Nil);
 
             // On each execution init all temp-vars with nil
-            foreach (TemporaryBinding tmp in this.Temporaries)
+            foreach (TemporaryBinding tmp in this.Context.Temporaries)
                 expressions.Add(tmp.GenerateAssignExpression(nilBinding.GenerateReadExpression(this), this));
 
             StatementVisitor visitor = new StatementVisitor(this);
@@ -108,89 +78,54 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
             }
 #endif
 
-            Expression result;
-            if ((this.Temporaries.Count == 0) && (expressions.Count == 1))
-                result = expressions[0];
-            else
-                result = Expression.Block(this.Temporaries.Select(binding => binding.Expression), expressions);
+            return this.Context.GeneratePrologAndEpilogue(expressions);
+        }
 
-            return result;
+        protected virtual void DefineArguments(Compiler.SemanticNodes.BlockNode node)
+        {
+            for (int i = 0; i < node.Arguments.Count; i++)
+                this.Context.DefineArgument(node.Arguments[i].Token.Value);
         }
     }
 
     public class BlockVisitor : BlockVisitorBase
     {
-        public BlockVisitor(EncoderVisitor enclosingVisitor)
-            : base(enclosingVisitor)
+        public BlockVisitor(EncoderVisitor parentVisitor)
+            : base(parentVisitor)
         {
+            this._Context = new BlockCompilationContext(this.ParentVisitor.Context);
+        }
+
+        private readonly BlockCompilationContext _Context;
+
+        public override CompilationContext Context
+        {
+            get { return this._Context; }
         }
 
         public override Expression VisitBlock(BlockNode node)
         {
             Expression result = base.VisitBlock(node);
 
-            // Somebody requested to return
-            if (this._ReturnLabel != null)
-                result = Expression.Label(this._ReturnLabel, result);
-
-            if (this._TempValue != null)
-                result = Expression.Block(new ParameterExpression[] { this._TempValue }, result);
-            string lambdaName = this.Context.GetLambdaName(this, node);
-            LambdaExpression lambda = Expression.Lambda(result, lambdaName, true, this.Arguments.Select(binding => (ParameterExpression)binding.Expression));
+            string lambdaName = this.Context.RootContext.GetLambdaName(this, node);
+            LambdaExpression lambda = Expression.Lambda(result, lambdaName, true, this._Context.GetLambdaParameters());
             return Expression.Convert(lambda, typeof(object));
-        }
-
-        protected internal override Expression Return(Expression value)
-        {
-            if (this.Context.Compiler.CompilerOptions.LightweightExceptions)
-                return this.ReturnLocal(Expression.New(BlockResult.ConstructorInfo, this.Context.HomeContext, value));
-            else
-                return Expression.Throw(Expression.New(BlockResult.ConstructorInfo, this.Context.HomeContext, value), typeof(object));
-        }
-
-        protected internal override Expression ReturnLocal(Expression value)
-        {
-            return Expression.Return(this.ReturnLabel, value, typeof(object));
-        }
-
-        private ParameterExpression _TempValue;
-        internal override Expression TempValue
-        {
-            get
-            {
-                if (this._TempValue == null)
-                    this._TempValue = Expression.Variable(typeof(object), "_TempValue");
-                return this._TempValue;
-            }
-        }
-
-        private LabelTarget _ReturnLabel;
-        public LabelTarget ReturnLabel
-        {
-            get
-            {
-                if (this._ReturnLabel == null)
-                    this._ReturnLabel = Expression.Label(typeof(object), "return");
-                return this._ReturnLabel;
-            }
         }
     }
 
     public class InlineBlockVisitor : BlockVisitorBase
     {
-        public InlineBlockVisitor(EncoderVisitor enclosingVisitor)
-            : base(enclosingVisitor)
+        public InlineBlockVisitor(EncoderVisitor parentVisitor)
+            : base(parentVisitor)
         {
+            this._Context = new InlineBlockCompilationContext(this.ParentVisitor.Context);
         }
 
-        protected override void DefineArgument(ArgumentBinding argument)
+        private readonly InlineBlockCompilationContext _Context;
+
+        public override CompilationContext Context
         {
-            if (argument == null)
-                throw new ArgumentNullException();
-            // If already defined, do not define it twice ... because it's given externally.
-            if (this.Arguments.Any(b => b.Name == argument.Name))
-                return;
-            base.DefineArgument(argument);
+            get { return this._Context; }
         }
 
         /// <summary>
@@ -201,7 +136,7 @@ namespace IronSmalltalk.ExpressionCompiler.Visiting
         /// <param name="expression">Expression that binds to the argument.</param>
         public void DefineExternalArgument(string name, Expression expression)
         {
-            this.DefineArgument(new ArgumentBinding(name, expression));
+            this._Context.DefineArgument(new ArgumentBinding(name, expression));
         }
     }
 }

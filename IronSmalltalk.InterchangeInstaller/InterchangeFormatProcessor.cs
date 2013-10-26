@@ -276,6 +276,39 @@ namespace IronSmalltalk.InterchangeInstaller
             int line = this.SourcePosition.Line;
             int col = this.SourcePosition.Column;
 
+            // Trim leading whitespaces
+            while (true)
+            {
+                int ch = this.Reader.Peek();
+                if (ch == -1)
+                {
+                    this.SourcePosition = new SourceLocation(pos, Math.Max(line, 1), Math.Max(col, 1));
+                    return null; // Only whitespaces
+                }
+                if (!Char.IsWhiteSpace((char)ch))
+                    break;
+
+                ch = this.Reader.Read(); // We've peeked and we know it's now EOF or whitespace
+
+                // Line and column counting
+                pos++;
+                if (ch == 13)
+                {
+                    if (this.Reader.Peek() == 10)
+                    {
+                        ch = this.Reader.Read();
+                        pos++;
+                    }
+                    line++;
+                    col = 0;
+                }
+                else
+                {
+                    col++;
+                }
+            }
+
+
             while (true)
             {
                 int ch = this.Reader.Read();
@@ -313,6 +346,7 @@ namespace IronSmalltalk.InterchangeInstaller
                 if (ch == separator)
                 {
                     this.SourcePosition = new SourceLocation(pos, Math.Max(line, 1), Math.Max(col, 1));
+
                     if (this.Reader.Peek() != separator)
                         return new InterchangeChunk(this, builder.ToString(), startPosition);
 
