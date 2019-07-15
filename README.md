@@ -14,3 +14,8 @@ There are 3 things you can do if you would like to help out with this project:
 1. Become familiar with X3J20 (http://webstore.ansi.org/RecordDetail.aspx?sku=ANSIINCITS319-1998+(R2007)) 
 2. Study how the DLR works. There are some useful links in the Documentation directory of the source download. 
 3. Start playing!
+
+Simple steps to get up and running code
+1. Load and build IronSmalltalk\DLR\DLR.sln in Visual Studio
+2. Load and build IronSmalltalk.sln in Visual Studio
+3. The Testing solution folder contains both unit test and a TestPlayground UI project that let you expemiment with compiler components.
