@@ -50,9 +50,9 @@ namespace IronSmalltalk.Runtime
         internal Symbol (string value, SymbolTable manager)
 	    {
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             if (manager == null)
-                throw new ArgumentNullException("manager");
+                throw new ArgumentNullException(nameof(manager));
 
             this.Value = value;
             this.Manager = manager;
@@ -85,7 +85,6 @@ namespace IronSmalltalk.Runtime
                     if (!((ch == ':') || ((ch >= '0') && (ch <= '9'))))
                         goto HashedString;
                 }
-
             }
             // 3.5.3 or quoted selector 3.5.10
             return "#" + this.Value;

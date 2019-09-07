@@ -52,7 +52,6 @@ namespace IronSmalltalk.Runtime.Bindings
         public ClassBinding(Symbol name)
             : base(name)
         {
-
         }
 
         /// <summary>
@@ -77,7 +76,6 @@ namespace IronSmalltalk.Runtime.Bindings
         public PoolBinding(Symbol name)
             : base(name)
         {
-
         }
 
         /// <summary>
@@ -146,7 +144,6 @@ namespace IronSmalltalk.Runtime.Bindings
         public GlobalConstantBinding(Symbol name)
             : base(name)
         {
-
         }
     }
 }

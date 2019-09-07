@@ -44,7 +44,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             : base()
         {
             if (String.IsNullOrWhiteSpace(selector))
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             this.Selector = selector;
         }
 

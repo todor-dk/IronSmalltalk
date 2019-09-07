@@ -927,6 +927,5 @@ namespace IronSmalltalk.Runtime.Execution.Internals
         /// <param name="arg1">Argument 32.</param>
         /// <returns>Return value of the method.</returns>
         public delegate object SmalltalkMethod32(object self, ExecutionContext executionContext, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8, object arg9, object arg10, object arg11, object arg12, object arg13, object arg14, object arg15, object arg16, object arg17, object arg18, object arg19, object arg20, object arg21, object arg22, object arg23, object arg24, object arg25, object arg26, object arg27, object arg28, object arg29, object arg30, object arg31, object arg32);
-
     }
 }

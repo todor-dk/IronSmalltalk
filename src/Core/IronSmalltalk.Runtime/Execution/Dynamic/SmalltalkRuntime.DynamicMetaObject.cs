@@ -48,7 +48,7 @@ namespace IronSmalltalk
             : base(expression, restrictions, runtime)
         {
             if (runtime == null)
-                throw new ArgumentNullException("runtime");
+                throw new ArgumentNullException(nameof(runtime));
             this.Runtime = runtime;
         }
 

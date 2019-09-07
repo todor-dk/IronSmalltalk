@@ -44,27 +44,27 @@ namespace IronSmalltalk.Runtime.Behavior
             else if (type == InitializerType.ClassInitializer)
             {
                 if (binding == null)
-                    throw new ArgumentNullException("binding");
+                    throw new ArgumentNullException(nameof(binding));
                 if (!(binding is ClassBinding))
                     throw new ArgumentException("ClassInitializers must have binding of type ClassBinding.");
             }
             else if (type == InitializerType.GlobalInitializer)
             {
                 if (binding == null)
-                    throw new ArgumentNullException("binding");
+                    throw new ArgumentNullException(nameof(binding));
                 if (!(binding is GlobalVariableOrConstantBinding))
                     throw new ArgumentException("ClassInitializers must have binding of type GlobalVariableOrConstantBinding.");
             }
             else if (type == InitializerType.PoolVariableInitializer)
             {
                 if (binding == null)
-                    throw new ArgumentNullException("binding");
+                    throw new ArgumentNullException(nameof(binding));
                 if (!(binding is PoolVariableOrConstantBinding))
                     throw new ArgumentException("ClassInitializers must have binding of type PoolVariableOrConstantBinding.");
             }
             else 
             {
-                throw new ArgumentOutOfRangeException("type");
+                throw new ArgumentOutOfRangeException(nameof(type));
             }
 
             this.Type = type;

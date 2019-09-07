@@ -37,7 +37,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             : base(selector)
         {
             if (argumentCount < 0)
-                throw new ArgumentOutOfRangeException("argumentCount");
+                throw new ArgumentOutOfRangeException(nameof(argumentCount));
             this.NativeName = nativeName;
             this.ArgumentCount = argumentCount;
         }

@@ -33,11 +33,11 @@ namespace IronSmalltalk.Runtime.Internal
         public static void AddProtectedName(SmalltalkRuntime runtime, SmalltalkNameScope scope, string name)
         {
             if (runtime == null)
-                throw new ArgumentNullException("runtime");
+                throw new ArgumentNullException(nameof(runtime));
             if (scope == null)
-                throw new ArgumentNullException("scope");
+                throw new ArgumentNullException(nameof(scope));
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             Symbol symbol = runtime.GetSymbol(name);
             if (!scope.ProtectedNames.Contains(symbol))
                 scope.ProtectedNames.Add(symbol);
@@ -47,11 +47,11 @@ namespace IronSmalltalk.Runtime.Internal
         public static ClassBinding AddClassBinding(SmalltalkRuntime runtime, SmalltalkNameScope scope, string name)
         {
             if (runtime == null)
-                throw new ArgumentNullException("runtime");
+                throw new ArgumentNullException(nameof(runtime));
             if (scope == null)
-                throw new ArgumentNullException("scope");
+                throw new ArgumentNullException(nameof(scope));
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             Symbol symbol = runtime.GetSymbol(name);
             ClassBinding binding = new ClassBinding(symbol);
             scope.Classes.Add(binding);
@@ -62,11 +62,11 @@ namespace IronSmalltalk.Runtime.Internal
         public static PoolBinding AddPoolBinding(SmalltalkRuntime runtime, SmalltalkNameScope scope, string name)
         {
             if (runtime == null)
-                throw new ArgumentNullException("runtime");
+                throw new ArgumentNullException(nameof(runtime));
             if (scope == null)
-                throw new ArgumentNullException("scope");
+                throw new ArgumentNullException(nameof(scope));
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             Symbol symbol = runtime.GetSymbol(name);
 
             PoolBinding binding = new PoolBinding(symbol);
@@ -78,11 +78,11 @@ namespace IronSmalltalk.Runtime.Internal
         public static GlobalVariableBinding AddGlobalVariableBinding(SmalltalkRuntime runtime, SmalltalkNameScope scope, string name)
         {
             if (runtime == null)
-                throw new ArgumentNullException("runtime");
+                throw new ArgumentNullException(nameof(runtime));
             if (scope == null)
-                throw new ArgumentNullException("scope");
+                throw new ArgumentNullException(nameof(scope));
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             Symbol symbol = runtime.GetSymbol(name);
 
             GlobalVariableBinding binding = new GlobalVariableBinding(symbol);
@@ -94,11 +94,11 @@ namespace IronSmalltalk.Runtime.Internal
         public static GlobalConstantBinding AddGlobalConstantBinding(SmalltalkRuntime runtime, SmalltalkNameScope scope, string name)
         {
             if (runtime == null)
-                throw new ArgumentNullException("runtime");
+                throw new ArgumentNullException(nameof(runtime));
             if (scope == null)
-                throw new ArgumentNullException("scope");
+                throw new ArgumentNullException(nameof(scope));
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             Symbol symbol = runtime.GetSymbol(name);
 
             GlobalConstantBinding binding = new GlobalConstantBinding(symbol);
@@ -112,15 +112,15 @@ namespace IronSmalltalk.Runtime.Internal
             Func<SmalltalkClass, Dictionary<Symbol, CompiledMethod>> classMethodDicInitializer, Func<SmalltalkClass, Dictionary<Symbol, CompiledMethod>> instanceMethodDicInitializer)
         {
             if (runtime == null)
-                throw new ArgumentNullException("runtime");
+                throw new ArgumentNullException(nameof(runtime));
             if (scope == null)
-                throw new ArgumentNullException("scope");
+                throw new ArgumentNullException(nameof(scope));
             if (binding == null)
-                throw new ArgumentNullException("binding");
+                throw new ArgumentNullException(nameof(binding));
             if (classMethodDicInitializer == null)
-                throw new ArgumentNullException("classMethodDicInitializer");
+                throw new ArgumentNullException(nameof(classMethodDicInitializer));
             if (instanceMethodDicInitializer == null)
-                throw new ArgumentNullException("instanceMethodDicInitializer");
+                throw new ArgumentNullException(nameof(instanceMethodDicInitializer));
             // 3. Prepare stuff ....
             ClassBinding superclass;
             if (String.IsNullOrWhiteSpace(superclassName))
@@ -211,9 +211,9 @@ namespace IronSmalltalk.Runtime.Internal
         public static void CreatePool(SmalltalkRuntime runtime, PoolBinding binding)
         {
             if (runtime == null)
-                throw new ArgumentNullException("runtime");
+                throw new ArgumentNullException(nameof(runtime));
             if (binding == null)
-                throw new ArgumentNullException("binding");
+                throw new ArgumentNullException(nameof(binding));
 
             binding.SetValue(new Pool(runtime, binding.Name));
         }
@@ -222,7 +222,7 @@ namespace IronSmalltalk.Runtime.Internal
         public static void AnnotateObject(IDiscreteBinding binding, string key, string value)
         {
             if (binding == null)
-                throw new ArgumentNullException("binding");
+                throw new ArgumentNullException(nameof(binding));
             binding.Annotate(key, value);
         }
 
@@ -230,7 +230,7 @@ namespace IronSmalltalk.Runtime.Internal
         public static void AnnotateObject(CompiledCode initializer, string key, string value)
         {
             if (initializer == null)
-                throw new ArgumentNullException("initializer");
+                throw new ArgumentNullException(nameof(initializer));
             initializer.Annotate(key, value);
         }
 
@@ -238,9 +238,9 @@ namespace IronSmalltalk.Runtime.Internal
         public static PoolVariableBinding CreatePoolVariableBinding(SmalltalkRuntime runtime, PoolBinding poolBinding, string name)
         {
             if (runtime == null)
-                throw new ArgumentNullException("runtime");
+                throw new ArgumentNullException(nameof(runtime));
             if (poolBinding == null)
-                throw new ArgumentNullException("poolBinding");
+                throw new ArgumentNullException(nameof(poolBinding));
 
             Symbol varName = runtime.GetSymbol(name);
             PoolVariableBinding binding = new PoolVariableBinding(varName);
@@ -252,9 +252,9 @@ namespace IronSmalltalk.Runtime.Internal
         public static PoolConstantBinding CreatePoolConstantBinding(SmalltalkRuntime runtime, PoolBinding poolBinding, string name)
         {
             if (runtime == null)
-                throw new ArgumentNullException("runtime");
+                throw new ArgumentNullException(nameof(runtime));
             if (poolBinding == null)
-                throw new ArgumentNullException("poolBinding");
+                throw new ArgumentNullException(nameof(poolBinding));
 
             Symbol varName = runtime.GetSymbol(name);
             PoolConstantBinding binding = new PoolConstantBinding(varName);
@@ -266,9 +266,9 @@ namespace IronSmalltalk.Runtime.Internal
         public static SmalltalkRuntime CreateRuntime(bool initialize, Action<SmalltalkRuntime, SmalltalkNameScope> extensionScopeInitializer, Action<SmalltalkRuntime, SmalltalkNameScope> globalScopeInitializer)
         {
             if (extensionScopeInitializer == null)
-                throw new ArgumentNullException("extensionScopeInitializer");
+                throw new ArgumentNullException(nameof(extensionScopeInitializer));
             if (globalScopeInitializer == null)
-                throw new ArgumentNullException("globalScopeInitializer");
+                throw new ArgumentNullException(nameof(globalScopeInitializer));
 
             SmalltalkRuntime runtime = new SmalltalkRuntime();
 
@@ -383,15 +383,15 @@ namespace IronSmalltalk.Runtime.Internal
         private static NativeCompiledMethod AddMethod(Dictionary<Symbol, CompiledMethod> dictionary, SmalltalkClass cls, string selector, Type containingType, string nativeName, CompiledMethod.MethodType methodType)
         {
             if (dictionary == null)
-                throw new ArgumentNullException("dictionary");
+                throw new ArgumentNullException(nameof(dictionary));
             if (cls == null)
-                throw new ArgumentNullException("cls");
+                throw new ArgumentNullException(nameof(cls));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             if (containingType == null)
-                throw new ArgumentNullException("containingType");
+                throw new ArgumentNullException(nameof(containingType));
             if (nativeName == null)
-                throw new ArgumentNullException("nativeName");
+                throw new ArgumentNullException(nameof(nativeName));
 
 
             Symbol sel = cls.Runtime.GetSymbol(selector);

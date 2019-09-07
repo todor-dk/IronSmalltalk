@@ -44,7 +44,7 @@ namespace IronSmalltalk.Runtime.Behavior
         protected MethodDictionary(SmalltalkRuntime runtime)
         {
             if (runtime == null)
-                throw new ArgumentNullException("runtime");
+                throw new ArgumentNullException(nameof(runtime));
             this._Runtime = runtime;
             this._contents = new Dictionary<Symbol, CompiledMethod>();
         }
@@ -62,9 +62,9 @@ namespace IronSmalltalk.Runtime.Behavior
         protected MethodDictionary(SmalltalkRuntime runtime, Func<SmalltalkRuntime, Dictionary<Symbol, CompiledMethod>> lazyInitializer)
         {
             if (runtime == null)
-                throw new ArgumentNullException("runtime");
+                throw new ArgumentNullException(nameof(runtime));
             if (lazyInitializer == null)
-                throw new ArgumentNullException("lazyInitializer");
+                throw new ArgumentNullException(nameof(lazyInitializer));
             this._Runtime = runtime;
             this._LazyInitializer = lazyInitializer;
             this._contents = null;
@@ -93,13 +93,13 @@ namespace IronSmalltalk.Runtime.Behavior
             get
             {
                 if (selector == null)
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException(nameof(selector));
                 return this[this.ToSymbol(selector)];
             }
             set
             {
                 if (selector == null)
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException(nameof(selector));
                 this[this.ToSymbol(selector)] = value;
             }
         }
@@ -114,7 +114,7 @@ namespace IronSmalltalk.Runtime.Behavior
             get
             {
                 if (selector == null)
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException(nameof(selector));
                 CompiledMethod value;
                 if (this.TryGetValue(selector, out value))
                     return value;
@@ -124,7 +124,7 @@ namespace IronSmalltalk.Runtime.Behavior
             set
             {
                 if (selector == null)
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException(nameof(selector));
                 this.ValidateModification(value, selector);
                 this.Contents[selector] = value;
             }
@@ -142,7 +142,7 @@ namespace IronSmalltalk.Runtime.Behavior
         public bool TryGetValue(string selector, out CompiledMethod method)
         {
             if (selector == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(selector));
             return this.TryGetValue(this.ToSymbol(selector), out method);
         }
 
@@ -158,7 +158,7 @@ namespace IronSmalltalk.Runtime.Behavior
         public bool TryGetValue(Symbol selector, out CompiledMethod method)
         {
             if (selector == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(selector));
             return this.Contents.TryGetValue(selector, out method);
         }
 
@@ -219,7 +219,7 @@ namespace IronSmalltalk.Runtime.Behavior
         public void Add(CompiledMethod method)
         {
             if (method == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(method));
             this.Add(method.Selector, method);
         }
 
@@ -237,7 +237,7 @@ namespace IronSmalltalk.Runtime.Behavior
         public void Add(string selector, CompiledMethod method)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             this.Add(this.ToSymbol(selector), method);
         }
 
@@ -255,7 +255,7 @@ namespace IronSmalltalk.Runtime.Behavior
         public void Add(Symbol selector, CompiledMethod method)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             this.ValidateModification(method, selector);
             this.Contents.Add(selector, method);
             this._nativeMethodNameMap = null;
@@ -271,7 +271,7 @@ namespace IronSmalltalk.Runtime.Behavior
         public void AddRange(IEnumerable<CompiledMethod> items)
         {
             if (items == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(items));
             foreach (CompiledMethod item in items)
                 this.Add(item.Selector, item);
         }
@@ -284,7 +284,7 @@ namespace IronSmalltalk.Runtime.Behavior
         public bool Remove(string selector)
         {
             if (selector == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(selector));
             return this.Remove(this.ToSymbol(selector));
         }
 
@@ -296,7 +296,7 @@ namespace IronSmalltalk.Runtime.Behavior
         public bool Remove(Symbol selector)
         {
             if (selector == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(selector));
             if (this._readOnly)
                 throw new InvalidOperationException("Dictionary is in read-only state.");
             bool removed = this.Contents.Remove(selector);
@@ -326,16 +326,16 @@ namespace IronSmalltalk.Runtime.Behavior
                 selector = method.Selector;
 
             if ((selector != null) && (selector.Manager.Runtime != this._Runtime))
-                throw new ArgumentException("Method selector belongs to a different SmalltalkRuntime.", "selector");
+                throw new ArgumentException("Method selector belongs to a different SmalltalkRuntime.", nameof(selector));
 
             if ((method != null) && (method.Class.Runtime != this._Runtime))
-                throw new ArgumentException("Method selector belongs to a different SmalltalkRuntime.", "method");
+                throw new ArgumentException("Method selector belongs to a different SmalltalkRuntime.", nameof(method));
 
             // We could check (method.Selector != selector), but we allow to add a method with a different selector,
             // thus giving the same CompiledMethod behavior several names (selectors).
 
             if ((method != null) && (method.Type != this.MethodType))
-                throw new ArgumentException(String.Format("Expected {0} method but was given {1} method.", this.MethodType, method.Type), "method");
+                throw new ArgumentException(String.Format("Expected {0} method but was given {1} method.", this.MethodType, method.Type), nameof(method));
         }
 
         public abstract CompiledMethod.MethodType MethodType { get; }
@@ -352,7 +352,7 @@ namespace IronSmalltalk.Runtime.Behavior
         public bool ContainsKey(string selector)
         {
             if (selector == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(selector));
             return this.ContainsKey(this.ToSymbol(selector));
         }
 
@@ -364,7 +364,7 @@ namespace IronSmalltalk.Runtime.Behavior
         public bool ContainsKey(Symbol selector)
         {
             if (selector == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(selector));
             CompiledMethod item;
             return this.TryGetValue(selector, out item) && (item != null);
         }
@@ -481,9 +481,9 @@ namespace IronSmalltalk.Runtime.Behavior
         void ICollection<KeyValuePair<Symbol, CompiledMethod>>.CopyTo(KeyValuePair<Symbol, CompiledMethod>[] array, int arrayIndex)
         {
             if (array == null)
-                throw new ArgumentNullException("array");
+                throw new ArgumentNullException(nameof(array));
             if (arrayIndex < 0)
-                throw new ArgumentOutOfRangeException("arrayIndex", arrayIndex, "arrayIndex is less than 0.");
+                throw new ArgumentOutOfRangeException(nameof(arrayIndex), arrayIndex, "arrayIndex is less than 0.");
             if (array.Length < (this.Count + arrayIndex))
                 throw new ArgumentException("The number of elements in the source ICollection <T> is greater than the available space from arrayIndex to the end of the destination array.");
 
@@ -604,9 +604,9 @@ namespace IronSmalltalk.Runtime.Behavior
         void ICollection<KeyValuePair<string, CompiledMethod>>.CopyTo(KeyValuePair<string, CompiledMethod>[] array, int arrayIndex)
         {
             if (array == null)
-                throw new ArgumentNullException("array");
+                throw new ArgumentNullException(nameof(array));
             if (arrayIndex < 0)
-                throw new ArgumentOutOfRangeException("arrayIndex", arrayIndex, "arrayIndex is less than 0.");
+                throw new ArgumentOutOfRangeException(nameof(arrayIndex), arrayIndex, "arrayIndex is less than 0.");
             if (array.Length < (this.Count + arrayIndex))
                 throw new ArgumentException("The number of elements in the source ICollection <T> is greater than the available space from arrayIndex to the end of the destination array.");
 
@@ -850,9 +850,9 @@ namespace IronSmalltalk.Runtime.Behavior
         public CompiledMethod GetMethodByNativeName(string name, int numberOfParameters, bool ignoreCase, out bool caseConflict)
         {
             if (String.IsNullOrWhiteSpace(name))
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             if (numberOfParameters < 0)
-                throw new ArgumentOutOfRangeException("numberOfParameters");
+                throw new ArgumentOutOfRangeException(nameof(numberOfParameters));
 
             // Things are cached to speed-up lookups
             Dictionary<int, Dictionary<string, CompiledMethod>> mapping = this.NativeMethodNameMap;
@@ -896,9 +896,9 @@ namespace IronSmalltalk.Runtime.Behavior
         public IEnumerable<string> GetNativeMethodNames()
         {
             HashSet<string> result = new HashSet<string>();
-            foreach(var p1 in this.NativeMethodNameMap)
+            foreach (var p1 in this.NativeMethodNameMap)
             {
-                foreach(var p2 in p1.Value)
+                foreach (var p2 in p1.Value)
                     result.Add(p2.Key);
             }
             return result;
@@ -974,5 +974,4 @@ namespace IronSmalltalk.Runtime.Behavior
             get { return CompiledMethod.MethodType.Instance; }
         }
     }
-
 }

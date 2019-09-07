@@ -235,7 +235,6 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                     this.Value = value;
                     this.List = list;
                 }
-
             }
         }
 

@@ -36,7 +36,7 @@ namespace IronSmalltalk.Runtime.Execution.Dynamic
             : base(expression, restrictions, self)
         {
             if (self == null)
-                throw new ArgumentNullException("self");
+                throw new ArgumentNullException(nameof(self));
             this.Self = self;
         }
 

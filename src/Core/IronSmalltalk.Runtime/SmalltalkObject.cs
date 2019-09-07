@@ -38,7 +38,7 @@ namespace IronSmalltalk.Runtime
         /// <summary>
         /// Internal. The FieldInfo of the SmalltalkObject.Class field.
         /// </summary>
-        public static readonly FieldInfo ClassField = TypeUtilities.Field(typeof(SmalltalkObject), "Class");
+        public static readonly FieldInfo ClassField = TypeUtilities.Field(typeof(SmalltalkObject), nameof(SmalltalkObject.Class));
 
         /// <summary>
         /// Array with the instance variables of the object.
@@ -49,7 +49,7 @@ namespace IronSmalltalk.Runtime
         /// <summary>
         /// Internal. The FieldInfo of the SmalltalkObject.InstanceVariables field.
         /// </summary>
-        public static readonly FieldInfo InstanceVariablesField = TypeUtilities.Field(typeof(SmalltalkObject), "InstanceVariables");
+        public static readonly FieldInfo InstanceVariablesField = TypeUtilities.Field(typeof(SmalltalkObject), nameof(SmalltalkObject.InstanceVariables));
 
         /// <summary>
         /// Create a new SmalltalkObject for a given SmalltalkClass.
@@ -82,9 +82,9 @@ namespace IronSmalltalk.Runtime
                 : base(cls)
             {
                 if (cls.InstanceState != SmalltalkClass.InstanceStateEnum.ByteIndexable)
-                    throw new ArgumentOutOfRangeException("cls", cls.InstanceState, "Expected a ByteIndexable class");
+                    throw new ArgumentOutOfRangeException(nameof(cls), cls.InstanceState, "Expected a ByteIndexable class");
                 if (objectSize < 0)
-                    throw new ArgumentOutOfRangeException("objectSize");
+                    throw new ArgumentOutOfRangeException(nameof(objectSize));
                 this.Contents = new byte[objectSize];
             }
         }
@@ -108,9 +108,9 @@ namespace IronSmalltalk.Runtime
                 : base(cls)
             {
                 if (cls.InstanceState != SmalltalkClass.InstanceStateEnum.ObjectIndexable)
-                    throw new ArgumentOutOfRangeException("cls", cls.InstanceState, "Expected an ObjectIndexable class");
+                    throw new ArgumentOutOfRangeException(nameof(cls), cls.InstanceState, "Expected an ObjectIndexable class");
                 if (objectSize < 0)
-                    throw new ArgumentOutOfRangeException("objectSize");
+                    throw new ArgumentOutOfRangeException(nameof(objectSize));
                 this.Contents = new object[objectSize];
             }
         }

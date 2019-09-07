@@ -14,6 +14,8 @@
  * **************************************************************************
 */
 
+#pragma warning disable CA1707 // Remove the underscores from member name
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -1048,7 +1050,6 @@ namespace IronSmalltalk.Runtime.Execution
             if (value <= '\x00FF')
                 return PreboxedConstants.Char_Objects[value];
             return null;
-
         }
 
         private static readonly object[] Char_Objects;
@@ -6704,7 +6705,7 @@ namespace IronSmalltalk.Runtime.Execution
                 case 127:
                     return PreboxedConstants.SByte_7F_Expression;
                 default:
-                    throw new ArgumentOutOfRangeException("value");
+                    throw new ArgumentOutOfRangeException(nameof(value));
             }
         }
 
@@ -11853,7 +11854,7 @@ namespace IronSmalltalk.Runtime.Execution
                 case 255:
                     return PreboxedConstants.Byte_FF_Expression;
                 default:
-                    throw new ArgumentOutOfRangeException("value");
+                    throw new ArgumentOutOfRangeException(nameof(value));
             }
         }
 

@@ -149,7 +149,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         public static CompiledMethod LookupMethod(ref SmalltalkClass cls, Symbol superLookupScope, Func<SmalltalkClass, CompiledMethod> lookupFunction)
         {
             if (lookupFunction == null)
-                throw new ArgumentNullException("lookupFunction");
+                throw new ArgumentNullException(nameof(lookupFunction));
 
             while (cls != null)
             {
@@ -364,6 +364,5 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 return cls;
             }
         }
-
     }
 }

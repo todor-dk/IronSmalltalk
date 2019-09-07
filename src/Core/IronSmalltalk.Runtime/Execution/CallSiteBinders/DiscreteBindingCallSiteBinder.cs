@@ -47,9 +47,9 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         public static string GetMoniker(SmalltalkClass cls, ClassVariableBinding binding)
         {
             if (cls == null)
-                throw new ArgumentNullException("cls");
+                throw new ArgumentNullException(nameof(cls));
             if (binding == null)
-                throw new ArgumentNullException("binding");
+                throw new ArgumentNullException(nameof(binding));
 
             return DiscreteBindingCallSiteBinderBase.GetMoniker(
                 DiscreteBindingCallSiteBinderBase.ClassVariablePrefix,
@@ -60,9 +60,9 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         public static string GetMoniker(PoolBinding poolBinding, PoolVariableOrConstantBinding binding)
         {
             if (poolBinding == null)
-                throw new ArgumentNullException("poolBinding");
+                throw new ArgumentNullException(nameof(poolBinding));
             if (binding == null)
-                throw new ArgumentNullException("binding");
+                throw new ArgumentNullException(nameof(binding));
 
             return DiscreteBindingCallSiteBinderBase.GetMoniker(
                 DiscreteBindingCallSiteBinderBase.PoolItemPrefix,
@@ -152,7 +152,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         public DiscreteBindingCallSiteBinderBase(string moniker)
         {
             if (moniker == null)
-                throw new ArgumentNullException("moniker");
+                throw new ArgumentNullException(nameof(moniker));
             this.Moniker = moniker;
             this.GetBindingStrategy = DiscreteBindingCallSiteBinderBase.ParseGetBindingStrategy(moniker);
         }

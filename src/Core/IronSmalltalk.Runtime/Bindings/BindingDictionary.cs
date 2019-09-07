@@ -61,7 +61,7 @@ namespace IronSmalltalk.Runtime.Bindings
         public BindingDictionary(SmalltalkRuntime runtime, int initialCapacity)
         {
             if (runtime == null)
-                throw new ArgumentNullException("runtime");
+                throw new ArgumentNullException(nameof(runtime));
             this.Runtime = runtime;
             this._Contents = new Dictionary<Symbol, TItem>(initialCapacity);
         }
@@ -148,7 +148,7 @@ namespace IronSmalltalk.Runtime.Bindings
         public void Add(TItem binding)
         {
             if (binding == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(binding));
             if (this._readOnly)
                 throw new InvalidOperationException("Dictionary is in read-only state.");
             this._Contents.Add(binding.Name, binding);
@@ -167,14 +167,14 @@ namespace IronSmalltalk.Runtime.Bindings
         public bool Remove(string key)
         {
             if (key == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(key));
             return this.Remove(this.ToSymbol(key));
         }
 
         public bool Remove(Symbol key)
         {
             if (key == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(key));
             if (this._readOnly)
                 throw new InvalidOperationException("Dictionary is in read-only state.");
             return this._Contents.Remove(key);
@@ -320,9 +320,9 @@ namespace IronSmalltalk.Runtime.Bindings
         void ICollection<KeyValuePair<Symbol, TItem>>.CopyTo(KeyValuePair<Symbol, TItem>[] array, int arrayIndex)
         {
             if (array == null)
-                throw new ArgumentNullException("array");
+                throw new ArgumentNullException(nameof(array));
             if (arrayIndex < 0)
-                throw new ArgumentOutOfRangeException("arrayIndex", arrayIndex, "arrayIndex is less than 0.");
+                throw new ArgumentOutOfRangeException(nameof(arrayIndex), arrayIndex, "arrayIndex is less than 0.");
             if (array.Length < (this.Count + arrayIndex))
                 throw new ArgumentException("The number of elements in the source ICollection <T> is greater than the available space from arrayIndex to the end of the destination array.");
 
@@ -443,9 +443,9 @@ namespace IronSmalltalk.Runtime.Bindings
         void ICollection<KeyValuePair<string, TItem>>.CopyTo(KeyValuePair<string, TItem>[] array, int arrayIndex)
         {
             if (array == null)
-                throw new ArgumentNullException("array");
+                throw new ArgumentNullException(nameof(array));
             if (arrayIndex < 0)
-                throw new ArgumentOutOfRangeException("arrayIndex", arrayIndex, "arrayIndex is less than 0.");
+                throw new ArgumentOutOfRangeException(nameof(arrayIndex), arrayIndex, "arrayIndex is less than 0.");
             if (array.Length < (this.Count + arrayIndex))
                 throw new ArgumentException("The number of elements in the source ICollection <T> is greater than the available space from arrayIndex to the end of the destination array.");
 

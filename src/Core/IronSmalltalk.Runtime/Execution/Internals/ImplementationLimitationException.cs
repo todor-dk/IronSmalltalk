@@ -31,12 +31,22 @@ namespace IronSmalltalk.Runtime.Execution.Internals
     [Serializable]
     public class ImplementationLimitationException : CodeGenerationException
     {
-        public ImplementationLimitationException() { }
-        public ImplementationLimitationException(string message) : base(message) { }
-        public ImplementationLimitationException(string message, Exception inner) : base(message, inner) { }
+        public ImplementationLimitationException()
+        {
+        }
+        public ImplementationLimitationException(string message)
+            : base(message)
+        {
+        }
+        public ImplementationLimitationException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
         protected ImplementationLimitationException(
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context)
-            : base(info, context) { }
+            : base(info, context)
+        {
+        }
     }
 }

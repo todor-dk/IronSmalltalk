@@ -34,7 +34,6 @@ namespace IronSmalltalk.Runtime.Internal
         [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public HomeContext()
         {
-
         }
     }
 
@@ -85,7 +84,7 @@ namespace IronSmalltalk.Runtime.Internal
         {
 #if DEBUG
             if (homeContext == null)
-                throw new ArgumentNullException("homeContext");
+                throw new ArgumentNullException(nameof(homeContext));
 #endif
             this.HomeContext = homeContext;
             this.Value = value;

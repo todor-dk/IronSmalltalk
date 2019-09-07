@@ -41,7 +41,7 @@ namespace IronSmalltalk.Runtime
         public SmalltalkString(int length)
         {
             if (length < 0)
-                throw new ArgumentOutOfRangeException("length");
+                throw new ArgumentOutOfRangeException(nameof(length));
             this.Contents = new char[length];
         }
 
@@ -203,7 +203,7 @@ namespace IronSmalltalk.Runtime
         public SmalltalkString ToUpper(CultureInfo culture)
         {
             if (culture == null)
-                throw new ArgumentNullException("culture");
+                throw new ArgumentNullException(nameof(culture));
             if (this.Contents == null)
                 return new SmalltalkString(0);
             char[] buffer = new char[this.Contents.Length];
@@ -229,7 +229,7 @@ namespace IronSmalltalk.Runtime
         public SmalltalkString ToLower(CultureInfo culture)
         {
             if (culture == null)
-                throw new ArgumentNullException("culture");
+                throw new ArgumentNullException(nameof(culture));
             if (this.Contents == null)
                 return new SmalltalkString(0);
             char[] buffer = new char[this.Contents.Length];

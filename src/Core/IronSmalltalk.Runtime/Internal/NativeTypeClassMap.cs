@@ -199,11 +199,11 @@ namespace IronSmalltalk.Runtime.Internal
         public void RegisterClass(SmalltalkClass cls, string typeName)
         {
             if (cls == null)
-                throw new ArgumentNullException("cls");
+                throw new ArgumentNullException(nameof(cls));
             if (System.String.IsNullOrWhiteSpace(typeName))
                 throw new SmalltalkDefinitionException(System.String.Format(
                     "Invalid type name. Check native type mapping for class {0}",
-                    cls.Name), new ArgumentNullException("typeName"));
+                    cls.Name), new ArgumentNullException(nameof(typeName)));
 
             // Special case handling for Smalltalk specific classes.
             if (typeName == "true")
@@ -293,35 +293,35 @@ namespace IronSmalltalk.Runtime.Internal
 
         private static string RemapTypeName(string name)
         {
-            if(name == "bool") 
+            if (name == "bool") 
                 return "System.Boolean";	
-            if(name == "byte") 
+            if (name == "byte") 
                 return "System.Byte";	
-            if(name == "sbyte") 
+            if (name == "sbyte") 
                 return "System.SByte";	
-            if(name == "char") 
+            if (name == "char") 
                 return "System.Char";	
-            if(name == "decimal") 
+            if (name == "decimal") 
                 return "System.Decimal";	
-            if(name == "double") 
+            if (name == "double") 
                 return "System.Double";	
-            if(name == "float") 
+            if (name == "float") 
                 return "System.Single";	
-            if(name == "int") 
+            if (name == "int") 
                 return "System.Int32";	
-            if(name == "uint") 
+            if (name == "uint") 
                 return "System.UInt32";	
-            if(name == "long") 
+            if (name == "long") 
                 return "System.Int64";	
-            if(name == "ulong") 
+            if (name == "ulong") 
                 return "System.UInt64";	
-            if(name == "object") 
+            if (name == "object") 
                 return "System.Object";	
-            if(name == "short") 
+            if (name == "short") 
                 return "System.Int16";	
-            if(name == "ushort") 
+            if (name == "ushort") 
                 return "System.UInt16";	
-            if(name == "string") 
+            if (name == "string") 
                 return "System.String";
             return name;
         }
@@ -341,37 +341,37 @@ namespace IronSmalltalk.Runtime.Internal
         public static Type GetType(string name)
         {
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
 
-            if(name == "bool") 
+            if (name == "bool") 
                 return typeof(bool);	
-            if(name == "byte") 
+            if (name == "byte") 
                 return typeof(byte);	
-            if(name == "sbyte") 
+            if (name == "sbyte") 
                 return typeof(sbyte);	
-            if(name == "char") 
+            if (name == "char") 
                 return typeof(char);	
-            if(name == "decimal") 
+            if (name == "decimal") 
                 return typeof(decimal);	
-            if(name == "double") 
+            if (name == "double") 
                 return typeof(double);	
-            if(name == "float") 
+            if (name == "float") 
                 return typeof(float);	
-            if(name == "int") 
+            if (name == "int") 
                 return typeof(int);	
-            if(name == "uint") 
+            if (name == "uint") 
                 return typeof(uint);	
-            if(name == "long") 
+            if (name == "long") 
                 return typeof(long);	
-            if(name == "ulong") 
+            if (name == "ulong") 
                 return typeof(ulong);	
-            if(name == "object") 
+            if (name == "object") 
                 return typeof(object);	
-            if(name == "short") 
+            if (name == "short") 
                 return typeof(short);	
-            if(name == "ushort") 
+            if (name == "ushort") 
                 return typeof(ushort);	
-            if(name == "string") 
+            if (name == "string") 
                 return typeof(string);
             if (name.StartsWith(NativeTypeClassMap.IstTypenamePrefix))
                 return NativeTypeClassMap.GetIstType(name);

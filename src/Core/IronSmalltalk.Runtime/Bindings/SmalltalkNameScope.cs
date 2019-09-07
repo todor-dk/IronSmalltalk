@@ -74,7 +74,7 @@ namespace IronSmalltalk.Runtime.Bindings
         public SmalltalkNameScope(SmalltalkRuntime runtime, SmalltalkNameScope outerScope)
         {
             if (runtime == null)
-                throw new ArgumentNullException("runtime");
+                throw new ArgumentNullException(nameof(runtime));
             this.Runtime = runtime;
             this.Classes = new DiscreteBindingDictionary<ClassBinding>(runtime, 50);
             this.GlobalConstants = new DiscreteBindingDictionary<GlobalConstantBinding>(runtime, 20);
@@ -349,16 +349,16 @@ namespace IronSmalltalk.Runtime.Bindings
             foreach (Symbol name in this.ProtectedNames)
                 visitor.Visit(name);
 
-            foreach(ClassBinding binding in this.Classes.Values)
+            foreach (ClassBinding binding in this.Classes.Values)
                 visitor.Visit(binding);
 
-            foreach(PoolBinding binding in this.Pools.Values)
+            foreach (PoolBinding binding in this.Pools.Values)
                 visitor.Visit(binding);
 
-            foreach(GlobalVariableBinding binding in this.GlobalVariables.Values)
+            foreach (GlobalVariableBinding binding in this.GlobalVariables.Values)
                 visitor.Visit(binding);
 
-            foreach(GlobalConstantBinding binding in this.GlobalConstants.Values)
+            foreach (GlobalConstantBinding binding in this.GlobalConstants.Values)
                 visitor.Visit(binding);
 
             foreach (CompiledInitializer initializer in this.Initializers)

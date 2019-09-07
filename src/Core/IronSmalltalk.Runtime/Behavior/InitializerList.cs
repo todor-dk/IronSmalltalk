@@ -130,11 +130,11 @@ namespace IronSmalltalk.Runtime.Behavior
         public void AddRange(IEnumerable<TItem> collection)
         {
             if (collection == null)
-                throw new ArgumentNullException("collection");
+                throw new ArgumentNullException(nameof(collection));
             if (this.ReadOnly)
                 throw new InvalidOperationException("List is in read-only state.");
 
-            foreach(TItem item in collection)
+            foreach (TItem item in collection)
                 this.Contents.Add(item);
         }
 

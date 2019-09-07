@@ -43,7 +43,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             : base(selector)
         {
             if (String.IsNullOrWhiteSpace(superScope))
-                throw new ArgumentNullException("superScope");
+                throw new ArgumentNullException(nameof(superScope));
             this.SuperScope = superScope;
         }
 

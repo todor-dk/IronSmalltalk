@@ -166,17 +166,17 @@ namespace IronSmalltalk.Runtime
             InstanceMethodDictionary instanceMethods, ClassMethodDictionary classMethods)
         {
             if (runtime == null)
-                throw new ArgumentNullException("runtime");
+                throw new ArgumentNullException(nameof(runtime));
             if ((name == null) || (name.Value.Length == 0))
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             if (!SmalltalkClass.ValidateIdentifiers <InstanceVariableBinding>(instanceVariables))
-                throw new ArgumentException("Invalid or duplicate instance variable name found", "instanceVariables");
+                throw new ArgumentException("Invalid or duplicate instance variable name found", nameof(instanceVariables));
             if (!SmalltalkClass.ValidateIdentifiers<ClassVariableBinding>(classVariables))
-                throw new ArgumentException("Invalid or duplicate class variable name found", "classVariables");
+                throw new ArgumentException("Invalid or duplicate class variable name found", nameof(classVariables));
             if (!SmalltalkClass.ValidateIdentifiers<ClassInstanceVariableBinding>(classInstanceVariables))
-                throw new ArgumentException("Invalid or duplicate class instance variable name found", "classInstanceVariables");
+                throw new ArgumentException("Invalid or duplicate class instance variable name found", nameof(classInstanceVariables));
             if (!SmalltalkClass.ValidateIdentifiers<PoolBinding>(importedPools))
-                throw new ArgumentException("Invalid or duplicate imported pool name found", "importedPools");
+                throw new ArgumentException("Invalid or duplicate imported pool name found", nameof(importedPools));
             if (!SmalltalkClass.CheckDuplicates <InstanceVariableBinding, ClassVariableBinding>(instanceVariables, classVariables))
                 throw new ArgumentException("Duplicate instance or class variable name. Instance and class variable names must be unique.");
             if (!SmalltalkClass.CheckDuplicates<ClassInstanceVariableBinding, ClassVariableBinding>(classInstanceVariables, classVariables))
@@ -277,7 +277,7 @@ namespace IronSmalltalk.Runtime
             this.RecompileIndexedVariables();
             this.RegisterNativeTypeMapping();
 
-            lock(this)
+            lock (this)
                 this._subclasses = null;
             foreach (SmalltalkClass cls in this.Subclasses)
                 cls.Recompile();

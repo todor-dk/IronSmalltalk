@@ -32,7 +32,7 @@ namespace IronSmalltalk.Runtime.Behavior
             : base(type, binding)
         {
             if (functionDelegate == null)
-                throw new ArgumentNullException("functionDelegate");
+                throw new ArgumentNullException(nameof(functionDelegate));
             this.Delegate = functionDelegate;
         }
 

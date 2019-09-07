@@ -150,6 +150,4 @@ namespace IronSmalltalk.Runtime.Bindings
             set { this.SetValue(value); }
         }
     }
-
-
 }

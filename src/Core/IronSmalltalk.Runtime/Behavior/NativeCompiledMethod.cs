@@ -32,7 +32,7 @@ namespace IronSmalltalk.Runtime.Behavior
             : base(cls, selector, methodType)
         {
             if (nativeMethod == null)
-                throw new ArgumentNullException("nativeMethod");
+                throw new ArgumentNullException(nameof(nativeMethod));
             this.NativeMethod = nativeMethod;
         }
 

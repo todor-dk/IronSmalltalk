@@ -27,13 +27,18 @@ namespace IronSmalltalk.Runtime.Internal
         /// <summary>
         /// Creates and initializes a new exception.
         /// </summary>
-        public SmalltalkRuntimeException() { }
+        public SmalltalkRuntimeException()
+        {
+        }
 
         /// <summary>
         /// Creates and initializes a new exception with the specified error message.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public SmalltalkRuntimeException(string message) : base(message) { }
+        public SmalltalkRuntimeException(string message)
+            : base(message)
+        {
+        }
 
         /// <summary>
         /// Creates and initializes a new exception with the specified error message
@@ -41,7 +46,10 @@ namespace IronSmalltalk.Runtime.Internal
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
         /// <param name="inner">The exception that is the cause of the current exception, or a null if no inner exception is specified.</param>
-        public SmalltalkRuntimeException(string message, Exception inner) : base(message, inner) { }
+        public SmalltalkRuntimeException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the exception with serialized data.
@@ -51,6 +59,8 @@ namespace IronSmalltalk.Runtime.Internal
         protected SmalltalkRuntimeException(
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context)
-            : base(info, context) { }
+            : base(info, context)
+        {
+        }
     }
 }

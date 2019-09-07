@@ -53,9 +53,9 @@ namespace IronSmalltalk.Runtime.Behavior
         protected CompiledMethod(SmalltalkClass cls, Symbol selector, MethodType methodType)
         {
             if (cls == null)
-                throw new ArgumentNullException("cls");
+                throw new ArgumentNullException(nameof(cls));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             this.Class = cls;
             this.Selector = selector;
@@ -88,7 +88,7 @@ namespace IronSmalltalk.Runtime.Behavior
             {
                 int args = 0;
                 bool binary = this.Selector.Value.Length != 0;
-                foreach(char c in this.Selector.Value)
+                foreach (char c in this.Selector.Value)
                 {
                     if (binary)
                     {
