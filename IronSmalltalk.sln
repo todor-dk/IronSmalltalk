@@ -48,6 +48,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronSmalltalk.Common", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronSmalltalk.Compiler", "src\Core\IronSmalltalk.Compiler\IronSmalltalk.Compiler.csproj", "{A0150A96-59CC-47E9-AC42-A4B38BECB117}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronSmalltalk.Core", "src\Core\IronSmalltalk.Core\IronSmalltalk.Core.csproj", "{7F170287-4372-49BA-8F49-729D68B6CBEB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronSmalltalk.CommandLineCompiler", "src\Core\IronSmalltalk.CommandLineCompiler\IronSmalltalk.CommandLineCompiler.csproj", "{C1E9D947-84AE-4008-8538-C0B8355555CF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronSmalltalk.ConsoleHost", "src\Core\IronSmalltalk.ConsoleHost\IronSmalltalk.ConsoleHost.csproj", "{B4E983DD-4363-4308-ACC0-364BC9CD7AA7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronSmalltalk.DefinitionInstaller", "src\Core\IronSmalltalk.DefinitionInstaller\IronSmalltalk.DefinitionInstaller.csproj", "{C2EAD669-428E-4292-9C74-D35547C4B5FC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronSmalltalk.ExpressionCompiler", "src\Core\IronSmalltalk.ExpressionCompiler\IronSmalltalk.ExpressionCompiler.csproj", "{25C4384F-437D-4D41-A44C-5138B583F1BE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronSmalltalk.Hosting", "src\Core\IronSmalltalk.Hosting\IronSmalltalk.Hosting.csproj", "{0BFF86BE-F4DA-476A-B3F6-4E08798CDFC3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronSmalltalk.InterchangeInstaller", "src\Core\IronSmalltalk.InterchangeInstaller\IronSmalltalk.InterchangeInstaller.csproj", "{160AE2AD-C2F4-4E65-9586-49E12D761B0D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronSmalltalk.NativeCompiler", "src\Core\IronSmalltalk.NativeCompiler\IronSmalltalk.NativeCompiler.csproj", "{EC20C2F4-92D2-4B5C-B2C1-37A2D284D7B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +78,38 @@ Global
 		{A0150A96-59CC-47E9-AC42-A4B38BECB117}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0150A96-59CC-47E9-AC42-A4B38BECB117}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0150A96-59CC-47E9-AC42-A4B38BECB117}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F170287-4372-49BA-8F49-729D68B6CBEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F170287-4372-49BA-8F49-729D68B6CBEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F170287-4372-49BA-8F49-729D68B6CBEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F170287-4372-49BA-8F49-729D68B6CBEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1E9D947-84AE-4008-8538-C0B8355555CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1E9D947-84AE-4008-8538-C0B8355555CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1E9D947-84AE-4008-8538-C0B8355555CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1E9D947-84AE-4008-8538-C0B8355555CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4E983DD-4363-4308-ACC0-364BC9CD7AA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4E983DD-4363-4308-ACC0-364BC9CD7AA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4E983DD-4363-4308-ACC0-364BC9CD7AA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4E983DD-4363-4308-ACC0-364BC9CD7AA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2EAD669-428E-4292-9C74-D35547C4B5FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2EAD669-428E-4292-9C74-D35547C4B5FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2EAD669-428E-4292-9C74-D35547C4B5FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2EAD669-428E-4292-9C74-D35547C4B5FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25C4384F-437D-4D41-A44C-5138B583F1BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25C4384F-437D-4D41-A44C-5138B583F1BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25C4384F-437D-4D41-A44C-5138B583F1BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25C4384F-437D-4D41-A44C-5138B583F1BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BFF86BE-F4DA-476A-B3F6-4E08798CDFC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BFF86BE-F4DA-476A-B3F6-4E08798CDFC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BFF86BE-F4DA-476A-B3F6-4E08798CDFC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BFF86BE-F4DA-476A-B3F6-4E08798CDFC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{160AE2AD-C2F4-4E65-9586-49E12D761B0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{160AE2AD-C2F4-4E65-9586-49E12D761B0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{160AE2AD-C2F4-4E65-9586-49E12D761B0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{160AE2AD-C2F4-4E65-9586-49E12D761B0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC20C2F4-92D2-4B5C-B2C1-37A2D284D7B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC20C2F4-92D2-4B5C-B2C1-37A2D284D7B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC20C2F4-92D2-4B5C-B2C1-37A2D284D7B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC20C2F4-92D2-4B5C-B2C1-37A2D284D7B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +120,14 @@ Global
 		{743F09A2-B55C-4E2A-8708-C989DFAC2C6E} = {872B4017-5929-43F0-846A-E899F4175588}
 		{DFBF6A64-E0EA-4522-98D5-80782FE61E9C} = {C147911F-3594-46A3-9E5E-947414EB59B9}
 		{A0150A96-59CC-47E9-AC42-A4B38BECB117} = {C147911F-3594-46A3-9E5E-947414EB59B9}
+		{7F170287-4372-49BA-8F49-729D68B6CBEB} = {C147911F-3594-46A3-9E5E-947414EB59B9}
+		{C1E9D947-84AE-4008-8538-C0B8355555CF} = {C147911F-3594-46A3-9E5E-947414EB59B9}
+		{B4E983DD-4363-4308-ACC0-364BC9CD7AA7} = {C147911F-3594-46A3-9E5E-947414EB59B9}
+		{C2EAD669-428E-4292-9C74-D35547C4B5FC} = {C147911F-3594-46A3-9E5E-947414EB59B9}
+		{25C4384F-437D-4D41-A44C-5138B583F1BE} = {C147911F-3594-46A3-9E5E-947414EB59B9}
+		{0BFF86BE-F4DA-476A-B3F6-4E08798CDFC3} = {C147911F-3594-46A3-9E5E-947414EB59B9}
+		{160AE2AD-C2F4-4E65-9586-49E12D761B0D} = {C147911F-3594-46A3-9E5E-947414EB59B9}
+		{EC20C2F4-92D2-4B5C-B2C1-37A2D284D7B3} = {C147911F-3594-46A3-9E5E-947414EB59B9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DE9F33BE-995B-451C-9F8D-015E8E897CDE}
