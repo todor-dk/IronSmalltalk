@@ -4,12 +4,37 @@
 	See: https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build?view=vs-2019
 -->
 <Project>
+    <!-- All projects in the **Core** folder target the same framework -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  
   <!-- Merge the **Directory.Build.props** from the parent folder -->
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
-  <!-- Example
+  <!-- NuGet package properties -->  
   <PropertyGroup>
-    <Deterministic>true</Deterministic>
+    <Company>IronSmalltalk</Company>
+    <Product>IronSmalltalk</Product>
+    <Authors>IronSmalltalk</Authors>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>license.md</PackageLicenseFile>
+    <Copyright>Copyright</Copyright>
+    <PackageProjectUrl>http://project.url/</PackageProjectUrl>
   </PropertyGroup>
+
+  <!-- Reference the license.md and add it to NuGet -->
+  <ItemGroup>
+    <None Include="$(SolutionDir)\license.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <!-- Stuff we may want to add:
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>$(SolutionDir)\xxx.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>  
   -->
 </Project>

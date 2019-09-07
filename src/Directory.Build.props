@@ -4,9 +4,17 @@
 	See: https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build?view=vs-2019
 -->
 <Project>
-  <!-- Example
+
   <PropertyGroup>
-    <Deterministic>true</Deterministic>
+    <!-- Set the $(SolutionDir) variable. -->
+    <SolutionDir>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), IronSmalltalk.sln))</SolutionDir>
+
+    <!-- Make all our projects output build temporaries in the **obj** folder. -->
+    <IntermediateOutputPath>$(SolutionDir)\obj\$(Configuration)\$(MSBuildProjectName)\</IntermediateOutputPath>
+    <MSBuildProjectExtensionsPath>$(SolutionDir)\obj\$(Configuration)\$(MSBuildProjectName)\</MSBuildProjectExtensionsPath>
+
+    <!-- Make all our projects output the build artifacts in the **bin** folder. -->
+    <OutputPath>$(SolutionDir)\bin\$(Configuration)\$(MSBuildProjectName)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
-  -->
 </Project>

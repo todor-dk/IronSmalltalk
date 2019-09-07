@@ -16,13 +16,16 @@ The solution's folder structure is listed below.
 ```
 
 1. **bin** - artifacts directory, where the build output is located.
+   This folder can be safely deleted and will be recreated on build.
 2. **DLR** - The contents of the DLR (this) folder were taken from the 
    IronLanguages project (https://github.com/IronLanguages)
    version (IronLanguages-main-af33202 - _VERY OUTDATED_).
 3. **docs** - Documentation files.
 4. **obj** - Temporary object files and other files used during build.
+   This folder can be safely deleted and will be recreated on build.
 5. **src** - Contains the sources. 
-   **NB:** This folder may never contain other files than source files!
+   **NB:** This folder may never contain other files than source files! 
+   Keeping it free from other files makes it easy to do file-level searches in the sources.
 6. **src\Core** - Contains the ___core___ sources comprising the IronSmalltalk compilers and runtime.
 7. **src\Test** - Contains ___unit tests___ to test projects in **src\Core**.
 8. **src\Tools*** - Contains ___tools___ used during development. 
