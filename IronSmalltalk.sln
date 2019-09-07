@@ -23,6 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{C147911F-3
 	ProjectSection(SolutionItems) = preProject
 		src\Core\Directory.Build.props = src\Core\Directory.Build.props
 		src\Core\Directory.Build.targets = src\Core\Directory.Build.targets
+		src\Core\IronSmalltalk.ruleset = src\Core\IronSmalltalk.ruleset
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{32A713CB-6A7A-49DF-A740-BF911DD2CD6B}"
