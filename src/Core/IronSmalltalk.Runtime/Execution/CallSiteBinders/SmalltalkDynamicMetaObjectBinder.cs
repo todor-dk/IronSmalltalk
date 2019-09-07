@@ -23,7 +23,7 @@ using System.Reflection;
 using System.Runtime;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Microsoft.Scripting.Generation;
+//using Microsoft.Scripting.Generation;
 
 namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 {
@@ -71,7 +71,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             //
             // finally produce the new rule if we need to 
             //
-#if !CLR2 && !SILVERLIGHT
+
             // We cannot compile rules in the heterogeneous app domains since they 
             // may come from less trusted sources
             // Silverlight always uses a homogenous appdomain, so we don’t need this check 
@@ -79,7 +79,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             {
                 throw new InvalidOperationException("Homogenous AppDomain Required");
             }
-#endif
+
             Expression<T> e = Stitch(binding, signature);
             T newRule = e.Compile(true);
 

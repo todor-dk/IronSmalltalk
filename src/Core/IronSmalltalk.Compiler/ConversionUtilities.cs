@@ -240,51 +240,10 @@ namespace IronSmalltalk.Compiler
         /// <returns>True if successful, otherwise false.</returns>
         private static bool TryParseBigInteger(string digits, bool isHex, out BigInteger result)
         {
-#if !SILVERLIGHT
             if (isHex)
-                return BigInteger.TryParse(digits, NumberStyles.HexNumber, null, out result);
+                return BigInteger.TryParse(digits, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out result);
             else
-                return BigInteger.TryParse(digits, out result);
-#else
-            // Silverlight doesn't have Parse() method, so we must do this by hand.
-            // In here, we (hopefully) provide functionality similar to BigInteger.TryParse(...).
-            // We handle exactly what the Parser and Compiler need and we are not 100% compatible.
-            // Alg. can be improved ...
-            result = BigInteger.Zero;
-            if (digits == null)
-                return false;
-            NumberFormatInfo info = NumberFormatInfo.GetInstance(null);
-            digits = digits.Trim(); // Remove whitespaces ... NumberStyles.AllowLeadingWhite and NumberStyles.AllowTrailingWhite
-            if (digits.Length == 0)
-                return false;
-            // Handle NumberStyles.AllowLeadingSign logic
-            bool negative = false;
-            if (digits.StartsWith(info.NegativeSign))
-            {
-                negative = true;
-                digits.Substring(info.NegativeSign.Length).Trim();
-            }
-            else if (digits.StartsWith(info.PositiveSign))
-            {
-                digits.Substring(info.PositiveSign.Length).Trim();
-            }
-            // Parse the number
-            string allowedChars = isHex ? "0123456789ABCDEFabcdef" : "0123456789";
-            BigInteger value = 0;
-            foreach (char ch in digits)
-            {
-                string digit = ch.ToString();
-                if (!allowedChars.Contains(digit))
-                    return false;
-                int num = isHex ? Int32.Parse(digit, NumberStyles.HexNumber, null) : Int32.Parse(digit);
-                value = value * 10 + num;
-            }
-
-            if (negative)
-                value = -value;
-            result = value;
-            return true;
-#endif
+                return BigInteger.TryParse(digits, NumberStyles.Integer, CultureInfo.InvariantCulture, out result);
         }
     }
 }

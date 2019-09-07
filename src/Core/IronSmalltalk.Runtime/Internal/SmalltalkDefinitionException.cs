@@ -19,21 +19,22 @@ using System;
 namespace IronSmalltalk.Runtime.Internal
 {
     /// <summary>
-    /// Represents a Smalltalk runtime exception.
+    /// Indicates an exception that occurred due to a problem with the Smalltalk definitions,
+    /// for example some problems with the source code that was being installed.
     /// </summary>
     [Serializable]
-    public class SmalltalkRuntimeException : Exception
+    public class SmalltalkDefinitionException : Exception
     {
         /// <summary>
         /// Creates and initializes a new exception.
         /// </summary>
-        public SmalltalkRuntimeException() { }
+        public SmalltalkDefinitionException() { }
 
         /// <summary>
         /// Creates and initializes a new exception with the specified error message.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public SmalltalkRuntimeException(string message) : base(message) { }
+        public SmalltalkDefinitionException(string message) : base(message) { }
 
         /// <summary>
         /// Creates and initializes a new exception with the specified error message
@@ -41,18 +42,16 @@ namespace IronSmalltalk.Runtime.Internal
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
         /// <param name="inner">The exception that is the cause of the current exception, or a null if no inner exception is specified.</param>
-        public SmalltalkRuntimeException(string message, Exception inner) : base(message, inner) { }
+        public SmalltalkDefinitionException(string message, Exception inner) : base(message, inner) { }
 
-#if !SILVERLIGHT
         /// <summary>
         /// Initializes a new instance of the exception with serialized data.
         /// </summary>
         /// <param name="info">The System.Runtime.Serialization.SerializationInfo that holds the serialized object data about the exception being thrown.</param>
         /// <param name="context">The System.Runtime.Serialization.StreamingContext that contains contextual information about the source or destination.</param>
-        protected SmalltalkRuntimeException(
+        protected SmalltalkDefinitionException(
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context)
             : base(info, context) { }
-#endif
     }
 }

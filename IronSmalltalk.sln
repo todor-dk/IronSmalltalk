@@ -48,7 +48,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronSmalltalk.Common", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronSmalltalk.Compiler", "src\Core\IronSmalltalk.Compiler\IronSmalltalk.Compiler.csproj", "{A0150A96-59CC-47E9-AC42-A4B38BECB117}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronSmalltalk.Core", "src\Core\IronSmalltalk.Core\IronSmalltalk.Core.csproj", "{7F170287-4372-49BA-8F49-729D68B6CBEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronSmalltalk.Runtime", "src\Core\IronSmalltalk.Runtime\IronSmalltalk.Runtime.csproj", "{7F170287-4372-49BA-8F49-729D68B6CBEB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronSmalltalk.CommandLineCompiler", "src\Core\IronSmalltalk.CommandLineCompiler\IronSmalltalk.CommandLineCompiler.csproj", "{C1E9D947-84AE-4008-8538-C0B8355555CF}"
 EndProject

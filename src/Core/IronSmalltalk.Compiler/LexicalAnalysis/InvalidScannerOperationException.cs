@@ -41,7 +41,6 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         {
         }
 
-#if !SILVERLIGHT
         /// <summary>
         /// Initializes a new instance of the InvalidScannerOperationException class with serialized data. 
         /// </summary>
@@ -52,7 +51,6 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
             : base(info, context)
         {
         }
-#endif
 
         /// <summary>
         /// Initializes a new instance of the InvalidScannerOperationException class

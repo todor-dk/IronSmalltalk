@@ -57,7 +57,6 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
         {
         }
 
-#if !SILVERLIGHT
         /// <summary>
         /// Initializes a new instance of the InvalidParserOperationException class with serialized data. 
         /// </summary>
@@ -68,6 +67,5 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
             : base(info, context)
         {
         }
-#endif
     }  
 }

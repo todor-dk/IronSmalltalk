@@ -29,8 +29,6 @@ namespace IronSmalltalk.Runtime.Execution.Internals
         public CodeGenerationException() { }
         public CodeGenerationException(string message) : base(message) { }
         public CodeGenerationException(string message, Exception inner) : base(message, inner) { }
-#if !SILVERLIGHT
         public CodeGenerationException(SerializationInfo info, StreamingContext context) : base(info, context) { }
-#endif
     }
 }
