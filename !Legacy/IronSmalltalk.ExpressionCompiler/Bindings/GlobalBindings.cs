@@ -1,0 +1,104 @@
+/*
+ * **************************************************************************
+ *
+ * Copyright (c) The IronSmalltalk Project. 
+ *
+ * This source code is subject to terms and conditions of the 
+ * license agreement found in the solution directory. 
+ * See: $(SolutionDir)\License.htm ... in the root of this distribution.
+ * By using this source code in any fashion, you are agreeing 
+ * to be bound by the terms of the license agreement.
+ *
+ * You must not remove this notice, or any other, from this software.
+ *
+ * **************************************************************************
+*/
+
+using IronSmalltalk.Runtime.Execution.CallSiteBinders;
+using System.Linq.Expressions;
+using RTB = IronSmalltalk.Runtime.Bindings;
+
+namespace IronSmalltalk.ExpressionCompiler.Bindings
+{
+    public abstract class GlobalBinding<TBinding> : DiscreteBinding<TBinding>
+        where TBinding : IronSmalltalk.Runtime.Bindings.IDiscreteGlobalBinding
+    {
+        public GlobalBinding(string name, TBinding binding)
+            : base(name, binding)
+        {
+        }
+
+        public override string Moniker
+        {
+            get { return DiscreteBindingCallSiteBinderBase.GetMoniker(this.Binding); }
+        }
+    }
+
+    public sealed class GlobalVariableBinding : GlobalBinding<RTB.GlobalVariableBinding>, IAssignableBinding
+    {
+        public GlobalVariableBinding(string name, RTB.GlobalVariableBinding binding)
+            : base(name, binding)
+        {
+        }
+
+        public System.Linq.Expressions.Expression GenerateAssignExpression(System.Linq.Expressions.Expression value, IBindingClient client)
+        {
+            return Expression.Assign(
+                Expression.Property(
+                    client.DiscreteBindingEncodingStrategy.GetBindingExpression<GlobalVariableBinding, RTB.GlobalVariableBinding>(client, this),
+                    GlobalVariableBinding.SetPropertyInfo), 
+                value);
+        }
+    }
+
+    public sealed class GlobalConstantBinding : GlobalBinding<RTB.GlobalConstantBinding>
+    {
+        public GlobalConstantBinding(string name, RTB.GlobalConstantBinding binding)
+            : base(name, binding)
+        {
+        }
+
+        /// <summary>
+        /// This returns true if the value of the binding will always be the same. 
+        /// Some read-only bindings (e.g. self, super) are NOT constant-value-bindings.
+        /// </summary>
+        public override bool IsConstantValueBinding
+        {
+            get { return true; }
+        }
+    }
+
+    public sealed class ClassBinding : GlobalBinding<RTB.ClassBinding>
+    {
+        public ClassBinding(string name, RTB.ClassBinding binding)
+            : base(name, binding)
+        {
+        }
+
+        /// <summary>
+        /// This returns true if the value of the binding will always be the same. 
+        /// Some read-only bindings (e.g. self, super) are NOT constant-value-bindings.
+        /// </summary>
+        public override bool IsConstantValueBinding
+        {
+            get { return true; }
+        }
+    }
+
+    public sealed class PoolBinding : GlobalBinding<RTB.PoolBinding>
+    {
+        public PoolBinding(string name, RTB.PoolBinding binding)
+            : base(name, binding)
+        {
+        }
+
+        /// <summary>
+        /// This returns true if the value of the binding will always be the same. 
+        /// Some read-only bindings (e.g. self, super) are NOT constant-value-bindings.
+        /// </summary>
+        public override bool IsConstantValueBinding
+        {
+            get { return true; }
+        }
+    }
+}

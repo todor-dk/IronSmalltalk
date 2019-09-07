@@ -1,0 +1,15 @@
+<!--
+	Shared MSBuild .props file.
+	This file contains MSBuild properties common to all projects.
+	See: https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build?view=vs-2019
+-->
+<Project>
+  <!-- Merge the **Directory.Build.props** from the parent folder -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <!-- Example
+  <PropertyGroup>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  -->
+</Project>

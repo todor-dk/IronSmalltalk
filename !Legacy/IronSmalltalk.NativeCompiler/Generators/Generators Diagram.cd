@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="IronSmalltalk.NativeCompiler.Generators.GeneratorBase" Collapsed="true">
+    <Position X="8" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Generators\GeneratorBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.NativeCompiler.Generators.Globals.GlobalBindingGenerator" Collapsed="true">
+    <Position X="4.75" Y="1.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAIABAAAAIAAAAAACAACAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Generators\Globals\GlobalBindingGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.NativeCompiler.Internals.MethodGenerator" Collapsed="true">
+    <Position X="7" Y="1.75" Width="1.5" />
+    <NestedTypes>
+      <Class Name="IronSmalltalk.NativeCompiler.Internals.MethodGenerator.MethodInformation" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Internals\MethodGenerator.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>QIgAAAAAAAIQAAAgAAIKKIAACIAAABAEiAAGQQAAAEA=</HashCode>
+      <FileName>Internals\MethodGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.NativeCompiler.Generators.RuntimeGenerator">
+    <Position X="9.5" Y="1.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAEIAAAAAAAACAAAAAAAAAABAAAAQAAAAAIAAA=</HashCode>
+      <FileName>Generators\RuntimeGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.NativeCompiler.Generators.Initializers.InitializerGenerator">
+    <Position X="12.75" Y="1.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AhAAAAAAAQAAAAAEAgAAAAIAABEAAAAAAAACACIABAA=</HashCode>
+      <FileName>Generators\Initializers\InitializerGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.NativeCompiler.Generators.NameScopeGenerator">
+    <Position X="0.5" Y="0.5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>CEIEAAAAAAEQkgCAAAAACCAAQABAQgAAAAAEAAIgDEA=</HashCode>
+      <FileName>Generators\NameScopeGenerator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

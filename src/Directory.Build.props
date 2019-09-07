@@ -1,0 +1,12 @@
+<!--
+	Shared MSBuild .props file.
+	This file contains MSBuild properties common to all projects.
+	See: https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build?view=vs-2019
+-->
+<Project>
+  <!-- Example
+  <PropertyGroup>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  -->
+</Project>

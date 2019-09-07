@@ -1,0 +1,12 @@
+<!--
+	Shared MSBuild .targets file.
+	This file contains MSBuild targets common to all projects.
+	See: https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build?view=vs-2019
+-->
+<Project>
+  <!-- Example
+  <Target Name="EmitCustomMessage" AfterTargets="Build">
+    <Message Importance="High" Text="The solution has completed the Build target" />
+  </Target>
+  -->
+</Project>

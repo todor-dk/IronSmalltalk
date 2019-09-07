@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+ * **************************************************************************
+ *
+ * Copyright (c) The IronSmalltalk Project. 
+ *
+ * This source code is subject to terms and conditions of the 
+ * license agreement found in the solution directory. 
+ * See: $(SolutionDir)\License.htm ... in the root of this distribution.
+ * By using this source code in any fashion, you are agreeing 
+ * to be bound by the terms of the license agreement.
+ *
+ * You must not remove this notice, or any other, from this software.
+ *
+ * **************************************************************************
+-->
+
+<SystemImplementation
+  xmlns="http://schemas.ironsmalltalk.org/version1.0/Tools/SystemImplementation.xsd"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="SystemImplementation.xsd">
+  <Class name="Object" instanceState="namedObjectVariables" definingProtocol="Object class">
+    <ImplementedInstanceProtocols />
+    <ImplementedClassProtocols />
+    <InstanceVariables />
+    <ClassVariables />
+    <ClassInstanceVariables />
+    <SharedPools />
+    <InstanceMethods />
+    <ClassMethods />
+    <Initializer>
+      <Source>ssdsd</Source>
+      <Annotations>
+        
+      </Annotations>
+      
+    </Initializer>
+    <Annotations>
+      <Annotation key="xxx">asad</Annotation>
+    </Annotations>
+  </Class>
+</SystemImplementation>

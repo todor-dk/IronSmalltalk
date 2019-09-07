@@ -1,0 +1,2 @@
+﻿
+-X:PassExceptions -X:AutoIndent -X:ColorfulConsole -e "Transcript show: 'Hello World'; cr"

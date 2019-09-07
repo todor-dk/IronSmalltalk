@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="IronSmalltalk.Runtime.CodeGeneration.Visiting.LiteralVisitor" Collapsed="true">
+    <Position X="10.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQIYBAAIAAAgAAAAgAAAAAABAAAAAAKAA=</HashCode>
+      <FileName>Visiting\LiteralVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.PrimaryVisitor" Collapsed="true">
+    <Position X="12.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAQIYBAAIAAAgAQAAgAAAAAABQABAAAKQA=</HashCode>
+      <FileName>Visiting\PrimaryVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.PrimitiveCallVisitor" Collapsed="true">
+    <Position X="15" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAEAAAIAAAEAAAAAAgAAIAAAAAAA=</HashCode>
+      <FileName>Visiting\PrimitiveCallVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.StatementVisitor" Collapsed="true">
+    <Position X="17.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAgAAAAAAAAAAAAAAAAAAAAAAAAAgQAAAA=</HashCode>
+      <FileName>Visiting\StatementVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.ExpressionVisitor" Collapsed="true">
+    <Position X="6" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAEAAAAAAAAAAAAAAAAQACCAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>Visiting\ExpressionVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.MessageVisitor" Collapsed="true">
+    <Position X="8.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABABAAQACkAgCMAACEAIIQFAAAEEBACABAAEBAAAIMA=</HashCode>
+      <FileName>Visiting\TO-DO\MessageVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.InitializerVisitor" Collapsed="true">
+    <Position X="3.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgABAAAAAAAAAAAAAACAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Visiting\TO-DO\InitializerVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.Runtime.CodeGeneration.Visiting.EncoderVisitor" Collapsed="true">
+    <Position X="11.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAACAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAEAAAAAA=</HashCode>
+      <FileName>Visiting\TO-DO\EncoderVisitor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.EncoderVisitor&lt;TResult&gt;" Collapsed="true">
+    <Position X="11.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ARAAAAQQAgAwKcBACMAIEwBRAAiIAACABBwIAQAAKUA=</HashCode>
+      <FileName>Visiting\TO-DO\EncoderVisitor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="IronSmalltalk.Runtime.CodeGeneration.Visiting.NestedEncoderVisitor&lt;TResult&gt;" Collapsed="true">
+    <Position X="13.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAEAAAAAg=</HashCode>
+      <FileName>Visiting\TO-DO\EncoderVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.BlockVisitorBase" Collapsed="true">
+    <Position X="20.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAACAAAAgAAAAAAAAAAAAAIAAACAAAIAAAAAAAAQA=</HashCode>
+      <FileName>Visiting\TO-DO\BlockVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.BlockVisitor" Collapsed="true">
+    <Position X="21.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAQA=</HashCode>
+      <FileName>Visiting\TO-DO\BlockVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.ExpressionCompiler.Visiting.InlineBlockVisitor" Collapsed="true">
+    <Position X="19.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Visiting\TO-DO\BlockVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="IronSmalltalk.Runtime.CodeGeneration.Visiting.IRootFunctionVisitor" Collapsed="true">
+    <Position X="24.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACAAAAAAKBAAAgBAAAACAAAAAAAA=</HashCode>
+      <FileName>Visiting\TO-DO\RootEncoderVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

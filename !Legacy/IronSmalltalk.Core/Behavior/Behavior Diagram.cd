@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="IronSmalltalk.Runtime.Behavior.CompiledMethod" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="IronSmalltalk.Runtime.Behavior.CompiledMethod.MethodType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Behavior\CompiledMethod.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AIAQAAAAAAAAAQAAAAIAAAAAAAAAAAAAAQAAAAACAAA=</HashCode>
+      <FileName>Behavior\CompiledMethod.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.Runtime.Behavior.MethodDictionary" Collapsed="true">
+    <Position X="5.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CBsAEAAAQoAGDhobCQAABAQAAMAAAAEmCAMobRXUb2A=</HashCode>
+      <FileName>Behavior\MethodDictionary.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="IronSmalltalk.Runtime.Behavior.ClassMethodDictionary" Collapsed="true">
+    <Position X="6.25" Y="7.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Behavior\MethodDictionary.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.Runtime.Behavior.InstanceMethodDictionary" Collapsed="true">
+    <Position X="3.5" Y="7.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Behavior\MethodDictionary.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.Runtime.Behavior.CompiledCode" Collapsed="true">
+    <Position X="1.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAQAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Behavior\CompiledCode.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="IronSmalltalk.Runtime.Behavior.NativeCompiledMethod">
+    <Position X="0.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Behavior\CompiledMethod.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.Runtime.Behavior.CompiledInitializer" Collapsed="true">
+    <Position X="2.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAACA=</HashCode>
+      <FileName>Behavior\CompiledInitializer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IronSmalltalk.Runtime.Behavior.NativeCompiledInitializer" Collapsed="true">
+    <Position X="2.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Behavior\NativeCompiledInitializer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
