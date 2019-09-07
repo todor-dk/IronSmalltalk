@@ -80,12 +80,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         protected internal AssignmentNode(SemanticNode parent, IdentifierToken identifier, AssignmentOperatorToken token)
             : base(parent)
         {
-#if DEBUG
-            if (identifier == null)
-                throw new ArgumentNullException("identifier");
-            if (token == null)
-                throw new ArgumentNullException("token");
-#endif
+            Contract.RequiresNotNull(identifier, nameof(identifier));
+            Contract.RequiresNotNull(token, nameof(token));
+
             this.Target = new AssignmentTargetNode(this, identifier);
             this.AssignmentOperator = token;
         }
@@ -96,8 +93,8 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="expression"></param>
         protected internal void SetContents(ExpressionNode expression)
         {
-            if (expression == null)
-                throw new ArgumentNullException("expression");
+            Contract.RequiresNotNull(expression, nameof(expression));
+
             this.Expression = expression;
         }
 
@@ -183,9 +180,8 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="token">Left opening parenthesis of the parenthesized expression.</param>
         protected internal ParenthesizedExpressionNode(IPrimaryParentNode parent, SpecialCharacterToken token)
         {
+            Contract.RequiresNotNull(parent, nameof(parent));
 #if DEBUG
-            if (parent == null)
-                throw new ArgumentNullException("parent");
             if (!Parser.IsOpeningParenthesis(token))
                 // We do expect the caller to this method to have ensured that we are actually parsing a parenthesis.
                 throw new InvalidParserOperationException("Expected opening parenthesis token ... '('");
@@ -201,8 +197,8 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="rightParenthesis">Right closing parenthesis of the parenthesized expression.</param>
         protected internal void SetContents(ExpressionNode expression, SpecialCharacterToken rightParenthesis)
         {
-            if (expression == null)
-                throw new ArgumentNullException("expression");
+            Contract.RequiresNotNull(expression, nameof(expression));
+
             if ((rightParenthesis != null) && !Parser.IsClosingParenthesis(rightParenthesis)) // Must allow for null
                 throw new ArgumentException("rightParenthesis");
             this.Expression = expression;
@@ -304,8 +300,8 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="cascadeMessages">Optional cascade messages sent to the primary of the expression.</param>
         protected internal void SetContents(IPrimaryNode primary, MessageSequenceNode messages, CascadeMessageSequenceNode cascadeMessages)
         {
-            if (primary == null)
-                throw new ArgumentNullException("primary");
+            Contract.RequiresNotNull(primary, nameof(primary));
+
             this.Primary = primary;
             this.Messages = messages; // OK with null
             this.CascadeMessages = cascadeMessages; // OK with null
@@ -373,12 +369,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="token">Identifier token containing the name of the variable.</param>
         protected internal VariableReferenceleNode(IPrimaryParentNode parent, IdentifierToken token)
         {
-#if DEBUG
-            if (parent == null)
-                throw new ArgumentNullException("parent");
-            if (token == null)
-                throw new ArgumentNullException("token");
-#endif
+            Contract.RequiresNotNull(parent, nameof(parent));
+            Contract.RequiresNotNull(token, nameof(token));
+
             this.Parent = parent;
             this.Token = token;
         }
@@ -402,12 +395,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="token">Identifier token containing the name of the variable.</param>
         protected internal AssignmentTargetNode(AssignmentNode parent, IdentifierToken token)
         {
-#if DEBUG
-            if (parent == null)
-                throw new ArgumentNullException("parent");
-            if (token == null)
-                throw new ArgumentNullException("token");
-#endif
+            Contract.RequiresNotNull(parent, nameof(parent));
+            Contract.RequiresNotNull(token, nameof(token));
+
             this.Parent = parent;
             this.Token = token;
         }

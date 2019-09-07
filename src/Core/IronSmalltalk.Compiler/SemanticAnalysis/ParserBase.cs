@@ -56,8 +56,7 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
         /// <param name="offendingToken">Token responsible for the problem.</param>
         protected virtual void ReportParserError(IParseNode node, string parseErrorMessage, IToken offendingToken)
         {
-            if (offendingToken == null)
-                throw new ArgumentNullException("offendingToken");
+            Contract.RequiresNotNull(offendingToken, nameof(offendingToken));
             
             this.ReportParserError(node, offendingToken.StartPosition, offendingToken.StopPosition, parseErrorMessage, offendingToken);
         }
@@ -83,8 +82,8 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
         /// <param name="offendingToken">Token responsible for the problem.</param>
         protected virtual void ReportParserError(string parseErrorMessage, IToken offendingToken)
         {
-            if (offendingToken == null)
-                throw new ArgumentNullException("offendingToken");
+            Contract.RequiresNotNull(offendingToken, nameof(offendingToken));
+
             this.ReportParserError(offendingToken.StartPosition, offendingToken.StopPosition, parseErrorMessage, offendingToken);
         }
 

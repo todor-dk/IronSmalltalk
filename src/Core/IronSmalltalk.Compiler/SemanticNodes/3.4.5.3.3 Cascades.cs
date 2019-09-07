@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 
@@ -56,12 +57,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="token">Token representing the semicolon used to delimit cascade message sequences.</param>
         protected internal CascadeMessageSequenceNode(ICascadeMessageSequenceParentNode parent, SpecialCharacterToken token)
         {
-#if DEBUG
-            if (parent == null)
-                throw new ArgumentNullException("parent");
-            if (token == null)
-                throw new ArgumentNullException("token");
-#endif
+            Contract.RequiresNotNull(parent, nameof(parent));
+            Contract.RequiresNotNull(token, nameof(token));
+
             this.Parent = parent;
             this.Semicolon = token;
         }
@@ -73,8 +71,8 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="nextCascade">Optional cascade messages following this cascade message.</param>
         protected internal void SetContents(MessageSequenceNode messages, CascadeMessageSequenceNode nextCascade)
         {
-            if (messages == null)
-                throw new ArgumentNullException("messages");
+            Contract.RequiresNotNull(messages, nameof(messages));
+
             this.Messages = messages;
             this.NextCascade = nextCascade; // OK with null
         }

@@ -65,8 +65,8 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="messages">Optional message or a sequence of messages sent to the primary.</param>
         protected internal void SetContents(IPrimaryNode primary, UnaryMessageSequenceNode messages)
         {
-            if (primary == null)
-                throw new ArgumentNullException("primary");
+            Contract.RequiresNotNull(primary, nameof(primary));
+
             this.Primary = primary;
             this.Messages = messages; // OK if this is null
         }
@@ -150,8 +150,8 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="nextMessage">Optional sequence of messages that may follow this message.</param>
         protected internal void SetContents(UnaryMessageNode message, UnaryMessageSequenceNode nextMessage)
         {
-            if (message == null)
-                throw new ArgumentNullException("message");
+            Contract.RequiresNotNull(message, nameof(message));
+
             this.Message = message;
             this.NextMessage = nextMessage; // OK with null.
         }
@@ -229,8 +229,8 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="messages">Optional message or a sequence of messages sent to the primary.</param>
         protected internal void SetContents(IPrimaryNode primary, BinaryOrBinaryUnaryMessageSequenceNode messages)
         {
-            if (primary == null)
-                throw new ArgumentNullException("primary");
+            Contract.RequiresNotNull(primary, nameof(primary));
+
             this.Primary = primary;
             this.Messages = messages; // null is OK.
         }
@@ -329,8 +329,8 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="nextMessage">Optional sequence of messages that may follow this message.</param>
         protected internal void SetContents(UnaryMessageNode message, BinaryOrBinaryUnaryMessageSequenceNode nextMessage)
         {
-            if (message == null)
-                throw new ArgumentNullException("message");
+            Contract.RequiresNotNull(message, nameof(message));
+
             this.Message = message;
             this.NextMessage = nextMessage;
         }
@@ -405,8 +405,8 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="nextMessage">Optional sequence of messages that may follow this message.</param>
         protected internal void SetContents(BinaryMessageNode message, BinaryMessageSequenceNode nextMessage)
         {
-            if (message == null)
-                throw new ArgumentNullException("message");
+            Contract.RequiresNotNull(message, nameof(message));
+
             this.Message = message;
             this.NextMessage = nextMessage; // Null is OK.
         }

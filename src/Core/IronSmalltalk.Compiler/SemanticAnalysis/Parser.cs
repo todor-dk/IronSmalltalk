@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.LexicalAnalysis;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticNodes;
@@ -49,8 +50,8 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
         /// <returns>A parse node for the method definition.</returns>
         public MethodNode ParseMethod(TextReader reader)
         {
-            if (reader == null)
-                throw new ArgumentNullException("reader");
+            Contract.RequiresNotNull(reader, nameof(reader));
+
             this.InitParser(reader);
             return this.ParseMethod();
         }
@@ -62,8 +63,8 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
         /// <returns>A parse node for the initializer definition.</returns>
         public InitializerNode ParseInitializer(TextReader reader)
         {
-            if (reader == null)
-                throw new ArgumentNullException("reader");
+            Contract.RequiresNotNull(reader, nameof(reader));
+
             this.InitParser(reader);
             return this.ParseInitializer();
         }

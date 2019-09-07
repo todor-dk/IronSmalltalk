@@ -227,10 +227,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="arguments">Argument nodes containing the arguments for the keyword message.</param>
         protected internal void SetContents(IEnumerable<KeywordToken> selectorTokens, IEnumerable<KeywordArgumentNode> arguments)
         {
-            if (selectorTokens == null)
-                throw new ArgumentNullException("selectorTokens");
-            if (arguments == null)
-                throw new ArgumentNullException("arguments");
+            Contract.RequiresNotNull(selectorTokens, nameof(selectorTokens));
+            Contract.RequiresNotNull(arguments, nameof(arguments));
+
             this.SelectorTokens.Clear();
             this.Arguments.Clear();
             this.SelectorTokens.AddRange(selectorTokens);

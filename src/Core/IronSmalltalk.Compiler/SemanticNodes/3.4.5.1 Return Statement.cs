@@ -54,8 +54,8 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="period">Optional period that terminates a statement.</param>
         protected internal void SetContents(ExpressionNode expression, SpecialCharacterToken period)
         {
-            if (expression == null)
-                throw new ArgumentNullException("expression");
+            Contract.RequiresNotNull(expression, nameof(expression));
+            
             this.Expression = expression;
             this.Period = period; // Null is OK here.
         }

@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 using IronSmalltalk.Compiler.LexicalAnalysis;
+using IronSmalltalk.Common;
 
 namespace IronSmalltalk.Compiler.SemanticNodes
 {
@@ -60,12 +61,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="token">Token for the left / opening square bracket of the block.</param>
         protected internal BlockNode(IPrimaryParentNode parent, SpecialCharacterToken token)
         {
-#if DEBUG
-            if (parent == null)
-                throw new ArgumentNullException("parent");
-            if (token == null)
-                throw new ArgumentNullException("token");
-#endif
+            Contract.RequiresNotNull(parent, nameof(parent));
+            Contract.RequiresNotNull(token, nameof(token));
+
             this.Arguments = new List<BlockArgumentNode>();
             this.Parent = parent;
             this.LeftBracket = token;
@@ -85,8 +83,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
             VerticalBarToken leftBar, IEnumerable<TemporaryVariableNode> temporaries, VerticalBarToken rightBar, 
             StatementNode statements, SpecialCharacterToken rightBracket)
         {
-            if (arguments == null)
-                throw new ArgumentNullException("arguments");
+            Contract.RequiresNotNull(arguments, nameof(arguments));
 
             this.SetContents(leftBar, temporaries, rightBar, statements);
 
@@ -199,12 +196,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         protected internal BlockArgumentNode(BlockNode parent, SpecialCharacterToken colon, IdentifierToken token)
             : base(token)
         {
-#if DEBUG
-            if (parent == null)
-                throw new ArgumentNullException("parent");
-            if (colon == null)
-                throw new ArgumentNullException("colon");
-#endif
+            Contract.RequiresNotNull(parent, nameof(parent));
+            Contract.RequiresNotNull(colon, nameof(colon));
+
             this.Colon = colon;
             this.Parent = parent;
         }

@@ -79,8 +79,8 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="rightParenthesis">Closing right parenthesis of the literal array.</param>
         protected internal void SetContents(IEnumerable<LiteralNode> elements, SpecialCharacterToken rightParenthesis)
         {
-            if (elements == null)
-                throw new ArgumentNullException("elements");
+            Contract.RequiresNotNull(elements, nameof(elements));
+
             if ((rightParenthesis != null) &&  !Parser.IsClosingParenthesis(rightParenthesis)) // NB: We allow null value.
                 throw new ArgumentException("rightParenthesis");
             this.RightParenthesis = rightParenthesis;

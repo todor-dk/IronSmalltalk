@@ -46,8 +46,8 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         /// <param name="reader"></param>
         public Scanner(TextReader reader)
         {
-            if (reader == null)
-                throw new ArgumentNullException("reader");
+            Contract.RequiresNotNull(reader, nameof(reader));
+
             this.Reader = new CharReader(reader);
             this.Buffer = new StringBuilder();
             this.ScanResult = new ScanResult();
@@ -1148,9 +1148,8 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         private TToken ReturnError<TToken>(TToken token, string errorMessage)
             where TToken : Token
         {
+            Contract.RequiresNotNull(token, nameof(token));
 #if DEBUG
-            if (token == null)
-                throw new ArgumentNullException("token");
             if (String.IsNullOrWhiteSpace(errorMessage))
                 throw new ArgumentException("errorMessage");
 #endif

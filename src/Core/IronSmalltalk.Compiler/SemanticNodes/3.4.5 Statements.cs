@@ -94,8 +94,8 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="nextStatement">Optional statement node that follows this statement.</param>
         protected internal void SetContents(ExpressionNode expression, SpecialCharacterToken period, StatementNode nextStatement)
         {
-            if (expression == null)
-                throw new ArgumentNullException("expression");
+            Contract.RequiresNotNull(expression, nameof(expression));
+
             this.Expression = expression;
             this.Period = period; // Null is OK here.
             this.NextStatement = nextStatement; // Null is OK here.
