@@ -35,8 +35,8 @@ namespace IronSmalltalk.Common.Internal
 
         public static ConstructorInfo Constructor(Type type, BindingFlags bindingFlags, params Type[] argumentTypes)
         {
-            if (type == null)
-                throw new ArgumentNullException(nameof(type));
+            Contract.RequiresNotNull(type, nameof(type));
+
             if (argumentTypes == null)
                 argumentTypes = TypeUtilities.EmptyTypeArray;
             ConstructorInfo ctor = type.GetConstructor(bindingFlags, null, argumentTypes, null);
@@ -53,8 +53,8 @@ namespace IronSmalltalk.Common.Internal
 
         public static FieldInfo Field(Type type, string name, BindingFlags bindingFlags)
         {
-            if (type == null)
-                throw new ArgumentNullException(nameof(type));
+            Contract.RequiresNotNull(type, nameof(type));
+
             FieldInfo field = type.GetField(name, bindingFlags);
             if (field == null)
                 throw new MissingFieldException(type.Name, name);
@@ -64,8 +64,8 @@ namespace IronSmalltalk.Common.Internal
 
         public static MethodInfo Method(Type type, string name)
         {
-            if (type == null)
-                throw new ArgumentNullException(nameof(type));
+            Contract.RequiresNotNull(type, nameof(type));
+
             MethodInfo method = type.GetMethod(name);
             if (method == null)
                 throw new MissingMethodException(type.Name, String.Format(CultureInfo.CurrentCulture, "{0}(...)", name));
@@ -80,8 +80,8 @@ namespace IronSmalltalk.Common.Internal
 
         public static MethodInfo Method(Type type, string name, BindingFlags bindingFlags, params Type[] argumentTypes)
         {
-            if (type == null)
-                throw new ArgumentNullException(nameof(type));
+            Contract.RequiresNotNull(type, nameof(type));
+
             if (argumentTypes == null)
                 argumentTypes = TypeUtilities.EmptyTypeArray;
             MethodInfo method = type.GetMethod(name, bindingFlags, null, argumentTypes, null);
@@ -108,8 +108,8 @@ namespace IronSmalltalk.Common.Internal
 
         public static PropertyInfo Property(Type type, Type returnType, string name, BindingFlags bindingFlags, params Type[] argumentTypes)
         {
-            if (type == null)
-                throw new ArgumentNullException(nameof(type));
+            Contract.RequiresNotNull(type, nameof(type));
+
             if (argumentTypes == null)
                 argumentTypes = TypeUtilities.EmptyTypeArray;
             PropertyInfo property = type.GetProperty(name, bindingFlags, null, returnType, argumentTypes, null);
