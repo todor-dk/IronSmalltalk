@@ -15,6 +15,7 @@
 */
 
 using System;
+using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.Visiting;
 
 namespace IronSmalltalk.Compiler.SemanticNodes
@@ -26,12 +27,12 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     // *** Moved here for logistical reasons.
     // ********************************************
 
-    partial interface IPrimaryNode
+    public partial interface IPrimaryNode
     {
         TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor);
     }
 
-    partial class SemanticNode
+    public partial class SemanticNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -41,17 +42,15 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public virtual TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitSemanticNode(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitSemanticNode(this);
         }
     }
 
     #region 3.4.1 Functions
 
-    partial class TemporaryVariableNode
+    public partial class TemporaryVariableNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -61,11 +60,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitTemporaryVariable(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitTemporaryVariable(this);
         }
     }
 
@@ -73,7 +70,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
 
     #region 3.4.2 Methods
 
-    partial class MethodNode
+    public partial class MethodNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -83,15 +80,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitMethod(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitMethod(this);
         }
     }
 
-    partial class MethodArgumentNode
+    public partial class MethodArgumentNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -101,11 +96,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitMethodArgument(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitMethodArgument(this);
         }
     }
 
@@ -113,7 +106,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
 
     #region 3.4.3 Initializers (Expressions)
 
-    partial class InitializerNode
+    public partial class InitializerNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -123,11 +116,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitInitializer(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitInitializer(this);
         }
     }
 
@@ -135,7 +126,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
 
     #region 3.4.4 Blocks
 
-    partial class BlockNode
+    public partial class BlockNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -145,15 +136,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitBlock(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitBlock(this);
         }
     }
 
-    partial class BlockArgumentNode
+    public partial class BlockArgumentNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -163,11 +152,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitBlockArgument(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitBlockArgument(this);
         }
     }
 
@@ -175,7 +162,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
 
     #region 3.4.5 Statements
 
-    partial class ReturnStatementNode
+    public partial class ReturnStatementNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -185,15 +172,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitReturnStatement(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitReturnStatement(this);
         }
     }
 
-    partial class StatementSequenceNode
+    public partial class StatementSequenceNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -203,11 +188,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitStatementSequence(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitStatementSequence(this);
         }
     }
 
@@ -215,7 +198,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
 
     #region 3.4.5.2 Expressions
 
-    partial class AssignmentNode
+    public partial class AssignmentNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -225,15 +208,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitAssignment(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitAssignment(this);
         }
     }
 
-    partial class ParenthesizedExpressionNode
+    public partial class ParenthesizedExpressionNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -243,15 +224,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitParenthesizedExpression(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitParenthesizedExpression(this);
         }
     }
 
-    partial class BasicExpressionNode
+    public partial class BasicExpressionNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -261,15 +240,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitBasicExpression(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitBasicExpression(this);
         }
     }
 
-    partial class VariableReferenceleNode
+    public partial class VariableReferenceleNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -279,15 +256,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitVariableReferencele(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitVariableReferencele(this);
         }
     }
 
-    partial class AssignmentTargetNode
+    public partial class AssignmentTargetNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -297,15 +272,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitAssignmentTarget(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitAssignmentTarget(this);
         }
     }
 
-    partial class CascadeMessageSequenceNode
+    public partial class CascadeMessageSequenceNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -315,11 +288,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitCascadeMessageSequence(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitCascadeMessageSequence(this);
         }
     }
 
@@ -327,7 +298,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
 
     #region 3.4.5.3 Messages Sequences
 
-    partial class BinaryArgumentNode
+    public partial class BinaryArgumentNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -337,15 +308,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
+            Contract.RequiresNotNull(visitor, nameof(visitor));
+
             return visitor.VisitBinaryArgument(this);
         }
     }
 
-    partial class UnaryMessageSequenceNode
+    public partial class UnaryMessageSequenceNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -355,15 +324,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitUnaryMessageSequence(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitUnaryMessageSequence(this);
         }
     }
 
-    partial class KeywordArgumentNode
+    public partial class KeywordArgumentNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -373,15 +340,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitKeywordArgument(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitKeywordArgument(this);
         }
     }
 
-    partial class UnaryBinaryMessageSequenceNode
+    public partial class UnaryBinaryMessageSequenceNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -391,15 +356,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitUnaryBinaryMessageSequence(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitUnaryBinaryMessageSequence(this);
         }
     }
 
-    partial class BinaryMessageSequenceNode
+    public partial class BinaryMessageSequenceNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -409,15 +372,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitBinaryMessageSequence(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitBinaryMessageSequence(this);
         }
     }
 
-    partial class UnaryBinaryKeywordMessageSequenceNode
+    public partial class UnaryBinaryKeywordMessageSequenceNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -427,15 +388,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitUnaryBinaryKeywordMessageSequence(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitUnaryBinaryKeywordMessageSequence(this);
         }
     }
 
-    partial class BinaryKeywordMessageSequenceNode
+    public partial class BinaryKeywordMessageSequenceNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -445,15 +404,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitBinaryKeywordMessageSequence(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitBinaryKeywordMessageSequence(this);
         }
     }
 
-    partial class KeywordMessageSequenceNode
+    public partial class KeywordMessageSequenceNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -463,11 +420,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitKeywordMessageSequence(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitKeywordMessageSequence(this);
         }
     }
 
@@ -475,7 +430,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
 
     #region 3.4.5.3 Messages
 
-    partial class KeywordMessageNode
+    public partial class KeywordMessageNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -485,15 +440,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitKeywordMessage(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitKeywordMessage(this);
         }
     }
 
-    partial class BinaryMessageNode
+    public partial class BinaryMessageNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -503,15 +456,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitBinaryMessage(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitBinaryMessage(this);
         }
     }
 
-    partial class UnaryMessageNode
+    public partial class UnaryMessageNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -521,11 +472,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitUnaryMessage(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitUnaryMessage(this);
         }
     }
 
@@ -533,7 +482,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
 
     #region 3.4.6 Literals
 
-    partial class LargeIntegerLiteralNode
+    public partial class LargeIntegerLiteralNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -543,15 +492,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitLargeIntegerLiteral(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitLargeIntegerLiteral(this);
         }
     }
 
-    partial class FloatELiteralNode
+    public partial class FloatELiteralNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -561,15 +508,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitFloatELiteral(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitFloatELiteral(this);
         }
     }
 
-    partial class FloatDLiteralNode
+    public partial class FloatDLiteralNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -579,15 +524,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitFloatDLiteral(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitFloatDLiteral(this);
         }
     }
 
-    partial class ScaledDecimalLiteralNode
+    public partial class ScaledDecimalLiteralNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -597,15 +540,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitScaledDecimalLiteral(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitScaledDecimalLiteral(this);
         }
     }
 
-    partial class SmallIntegerLiteralNode
+    public partial class SmallIntegerLiteralNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -615,15 +556,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitSmallIntegerLiteral(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitSmallIntegerLiteral(this);
         }
     }
 
-    partial class CharacterLiteralNode
+    public partial class CharacterLiteralNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -633,15 +572,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitCharacterLiteral(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitCharacterLiteral(this);
         }
     }
 
-    partial class StringLiteralNode
+    public partial class StringLiteralNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -651,15 +588,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitStringLiteral(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitStringLiteral(this);
         }
     }
 
-    partial class SymbolLiteralNode
+    public partial class SymbolLiteralNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -669,15 +604,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitSymbolLiteral(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitSymbolLiteral(this);
         }
     }
 
-    partial class SelectorLiteralNode
+    public partial class SelectorLiteralNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -687,15 +620,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitSelectorLiteral(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitSelectorLiteral(this);
         }
     }
 
-    partial class ArrayLiteralNode
+    public partial class ArrayLiteralNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -705,15 +636,13 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitArrayLiteral(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitArrayLiteral(this);
         }
     }
 
-    partial class IdentifierLiteralNode
+    public partial class IdentifierLiteralNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -723,17 +652,15 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitIdentifierLiteral(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitIdentifierLiteral(this);
         }
     }
 
     #endregion
 
-    partial class PrimitiveCallNode
+    public partial class PrimitiveCallNode
     {
         /// <summary>
         /// Implements the visitor pattern for parse nodes.
@@ -743,11 +670,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="visitor"></param>
         public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor)
         {
-#if DEBUG
-            if (visitor == null)
-                throw new ArgumentNullException();
-#endif
-            return visitor.VisitPrimitiveCall(this);
+			Contract.RequiresNotNull(visitor, nameof(visitor));
+
+			return visitor.VisitPrimitiveCall(this);
         }
     }
 }

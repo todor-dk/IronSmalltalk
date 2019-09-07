@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.LexicalTokens;
 
 
@@ -65,11 +66,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="parent">Parent node that defines this parse node.</param>
         protected MessageSequenceBase(IMessageSequenceParentNode parent)
         {
-#if DEBUG
-            if (parent == null)
-                throw new ArgumentNullException("parent");
-#endif
-            this.Parent = parent;
+			Contract.RequiresNotNull(parent, nameof(parent));
+
+			this.Parent = parent;
         }
 
         /// <summary>
@@ -330,5 +329,4 @@ namespace IronSmalltalk.Compiler.SemanticNodes
                 return this.Message.PrintString();
         }
     }
-
 }

@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 
@@ -155,11 +156,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         protected internal IdentifierLiteralNode(ILiteralNodeParent parent, ILiteralArrayIdentifierToken token)
             : base(parent)
         {
-#if DEBUG
-            if (token == null)
-                throw new ArgumentNullException("token");
-#endif
-            this.Token = token;
+			Contract.RequiresNotNull(token, nameof(token));
+
+			this.Token = token;
         }
 
         /// <summary>

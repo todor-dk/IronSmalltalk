@@ -14,6 +14,7 @@
  * **************************************************************************
 */
 
+using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.SemanticNodes;
 
 namespace IronSmalltalk.Compiler.Visiting
@@ -31,14 +32,16 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitSemanticNode(SemanticNode node)
 		{
-			// Naive brute force implementation
-			foreach (IParseNode child in node.GetChildNodes())
+            Contract.RequiresNotNull(node, nameof(node));
+
+            // Naive brute force implementation
+            foreach (IParseNode child in node.GetChildNodes())
 			{
 				if (child is SemanticNode)
 					((SemanticNode)child).Accept(this);
 			}
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		#region 3.4.1 Functions
@@ -49,7 +52,9 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitTemporaryVariable(TemporaryVariableNode node)
 		{
-			return default(TResult); // The default naive implementation
+            Contract.RequiresNotNull(node, nameof(node));
+
+            return default(TResult); // The default naive implementation
 		}
 
 		#endregion
@@ -62,19 +67,21 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitMethod(MethodNode node)
 		{
-			foreach (MethodArgumentNode arg in node.Arguments)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            foreach (MethodArgumentNode arg in node.Arguments)
 				arg.Accept(this);
 
-			foreach (TemporaryVariableNode tmp in node.Temporaries)
+            foreach (TemporaryVariableNode tmp in node.Temporaries)
 				tmp.Accept(this);
 
-			if (node.Primitive != null)
+            if (node.Primitive != null)
 				node.Primitive.Accept(this);
 
-			if (node.Statements != null)
+            if (node.Statements != null)
 				node.Statements.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -83,7 +90,9 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitMethodArgument(MethodArgumentNode node)
 		{
-			return default(TResult); // The default naive implementation
+            Contract.RequiresNotNull(node, nameof(node));
+
+            return default(TResult); // The default naive implementation
 		}
 
 		#endregion
@@ -96,13 +105,15 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitInitializer(InitializerNode node)
 		{
-			foreach (TemporaryVariableNode tmp in node.Temporaries)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            foreach (TemporaryVariableNode tmp in node.Temporaries)
 				tmp.Accept(this);
 
-			if (node.Statements != null)
+            if (node.Statements != null)
 				node.Statements.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		#endregion
@@ -115,16 +126,18 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitBlock(BlockNode node)
 		{
-			foreach (BlockArgumentNode arg in node.Arguments)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            foreach (BlockArgumentNode arg in node.Arguments)
 				arg.Accept(this);
 
-			foreach (TemporaryVariableNode tmp in node.Temporaries)
+            foreach (TemporaryVariableNode tmp in node.Temporaries)
 				tmp.Accept(this);
 
-			if (node.Statements != null)
+            if (node.Statements != null)
 				node.Statements.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -133,7 +146,9 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitBlockArgument(BlockArgumentNode node)
 		{
-			return default(TResult); // The default naive implementation
+            Contract.RequiresNotNull(node, nameof(node));
+
+            return default(TResult); // The default naive implementation
 		}
 
 		#endregion
@@ -146,12 +161,14 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitStatementSequence(StatementSequenceNode node)
 		{
-			if (node.Expression != null)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            if (node.Expression != null)
 				node.Expression.Accept(this);
-			if (node.NextStatement != null)
+            if (node.NextStatement != null)
 				node.NextStatement.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -160,10 +177,12 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitReturnStatement(ReturnStatementNode node)
 		{
-			if (node.Expression != null)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            if (node.Expression != null)
 				node.Expression.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		#endregion
@@ -176,13 +195,15 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitAssignment(AssignmentNode node)
 		{
-			if (node.Target != null)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            if (node.Target != null)
 				node.Target.Accept(this);
 
-			if (node.Expression != null)
+            if (node.Expression != null)
 				node.Expression.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -191,16 +212,18 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitBasicExpression(BasicExpressionNode node)
 		{
-			if (node.Primary != null)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            if (node.Primary != null)
 				node.Primary.Accept(this);
 
-			if (node.Messages != null)
+            if (node.Messages != null)
 				node.Messages.Accept(this);
 
-			if (node.CascadeMessages != null)
+            if (node.CascadeMessages != null)
 				node.CascadeMessages.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -209,13 +232,15 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitCascadeMessageSequence(CascadeMessageSequenceNode node)
 		{
-			if (node.Messages != null)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            if (node.Messages != null)
 				node.Messages.Accept(this);
 
-			if (node.NextCascade != null)
+            if (node.NextCascade != null)
 				node.NextCascade.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -224,10 +249,12 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitParenthesizedExpression(ParenthesizedExpressionNode node)
 		{
-			if (node.Expression != null)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            if (node.Expression != null)
 				node.Expression.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -236,7 +263,9 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitVariableReferencele(VariableReferenceleNode node)
 		{
-			return default(TResult); // The default naive implementation
+            Contract.RequiresNotNull(node, nameof(node));
+
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -245,7 +274,9 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitAssignmentTarget(AssignmentTargetNode node)
 		{
-			return default(TResult); // The default naive implementation
+            Contract.RequiresNotNull(node, nameof(node));
+
+            return default(TResult); // The default naive implementation
 		}
 
 		#endregion
@@ -258,13 +289,15 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitUnaryMessageSequence(UnaryMessageSequenceNode node)
 		{
-			if (node.Message != null)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            if (node.Message != null)
 				node.Message.Accept(this);
 
-			if (node.NextMessage != null)
+            if (node.NextMessage != null)
 				node.NextMessage.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -273,13 +306,15 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitUnaryBinaryMessageSequence(UnaryBinaryMessageSequenceNode node)
 		{
-			if (node.Message != null)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            if (node.Message != null)
 				node.Message.Accept(this);
 
-			if (node.NextMessage != null)
+            if (node.NextMessage != null)
 				node.NextMessage.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -288,13 +323,15 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitUnaryBinaryKeywordMessageSequence(UnaryBinaryKeywordMessageSequenceNode node)
 		{
-			if (node.Message != null)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            if (node.Message != null)
 				node.Message.Accept(this);
 
-			if (node.NextMessage != null)
+            if (node.NextMessage != null)
 				node.NextMessage.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -303,13 +340,15 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitBinaryMessageSequence(BinaryMessageSequenceNode node)
 		{
-			if (node.Message != null)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            if (node.Message != null)
 				node.Message.Accept(this);
 
-			if (node.NextMessage != null)
+            if (node.NextMessage != null)
 				node.NextMessage.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -318,13 +357,15 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitBinaryKeywordMessageSequence(BinaryKeywordMessageSequenceNode node)
 		{
-			if (node.Message != null)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            if (node.Message != null)
 				node.Message.Accept(this);
 
-			if (node.NextMessage != null)
+            if (node.NextMessage != null)
 				node.NextMessage.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -333,10 +374,12 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitKeywordMessageSequence(KeywordMessageSequenceNode node)
 		{
-			if (node.Message != null)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            if (node.Message != null)
 				node.Message.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		#endregion
@@ -349,7 +392,9 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitUnaryMessage(UnaryMessageNode node)
 		{
-			return default(TResult); // The default naive implementation
+            Contract.RequiresNotNull(node, nameof(node));
+
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -358,10 +403,12 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitBinaryMessage(BinaryMessageNode node)
 		{
-			if (node.Argument != null)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            if (node.Argument != null)
 				node.Argument.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -370,10 +417,12 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitKeywordMessage(KeywordMessageNode node)
 		{
-			foreach (KeywordArgumentNode arg in node.Arguments)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            foreach (KeywordArgumentNode arg in node.Arguments)
 				arg.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -382,13 +431,15 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitBinaryArgument(BinaryArgumentNode node)
 		{
-			if (node.Primary != null)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            if (node.Primary != null)
 				node.Primary.Accept(this);
 
-			if (node.Messages != null)
+            if (node.Messages != null)
 				node.Messages.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -397,13 +448,15 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitKeywordArgument(KeywordArgumentNode node)
 		{
-			if (node.Primary != null)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            if (node.Primary != null)
 				node.Primary.Accept(this);
 
-			if (node.Messages != null)
+            if (node.Messages != null)
 				node.Messages.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		#endregion
@@ -416,7 +469,9 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitSmallIntegerLiteral(SmallIntegerLiteralNode node)
 		{
-			return default(TResult); // The default naive implementation
+            Contract.RequiresNotNull(node, nameof(node));
+
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -425,7 +480,9 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitLargeIntegerLiteral(LargeIntegerLiteralNode node)
 		{
-			return default(TResult); // The default naive implementation
+            Contract.RequiresNotNull(node, nameof(node));
+
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -434,7 +491,9 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitFloatDLiteral(FloatDLiteralNode node)
 		{
-			return default(TResult); // The default naive implementation
+            Contract.RequiresNotNull(node, nameof(node));
+
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -443,7 +502,9 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitFloatELiteral(FloatELiteralNode node)
 		{
-			return default(TResult); // The default naive implementation
+            Contract.RequiresNotNull(node, nameof(node));
+
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -452,7 +513,9 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitScaledDecimalLiteral(ScaledDecimalLiteralNode node)
 		{
-			return default(TResult); // The default naive implementation
+            Contract.RequiresNotNull(node, nameof(node));
+
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -461,7 +524,9 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitCharacterLiteral(CharacterLiteralNode node)
 		{
-			return default(TResult); // The default naive implementation
+            Contract.RequiresNotNull(node, nameof(node));
+
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -470,7 +535,9 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitIdentifierLiteral(IdentifierLiteralNode node)
 		{
-			return default(TResult); // The default naive implementation
+            Contract.RequiresNotNull(node, nameof(node));
+
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -479,7 +546,9 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitSelectorLiteral(SelectorLiteralNode node)
 		{
-			return default(TResult); // The default naive implementation
+            Contract.RequiresNotNull(node, nameof(node));
+
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -488,7 +557,9 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitStringLiteral(StringLiteralNode node)
 		{
-			return default(TResult); // The default naive implementation
+            Contract.RequiresNotNull(node, nameof(node));
+
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -497,7 +568,9 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitSymbolLiteral(SymbolLiteralNode node)
 		{
-			return default(TResult); // The default naive implementation
+            Contract.RequiresNotNull(node, nameof(node));
+
+            return default(TResult); // The default naive implementation
 		}
 
 		/// <summary>
@@ -506,10 +579,12 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitArrayLiteral(ArrayLiteralNode node)
 		{
-			foreach (LiteralNode item in node.Elements)
+            Contract.RequiresNotNull(node, nameof(node));
+
+            foreach (LiteralNode item in node.Elements)
 				item.Accept(this);
 
-			return default(TResult); // The default naive implementation
+            return default(TResult); // The default naive implementation
 		}
 
 		#endregion
@@ -520,9 +595,9 @@ namespace IronSmalltalk.Compiler.Visiting
 		/// <param name="node">The node to visit.</param>
 		public virtual TResult VisitPrimitiveCall(PrimitiveCallNode node)
 		{
-			return default(TResult); // The default naive implementation
+            Contract.RequiresNotNull(node, nameof(node));
+
+            return default(TResult); // The default naive implementation
 		}
-
 	}
-
 }

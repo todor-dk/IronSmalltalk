@@ -176,7 +176,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
 
             this.Buffer.Clear();
             // NB: The value of the comment excludes the delimiting quotes.
-            while(true)
+            while (true)
             {
                 this.Read();
                 if (this.ScanResult.EndOfFile)
@@ -626,7 +626,6 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
                     return this.ReturnSuccess(this.GetFloatToken(integerDigits, this.Buffer.ToString(), "0", false, '\0'));
                 }
             }
-
         }
 
         /// <summary>
@@ -664,7 +663,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
                 negativeExponent = true;
                 this.Read();
             }
-            if(!this.ScanResult.IsDigit())
+            if (!this.ScanResult.IsDigit())
                 return this.ReturnError(this.GetFloatToken(integerDigits, decimalDigits, "0", negativeExponent, exponentLetter), LexicalErrors.InvalidFloatNoExponentDigits);
 
             // Add digits to the <exponent> buffer.
@@ -1140,12 +1139,10 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         private TToken ReturnSuccess<TToken>(TToken token)
             where TToken : Token
         {
-#if DEBUG
-            if (token == null)
-                throw new ArgumentNullException("token");
-#endif
-            token.SetTokenValues(this.TokenStartPosition, this.CurrentPosition, null);
-            return token;
+			Contract.RequiresNotNull(token, nameof(token));
+
+			token.SetTokenValues(this.TokenStartPosition, this.CurrentPosition, null);
+			return token;
         }
 
         private TToken ReturnError<TToken>(TToken token, string errorMessage)

@@ -118,7 +118,6 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
 
                 //if ((parent.Comments != null) && (token is CommentToken))
                 //    parent.Comments.Add((CommentToken)token);
-
             } while (token is WhitespaceToken);
             return token;
         }

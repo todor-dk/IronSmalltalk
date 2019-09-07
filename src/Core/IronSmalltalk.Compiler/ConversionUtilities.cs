@@ -179,7 +179,7 @@ namespace IronSmalltalk.Compiler
             // 2. The decimal part ... check for garbage and convert to BigInteger
             if (decimalDigits == null)
                 decimalDigits = String.Empty;
-            foreach(char ch in decimalDigits)
+            foreach (char ch in decimalDigits)
             {
                 if ((ch < LexicalConstants.FirstDigit || ch > LexicalConstants.LastDigit))
                     goto Error;
@@ -191,7 +191,7 @@ namespace IronSmalltalk.Compiler
             // 3. The scale part ... check for garbage and convert to integer
             if (fractionalDigits == null)
                 fractionalDigits = String.Empty;
-            foreach(char ch in fractionalDigits)
+            foreach (char ch in fractionalDigits)
             {
                 if ((ch < LexicalConstants.FirstDigit || ch > LexicalConstants.LastDigit))
                     goto Error;

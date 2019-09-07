@@ -14,6 +14,7 @@
  * **************************************************************************
 */
 
+using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.SemanticNodes;
 
 namespace IronSmalltalk.Compiler.Visiting
@@ -39,6 +40,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitSemanticNode(SemanticNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             // Naive brute force implementation
             foreach (IParseNode child in node.GetChildNodes())
             {
@@ -60,6 +63,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitTemporaryVariable(TemporaryVariableNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
             if (node.Token == null)
@@ -77,6 +82,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitMethod(MethodNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if ((node.LeftBar == null) ^ (node.RightBar == null))
                 return false;
 
@@ -107,6 +114,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitMethodArgument(MethodArgumentNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -126,6 +135,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitInitializer(InitializerNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if ((node.LeftBar == null) ^ (node.RightBar == null))
                 return false;
 
@@ -151,6 +162,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitBlock(BlockNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -186,6 +199,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitBlockArgument(BlockArgumentNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
             if (node.Colon == null)
@@ -205,6 +220,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitStatementSequence(StatementSequenceNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -222,6 +239,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitReturnStatement(ReturnStatementNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -243,6 +262,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitAssignment(AssignmentNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -262,6 +283,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitBasicExpression(BasicExpressionNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -281,6 +304,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitCascadeMessageSequence(CascadeMessageSequenceNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -300,6 +325,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitParenthesizedExpression(ParenthesizedExpressionNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -317,6 +344,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitVariableReferencele(VariableReferenceleNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
             if (node.Token == null)
@@ -330,6 +359,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitAssignmentTarget(AssignmentTargetNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
             if (node.Token == null)
@@ -347,6 +378,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitUnaryMessageSequence(UnaryMessageSequenceNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -365,6 +398,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitUnaryBinaryMessageSequence(UnaryBinaryMessageSequenceNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -383,6 +418,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitUnaryBinaryKeywordMessageSequence(UnaryBinaryKeywordMessageSequenceNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -401,6 +438,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitBinaryMessageSequence(BinaryMessageSequenceNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -419,6 +458,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitBinaryKeywordMessageSequence(BinaryKeywordMessageSequenceNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -437,6 +478,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitKeywordMessageSequence(KeywordMessageSequenceNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -456,6 +499,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitUnaryMessage(UnaryMessageNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -471,6 +516,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitBinaryMessage(BinaryMessageNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -488,6 +535,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitKeywordMessage(KeywordMessageNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -510,6 +559,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitBinaryArgument(BinaryArgumentNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -527,6 +578,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitKeywordArgument(KeywordArgumentNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 
@@ -548,6 +601,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitSmallIntegerLiteral(SmallIntegerLiteralNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
             if (node.Token == null)
@@ -561,6 +616,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitLargeIntegerLiteral(LargeIntegerLiteralNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
             if (node.Token == null)
@@ -574,6 +631,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitFloatELiteral(FloatELiteralNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
             if (node.Token == null)
@@ -587,6 +646,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitFloatDLiteral(FloatDLiteralNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
             if (node.Token == null)
@@ -600,6 +661,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitScaledDecimalLiteral(ScaledDecimalLiteralNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
             if (node.Token == null)
@@ -613,6 +676,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitCharacterLiteral(CharacterLiteralNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
             if (node.Token == null)
@@ -626,6 +691,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitIdentifierLiteral(IdentifierLiteralNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
             if (node.Token == null)
@@ -639,6 +706,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitSelectorLiteral(SelectorLiteralNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
             if (node.Token == null)
@@ -652,6 +721,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitStringLiteral(StringLiteralNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
             if (node.Token == null)
@@ -665,6 +736,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitSymbolLiteral(SymbolLiteralNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
             if (node.Token == null)
@@ -678,6 +751,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitArrayLiteral(ArrayLiteralNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
             if ((node.ArrayToken == null) || (node.LeftParenthesis == null) || (node.RightParenthesis == null))
@@ -700,6 +775,8 @@ namespace IronSmalltalk.Compiler.Visiting
         /// <param name="node">The node to visit.</param>
         public override bool VisitPrimitiveCall(PrimitiveCallNode node)
         {
+            Contract.RequiresNotNull(node, nameof(node));
+
             if (node.Parent == null)
                 return false;
 

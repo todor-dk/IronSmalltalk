@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 
@@ -51,11 +52,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="parent">The parent node that defines the statement.</param>
         protected StatementNode(IStatementParentNode parent)
         {
-#if DEBUG
-            if (parent == null)
-                throw new ArgumentNullException("parent");
-#endif
-            this.Parent = parent;
+			Contract.RequiresNotNull(parent, nameof(parent));
+
+			this.Parent = parent;
         }
     }
 

@@ -288,6 +288,5 @@ namespace IronSmalltalk.Compiler.Visiting
         /// </summary>
         /// <param name="node">The node to visit.</param>
         TResult VisitPrimitiveCall(PrimitiveCallNode node);
-
     }
 }

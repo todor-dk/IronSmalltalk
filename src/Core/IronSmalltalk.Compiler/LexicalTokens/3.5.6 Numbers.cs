@@ -111,7 +111,6 @@ namespace IronSmalltalk.Compiler.LexicalTokens
             : base(value)
         {
         }
-
     }
 
     /// <summary>

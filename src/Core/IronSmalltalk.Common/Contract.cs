@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IronSmalltalk.Common.Internal;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -17,7 +18,7 @@ namespace IronSmalltalk.Common
         [System.Diagnostics.Contracts.ContractAbbreviator]
         [System.Diagnostics.Contracts.ContractArgumentValidator]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void RequiresNotNull<TValue>(TValue value, string name)
+        public static void RequiresNotNull<TValue>([ValidatedNotNull] TValue value, string name)
         {
 #if DEBUG
             if (value == null)

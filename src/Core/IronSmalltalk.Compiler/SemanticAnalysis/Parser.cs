@@ -154,7 +154,7 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
             if (!(apiConvention is KeywordToken))
                 this.ReportParserError(result, SemanticErrors.MissingApiConvention, apiConvention);
 
-            while(true)
+            while (true)
             {
                 Token tkn = this.GetNextTokenxx(Preference.Default);
                 if (tkn is IPrimitiveCallParameterToken)
@@ -337,7 +337,7 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
 
             // Ensure the block is properly closed.
             SpecialCharacterToken rightBracket = null;
-            token = this.GetNextTokenxx(Preference.Default) ;
+            token = this.GetNextTokenxx(Preference.Default);
             if (!Parser.IsBlockEndDelimiter(token))
             {
                 this.ReportParserError(result, SemanticErrors.MissingBlockClosingBracket, token);

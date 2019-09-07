@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.LexicalTokens;
 
 
@@ -52,11 +53,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="parent">Parent message node that defines this message argument node.</param>
         protected internal BinaryArgumentNode(BinaryMessageNode parent)
         {
-#if DEBUG
-            if (parent == null)
-                throw new ArgumentNullException("parent");
-#endif
-            this.Parent = parent;
+			Contract.RequiresNotNull(parent, nameof(parent));
+
+			this.Parent = parent;
         }
 
         /// <summary>
@@ -218,11 +217,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="parent">Parent message node that defines this message argument node.</param>
         protected internal KeywordArgumentNode(KeywordMessageNode parent)
         {
-#if DEBUG
-            if (parent == null)
-                throw new ArgumentNullException("parent");
-#endif
-            this.Parent = parent;
+			Contract.RequiresNotNull(parent, nameof(parent));
+
+			this.Parent = parent;
         }
 
         /// <summary>

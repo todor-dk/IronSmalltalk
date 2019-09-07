@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.LexicalAnalysis;
 using IronSmalltalk.Compiler.SemanticAnalysis;
+using IronSmalltalk.Common;
 
 namespace IronSmalltalk.Compiler.SemanticNodes
 {
@@ -41,11 +42,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         protected internal ReturnStatementNode(IStatementParentNode parent, ReturnOperatorToken token)
             : base(parent)
         {
-#if DEBUG
-            if (token == null)
-                throw new ArgumentNullException("token");
-#endif
-            this.Token = token;
+			Contract.RequiresNotNull(token, nameof(token));
+
+			this.Token = token;
         }
 
         /// <summary>

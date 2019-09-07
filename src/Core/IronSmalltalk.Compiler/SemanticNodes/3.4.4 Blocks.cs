@@ -137,7 +137,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             sb.Append(SemanticConstants.BlockStartDelimiter);
-            foreach(BlockArgumentNode arg in this.Arguments)
+            foreach (BlockArgumentNode arg in this.Arguments)
             {
                 sb.Append(' ');
                 sb.Append(SemanticConstants.BlockArgumentPrefix);

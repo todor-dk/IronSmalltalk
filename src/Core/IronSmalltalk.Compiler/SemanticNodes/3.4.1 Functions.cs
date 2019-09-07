@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.LexicalTokens;
 
 namespace IronSmalltalk.Compiler.SemanticNodes
@@ -101,11 +102,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         protected internal TemporaryVariableNode(FunctionNode parent, IdentifierToken token)
             : base(token)
         {
-#if DEBUG
-            if (parent == null)
-                throw new ArgumentNullException("parent");
-#endif
-            this.Parent = parent;
+			Contract.RequiresNotNull(parent, nameof(parent));
+
+			this.Parent = parent;
         }
     }
 }

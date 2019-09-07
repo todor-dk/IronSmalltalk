@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.LexicalTokens;
 
 namespace IronSmalltalk.Compiler.SemanticNodes
@@ -36,11 +37,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="parent">Parent node that defines the literal node.</param>
         protected LiteralNode(ILiteralNodeParent parent)
         {
-#if DEBUG
-            if (parent == null)
-                throw new ArgumentNullException("parent");
-#endif
-            this.Parent = parent;
+			Contract.RequiresNotNull(parent, nameof(parent));
+
+			this.Parent = parent;
         }
     }
 
@@ -73,11 +72,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         protected SingleValueLiteralNode(ILiteralNodeParent parent, TToken token)
             : base(parent)
         {
-#if DEBUG
-            if (token == null)
-                throw new ArgumentNullException("token");
-#endif
-            this.Token = token;
+			Contract.RequiresNotNull(token, nameof(token));
+
+			this.Token = token;
         }
 
         /// <summary>
