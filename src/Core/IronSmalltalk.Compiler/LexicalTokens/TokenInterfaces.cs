@@ -18,7 +18,7 @@
 namespace IronSmalltalk.Compiler.LexicalTokens
 {
     /// <summary>
-    /// Tokens that may construct a method selector (identifiers, keywords, binary selectors)
+    /// Tokens that may construct a method selector (identifiers, keywords, binary selectors).
     /// </summary>
     public interface IMethodSelectorToken : IToken
     {

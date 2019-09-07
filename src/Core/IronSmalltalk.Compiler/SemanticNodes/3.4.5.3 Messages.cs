@@ -74,7 +74,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <returns>An enumerable collection with the child nodes directly defines in this node.</returns>
         public override IEnumerable<IParseNode> GetChildNodes()
         {
-            return new IParseNode[0];
+            return Array.Empty<IParseNode>();
         }
 
         /// <summary>
@@ -141,8 +141,8 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <param name="argument">Parse node that is the argument for the binary message.</param>
         protected internal void SetContents(BinaryArgumentNode argument)
         {
-            if (argument == null)
-                throw new ArgumentNullException();
+            Contract.RequiresNotNull(argument, nameof(argument));
+
             this.Argument = argument;
         }
 

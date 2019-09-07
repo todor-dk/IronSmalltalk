@@ -200,7 +200,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
             Contract.RequiresNotNull(expression, nameof(expression));
 
             if ((rightParenthesis != null) && !Parser.IsClosingParenthesis(rightParenthesis)) // Must allow for null
-                throw new ArgumentException("rightParenthesis");
+                throw new ArgumentException("Not a closing parenthesis.", nameof(rightParenthesis));
             this.Expression = expression;
             this.RightParenthesis = rightParenthesis;
         }
@@ -329,7 +329,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <returns>An enumerable collection with the tokens directly defining this node.</returns>
         public override IEnumerable<IToken> GetTokens()
         {
-            return new IToken[0];
+            return Array.Empty<IToken>();
         }
 
         /// <summary>

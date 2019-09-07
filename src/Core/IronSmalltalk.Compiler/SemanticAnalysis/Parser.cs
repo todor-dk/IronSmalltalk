@@ -71,7 +71,7 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
 
         #region 3.4.1 Functions
 
-        protected virtual ParseTemporariesResult ParseTemporaries(FunctionNode function, Token token)
+        protected virtual ParseTemporariesResult ParseTemporaries(FunctionNode functionNode, Token token)
         {
             // PARSE: <temporaries> ::= '|' <temporary variable list> '|'
             ParseTemporariesResult result = new ParseTemporariesResult();
@@ -93,11 +93,11 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
                 }
                 if (token is IdentifierToken)
                 {
-                    result.Temporaries.Add(new TemporaryVariableNode(function, (IdentifierToken)token));
+                    result.Temporaries.Add(new TemporaryVariableNode(functionNode, (IdentifierToken)token));
                 }
                 else
                 {
-                    this.ReportParserError(function, SemanticErrors.MissingClosingTempBar, token);
+                    this.ReportParserError(functionNode, SemanticErrors.MissingClosingTempBar, token);
                     this.ResidueToken = token;
                     return result;
                 }
@@ -106,9 +106,11 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
 
         protected class ParseTemporariesResult
         {
-            public VerticalBarToken LeftBar;
-            public List<TemporaryVariableNode> Temporaries = new List<TemporaryVariableNode>();
-            public VerticalBarToken RightBar;
+            public VerticalBarToken LeftBar { get; set; }
+
+            public List<TemporaryVariableNode> Temporaries { get; } = new List<TemporaryVariableNode>();
+
+            public VerticalBarToken RightBar { get; set; }
         }
 
         #endregion
@@ -398,7 +400,7 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
             if (expression == null)
                 this.ReportParserError(result, SemanticErrors.MissingExpression, token);
 
-            SpecialCharacterToken period = null;
+            SpecialCharacterToken period;
             token = this.GetNextTokenxx(Preference.Default);
             if (Parser.IsStatementDelimiter(token))
             {
@@ -491,10 +493,9 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
         protected virtual ExpressionNode ParseExpression(SemanticNode parent, Token token)
         {
             // Tricky ... first try for <assignment>
-            if (token is IdentifierToken)
+            if (token is IdentifierToken identifier)
             {
                 // In here, we either have an <assignment target> or <primary> of a <basic expression>
-                IdentifierToken identifier = (IdentifierToken)token;
 
                 // Try to check for assignmentOperator
                 token = this.GetNextTokenxx(Preference.Default);
@@ -547,6 +548,10 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
 
         protected virtual void ParseBaseicExpressionMessages(BasicExpressionNode expression, IPrimaryNode primary, Token token)
         {
+            Contract.RequiresNotNull(expression, nameof(expression));
+            Contract.RequiresNotNull(primary, nameof(primary));
+            Contract.RequiresNotNull(token, nameof(token));
+
             MessageSequenceNode messages = this.ParseMessages(expression, token);
             if (messages == null)
             {
@@ -676,8 +681,7 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
             BinaryMessageNode message = this.ParseBinaryMessage(result, selector);
 
             Token token = this.GetNextTokenxx(Preference.Default);
-            BinaryKeywordOrKeywordMessageSequenceNode nextMessage = (BinaryKeywordOrKeywordMessageSequenceNode)
-                this.ParseMessages(result, token, MessageType.Binary | MessageType.Keyword);
+            BinaryKeywordOrKeywordMessageSequenceNode nextMessage = (BinaryKeywordOrKeywordMessageSequenceNode)this.ParseMessages(result, token, MessageType.Binary | MessageType.Keyword);
 
             result.SetContents(message, nextMessage);
             return result;

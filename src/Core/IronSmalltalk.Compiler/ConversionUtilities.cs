@@ -29,8 +29,7 @@ namespace IronSmalltalk.Compiler
     {
         public static int ConvertSmallInteger(string digits, out bool success)
         {
-            int result;
-            success = Int32.TryParse(digits, out result);
+            success = Int32.TryParse(digits, out int result);
             return result;
         }
 
@@ -60,6 +59,8 @@ namespace IronSmalltalk.Compiler
 
         public static BigInteger ConvertLargeInteger(string digits, int digitBase)
         {
+            Contract.RequiresNotNull(digits, nameof(digits));
+
             if (digitBase == 10)
                 return ConversionUtilities.ConvertLargeInteger(digits);
             // Hmm .... should we do base-16 ourself or pass to the CLR? May be CLR is faster.
@@ -91,33 +92,29 @@ namespace IronSmalltalk.Compiler
                 throw new InvalidScannerOperationException();
 #endif
             // We use the lazy approach here - convert to string, let the .Net do the job.
-            string str = String.Format("{0}.{1}e{2}{3}", integerDigits, decimalDigits, (negativeExponent ? "-" : ""), exponentDigits);
+            string str = String.Format(CultureInfo.InvariantCulture, "{0}.{1}e{2}{3}", integerDigits, decimalDigits, (negativeExponent ? "-" : ""), exponentDigits);
 
             if (exponentLetter == LexicalConstants.ExponentLettersFloatE)
             {
-                float result;
-                if (Single.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out result))
+                if (Single.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out float result))
                     errorMessage = null;
                 else
-                    errorMessage = String.Format("Invalid float {0}.", str.Replace('e', exponentLetter));
+                    errorMessage = String.Format(CultureInfo.InvariantCulture, "Invalid float {0}.", str.Replace('e', exponentLetter));
                 return result;
             }
             else if ((exponentLetter == LexicalConstants.ExponentLettersFloatD) || (exponentLetter == LexicalConstants.ExponentLettersFloatQ))
             {
-                double result;
-                if (Double.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out result))
+                if (Double.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out double result))
                     errorMessage = null; // OK
                 else
-                    errorMessage = String.Format("Invalid float {0}.", str.Replace('e', exponentLetter));
+                    errorMessage = String.Format(CultureInfo.InvariantCulture, "Invalid float {0}.", str.Replace('e', exponentLetter));
                 return result;
             }
             else
             {
                 // Must try our best here ...
-                float floatE;
-                double floatD;
-                bool okE = Single.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out floatE);
-                bool okD = Double.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out floatD);
+                bool okE = Single.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out float floatE);
+                bool okD = Double.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out double floatD);
                 if (okE & okD)
                 {
                     // X3J20: 3.4.6.1. (page 23 first / second chapter)
@@ -141,7 +138,7 @@ namespace IronSmalltalk.Compiler
                 }
                 else
                 {
-                    errorMessage = String.Format("Invalid float {0}.", str);
+                    errorMessage = String.Format(CultureInfo.InvariantCulture, "Invalid float {0}.", str);
                     return floatD; // Not used, but must return something.
                 }
             }
@@ -172,8 +169,7 @@ namespace IronSmalltalk.Compiler
             // more digits than the fraction part. So we leave them alone.
 
             // 1. The integer part .... simple, just convert to BigInteger
-            BigInteger integer;
-            if (!ConversionUtilities.TryParseBigInteger(integerDigits, false, out integer))
+            if (!ConversionUtilities.TryParseBigInteger(integerDigits, false, out BigInteger integer))
                 goto Error;
 
             // 2. The decimal part ... check for garbage and convert to BigInteger
@@ -211,9 +207,9 @@ namespace IronSmalltalk.Compiler
             return new BigDecimal(numerator, scale);
 
             Error:
-            errorMessage = String.Format("Invalid scaled decimal {0}{1}s{2}.", 
+            errorMessage = String.Format(CultureInfo.InvariantCulture, "Invalid scaled decimal {0}{1}s{2}.", 
                 integerDigits, 
-                String.IsNullOrWhiteSpace(decimalDigits) ? "" : String.Format(".{0}", decimalDigits),
+                String.IsNullOrWhiteSpace(decimalDigits) ? "" : String.Format(CultureInfo.InvariantCulture, ".{0}", decimalDigits),
                 fractionalDigits);
             return BigDecimal.Zero;
         }
@@ -222,30 +218,24 @@ namespace IronSmalltalk.Compiler
         /// <summary>
         /// Parsing of BigIntegers.
         /// </summary>
-        /// <param name="digits">Digits to parse</param>
-        /// <param name="isHex">Are the digits base 16 or base 10?</param>
-        /// <returns>The number value</returns>
+        /// <param name="digits">Digits to parse.</param>
+        /// <param name="isHex">Are the digits base 16 or base 10?.</param>
+        /// <returns>The number value.</returns>
         private static BigInteger ParseBigInteger(string digits, bool isHex)
         {
-#if !SILVERLIGHT
+            Contract.RequiresNotNull(digits, nameof(digits));
+
             if (isHex)
-                return BigInteger.Parse(digits, NumberStyles.HexNumber, null);
+                return BigInteger.Parse(digits, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
             else
-                return BigInteger.Parse(digits);
-#else
-            // Silverlight doesn't have Parse() method, so we must do this by hand.
-            BigInteger result;
-            if (ConversionUtilities.TryParseBigInteger(digits, isHex, out result))
-                return result;
-            throw new FormatException();
-#endif
+                return BigInteger.Parse(digits, CultureInfo.InvariantCulture);
         }
 
         /// <summary>
         /// Parsing of BigIntegers.
         /// </summary>
-        /// <param name="digits">Digits to parse</param>
-        /// <param name="isHex">Are the digits base 16 or base 10?</param>
+        /// <param name="digits">Digits to parse.</param>
+        /// <param name="isHex">Are the digits base 16 or base 10?.</param>
         /// <param name="result">The number value.</param>
         /// <returns>True if successful, otherwise false.</returns>
         private static bool TryParseBigInteger(string digits, bool isHex, out BigInteger result)

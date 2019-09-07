@@ -16,6 +16,7 @@
 
 using System;
 using System.Globalization;
+using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.LexicalAnalysis;
 
 namespace IronSmalltalk.Compiler.LexicalTokens
@@ -26,7 +27,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
     /// except that unquoted selectors are only allowed inside literal arrays.
     /// 
     /// This is an extension to X3J20 lexical grammar, so we can read array literals.
-    /// Example: #( with:with: ) .... should be read as: #( #with:with: )
+    /// Example: #( with:with: ) .... should be read as: #( #with:with: ).
     /// </summary>
     public class UnquotedSelectorToken : LiteralToken<string>, ILiteralArrayIdentifierToken
     {
@@ -37,8 +38,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         public UnquotedSelectorToken(string value)
             : base(value)
         {
-            if (value == null)
-                throw new ArgumentNullException();
+			Contract.RequiresNotNull(value, nameof(value));
         }
 
         /// <summary>

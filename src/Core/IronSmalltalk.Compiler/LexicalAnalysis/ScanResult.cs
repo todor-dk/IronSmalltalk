@@ -36,7 +36,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         public bool EndOfFile { get; private set; }
 
         /// <summary>
-        /// Creates a new scan result
+        /// Creates a new scan result.
         /// </summary>
         public ScanResult()
         {

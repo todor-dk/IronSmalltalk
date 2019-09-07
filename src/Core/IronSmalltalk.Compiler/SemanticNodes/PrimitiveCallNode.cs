@@ -16,6 +16,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
 
@@ -33,7 +35,6 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     //      System.Console(string arg1);
     // EXAMPLE: <call: 'System.String' ToUpper string>
     //      string this.ToUpper();
-    [Serializable]
     public partial class PrimitiveCallNode : SemanticNode 
     {
         public MethodNode Parent { get; private set; }
@@ -56,6 +57,8 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         protected internal void SetContents(BinarySelectorToken openingDelimiter, BinarySelectorToken closingDelimiter,
             KeywordToken apiConvention, IEnumerable<IPrimitiveCallParameterToken> parameters)
         {
+            Contract.RequiresNotNull(parameters, nameof(parameters));
+
             this.OpeningDelimiter = openingDelimiter;
             this.ClosingDelimiter = closingDelimiter;
             this.ApiConvention = apiConvention;
@@ -70,7 +73,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <returns>An enumerable collection with the child nodes directly defines in this node.</returns>
         public override IEnumerable<IParseNode> GetChildNodes()
         {
-            return new IParseNode[0];
+            return Array.Empty<IParseNode>();
         }
 
         /// <summary>
@@ -101,7 +104,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
             if (this.ApiConvention != null)
                 sb.Append(this.ApiConvention.Value);
             foreach (Token token in this.ApiParameters)
-                sb.AppendFormat(" {0}", token.SourceString);
+                sb.AppendFormat(CultureInfo.InvariantCulture, " {0}", token.SourceString);
             sb.Append(SemanticConstants.PrimitiveClosingDelimiter);
             return sb.ToString();
         }

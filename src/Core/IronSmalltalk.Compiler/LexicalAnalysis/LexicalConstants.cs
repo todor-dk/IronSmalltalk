@@ -35,10 +35,10 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         public const char CommentDelimiter = '"';
 
         // 3.5.4 Keywords
-        public static readonly char KeywordPostfix = GlobalConstants.KeywordPostfix; // ':';
+        public const char KeywordPostfix = GlobalConstants.KeywordPostfix; // ':';
 
         // 3.5.5 Operators
-        public static readonly string BinaryCharacters = GlobalConstants.BinaryCharacters; // @"!%&*+,/<=>?@\~|-";
+        public const string BinaryCharacters = GlobalConstants.BinaryCharacters; // @"!%&*+,/<=>?@\~|-";
         public const char ReturnOperator = '^';
         public const char AssignmentOperatorCharacter1 = ':';
         public const char AssignmentOperatorCharacter2 = '=';

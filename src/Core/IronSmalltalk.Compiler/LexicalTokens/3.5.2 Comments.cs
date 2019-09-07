@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Globalization;
 using IronSmalltalk.Compiler.LexicalAnalysis;
 
 namespace IronSmalltalk.Compiler.LexicalTokens
@@ -34,7 +35,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         {
 #if DEBUG
             if (comment.IndexOf(LexicalConstants.CommentDelimiter) != -1)
-                throw new ArgumentException("comment"); // No delimiters inside comment text!
+                throw new ArgumentException("No delimiters inside comment text.", nameof(comment)); // No delimiters inside comment text!
 #endif
         }
 
@@ -43,7 +44,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         /// </summary>
         public override string SourceString
         {
-            get { return string.Format("{0}{1}{0}", LexicalConstants.CommentDelimiter, this.Value); }
+            get { return string.Format(CultureInfo.InvariantCulture, "{0}{1}{0}", LexicalConstants.CommentDelimiter, this.Value); }
         }
     }
 }

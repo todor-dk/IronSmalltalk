@@ -16,12 +16,13 @@
 
 using System;
 using System.Globalization;
+using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.LexicalAnalysis;
 
 namespace IronSmalltalk.Compiler.LexicalTokens
 {
     /// <summary>
-    /// Literal string token as described in X3J20 chapter "3.5.8 Quoted Strings"
+    /// Literal string token as described in X3J20 chapter "3.5.8 Quoted Strings".
     /// </summary>
     /// <remarks>
     /// The string value excludes the string delimiters or double/escape quotes.
@@ -35,8 +36,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         public StringToken(string value)
             : base(value)
         {
-            if (value == null)
-                throw new ArgumentNullException();
+			Contract.RequiresNotNull(value, nameof(value));
         }
 
         /// <summary>

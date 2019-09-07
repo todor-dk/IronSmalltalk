@@ -47,7 +47,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
     ///     if (token is StringToken)
     /// 
     /// If we need common functionality, inject an abstract class above the concrete
-    /// classes, or better, use interfaces!
+    /// classes, or better, use interfaces.
     /// </remarks>
     [Serializable]
     public abstract class Token : IToken 
@@ -70,9 +70,9 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         public void SetTokenValues(SourceLocation startPosition, SourceLocation stopPosition, string scanError)
         {
             if (!startPosition.IsValid)
-                throw new ArgumentOutOfRangeException("startPosition");
+                throw new ArgumentOutOfRangeException(nameof(startPosition));
             if (stopPosition < startPosition)
-                throw new ArgumentOutOfRangeException("stopPosition");
+                throw new ArgumentOutOfRangeException(nameof(stopPosition));
 
             this.StartPosition = startPosition;
             this.StopPosition = stopPosition;
@@ -106,7 +106,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         /// <summary>
         /// Determines if the token is valid.
         /// Invalid tokens indicate that some syntax error was encountered.
-        /// The scanner still return a Token, but the source file has syntax error in it!
+        /// The scanner still return a Token, but the source file has syntax error in it!.
         /// </summary>
         public bool IsValid
         {

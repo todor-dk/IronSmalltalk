@@ -15,11 +15,12 @@
 */
 
 using IronSmalltalk.Compiler.LexicalAnalysis;
+using System.Globalization;
 
 namespace IronSmalltalk.Compiler.LexicalTokens
 {
     /// <summary>
-    /// Literal character token as described in X3J20 chapter "3.5.7 Quoted Character"
+    /// Literal character token as described in X3J20 chapter "3.5.7 Quoted Character".
     /// </summary>
     public class CharacterToken : LiteralToken<char>
     {
@@ -37,7 +38,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         /// </summary>
         public override string SourceString
         {
-            get { return string.Format("{0}{1}", LexicalConstants.CharacterDelimiter, this.Value); }
+            get { return string.Format(CultureInfo.InvariantCulture, "{0}{1}", LexicalConstants.CharacterDelimiter, this.Value); }
         }
     }
 }

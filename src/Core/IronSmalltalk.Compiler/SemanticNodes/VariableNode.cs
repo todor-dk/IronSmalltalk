@@ -57,7 +57,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <returns>An enumerable collection with the child nodes directly defines in this node.</returns>
         public override IEnumerable<IParseNode> GetChildNodes()
         {
-            return new IParseNode[0];
+            return Array.Empty<IParseNode>();
         }
 
         /// <summary>

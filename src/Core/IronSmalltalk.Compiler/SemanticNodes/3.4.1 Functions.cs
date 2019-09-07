@@ -73,7 +73,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
             this.Statements = statements; // OK with null
 
             if ((this.Temporaries.Count != 0) && (this.LeftBar == null))
-                throw new ArgumentNullException("leftBar"); // Little late, but OK to throw the exception.
+                throw new ArgumentNullException(nameof(leftBar)); // Little late, but OK to throw the exception.
         }
 
 

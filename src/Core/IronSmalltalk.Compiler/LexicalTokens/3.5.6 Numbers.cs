@@ -20,7 +20,7 @@ using IronSmalltalk.Common;
 namespace IronSmalltalk.Compiler.LexicalTokens
 {
     /// <summary>
-    /// Base class for number tokens as described in X3J20 chapter "3.5.6 Numbers"
+    /// Base class for number tokens as described in X3J20 chapter "3.5.6 Numbers".
     /// </summary>
     /// <typeparam name="TValue">Value type for the literal, usually int or other numeric type.</typeparam>
     public abstract class NumberToken<TValue> : LiteralToken<TValue>, INumberToken
@@ -53,7 +53,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
     }
 
     /// <summary>
-    /// Small integer token as described in X3J20 chapter "3.5.6 Numbers"
+    /// Small integer token as described in X3J20 chapter "3.5.6 Numbers".
     /// </summary>
     public class SmallIntegerToken : IntegerToken<int>
     {
@@ -76,7 +76,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
     }
 
     /// <summary>
-    /// Large integer token as described in X3J20 chapter "3.5.6 Numbers"
+    /// Large integer token as described in X3J20 chapter "3.5.6 Numbers".
     /// </summary>
     public class LargeIntegerToken : IntegerToken<BigInteger>
     {
@@ -99,7 +99,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
     }
 
     /// <summary>
-    /// Floating point literal token as described in X3J20 chapter "3.5.6 Numbers"
+    /// Floating point literal token as described in X3J20 chapter "3.5.6 Numbers".
     /// </summary>
     public abstract class FloatToken<TValue> : NumberToken<TValue>
     {
@@ -114,7 +114,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
     }
 
     /// <summary>
-    /// Floating point FloatE literal token as described in X3J20 chapter "3.5.6 Numbers"
+    /// Floating point FloatE literal token as described in X3J20 chapter "3.5.6 Numbers".
     /// </summary>
     public class FloatEToken : FloatToken<float>
     {
@@ -141,7 +141,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
     }
 
     /// <summary>
-    /// Floating point FloatD (or FloatQ) literal token as described in X3J20 chapter "3.5.6 Numbers"
+    /// Floating point FloatD (or FloatQ) literal token as described in X3J20 chapter "3.5.6 Numbers".
     /// </summary>
     public class FloatDToken : FloatToken<double>
     {
@@ -168,7 +168,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
     }
 
     /// <summary>
-    /// Scaled decimal token as described in X3J20 chapter "3.5.6 Numbers"
+    /// Scaled decimal token as described in X3J20 chapter "3.5.6 Numbers".
     /// </summary>
     public class ScaledDecimalToken : NumberToken<BigDecimal>
     {

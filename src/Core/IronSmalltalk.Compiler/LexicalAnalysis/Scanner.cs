@@ -105,7 +105,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
 
             this.Read();
             this.TokenStartPosition = this.CurrentPosition;
-            CharacterClassification classification= this.ScanResult.Classify(preference);
+            CharacterClassification classification = this.ScanResult.Classify(preference);
 
             switch (classification)
             {
@@ -157,7 +157,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         #region 3.5.2 Comments
 
         /// <summary>
-        /// Returns a token for a comment, as defined in X3J20 "3.5.2 Comments"
+        /// Returns a token for a comment, as defined in X3J20 "3.5.2 Comments".
         /// </summary>
         /// <returns>A comment token containing the comment text (excluding the delimiters).</returns>
         private CommentToken GetComment()
@@ -195,7 +195,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         #region 3.5.3 Identifiers and 3.5.4 Keywords
 
         /// <summary>
-        /// Returns a token for an identifier or keyword, as defined in X3J20 "3.5.3 Identifiers" and "3.5.4 Keywords"
+        /// Returns a token for an identifier or keyword, as defined in X3J20 "3.5.3 Identifiers" and "3.5.4 Keywords".
         /// </summary>
         /// <returns>An identifier or keyword token containing the identifier value.</returns>
         private IdentifierOrKeywordToken GetIdentifier()
@@ -204,7 +204,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         }
 
         /// <summary>
-        /// Returns a token for an identifier or keyword, as defined in X3J20 "3.5.3 Identifiers" and "3.5.4 Keywords"
+        /// Returns a token for an identifier or keyword, as defined in X3J20 "3.5.3 Identifiers" and "3.5.4 Keywords".
         /// </summary>
         /// <param name="unadorned">Indicates an unadorned identifier. This is false, when we use this function to scan for quoted selectors.</param>
         /// <returns>An identifier or keyword token containing the identifier value.</returns>
@@ -280,7 +280,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         #region 3.5.5 Operators
 
         /// <summary>
-        /// Returns a token for a binary selector, as defined in X3J20 "3.5.5 Operators"
+        /// Returns a token for a binary selector, as defined in X3J20 "3.5.5 Operators".
         /// </summary>
         /// <returns>A binary selector token.</returns>
         private BinarySelectorToken GetBinarySelector(Preference preference)
@@ -366,7 +366,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
 
 
         /// <summary>
-        /// Returns a token for the return operator, as defined in X3J20 "3.5.5 Operators"
+        /// Returns a token for the return operator, as defined in X3J20 "3.5.5 Operators".
         /// </summary>
         /// <returns>A return operator token.</returns>
         private ReturnOperatorToken GetReturnOperator()
@@ -381,7 +381,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         }
 
         /// <summary>
-        /// Returns a token for the assignment operator, as defined in X3J20 "3.5.5 Operators"
+        /// Returns a token for the assignment operator, as defined in X3J20 "3.5.5 Operators".
         /// </summary>
         /// <returns>An assignment operator token.</returns>
         private AssignmentOperatorToken GetAssignmentOperator()
@@ -406,7 +406,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         #region 3.5.6 Numbers
 
         /// <summary>
-        /// Returns a token for the assignment operator, as defined in X3J20 "3.5.6 Numbers"
+        /// Returns a token for the assignment operator, as defined in X3J20 "3.5.6 Numbers".
         /// </summary>
         /// <returns></returns>
         private Token GetNumber()
@@ -512,11 +512,10 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
 #endif
 
             // Try to parse the <radixSpecifier> to integer.
-            bool success;
-            int radix = ConversionUtilities.ConvertSmallInteger(radixSpecifier, out success);
+            int radix = ConversionUtilities.ConvertSmallInteger(radixSpecifier, out bool success);
             // Check if successful. It must be between 2 and 36 (both inclusive).
             if ((!success) || (radix < 2) || (radix > 36))
-                return this.ReturnError(new SmallIntegerToken(0), String.Format(LexicalErrors.InvalidRadix, radixSpecifier));
+                return this.ReturnError(new SmallIntegerToken(0), String.Format(CultureInfo.InvariantCulture, LexicalErrors.InvalidRadix, radixSpecifier));
 
             // Ok, start processing the <radixDigits> part.
             this.Read();
@@ -542,7 +541,9 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
                         this.Skip(); // We've already filled the ScanResult with the Peek(), so just forward 1 position.
                         // The X3J20 standard does not allow the digits to be outside the radix range
                         return this.ReturnError(this.GetIntegerToken(this.Buffer.ToString(), radix),
-                            String.Format(LexicalErrors.DigitTooBig,
+                            String.Format(
+                                CultureInfo.InvariantCulture,
+                                LexicalErrors.DigitTooBig,
                                 radix, 
                                 (radix <= 10) ? 
                                     (radix - 1).ToString(CultureInfo.InvariantCulture) : 
@@ -736,9 +737,8 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         /// <returns>An integer token.</returns>
         private Token GetIntegerToken(string integerDigits)
         {
-            bool success;
             // Try first if it is small integer ...
-            int value = ConversionUtilities.ConvertSmallInteger(integerDigits, out success);
+            int value = ConversionUtilities.ConvertSmallInteger(integerDigits, out bool success);
             if (success)
                 return this.ReturnSuccess(new SmallIntegerToken(value));
             // ... then try large integer (it is not supposed to fail, since we provide clean input)
@@ -754,9 +754,8 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         /// <returns>An integer token.</returns>
         private Token GetIntegerToken(string integerDigits, int radix)
         {
-            bool success;
             // Try first if it is small integer ...
-            int value = ConversionUtilities.ConvertSmallInteger(integerDigits, radix, out success);
+            int value = ConversionUtilities.ConvertSmallInteger(integerDigits, radix, out bool success);
             if (success)
                 return this.ReturnSuccess(new SmallIntegerToken(value));
             // ... then try large integer (it is not supposed to fail, since we provide clean input)
@@ -780,8 +779,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
                 throw new InvalidScannerOperationException();
 #endif
 
-            string errorMessage = null;
-            object value = ConversionUtilities.ConvertFloat(integerDigits, decimalDigits, exponentDigits, negativeExponent, exponentLetter, out errorMessage);
+            object value = ConversionUtilities.ConvertFloat(integerDigits, decimalDigits, exponentDigits, negativeExponent, exponentLetter, out string errorMessage);
             if (value is double)
             {
                 if (errorMessage == null)
@@ -818,8 +816,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         private ScaledDecimalToken GetScaledDecimalToken(string integerDigits, string decimalDigits, string fractionalDigits)
         {
             // NB: decimalDigits may be null
-            string errorMessage = null;
-            BigDecimal value = ConversionUtilities.ConvertScaledDecimal(integerDigits, decimalDigits, fractionalDigits, out errorMessage);
+            BigDecimal value = ConversionUtilities.ConvertScaledDecimal(integerDigits, decimalDigits, fractionalDigits, out string errorMessage);
             if (errorMessage == null)
                 return this.ReturnSuccess(new ScaledDecimalToken(value));
             else
@@ -832,7 +829,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         #region 3.5.7 Quoted Character
 
         /// <summary>
-        /// Returns a token for a character, as defined in X3J20 "3.5.7 Quoted Character"
+        /// Returns a token for a character, as defined in X3J20 "3.5.7 Quoted Character".
         /// </summary>
         /// <returns>A character token containing the character literal.</returns>
         private CharacterToken GetQuotedCharacter()
@@ -859,7 +856,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         #region 3.5.8 Quoted Strings
 
         /// <summary>
-        /// Returns a token for a string, as defined in X3J20 "3.5.8 Quoted Strings"
+        /// Returns a token for a string, as defined in X3J20 "3.5.8 Quoted Strings".
         /// </summary>
         /// <returns>A string token containing the string literal.</returns>
         private StringToken GetQuotedString()
@@ -900,7 +897,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         #region 3.5.9 Hashed String
 
         /// <summary>
-        /// Returns a token for a hashed string, as defined in X3J20 "3.5.9 Hashed Strings"
+        /// Returns a token for a hashed string, as defined in X3J20 "3.5.9 Hashed Strings".
         /// </summary>
         /// <returns>A hashed string token containing the string literal.</returns>
         private HashedStringToken GetHashedString()
@@ -933,7 +930,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         #region 3.5.10 Quoted Selector
 
         /// <summary>
-        /// Returns a token for a quoted selector, as defined in X3J20 "3.5.10 Quoted Selector"
+        /// Returns a token for a quoted selector, as defined in X3J20 "3.5.10 Quoted Selector".
         /// </summary>
         /// <returns>A keyword token containing the quoted selector value.</returns>
         private QuotedSelectorToken GetQuotedSelector()
@@ -1057,7 +1054,7 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
 
         /// <summary>
         /// This is an extension to X3J20 lexical grammar, so we can read array literals.
-        /// Example: #( with:with: ) .... should be read as: #( #with:with: )
+        /// Example: #( with:with: ) .... should be read as: #( #with:with: ).
         /// </summary>
         /// <returns>
         /// A unquoted selector token containing the selector value, if the token contains 2 or more keywords,
@@ -1149,10 +1146,8 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
             where TToken : Token
         {
             Contract.RequiresNotNull(token, nameof(token));
-#if DEBUG
-            if (String.IsNullOrWhiteSpace(errorMessage))
-                throw new ArgumentException("errorMessage");
-#endif
+            Contract.RequiresNotEmptyOrWhiteSpace(errorMessage, nameof(errorMessage));
+
             token.SetTokenValues(this.TokenStartPosition, this.CurrentPosition, errorMessage);
             if (this.ErrorSink != null)
                 this.ErrorSink.AddScanError(token, this.TokenStartPosition, this.CurrentPosition, errorMessage);

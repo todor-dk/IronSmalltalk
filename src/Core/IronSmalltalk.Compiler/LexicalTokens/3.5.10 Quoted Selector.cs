@@ -16,6 +16,7 @@
 
 using System;
 using System.Globalization;
+using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.LexicalAnalysis;
 
 namespace IronSmalltalk.Compiler.LexicalTokens
@@ -35,8 +36,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         public QuotedSelectorToken(string value)
             : base(value)
         {
-            if (value == null)
-                throw new ArgumentNullException();
+			Contract.RequiresNotNull(value, nameof(value));
         }
 
         /// <summary>

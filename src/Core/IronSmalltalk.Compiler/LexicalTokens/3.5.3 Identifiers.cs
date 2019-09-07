@@ -14,6 +14,7 @@
  * **************************************************************************
 */
 
+using IronSmalltalk.Common;
 using System;
 
 namespace IronSmalltalk.Compiler.LexicalTokens
@@ -34,8 +35,8 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         /// <param name="value">String value of the identifier.</param>
         public IdentifierOrKeywordToken(string value)
         {
-            if (String.IsNullOrWhiteSpace(value))
-                throw new ArgumentNullException();
+            Contract.RequiresNotEmptyOrWhiteSpace(value, nameof(value));
+            
             this.Value = value;
         }
 

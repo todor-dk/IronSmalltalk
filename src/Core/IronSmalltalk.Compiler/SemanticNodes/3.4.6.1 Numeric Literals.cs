@@ -22,7 +22,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     /// <summary>
     /// Parse node representing a numeric literal constant.
     /// </summary>
-    /// <typeparam name="TToken">Type of the numeric value</typeparam>
+    /// <typeparam name="TToken">Type of the numeric value.</typeparam>
     public abstract class NumericLiteralNode<TToken> : SingleValueLiteralNode<TToken>
         where TToken : INumberToken
     {

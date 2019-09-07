@@ -24,7 +24,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
 {
     /// <summary>
     /// The BinaryArgumentNode parse node represents an argument of a binary message.
-    /// It is defined in X3J20 as: binary_argument ::= primary unary_message*
+    /// It is defined in X3J20 as: binary_argument ::= primary unary_message*.
     /// </summary>
     public partial class BinaryArgumentNode : SemanticNode, IMessageSequenceParentNode, IPrimaryParentNode
     {
@@ -91,7 +91,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <returns>An enumerable collection with the tokens directly defining this node.</returns>
         public override IEnumerable<IToken> GetTokens()
         {
-            return new IToken[0];
+            return Array.Empty<IToken>();
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     /// A sequence of messages starting with a unary message, 
     /// optionally followed by another unary message (sequence).
     /// This is an optional message sent to binary parameters.
-    /// X2J20 definition: unary_message*
+    /// X2J20 definition: unary_message*.
     /// </summary>
     public partial class UnaryMessageSequenceNode : MessageSequenceBase
     {
@@ -190,7 +190,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
 
     /// <summary>
     /// The KeywordArgumentNode parse node represents an argument of a keyword message.
-    /// It is defined in X3J20 as: keyword_argument ::= primary unary_message* binary_message*
+    /// It is defined in X3J20 as: keyword_argument ::= primary unary_message* binary_message*.
     /// </summary>
     public partial class KeywordArgumentNode : SemanticNode, IMessageSequenceParentNode, IPrimaryParentNode
     {
@@ -255,7 +255,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <returns>An enumerable collection with the tokens directly defining this node.</returns>
         public override IEnumerable<IToken> GetTokens()
         {
-            return new IToken[0];
+            return Array.Empty<IToken>();
         }
 
         /// <summary>
@@ -295,7 +295,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     /// A sequence of messages starting with a unary message, 
     /// optionally followed by another unary or binary message (sequence).
     /// This is an optional message sent to keyword parameters.
-    /// X2J20 definition: unary_message* binary_message*
+    /// X2J20 definition: unary_message* binary_message*.
     /// </summary>
     public partial class UnaryBinaryMessageSequenceNode : BinaryOrBinaryUnaryMessageSequenceNode
     {
@@ -371,7 +371,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     /// A sequence of messages starting with a binary message, 
     /// optionally followed by another binary message (sequence).
     /// This is an optional message sent to keyword parameters.
-    /// X2J20 definition: binary_message*
+    /// X2J20 definition: binary_message*.
     /// </summary>
     public partial class BinaryMessageSequenceNode : BinaryOrBinaryUnaryMessageSequenceNode
     {

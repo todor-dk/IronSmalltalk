@@ -117,11 +117,12 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
 
                 //if ((parent.Comments != null) && (token is CommentToken))
                 //    parent.Comments.Add((CommentToken)token);
-            } while (token is WhitespaceToken);
+            }
+            while (token is WhitespaceToken);
             return token;
         }
 
-        protected Token ResidueToken;
+        protected Token ResidueToken { get; set; }
 
         #endregion
 
@@ -132,7 +133,9 @@ namespace IronSmalltalk.Compiler.SemanticAnalysis
         /// <param name="startPosition">Source code start position.</param>
         /// <param name="stopPosition">source code end position.</param>
         /// <param name="scanErrorMessage">Scan error message because of source code syntax error.</param>   
+#pragma warning disable CA1033 // Interface methods should be callable by child types
         void IScanErrorSink.AddScanError(IToken token, SourceLocation startPosition, SourceLocation stopPosition, string scanErrorMessage)
+#pragma warning restore CA1033 // Interface methods should be callable by child types
         {
             // Just forward the error to the outer sink.
             if (this.ErrorSink != null)

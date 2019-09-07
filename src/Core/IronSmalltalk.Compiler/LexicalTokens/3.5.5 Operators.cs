@@ -16,6 +16,7 @@
 
 using System;
 using System.Globalization;
+using IronSmalltalk.Common;
 using IronSmalltalk.Compiler.LexicalAnalysis;
 
 namespace IronSmalltalk.Compiler.LexicalTokens
@@ -94,8 +95,8 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         /// <param name="selector">Value of the binary operator, e.g. "~=".</param>
         public BinarySelectorToken(string selector)
         {
-            if (String.IsNullOrWhiteSpace(selector))
-                throw new ArgumentNullException();
+            Contract.RequiresNotEmptyOrWhiteSpace(selector, nameof(selector));
+
             this.Value = selector;
         }
 

@@ -51,7 +51,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     /// Following abstract classes are defined to group and generalize specific message sequences:
     /// - MessageSequenceNode : UnaryBinaryKeywordMessageSequenceNode, BinaryKeywordMessageSequenceNode, KeywordMessageSequenceNode
     /// - BinaryKeywordOrKeywordMessageSequenceNode: BinaryKeywordMessageSequenceNode, KeywordMessageSequenceNode
-    /// - BinaryOrBinaryUnaryMessageSequenceNode: BinaryMessageSequenceNode, UnaryBinaryMessageSequenceNode
+    /// - BinaryOrBinaryUnaryMessageSequenceNode: BinaryMessageSequenceNode, UnaryBinaryMessageSequenceNode.
     /// </remarks>
     public abstract class MessageSequenceBase : SemanticNode, IMessageSequenceParentNode
     {
@@ -77,7 +77,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <returns>An enumerable collection with the tokens directly defining this node.</returns>
         public override IEnumerable<IToken> GetTokens()
         {
-            return new IToken[0];
+            return Array.Empty<IToken>();
         }
     }
 
@@ -107,7 +107,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     /// <summary>
     /// A sequence of messages starting with a unary message, 
     /// optionally followed by another message (sequence).
-    /// X2J20 definition: unary_message+ binary_message* [keyword_message]
+    /// X2J20 definition: unary_message+ binary_message* [keyword_message].
     /// </summary>
     public partial class UnaryBinaryKeywordMessageSequenceNode : MessageSequenceNode
     {
@@ -197,7 +197,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     /// <summary>
     /// A sequence of messages starting with a binary message, 
     /// optionally followed by another binary or keyword message (sequence).
-    /// X2J20 definition: binary_message+ [keyword_message]
+    /// X2J20 definition: binary_message+ [keyword_message].
     /// </summary>
     public partial class BinaryKeywordMessageSequenceNode : BinaryKeywordOrKeywordMessageSequenceNode
     {
@@ -273,7 +273,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     /// A sequence of messages starting with a keyword message.
     /// Technically, this is not a sequence, since no messages may follow it,
     /// but we've kept the sequence nomenclature.
-    /// X2J20 definition: keyword_message
+    /// X2J20 definition: keyword_message.
     /// </summary>
     public partial class KeywordMessageSequenceNode : BinaryKeywordOrKeywordMessageSequenceNode
     {

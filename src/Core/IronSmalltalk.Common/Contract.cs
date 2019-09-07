@@ -25,5 +25,20 @@ namespace IronSmalltalk.Common
                 throw new ArgumentNullException(name);
 #endif
         }
+
+        /// <summary>
+        /// Validate that the given string is not null, empty or contains only whitespaces.
+        /// </summary>
+        /// <param name="value">String to validate.</param>
+        /// <param name="name">Name of the argument (string) being validated.</param>
+        /// <exception cref="ArgumentNullException"> is thrown if the given string is null, empty or contains only whitespaces.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void RequiresNotEmptyOrWhiteSpace(string value, string name)
+        {
+#if DEBUG
+            if (String.IsNullOrWhiteSpace(value))
+                throw new ArgumentNullException(name);
+#endif
+        }
     }
 }

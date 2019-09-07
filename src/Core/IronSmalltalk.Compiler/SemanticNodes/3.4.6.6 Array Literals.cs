@@ -63,9 +63,9 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         {
 #if DEBUG
             if (!Parser.IsLiteralArrayPrefix(arrayToken))
-                throw new ArgumentException("arrayToken");
+                throw new ArgumentException("Not a literal array prefix.", nameof(arrayToken));
             if (!Parser.IsOpeningParenthesis(leftParenthesis))
-                throw new ArgumentException("leftParenthesis");
+                throw new ArgumentException("Not an opening parenthesis.", nameof(leftParenthesis));
 #endif
             this.ArrayToken = arrayToken;
             this.LeftParenthesis = leftParenthesis;
@@ -82,7 +82,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
             Contract.RequiresNotNull(elements, nameof(elements));
 
             if ((rightParenthesis != null) &&  !Parser.IsClosingParenthesis(rightParenthesis)) // NB: We allow null value.
-                throw new ArgumentException("rightParenthesis");
+                throw new ArgumentException("No a closing parenthesis.", nameof(rightParenthesis));
             this.RightParenthesis = rightParenthesis;
             foreach (LiteralNode elem in elements)
                 this.Elements.Add(elem);
@@ -167,7 +167,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
         /// <returns>An enumerable collection with the child nodes directly defines in this node.</returns>
         public override IEnumerable<IParseNode> GetChildNodes()
         {
-            return new IParseNode[0];
+            return Array.Empty<IParseNode>();
         }
 
         /// <summary>

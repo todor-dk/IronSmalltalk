@@ -268,11 +268,15 @@ namespace IronSmalltalk.Compiler.LexicalAnalysis
         {
             // NB: When, EOF, this.Character == '0x00', therefore it should return <false> here.
             if (numericBase <= 10)
+            {
                 return (this.Character >= LexicalConstants.FirstDigit) && (this.Character < (LexicalConstants.FirstDigit + numericBase));
+            }
             else
+            {
                 // NB: X3J20 Standard only allows uppercase letters
                 return ((this.Character >= LexicalConstants.FirstDigit) && (this.Character <= LexicalConstants.LastDigit))
                     || ((this.Character >= LexicalConstants.FirstLetterDigit) && (this.Character < (LexicalConstants.FirstLetterDigit + numericBase - 10)));
+            }
         }
 
         /// <summary>

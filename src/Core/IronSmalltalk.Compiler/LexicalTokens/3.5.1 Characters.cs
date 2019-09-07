@@ -14,6 +14,7 @@
  * **************************************************************************
 */
 
+using IronSmalltalk.Common;
 using System;
 
 namespace IronSmalltalk.Compiler.LexicalTokens
@@ -29,9 +30,9 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         /// <param name="value">The text contents (white spaces) for this token.</param>
         public WhitespaceToken(string value)
         {
-            if (value == null)
-                throw new ArgumentNullException();
-            this.Value = value;
+			Contract.RequiresNotNull(value, nameof(value));
+
+			this.Value = value;
         }
 
         /// <summary>

@@ -49,7 +49,7 @@ namespace IronSmalltalk.Compiler.LexicalTokens
         /// <summary>
         /// Determines if the token is valid.
         /// Invalid tokens indicate that some syntax error was encountered.
-        /// The scanner still return a Token, but the source file has syntax error in it!
+        /// The scanner still return a Token, but the source file has syntax error in it!.
         /// </summary>
         bool IsValid { get; }
 

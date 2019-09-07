@@ -138,7 +138,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     }
 
     /// <summary>
-    /// Argument node represents a method or a block argument
+    /// Argument node represents a method or a block argument.
     /// </summary>
     public abstract class ArgumentNode : VariableNode
     {

@@ -24,7 +24,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
 {
     /// <summary>
     /// A sequence of messages sent that are sent as cascade message to the primary of a basic expression.
-    /// Cascade messages are defined in X3J20 "3.4.5.3 Messages" as: cascaded_messages ::= (';' messages)*
+    /// Cascade messages are defined in X3J20 "3.4.5.3 Messages" as: cascaded_messages ::= (';' messages)*.
     /// </summary>
     public partial class CascadeMessageSequenceNode : SemanticNode, IMessageSequenceParentNode, ICascadeMessageSequenceParentNode
     {

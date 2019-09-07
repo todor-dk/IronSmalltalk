@@ -61,7 +61,7 @@ namespace IronSmalltalk.Compiler.SemanticNodes
     }
 
     /// <summary>
-    /// This is the root class for all parse tree nodes defined in X3J20 3.4
+    /// This is the root class for all parse tree nodes defined in X3J20 3.4.
     /// </summary>
     /// <remarks>
     /// We have this class so we can differentiate between parse nodes defines
