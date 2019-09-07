@@ -1,12 +1,12 @@
 /*
  * **************************************************************************
  *
- * Copyright (c) The IronSmalltalk Project. 
+ * Copyright (c) The IronSmalltalk Project.
  *
- * This source code is subject to terms and conditions of the 
- * license agreement found in the solution directory. 
+ * This source code is subject to terms and conditions of the
+ * license agreement found in the solution directory.
  * See: $(SolutionDir)\License.htm ... in the root of this distribution.
- * By using this source code in any fashion, you are agreeing 
+ * By using this source code in any fashion, you are agreeing
  * to be bound by the terms of the license agreement.
  *
  * You must not remove this notice, or any other, from this software.
@@ -24,7 +24,7 @@ namespace IronSmalltalk.Common
     public static class Utilities
     {
         /// <summary>
-        /// Validate that a given string is a legal identifier 
+        /// Validate that a given string is a legal identifier
         /// according to the definition of X3J20 "3.5.3 Identifiers".
         /// </summary>
         /// <param name="value">String to be validated for being identifier.</param>
@@ -43,11 +43,9 @@ namespace IronSmalltalk.Common
                 {
                     if ((i == 1) || (c < '0') || (c > '9'))
                         return false;
-                }                
+                }
             }
             return true;
         }
-
     }
-
 }

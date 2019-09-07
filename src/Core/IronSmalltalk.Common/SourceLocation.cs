@@ -1,12 +1,12 @@
 /*
  * **************************************************************************
  *
- * Copyright (c) The IronSmalltalk Project. 
+ * Copyright (c) The IronSmalltalk Project.
  *
- * This source code is subject to terms and conditions of the 
- * license agreement found in the solution directory. 
+ * This source code is subject to terms and conditions of the
+ * license agreement found in the solution directory.
  * See: $(SolutionDir)\License.htm ... in the root of this distribution.
- * By using this source code in any fashion, you are agreeing 
+ * By using this source code in any fashion, you are agreeing
  * to be bound by the terms of the license agreement.
  *
  * You must not remove this notice, or any other, from this software.
@@ -78,11 +78,11 @@ namespace IronSmalltalk.Common
             : this()
         {
             if (index < 0)
-                throw new ArgumentOutOfRangeException("index");
+                throw new ArgumentOutOfRangeException(nameof(index));
             if (line < 1)
-                throw new ArgumentOutOfRangeException("line");
+                throw new ArgumentOutOfRangeException(nameof(line));
             if (column < 1)
-                throw new ArgumentOutOfRangeException("column");
+                throw new ArgumentOutOfRangeException(nameof(column));
 
             this.Position = index;
             this.Line = line;
@@ -195,7 +195,7 @@ namespace IronSmalltalk.Common
             if (obj == null)
                 return 1;
             if (!(obj is SourceLocation))
-                throw new ArgumentException("Must be SourceLocation");
+                throw new ArgumentException("Must be SourceLocation", nameof(obj));
             return this.CompareTo((SourceLocation)obj);
         }
 

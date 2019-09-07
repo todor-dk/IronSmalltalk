@@ -1,12 +1,12 @@
 /*
  * **************************************************************************
  *
- * Copyright (c) The IronSmalltalk Project. 
+ * Copyright (c) The IronSmalltalk Project.
  *
- * This source code is subject to terms and conditions of the 
- * license agreement found in the solution directory. 
+ * This source code is subject to terms and conditions of the
+ * license agreement found in the solution directory.
  * See: $(SolutionDir)\License.htm ... in the root of this distribution.
- * By using this source code in any fashion, you are agreeing 
+ * By using this source code in any fashion, you are agreeing
  * to be bound by the terms of the license agreement.
  *
  * You must not remove this notice, or any other, from this software.
@@ -24,16 +24,15 @@ namespace IronSmalltalk.Common
     /// <summary>
     /// Represents an arbitrarily large signed decimal.
     /// </summary>
-    [Serializable]
-    public struct BigDecimal: IComparable, IComparable<BigDecimal>, IEquatable<BigDecimal>
+    public struct BigDecimal : IComparable, IComparable<BigDecimal>, IEquatable<BigDecimal>
     {
         /// <summary>
-        /// Numerator containing the value of the decimal. 
+        /// Numerator containing the value of the decimal.
         /// </summary>
         /// <example>
         /// The value 123.45600 has the numerator 12345600.
         /// </example>
-        public readonly BigInteger Numerator;
+        public BigInteger Numerator { get; }
 
         /// <summary>
         /// Denominator that is used in many math operations. It is 10^this.Scale (10 to the power of Scale).
@@ -41,25 +40,25 @@ namespace IronSmalltalk.Common
         /// <example>
         /// The value 123.45600 has the denominator 100000.
         /// </example>
-        public readonly BigInteger Denominator;
+        public BigInteger Denominator { get; }
 
         /// <summary>
-        /// An integer which represents the total number of digits used to represent 
+        /// An integer which represents the total number of digits used to represent
         /// the fraction part of the decimal, including trailing zeros.
         /// </summary>
         /// <example>
-        /// The value 123.45600 has the scale 5. 
+        /// The value 123.45600 has the scale 5.
         /// The value 123 has the scale 0.
         /// The value 123.45s8 has the scale 8.
         /// </example>
-        public readonly int Scale;
+        public int Scale { get; }
 
         /// <summary>
         /// The maximum number of fractional digits.
         /// </summary>
         /// <remarks>
         /// The implementation limit specified in X2J20 "3.6 Implementation Limits"
-        /// is 30 fractional digits. Theoretically, we could use any, but we've 
+        /// is 30 fractional digits. Theoretically, we could use any, but we've
         /// set the limit to 99.
         /// </remarks>
         public const int MaxScale = 99;
@@ -77,10 +76,10 @@ namespace IronSmalltalk.Common
         /// <summary>
         /// Gets a value that represents the number -11 (minus one) with a scale of 0.
         /// </summary>
-        public static readonly BigDecimal MinusOne = new BigDecimal(-11, 0);  
+        public static readonly BigDecimal MinusOne = new BigDecimal(-11, 0);
 
         /// <summary>
-        /// Info: For some unexplained reason, we can't get the static constructor to run, 
+        /// Info: For some unexplained reason, we can't get the static constructor to run,
         /// therefore we use explicit lazy initialization.
         /// </summary>
         private static BigInteger[] _CachedDenominators;
@@ -103,7 +102,7 @@ namespace IronSmalltalk.Common
         /// </summary>
         /// <param name="value">An integer value.</param>
         public BigDecimal(int value)
-            : this((BigInteger) value)
+            : this((BigInteger)value)
         {
         }
 
@@ -117,7 +116,7 @@ namespace IronSmalltalk.Common
         }
 
         /// <summary>
-        /// Initializes a new instance of the BigDecimal structure using a BigInteger numerator 
+        /// Initializes a new instance of the BigDecimal structure using a BigInteger numerator
         /// value and a scale, which represents the number of digits in the denominator.
         /// The BigDecimal is capable of representing the specified number of fractional digits.
         /// </summary>
@@ -130,9 +129,9 @@ namespace IronSmalltalk.Common
         public BigDecimal(BigInteger numerator, int scale)
         {
             if (scale < 0)
-                throw new ArgumentOutOfRangeException("scale");
+                throw new ArgumentOutOfRangeException(nameof(scale));
             if (scale > BigDecimal.MaxScale)
-                throw new ArgumentOutOfRangeException("scale");
+                throw new ArgumentOutOfRangeException(nameof(scale));
 
             this.Numerator = numerator;
             this.Scale = scale;
@@ -158,12 +157,12 @@ namespace IronSmalltalk.Common
                 this.Scale++;
                 value = value * 10;
                 i = Decimal.Truncate(value);
-                this.Numerator = this.Numerator * 10 + (int)i;
+                this.Numerator = (this.Numerator * 10) + (int)i;
                 value = value - i;
             }
 
             if (this.Scale > BigDecimal.MaxScale)
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(value));
             if (this.Scale < BigDecimal.CachedDenominators.Length)
                 this.Denominator = BigDecimal.CachedDenominators[this.Scale];
             else
@@ -216,18 +215,18 @@ namespace IronSmalltalk.Common
             BigInteger abs = BigInteger.Abs(this.Numerator);
             BigInteger digits;
             BigInteger integer = BigInteger.DivRem(abs, this.Denominator, out digits);
-            
+
             StringBuilder str = new StringBuilder(100);
             if (this.Numerator.Sign < 0)
                 str.Append(info.NegativeSign);
-            str.Append(integer.ToString("R"));
+            str.Append(integer.ToString("R", CultureInfo.CurrentCulture));
             str.Append(info.NumberDecimalSeparator);
-            string digitString = digits.ToString("R");
+            string digitString = digits.ToString("R", CultureInfo.CurrentCulture);
             for (int i = 0; i < this.Scale - digitString.Length; i++)
                 str.Append('0');
             str.Append(digitString);
             str.Append('s');
-            str.Append(this.Scale.ToString("D"));
+            str.Append(this.Scale.ToString("D", CultureInfo.CurrentCulture));
             return str.ToString();
         }
 
@@ -245,14 +244,14 @@ namespace IronSmalltalk.Common
             StringBuilder str = new StringBuilder(100);
             if (this.Numerator.Sign < 0)
                 str.Append('-');
-            str.Append(integer.ToString("R"));
+            str.Append(integer.ToString("R", CultureInfo.CurrentCulture));
             str.Append('.');
-            string digitString = digits.ToString("R");
+            string digitString = digits.ToString("R", CultureInfo.CurrentCulture);
             for (int i = 0; i < this.Scale - digitString.Length; i++)
                 str.Append('0');
             str.Append(digitString);
             str.Append('s');
-            str.Append(this.Scale.ToString("D"));
+            str.Append(this.Scale.ToString("D", CultureInfo.CurrentCulture));
             return str.ToString();
         }
 
@@ -323,7 +322,7 @@ namespace IronSmalltalk.Common
             if (obj == null)
                 return 1;
             if (!(obj is BigDecimal))
-                throw new ArgumentException("Must be BigDecimal");
+                throw new ArgumentException("Must be BigDecimal", nameof(obj));
             return this.CompareTo((BigDecimal)obj);
         }
 
@@ -335,9 +334,9 @@ namespace IronSmalltalk.Common
         public BigDecimal ToScale(int scale)
         {
             if (scale < 0)
-                throw new ArgumentOutOfRangeException("scale");
+                throw new ArgumentOutOfRangeException(nameof(scale));
             if (scale > BigDecimal.MaxScale)
-                throw new ArgumentOutOfRangeException("scale");
+                throw new ArgumentOutOfRangeException(nameof(scale));
 
             if (scale < this.Scale)
             {
@@ -353,7 +352,7 @@ namespace IronSmalltalk.Common
                 // -1.24s asScaledDecimal: 1 => -1.2s   OK
                 // 1.24s asScaledDecimal: 1 => 1.2s     OK
                 // 1.25s asScaledDecimal: 1 => 1.3s     OK, round up 1.3
-                // 1.26s asScaledDecimal: 1 => 1.3s     OK 
+                // 1.26s asScaledDecimal: 1 => 1.3s     OK
                 return BigDecimal.DivideRounded(this.Numerator, multiplier, scale);
             }
             else if (scale > this.Scale)
@@ -380,9 +379,9 @@ namespace IronSmalltalk.Common
         /// <param name="op">Binary operation lambda function.</param>
         /// <returns>The value of the binary operation.</returns>
         /// <remarks>
-        /// This function first converts both decimals to the same precision. 
+        /// This function first converts both decimals to the same precision.
         /// The operand with the highest precision dictates the outcoming precision.
-        /// The lambda function is passed the numerators (and not decimals themselves) 
+        /// The lambda function is passed the numerators (and not decimals themselves)
         /// of the operands as well as the scale (precision). The numerators
         /// are of same precision and can be used directly for any operations.
         /// </remarks>
@@ -422,9 +421,9 @@ namespace IronSmalltalk.Common
         /// <param name="op">Binary operation lambda function.</param>
         /// <returns>The value of the binary operation.</returns>
         /// <remarks>
-        /// This function first converts both decimals to the same precision. 
+        /// This function first converts both decimals to the same precision.
         /// The operand with the highest precision dictates the outcoming precision.
-        /// The lambda function is passed the numerators (and not decimals themselves) 
+        /// The lambda function is passed the numerators (and not decimals themselves)
         /// of the operands as well as the scale (precision). The numerators
         /// are of same precision and can be used directly for any operations.
         /// </remarks>
@@ -753,7 +752,7 @@ namespace IronSmalltalk.Common
 
         #endregion
 
-        #region Conversion 
+        #region Conversion
 
         #region Implicit Conversions
 
@@ -794,7 +793,7 @@ namespace IronSmalltalk.Common
         /// <returns>A BigDecimal that contains the value of the value parameter.</returns>
         public static implicit operator BigDecimal(long value)
         {
-            return new BigDecimal((BigInteger) value);
+            return new BigDecimal((BigInteger)value);
         }
 
         /// <summary>
@@ -871,7 +870,7 @@ namespace IronSmalltalk.Common
             BigInteger r;
             BigInteger i = BigInteger.DivRem(value.Numerator, value.Denominator, out r);
             // IntegerPart + FractionPart  ... FractionPart = Remainder / Denominator ... (rounding division)
-            return ((decimal)i) + ((decimal)r) / ((decimal)value.Denominator);            
+            return ((decimal)i) + (((decimal)r) / ((decimal)value.Denominator));
         }
 
         /// <summary>
@@ -884,7 +883,7 @@ namespace IronSmalltalk.Common
             BigInteger r;
             BigInteger i = BigInteger.DivRem(value.Numerator, value.Denominator, out r);
             // IntegerPart + FractionPart  ... FractionPart = Remainder / Denominator ... (rounding division)
-            return ((double)i) + ((double)r) / ((double)value.Denominator);
+            return ((double)i) + (((double)r) / ((double)value.Denominator));
         }
 
         /// <summary>
