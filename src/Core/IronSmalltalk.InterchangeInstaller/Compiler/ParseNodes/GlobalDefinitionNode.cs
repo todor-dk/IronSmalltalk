@@ -45,11 +45,11 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         public override InterchangeUnitNode FileIn(InterchangeFormatProcessor processor, IParseErrorSink parseErrorSink, ISourceCodeReferenceService sourceCodeService)
         {
             if (processor == null)
-                throw new ArgumentNullException("processor");
+                throw new ArgumentNullException(nameof(processor));
             if (parseErrorSink == null)
-                throw new ArgumentNullException("parseErrorSink");
+                throw new ArgumentNullException(nameof(parseErrorSink));
             if (sourceCodeService == null)
-                throw new ArgumentNullException("sourceCodeService");
+                throw new ArgumentNullException(nameof(sourceCodeService));
             // ALL instance vars must be set. If one is missing, then source code bug, and 
             //   InterchangeFormatParser.ParseGlobalVariable/ConstantDefinition() should have reported the error.
             if (this.GlobalName == null)
@@ -63,7 +63,6 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         }
 
         protected abstract GlobalDefinition CreateDefinition(InterchangeFormatProcessor processor, ISourceCodeReferenceService sourceCodeService);
-
     }
 
     public partial class GlobalVariableDefinitionNode : GlobalDefinitionNode

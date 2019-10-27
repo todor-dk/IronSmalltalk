@@ -38,7 +38,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.DefinitionInstaller
             : base(parseTree, sourceCodeService)
         {
             if (String.IsNullOrWhiteSpace(globalName))
-                throw new ArgumentNullException("globalName");
+                throw new ArgumentNullException(nameof(globalName));
 
             this.GlobalName = globalName;
         }

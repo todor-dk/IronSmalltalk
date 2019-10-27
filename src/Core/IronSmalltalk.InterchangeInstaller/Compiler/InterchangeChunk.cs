@@ -69,9 +69,9 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
         public InterchangeChunk(InterchangeFormatProcessor processor, string sourceChunk, SourceLocation startPosition)
         {
             if (processor == null)
-                throw new ArgumentNullException("processor");
+                throw new ArgumentNullException(nameof(processor));
             if (sourceChunk == null)
-                throw new ArgumentNullException("sourceChunk");
+                throw new ArgumentNullException(nameof(sourceChunk));
 
             this.Processor = processor;
             this.SourceChunk = sourceChunk;
@@ -138,7 +138,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
             if (position < 0)
                 return position;
             // patch source positions due to '!' char escaping.
-            int escapedChars = this.SourceChunk.Take(position-1).Count(ch => ch == InterchangeFormatConstants.ElementSeparator);
+            int escapedChars = this.SourceChunk.Take(position - 1).Count(ch => ch == InterchangeFormatConstants.ElementSeparator);
             return this.StartPosition.Position + position + escapedChars;
         }
 
@@ -159,7 +159,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
             int start = Math.Max(position.Position - position.Column + 1, 0);
             string line = this.SourceChunk.Substring(start, Math.Min(this.SourceChunk.Length - start, position.Column));
             escapedChars = line.Count(ch => ch == InterchangeFormatConstants.ElementSeparator);
-            return new SourceLocation(abspos, this.StartPosition.Line + position.Line - 1, 
+            return new SourceLocation(abspos, this.StartPosition.Line + position.Line - 1,
                 ((position.Line == 1) ? this.StartPosition.Column - 1 : 0) + position.Column + escapedChars);
         }
 
@@ -169,10 +169,9 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
         /// <remarks>
         /// Due to the assembly dependencies, it's not possible to have this property strongly types.
         /// </remarks>
-        public object SourceObject 
+        public object SourceObject
         {
             get { return this.Processor.FileInInformation; }
         }
-
     }
 }

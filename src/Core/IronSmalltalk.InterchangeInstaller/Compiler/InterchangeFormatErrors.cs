@@ -17,8 +17,14 @@
 
 namespace IronSmalltalk.InterchangeInstaller.Compiler
 {
-    public class InterchangeFormatConstants
+    /// <summary>
+    /// Error messages the interchange format reader may report if it encounters illegal source code.
+    /// </summary>
+    public static class InterchangeFormatErrors
     {
-        public const char ElementSeparator = '!';
+        public const string MissingTerminalSeparator = "Missing terminal '!' separator.";
+        public const string MissingInterchangeVersionIdentifier = "Missing version specification.";
+        public const string InvalidVersionId = "Invalid version Id. Currently only '1.0' is supported.";
+        public const string ExpectedInterchangeUnit = "Expected interchange unit / interchange element";
     }
 }

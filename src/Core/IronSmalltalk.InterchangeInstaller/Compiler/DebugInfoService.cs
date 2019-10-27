@@ -39,7 +39,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
         public DebugInfoService(ISourceCodeReferenceService sourceCodeService)
         {
             if (sourceCodeService == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(sourceCodeService));
             this.SourceCodeService = sourceCodeService;
         }
 

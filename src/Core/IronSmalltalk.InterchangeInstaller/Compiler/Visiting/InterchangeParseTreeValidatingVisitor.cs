@@ -23,7 +23,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.Visiting
         /// <summary>
         /// Default instance of the validating visitor.
         /// </summary>
-        public static readonly InterchangeParseTreeValidatingVisitor Current = new InterchangeParseTreeValidatingVisitor(); 
+        public static readonly InterchangeParseTreeValidatingVisitor Current = new InterchangeParseTreeValidatingVisitor();
 
         /// <summary>
         /// Visits the Interchange Node. This is the default visit, in case no other implementation.
@@ -196,6 +196,5 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.Visiting
                 return false;
             return true;
         }
-
     }
 }

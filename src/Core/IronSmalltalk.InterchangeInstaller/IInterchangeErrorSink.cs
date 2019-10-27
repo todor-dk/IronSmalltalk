@@ -22,7 +22,7 @@ namespace IronSmalltalk.InterchangeInstaller
     /// <summary>
     /// Interface for reporting errors encountered during processing of the source code contained in interchange file.
     /// </summary>
-    public interface IInterchangeErrorSink : IParseErrorSink 
+    public interface IInterchangeErrorSink : IParseErrorSink
     {
         /// <summary>
         /// Report an error encountered during reading of interchange format source code file.

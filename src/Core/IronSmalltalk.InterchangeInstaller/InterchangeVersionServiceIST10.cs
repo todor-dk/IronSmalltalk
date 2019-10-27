@@ -40,7 +40,7 @@ namespace IronSmalltalk.InterchangeInstaller
         protected override InterchangeFormatParser GetInterchangeParser(InterchangeChunk sourceChunk)
         {
             if (sourceChunk == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(sourceChunk));
             InterchangeFormatParserIST10 parser = new InterchangeFormatParserIST10(new StringReader(sourceChunk.SourceChunk));
             parser.ErrorSink = sourceChunk;
             return parser;

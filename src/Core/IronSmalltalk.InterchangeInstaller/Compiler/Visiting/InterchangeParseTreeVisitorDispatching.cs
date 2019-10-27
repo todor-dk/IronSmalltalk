@@ -38,7 +38,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         {
 #if DEBUG
             if (visitor == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(visitor));
 #endif
             return visitor.VisitInterchangeNode(this);
         }
@@ -56,7 +56,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         {
 #if DEBUG
             if (visitor == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(visitor));
 #endif
             return visitor.VisitProgramInitialization(this);
         }
@@ -74,7 +74,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         {
 #if DEBUG
             if (visitor == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(visitor));
 #endif
             return visitor.VisitPoolVariableDefinition(this);
         }
@@ -92,7 +92,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         {
 #if DEBUG
             if (visitor == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(visitor));
 #endif
             return visitor.VisitPoolValueInitialization(this);
         }
@@ -110,7 +110,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         {
 #if DEBUG
             if (visitor == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(visitor));
 #endif
             return visitor.VisitPoolDefinition(this);
         }
@@ -128,7 +128,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         {
 #if DEBUG
             if (visitor == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(visitor));
 #endif
             return visitor.VisitPoolConstantDefinition(this);
         }
@@ -146,7 +146,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         {
 #if DEBUG
             if (visitor == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(visitor));
 #endif
             return visitor.VisitInterchangeVersionIdentifier(this);
         }
@@ -164,7 +164,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         {
 #if DEBUG
             if (visitor == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(visitor));
 #endif
             return visitor.VisitInstanceMethodDefinition(this);
         }
@@ -182,7 +182,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         {
 #if DEBUG
             if (visitor == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(visitor));
 #endif
             return visitor.VisitClassMethodDefinition(this);
         }
@@ -200,7 +200,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         {
 #if DEBUG
             if (visitor == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(visitor));
 #endif
             return visitor.VisitGlobalVariableDefinition(this);
         }
@@ -218,7 +218,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         {
 #if DEBUG
             if (visitor == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(visitor));
 #endif
             return visitor.VisitGlobalInitialization(this);
         }
@@ -236,7 +236,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         {
 #if DEBUG
             if (visitor == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(visitor));
 #endif
             return visitor.VisitGlobalConstantDefinition(this);
         }
@@ -254,7 +254,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         {
 #if DEBUG
             if (visitor == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(visitor));
 #endif
             return visitor.VisitClassDefinition(this);
         }
@@ -272,7 +272,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         {
 #if DEBUG
             if (visitor == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(visitor));
 #endif
             return visitor.VisitAnnotation(this);
         }

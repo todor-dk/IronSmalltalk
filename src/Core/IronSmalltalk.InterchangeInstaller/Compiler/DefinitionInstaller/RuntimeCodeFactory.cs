@@ -34,9 +34,9 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.DefinitionInstaller
         public RuntimeCodeFactory(TParseTree parseTree, ISourceCodeReferenceService sourceCodeService)
         {
             if (parseTree == null)
-                throw new ArgumentNullException("parseTree");
+                throw new ArgumentNullException(nameof(parseTree));
             if (sourceCodeService == null)
-                throw new ArgumentNullException("sourceCodeService");
+                throw new ArgumentNullException(nameof(sourceCodeService));
 
             this.ParseTree = parseTree;
             this.SourceCodeService = sourceCodeService;
@@ -63,6 +63,5 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.DefinitionInstaller
                 this.ErrorSink.ReportError(errorMessage, start, stop);
             }
         }
-
     }
 }

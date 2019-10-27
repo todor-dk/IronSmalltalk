@@ -30,7 +30,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
         public InterchangeFormatParser(TextReader reader)
         {
             if (reader == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(reader));
             this.InitParser(reader);
         }
 
@@ -101,7 +101,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
             // <className> ’classMethod’ <elementSeparator>
             // ’Global’ ’initializer’ <elementSeparator>
             // comment <elementSeparator> ... NB: This will NEVER be returned by GetNextTokenxx().
-            
+
             Token token = this.GetNextTokenxx();
             if (token is EofToken)
                 return null; // Most probably just a comment ...
@@ -123,7 +123,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
                 this.ReportParserError("Expected identifier or keyword.", token);
                 return null;
             }
-            
+
             // <classDefinition> ::= ’Class’ ’named:’ <classNameString> .... <elementSeparator>
             if ((id.Value == "Class") && (cmd.Value == "named:"))
                 return this.ParseClassDefinition(); // Discard <id> and <cmd> 
@@ -387,7 +387,6 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
                 return result;
             }
             return new PoolDefinitionNode(name);
-
         }
 
         protected virtual ProgramInitializationNode ParseProgramInitialization()
@@ -557,7 +556,6 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
                     this.ReportParserError(errorMessage, token);
                     return null; // Non-letter or non-digit char
                 }
-                
             }
 
             return token; // OK
@@ -613,7 +611,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler
                     }
                 }
             }
- 
+
             return token;
         }
 

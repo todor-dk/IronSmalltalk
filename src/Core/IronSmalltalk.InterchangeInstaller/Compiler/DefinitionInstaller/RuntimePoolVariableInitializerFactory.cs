@@ -39,9 +39,9 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.DefinitionInstaller
             : base(parseTree, sourceCodeService)
         {
             if (String.IsNullOrWhiteSpace(poolName))
-                throw new ArgumentNullException("poolName");
+                throw new ArgumentNullException(nameof(poolName));
             if (String.IsNullOrWhiteSpace(poolItemName))
-                throw new ArgumentNullException("poolItemName");
+                throw new ArgumentNullException(nameof(poolItemName));
 
             this.PoolName = poolName;
             this.PoolItemName = poolItemName;

@@ -88,9 +88,9 @@ namespace IronSmalltalk.InterchangeInstaller
         public PathFileInInformation(string path, Encoding encoding, IFileInErrorSink errorSink, SymbolDocumentInfo symbolDocument)
         {
             if (String.IsNullOrWhiteSpace(path))
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             if (encoding == null)
-                throw new ArgumentNullException("encoding");
+                throw new ArgumentNullException(nameof(encoding));
             this.Path = path;
             this.Encoding = encoding;
             this.ErrorSink = errorSink; // null is OK
@@ -118,7 +118,7 @@ namespace IronSmalltalk.InterchangeInstaller
         public DelegateFileInInformation(Func<TextReader> getReaderFunction)
         {
             if (getReaderFunction == null)
-                throw new ArgumentNullException("getReaderFunction");
+                throw new ArgumentNullException(nameof(getReaderFunction));
             this.GetReaderFunction = getReaderFunction;
         }
 

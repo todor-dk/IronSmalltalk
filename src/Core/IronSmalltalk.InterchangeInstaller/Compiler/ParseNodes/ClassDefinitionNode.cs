@@ -45,17 +45,17 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         public override InterchangeUnitNode FileIn(InterchangeFormatProcessor processor, IParseErrorSink parseErrorSink, ISourceCodeReferenceService sourceCodeService)
         {
             if (processor == null)
-                throw new ArgumentNullException("processor");
+                throw new ArgumentNullException(nameof(processor));
             if (parseErrorSink == null)
-                throw new ArgumentNullException("parseErrorSink");
+                throw new ArgumentNullException(nameof(parseErrorSink));
             if (sourceCodeService == null)
-                throw new ArgumentNullException("sourceCodeService");
+                throw new ArgumentNullException(nameof(sourceCodeService));
             // ALL instance vars must be set. If one is missing, then source code bug, and 
             //   InterchangeFormatParser.ParseClassDefinition() should have reported the error.
             if ((this.ClassName == null) || (this.SuperclassName == null) || (this.IndexedInstanceVariables == null)
                 || (this.InstanceVariableNames == null) || (this.ClassVariableNames == null) || (this.SharedPools == null)
                 || (this.ClassInstanceVariableNames == null))
-                    return this;
+                return this;
 
             SmalltalkClass.InstanceStateEnum? instanceState = this.GetInstanceState(processor, parseErrorSink, sourceCodeService);
             if (instanceState == null)
@@ -81,7 +81,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
                 civn, cvn, ivn, spn);
             this.Definfition = definition;
             // This may fail, but we don't care. If failed, it reported the error through its error sink.
-            processor.FileInProcessor.FileInClass(definition); 
+            processor.FileInProcessor.FileInClass(definition);
 
             return this;
         }
@@ -89,11 +89,17 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         protected virtual SmalltalkClass.InstanceStateEnum? GetInstanceState(InterchangeFormatProcessor processor, IParseErrorSink parseErrorSink, ISourceCodeReferenceService sourceCodeService)
         {
             if (this.IndexedInstanceVariables.Value == "byte")
+            {
                 return SmalltalkClass.InstanceStateEnum.ByteIndexable;
+            }
             else if (this.IndexedInstanceVariables.Value == "object")
+            {
                 return SmalltalkClass.InstanceStateEnum.ObjectIndexable;
+            }
             else if (this.IndexedInstanceVariables.Value == "none")
+            {
                 return SmalltalkClass.InstanceStateEnum.NamedObjectVariables;
+            }
             else
             {
                 parseErrorSink.AddParserError(this.IndexedInstanceVariables.StartPosition, this.IndexedInstanceVariables.StopPosition,

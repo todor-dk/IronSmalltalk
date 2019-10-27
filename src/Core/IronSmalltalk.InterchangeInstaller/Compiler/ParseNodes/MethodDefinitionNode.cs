@@ -32,7 +32,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         public MethodDefinitionNode(IdentifierToken className)
         {
             if (className == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(className));
             this.ClassName = className;
         }
 
@@ -46,11 +46,11 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         public override InterchangeUnitNode FileIn(InterchangeFormatProcessor processor, IParseErrorSink parseErrorSink, ISourceCodeReferenceService sourceCodeService)
         {
             if (processor == null)
-                throw new ArgumentNullException("processor");
+                throw new ArgumentNullException(nameof(processor));
             if (parseErrorSink == null)
-                throw new ArgumentNullException("parseErrorSink");
+                throw new ArgumentNullException(nameof(parseErrorSink));
             if (sourceCodeService == null)
-                throw new ArgumentNullException("sourceCodeService");
+                throw new ArgumentNullException(nameof(sourceCodeService));
             // ALL instance vars must be set. If one is missing, then source code bug, and 
             //   InterchangeFormatParser.ParseInstance/ClassMethodDefinition() should have reported the error.
             if (this.ClassName == null)

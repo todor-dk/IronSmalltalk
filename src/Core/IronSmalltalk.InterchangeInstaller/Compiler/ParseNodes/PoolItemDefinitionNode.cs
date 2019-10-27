@@ -30,7 +30,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         public PoolItemDefinitionNode(IdentifierToken poolName)
         {
             if (poolName == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(poolName));
             this.PoolName = poolName;
         }
 
@@ -44,11 +44,11 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         public override InterchangeUnitNode FileIn(InterchangeFormatProcessor processor, IParseErrorSink parseErrorSink, ISourceCodeReferenceService sourceCodeService)
         {
             if (processor == null)
-                throw new ArgumentNullException("processor");
+                throw new ArgumentNullException(nameof(processor));
             if (parseErrorSink == null)
-                throw new ArgumentNullException("parseErrorSink");
+                throw new ArgumentNullException(nameof(parseErrorSink));
             if (sourceCodeService == null)
-                throw new ArgumentNullException("sourceCodeService");
+                throw new ArgumentNullException(nameof(sourceCodeService));
             // ALL instance vars must be set. If one is missing, then source code bug, and 
             //   InterchangeFormatParser.ParsePoolVariable/ConstantDefinition() should have reported the error.
             if ((this.PoolName == null) || (this.PoolVariableName == null))

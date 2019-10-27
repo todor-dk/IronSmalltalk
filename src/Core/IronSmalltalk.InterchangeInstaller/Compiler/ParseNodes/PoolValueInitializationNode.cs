@@ -24,21 +24,16 @@ using IronSmalltalk.InterchangeInstaller.Compiler.DefinitionInstaller;
 
 namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <remarks>
-    /// This class handles initialization for both classes and globals.
-    /// </remarks>
-    public partial class GlobalInitializationNode : InterchangeElementNode
+    public partial class PoolValueInitializationNode : InterchangeElementNode
     {
-        public IdentifierToken GlobalName { get; private set; }
+        public IdentifierToken PoolName { get; private set; }
+        public StringToken PoolVariableName { get; set; }
 
-        public GlobalInitializationNode(IdentifierToken globalName)
+        public PoolValueInitializationNode(IdentifierToken poolName)
         {
-            if (globalName == null)
-                throw new ArgumentNullException();
-            this.GlobalName = globalName;
+            if (poolName == null)
+                throw new ArgumentNullException(nameof(poolName));
+            this.PoolName = poolName;
         }
 
         /// <summary>
@@ -51,18 +46,18 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         public override InterchangeUnitNode FileIn(InterchangeFormatProcessor processor, IParseErrorSink parseErrorSink, ISourceCodeReferenceService sourceCodeService)
         {
             if (processor == null)
-                throw new ArgumentNullException("processor");
+                throw new ArgumentNullException(nameof(processor));
             if (parseErrorSink == null)
-                throw new ArgumentNullException("parseErrorSink");
+                throw new ArgumentNullException(nameof(parseErrorSink));
             if (sourceCodeService == null)
-                throw new ArgumentNullException("sourceCodeService");
+                throw new ArgumentNullException(nameof(sourceCodeService));
             // ALL instance vars must be set. If one is missing, then source code bug, and 
-            //   InterchangeFormatParser.ParseGlobalInitialization() should have reported the error.
-            if (this.GlobalName == null)
+            //   InterchangeFormatParser.ParsePoolValueInitialization() should have reported the error.
+            if ((this.PoolName == null) || (this.PoolVariableName == null))
                 return this;
 
-            // <globalValueInitialization> ::= <globalName> ’initializer’ <elementSeparator> 
-            //      <variableInitializer> <elementSeparator>
+            // <poolValueInitialization> ::= <poolName> ’initializerFor:’ <poolVariableNameString>
+            //      <elementSeparator> <variableInitializer> <elementSeparator>
             // <variableInitializer> ::= <initializer definition>
 
             ISourceCodeReferenceService methodSourceCodeService;
@@ -78,16 +73,17 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
                 return this;
             }
 
-            RuntimeGlobalInitializerFactory factory = new RuntimeGlobalInitializerFactory(initializer, methodSourceCodeService, this.GlobalName.Value);
+            RuntimePoolVariableInitializerFactory factory = new RuntimePoolVariableInitializerFactory(initializer, methodSourceCodeService, this.PoolName.Value, this.PoolVariableName.Value);
 
-            GlobalInitializer definition = new GlobalInitializer(
-                processor.CreateSourceReference(this.GlobalName.Value, this.GlobalName, sourceCodeService), 
+            PoolVariableInitializer definition = new PoolVariableInitializer(
+                processor.CreateSourceReference(this.PoolName.Value, this.PoolName, sourceCodeService),
+                processor.CreateSourceReference(this.PoolVariableName.Value, this.PoolVariableName, sourceCodeService),
                 sourceCodeService,
                 methodSourceCodeService,
                 factory);
             this.Definfition = definition;
             // This may fail, but we don't care. If failed, it reported the error through its error sink.
-            processor.FileInProcessor.FileInGlobalInitializer(definition);
+            processor.FileInProcessor.FileInPoolVariableInitializer(definition);
 
             return this;
         }

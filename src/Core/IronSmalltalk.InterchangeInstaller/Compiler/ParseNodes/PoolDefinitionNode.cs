@@ -15,16 +15,28 @@
 */
 
 using System;
+using IronSmalltalk.Compiler.LexicalTokens;
 using IronSmalltalk.Compiler.SemanticAnalysis;
-using IronSmalltalk.Compiler.SemanticNodes;
 using IronSmalltalk.DefinitionInstaller;
 using IronSmalltalk.DefinitionInstaller.Definitions;
-using IronSmalltalk.InterchangeInstaller.Compiler.DefinitionInstaller;
 
 namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
 {
-    public partial class ProgramInitializationNode : InterchangeElementNode
+    public partial class PoolDefinitionNode : InterchangeElementNode
     {
+        public StringToken PoolName { get; private set; }
+
+        public PoolDefinitionNode()
+        {
+        }
+
+        public PoolDefinitionNode(StringToken poollName)
+        {
+            if (poollName == null)
+                throw new ArgumentNullException(nameof(poollName));
+            this.PoolName = poollName;
+        }
+
         /// <summary>
         /// File-in and process the actions contained in the node.
         /// </summary>
@@ -35,36 +47,20 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         public override InterchangeUnitNode FileIn(InterchangeFormatProcessor processor, IParseErrorSink parseErrorSink, ISourceCodeReferenceService sourceCodeService)
         {
             if (processor == null)
-                throw new ArgumentNullException("processor");
+                throw new ArgumentNullException(nameof(processor));
             if (parseErrorSink == null)
-                throw new ArgumentNullException("parseErrorSink");
+                throw new ArgumentNullException(nameof(parseErrorSink));
             if (sourceCodeService == null)
-                throw new ArgumentNullException("sourceCodeService");
-
-            // <programInitialization> ::= ’Global’ ’initializer’ <elementSeparator>
-            //      <programInitializer> <elementSeparator>
-            //  <programInitializer> ::= <initializer definition>
-
-            ISourceCodeReferenceService methodSourceCodeService;
-            InitializerNode initializer = processor.ParseInitializer(out methodSourceCodeService);
-            if (initializer == null)
-                return this; // Processor/Parser should have reported errors
-            if (!initializer.Accept(IronSmalltalk.Compiler.Visiting.ParseTreeValidatingVisitor.Current))
-            {
-                // We expect the parser to have reported the errors. Just in case, we do it once more to the installer.
-                // Bad practice here is to use the 'processor.SourcePosition', but we don't have anything better :-/
-                if (processor.ErrorSink != null)
-                    processor.ErrorSink.AddInterchangeError(processor.SourcePosition, processor.SourcePosition, "Invalid initializer source code.");
+                throw new ArgumentNullException(nameof(sourceCodeService));
+            // ALL instance vars must be set. If one is missing, then source code bug, and 
+            //   InterchangeFormatParser.ParsePoolDefinition() should have reported the error.
+            if (this.PoolName == null)
                 return this;
-            }
 
-            RuntimeProgramInitializerFactory factory = new RuntimeProgramInitializerFactory(initializer, methodSourceCodeService);
-
-            ProgramInitializer definition = new ProgramInitializer(sourceCodeService, methodSourceCodeService, factory);
+            PoolDefinition definition = new PoolDefinition(processor.CreateSourceReference(this.PoolName.Value, this.PoolName, sourceCodeService));
             this.Definfition = definition;
             // This may fail, but we don't care. If failed, it reported the error through its error sink.
-            processor.FileInProcessor.FileInProgramInitializer(definition);
-
+            processor.FileInProcessor.FileInPool(definition);
             return this;
         }
     }

@@ -68,11 +68,11 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         public override InterchangeUnitNode FileIn(InterchangeFormatProcessor processor, IParseErrorSink parseErrorSink, ISourceCodeReferenceService sourceCodeService)
         {
             if (processor == null)
-                throw new ArgumentNullException("processor");
+                throw new ArgumentNullException(nameof(processor));
             if (parseErrorSink == null)
-                throw new ArgumentNullException("parseErrorSink");
+                throw new ArgumentNullException(nameof(parseErrorSink));
             if (sourceCodeService == null)
-                throw new ArgumentNullException("sourceCodeService");
+                throw new ArgumentNullException(nameof(sourceCodeService));
 
             if ((this.AnnotatedNode == null) || (this.Key == null) || (this.Value == null))
                 return this;
@@ -81,7 +81,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
                 // Not normal, means there was bug in the code that was supposed to create the definition,
                 // but we don't want to add too much trouble to the developer, so we silently ignore 
                 // the annotation (to the buggy definition).
-                return this; 
+                return this;
 
             this.AnnotatedNode.Definfition.Annotate(this.Key.Value, this.Value.Value);
             return this;

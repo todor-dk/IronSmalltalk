@@ -28,7 +28,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         /// <returns>An enumerable collection with the child nodes directly defines in this node.</returns>
         public override IEnumerable<IParseNode> GetChildNodes()
         {
-            return new IParseNode[0];
+            return System.Array.Empty<IParseNode>();
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace IronSmalltalk.InterchangeInstaller.Compiler.ParseNodes
         /// <returns>An enumerable collection with the tokens directly defining this node.</returns>
         public override IEnumerable<IToken> GetTokens()
         {
-            return new IronSmalltalk.Compiler.LexicalTokens.IToken[0];
+            return System.Array.Empty<IToken>();
         }
 
         /// <summary>

@@ -49,7 +49,7 @@ namespace IronSmalltalk.InterchangeInstaller
         public FileInService(SmalltalkRuntime runtime)
         {
             if (runtime == null)
-                throw new ArgumentNullException("runtime");
+                throw new ArgumentNullException(nameof(runtime));
 
             // TODO : Move constants out of code into a the InterchangeFormatConstants class
 
@@ -74,14 +74,14 @@ namespace IronSmalltalk.InterchangeInstaller
         public void Install(FileInInformation fileIn)
         {
             if (fileIn == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(fileIn));
             this.Install(new FileInInformation[] { fileIn });
         }
 
         public void Install(IEnumerable<FileInInformation> fileIns)
         {
             if (fileIns == null)
-                throw new ArgumentNullException("fileIns");
+                throw new ArgumentNullException(nameof(fileIns));
 
             InterchangeInstallerContext context = this.Read(fileIns);
 
@@ -91,14 +91,14 @@ namespace IronSmalltalk.InterchangeInstaller
         public InterchangeInstallerContext Read(FileInInformation fileIn)
         {
             if (fileIn == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(fileIn));
             return this.Read(new FileInInformation[] { fileIn });
         }
 
         public InterchangeInstallerContext Read(IEnumerable<FileInInformation> fileIns)
         {
             if (fileIns == null)
-                throw new ArgumentNullException("fileIns");
+                throw new ArgumentNullException(nameof(fileIns));
 
             InterchangeInstallerContext installer = this.CreateInstallerContext();
 
@@ -188,7 +188,7 @@ namespace IronSmalltalk.InterchangeInstaller
             public void AddInstallError(string installErrorMessage, ISourceReference sourceReference)
             {
                 if (sourceReference == null)
-                    throw new ArgumentNullException("sourceReference");
+                    throw new ArgumentNullException(nameof(sourceReference));
                 FileInInformation sourceObject = sourceReference.Service.SourceObject as FileInInformation;
 #if DEBUG
                 System.Diagnostics.Debug.Assert(sourceObject != null);

@@ -111,17 +111,17 @@ namespace IronSmalltalk.InterchangeInstaller
         /// <param name="sourceCodeReader">Text reader containing the source code.</param>
         /// <param name="fileInProcessor">File-in processor that will be notified about each filed-in element.</param>
         /// <param name="versionServicesMap">Map between interchange versions and interchange-version-services.</param>
-        public InterchangeFormatProcessor(FileInInformation fileInInfo, TextReader sourceCodeReader, IInterchangeFileInProcessor fileInProcessor, 
+        public InterchangeFormatProcessor(FileInInformation fileInInfo, TextReader sourceCodeReader, IInterchangeFileInProcessor fileInProcessor,
             IDictionary<string, InterchangeVersionService> versionServicesMap)
         {
             if (fileInInfo == null)
-                throw new ArgumentNullException("fileInInfo");
+                throw new ArgumentNullException(nameof(fileInInfo));
             if (sourceCodeReader == null)
-                throw new ArgumentNullException("sourceCodeReader");
+                throw new ArgumentNullException(nameof(sourceCodeReader));
             if (fileInProcessor == null)
-                throw new ArgumentNullException("fileInProcessor");
+                throw new ArgumentNullException(nameof(fileInProcessor));
             if (versionServicesMap == null)
-                throw new ArgumentNullException("versionServicesMap");
+                throw new ArgumentNullException(nameof(versionServicesMap));
             this.FileInInformation = fileInInfo;
             this.ErrorSink = fileInInfo.ErrorSink;
             this.Reader = sourceCodeReader;
@@ -165,10 +165,13 @@ namespace IronSmalltalk.InterchangeInstaller
             if ((vidNode.VersionId != null) && !this.SetVersionService())
             {
                 if (this.ErrorSink != null)
+                {
                     this.ErrorSink.AddInterchangeError(
                         chunk.TranslateSourcePosition(vidNode.VersionId.StartPosition),
                         chunk.TranslateSourcePosition(vidNode.VersionId.StopPosition),
                         InterchangeFormatErrors.InvalidVersionId);
+                }
+
                 return false; // Cannot process this version
             }
             return true;
@@ -350,10 +353,11 @@ namespace IronSmalltalk.InterchangeInstaller
                     if (this.Reader.Peek() != separator)
                         return new InterchangeChunk(this, builder.ToString(), startPosition);
 
-                    pos++; col++;
+                    pos++;
+                    col++;
                     this.Reader.Read();
                 }
-                builder.Append((char) ch);
+                builder.Append((char)ch);
             }
         }
     }

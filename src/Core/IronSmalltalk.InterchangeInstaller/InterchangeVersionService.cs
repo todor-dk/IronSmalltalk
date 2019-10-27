@@ -86,7 +86,7 @@ namespace IronSmalltalk.InterchangeInstaller
         protected virtual InterchangeFormatParser GetInterchangeParser(InterchangeChunk sourceChunk)
         {
             if (sourceChunk == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(sourceChunk));
             InterchangeFormatParser parser = new InterchangeFormatParser(new StringReader(sourceChunk.SourceChunk));
             parser.ErrorSink = sourceChunk;
             return parser;
@@ -166,11 +166,11 @@ namespace IronSmalltalk.InterchangeInstaller
         protected internal virtual IEnumerable<SourceReference<string>> ParseIdentifierList(StringToken token, IParseErrorSink parseErrorSink, ISourceCodeReferenceService sourceCodeService)
         {
             if (token == null)
-                throw new ArgumentNullException("token");
+                throw new ArgumentNullException(nameof(token));
             if (parseErrorSink == null)
-                throw new ArgumentNullException("parseErrorSink");
+                throw new ArgumentNullException(nameof(parseErrorSink));
             if (sourceCodeService == null)
-                throw new ArgumentNullException("sourceCodeService");
+                throw new ArgumentNullException(nameof(sourceCodeService));
 
             List<SourceReference<string>> result = new List<SourceReference<string>>();
             if (token.Value.Length == 0)
@@ -218,7 +218,7 @@ namespace IronSmalltalk.InterchangeInstaller
         protected void ReportError(InterchangeFormatProcessor processor, string parseErrorMessage)
         {
             if (processor == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(processor));
             if (processor.ErrorSink != null)
                 processor.ErrorSink.AddInterchangeError(processor.SourcePosition, processor.SourcePosition, parseErrorMessage);
         }
@@ -231,7 +231,7 @@ namespace IronSmalltalk.InterchangeInstaller
         protected InterchangeChunk GetNextChunk(InterchangeFormatProcessor processor)
         {
             if (processor == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(processor));
             return processor.GetNextChunk();
         }
     }
