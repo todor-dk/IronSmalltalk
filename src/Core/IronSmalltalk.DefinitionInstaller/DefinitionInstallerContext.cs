@@ -44,7 +44,7 @@ namespace IronSmalltalk.DefinitionInstaller
         private List<MethodDefinition> _methods = new List<MethodDefinition>();
         private List<InitializerDefinition> _initializers = new List<InitializerDefinition>();
         private List<Tuple<SmalltalkClass, ISourceReference>> _newClasses = new List<Tuple<SmalltalkClass, ISourceReference>>();
-        
+
         /// <summary>
         /// Smalltalk context that this installation is part of.
         /// </summary>
@@ -64,7 +64,7 @@ namespace IronSmalltalk.DefinitionInstaller
         public DefinitionInstallerContext(SmalltalkRuntime runtime)
         {
             if (runtime == null)
-                throw new ArgumentNullException("runtime");
+                throw new ArgumentNullException(nameof(runtime));
 
             this.Runtime = runtime;
             this.InstallMetaAnnotations = false;
@@ -153,7 +153,7 @@ namespace IronSmalltalk.DefinitionInstaller
         public bool Install()
         {
             this.CreateTemporaryNameSpace();
-                
+
             if (!this.CreateGlobalBindings())
                 return false;
             if (!this.CreateGlobalObjects())
@@ -187,7 +187,7 @@ namespace IronSmalltalk.DefinitionInstaller
         private bool CreateGlobalBindings()
         {
             bool result = true;
-            foreach(GlobalBase def in this._globals)
+            foreach (GlobalBase def in this._globals)
                 result = (result & def.CreateGlobalBinding(this));
             return result;
         }
@@ -272,7 +272,7 @@ namespace IronSmalltalk.DefinitionInstaller
         private bool RecompileClasses()
         {
             List<Tuple<SmalltalkClass, ISourceReference>> toRecompile = new List<Tuple<SmalltalkClass, ISourceReference>>();
-            foreach(Tuple<SmalltalkClass, ISourceReference> cls in this._newClasses)
+            foreach (Tuple<SmalltalkClass, ISourceReference> cls in this._newClasses)
             {
                 // Do not recompile classes that we are going to recompile anyway
                 bool subclassOfRecompiled = false;
@@ -322,19 +322,19 @@ namespace IronSmalltalk.DefinitionInstaller
 
         bool IDefinitionInstallerContext.ReportError(ISourceReference sourceReference, string errorMessage)
         {
-            
+
             if (this.ErrorSink != null)
                 this.ErrorSink.AddInstallError(errorMessage, sourceReference);
             // This value has no meaning to us, but makes it easier for senders to use us and return <false> directly.
-            return false; 
+            return false;
         }
 
         void IDefinitionInstallerContext.RegisterNewClass(SmalltalkClass cls, ISourceReference sourceReference)
         {
             if (cls == null)
-                throw new ArgumentNullException("cls");
+                throw new ArgumentNullException(nameof(cls));
             if (sourceReference == null)
-                throw new ArgumentNullException("sourceReference");
+                throw new ArgumentNullException(nameof(sourceReference));
             this._newClasses.Add(new Tuple<SmalltalkClass, ISourceReference>(cls, sourceReference));
         }
 
@@ -424,11 +424,11 @@ namespace IronSmalltalk.DefinitionInstaller
             if (annotations == null)
                 return false;
 
-            foreach (var pair in annotations)
+            foreach (KeyValuePair<string, string> pair in annotations)
             {
                 if (!String.IsNullOrEmpty(pair.Key))
                 {
-                    if (this.InstallMetaAnnotations || !pair.Key.StartsWith("ist.meta."))
+                    if (this.InstallMetaAnnotations || !pair.Key.StartsWith("ist.meta.", StringComparison.Ordinal))
                         annotetableObject.Annotate(pair.Key, pair.Value);
                 }
             }

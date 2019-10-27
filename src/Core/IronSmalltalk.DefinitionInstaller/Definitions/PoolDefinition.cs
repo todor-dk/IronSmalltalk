@@ -49,7 +49,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         /// <returns>A System.String that represents the shared pool definition object.</returns>
         public override string ToString()
         {
-            return String.Format("Pool named: '{0}'", this.Name.Value);
+            return $"Pool named: '{this.Name.Value}'";
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         protected internal override bool CreateGlobalBinding(IDefinitionInstallerContext installer)
         {
             if (installer == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(installer));
             // 1. Check if the name is not complete garbage.
             if (!IronSmalltalk.Common.Utilities.ValidateIdentifier(this.Name.Value))
                 return installer.ReportError(this.Name, InstallerErrors.PoolInvalidName);
@@ -88,7 +88,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         protected internal override bool CreateGlobalObject(IDefinitionInstallerContext installer)
         {
             if (installer == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(installer));
             // 1. Get the binding to the global 
             Symbol name = installer.Runtime.GetSymbol(this.Name.Value);
             PoolBinding binding = installer.GetLocalPoolBinding(name);

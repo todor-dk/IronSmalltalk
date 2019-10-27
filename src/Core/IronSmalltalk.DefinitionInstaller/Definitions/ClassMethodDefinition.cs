@@ -29,7 +29,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
 
         public override string ToString()
         {
-            return String.Format("{0} classMethod", this.ClassName.Value);
+            return $"{this.ClassName.Value} classMethod";
         }
 
         protected override bool InternalAddMethod(IDefinitionInstallerContext installer, SmalltalkClass cls)

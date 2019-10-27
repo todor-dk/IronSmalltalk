@@ -28,6 +28,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         /// Name of the Pool that owns the pool variable or pool constant.
         /// </summary>
         public SourceReference<string> PoolName { get; private set; }
+
         /// <summary>
         /// Name of the pool variable or pool constant.
         /// </summary>
@@ -41,9 +42,9 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         public PoolValueDefinition(SourceReference<string> poolName, SourceReference<string> variableName)
         {
             if (poolName == null)
-                throw new ArgumentNullException("poolName");
+                throw new ArgumentNullException(nameof(poolName));
             if (variableName == null)
-                throw new ArgumentNullException("variableName");
+                throw new ArgumentNullException(nameof(variableName));
             this.PoolName = poolName;
             this.VariableName = variableName;
         }
@@ -63,7 +64,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         protected internal override bool AnnotateObject(IDefinitionInstallerContext installer)
         {
             if (installer == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(installer));
 
             if (!this.Annotations.Any())
                 return true;

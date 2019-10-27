@@ -1,3 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+  <ItemGroup>
+    <ProjectReference Include="..\IronSmalltalk.Runtime\IronSmalltalk.Runtime.csproj" />
+  </ItemGroup>
 </Project>

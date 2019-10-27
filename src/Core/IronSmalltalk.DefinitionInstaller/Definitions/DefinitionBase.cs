@@ -47,9 +47,9 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         public virtual void Annotate(string key, string value)
         {
             if (key == null)
-                throw new ArgumentNullException("key");
+                throw new ArgumentNullException(nameof(key));
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
 
             this._annotations[key] = value;
         }

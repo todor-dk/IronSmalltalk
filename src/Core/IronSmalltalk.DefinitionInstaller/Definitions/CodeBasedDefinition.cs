@@ -44,11 +44,11 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         public CodeBasedDefinition(ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, TFactory factory)
         {
             if (sourceCodeService == null)
-                throw new ArgumentNullException("sourceCodeService");
+                throw new ArgumentNullException(nameof(sourceCodeService));
             if (methodSourceCodeService == null)
-                throw new ArgumentNullException("methodSourceCodeService");
+                throw new ArgumentNullException(nameof(methodSourceCodeService));
             if (factory == null)
-                throw new ArgumentNullException("factory");
+                throw new ArgumentNullException(nameof(factory));
             this.SourceCodeService = sourceCodeService;
             this.MethodSourceCodeService = methodSourceCodeService;
             this.Factory = factory;
@@ -62,7 +62,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         protected internal override bool AnnotateObject(IDefinitionInstallerContext installer)
         {
             if (installer == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(installer));
 
             if (!this.Annotations.Any())
                 return true;
@@ -83,9 +83,9 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
             public IntermediateCodeValidationErrorSink(ISourceCodeReferenceService sourceCodeService, IDefinitionInstallerContext installer)
             {
                 if (installer == null)
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException(nameof(installer));
                 if (sourceCodeService == null)
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException(nameof(sourceCodeService));
                 this.Installer = installer;
                 this.SourceCodeService = sourceCodeService;
             }

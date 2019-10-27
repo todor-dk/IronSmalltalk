@@ -38,7 +38,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         /// </summary>
         /// <param name="errorMessage">Error message</param>
         /// <param name="start">Start location in the source code where the error occured.</param>
-        /// <param name="stop">Stop location in the source code where the error occured.</param>
+        /// <param name="stop">End location in the source code where the error occured.</param>
         // <returns></returns>
         void ReportError(string errorMessage, SourceLocation start, SourceLocation stop);
     }

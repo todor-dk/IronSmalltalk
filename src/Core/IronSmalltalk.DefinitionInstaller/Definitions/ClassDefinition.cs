@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using IronSmalltalk.Runtime;
 using IronSmalltalk.Runtime.Bindings;
@@ -25,7 +26,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
     /// <summary>
     /// Definition description of a Smalltalk class.
     /// </summary>
-    public class ClassDefinition : GlobalBase 
+    public class ClassDefinition : GlobalBase
     {
         /// <summary>
         /// Name of the class.
@@ -34,26 +35,32 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         {
             get { return this.Name; }
         }
+
         /// <summary>
         /// Name of the superclass.
         /// </summary>
         public SourceReference<string> SuperclassName { get; private set; }
+
         /// <summary>
         /// Instance state of class, i.e. Byte-Indexable, Object-Indexable or Named-Instance-Variables.
         /// </summary>
         public SourceReference<SmalltalkClass.InstanceStateEnum> InstanceState { get; private set; }
+
         /// <summary>
         /// Names of the class-instance-variables directly defined in this class.
         /// </summary>
         public IEnumerable<SourceReference<string>> ClassInstanceVariableNames { get; private set; }
+
         /// <summary>
         /// Names of the class-variables directly defined in this class.
         /// </summary>
         public IEnumerable<SourceReference<string>> ClassVariableNames { get; private set; }
+
         /// <summary>
         /// Names of the instance-variables directly defined in this class.
         /// </summary>
         public IEnumerable<SourceReference<string>> InstanceVariableNames { get; private set; }
+
         /// <summary>
         /// Names of the pools imported by this class.
         /// </summary>
@@ -76,17 +83,17 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
             : base(className)
         {
             if (superclassName == null)
-                throw new ArgumentNullException("superclassName");
+                throw new ArgumentNullException(nameof(superclassName));
             if (instanceState == null)
-                throw new ArgumentNullException("instanceState");
+                throw new ArgumentNullException(nameof(instanceState));
             if (classInstanceVariableNames == null)
-                throw new ArgumentNullException("classInstanceVariableNames");
+                throw new ArgumentNullException(nameof(classInstanceVariableNames));
             if (classVariableNames == null)
-                throw new ArgumentNullException("classVariableNames");
+                throw new ArgumentNullException(nameof(classVariableNames));
             if (instanceVariableNames == null)
-                throw new ArgumentNullException("instanceVariableNames");
+                throw new ArgumentNullException(nameof(instanceVariableNames));
             if (importedPoolNames == null)
-                throw new ArgumentNullException("importedPoolNames");
+                throw new ArgumentNullException(nameof(importedPoolNames));
             this.SuperclassName = superclassName;
             this.InstanceState = instanceState;
             this.ClassInstanceVariableNames = classInstanceVariableNames;
@@ -102,13 +109,13 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         public override string ToString()
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            sb.AppendFormat("Class named: '{0}' \n", this.ClassName.Value);
-            sb.AppendFormat("\tsuperclass: '{0}' \n", this.SuperclassName.Value);
-            sb.AppendFormat("\tindexedInstanceVariables: {0} \n", this.InstanceState.Value);
-            sb.AppendFormat("\tinstanceVariableNames: '{0}' \n", String.Join(" ", this.InstanceVariableNames.Select(sr => sr.Value)));
-            sb.AppendFormat("\tclassVariableNames: '{0}' \n", String.Join(" ", this.ClassVariableNames.Select(sr => sr.Value)));
-            sb.AppendFormat("\tsharedPools: '{0}' \n", String.Join(" ", this.ImportedPoolNames.Select(sr => sr.Value)));
-            sb.AppendFormat("\tclassInstanceVariableNames: '{0}'", String.Join(" ", this.ClassInstanceVariableNames.Select(sr => sr.Value)));
+            sb.AppendFormat(CultureInfo.InvariantCulture, "Class named: '{0}' \n", this.ClassName.Value);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\tsuperclass: '{0}' \n", this.SuperclassName.Value);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\tindexedInstanceVariables: {0} \n", this.InstanceState.Value);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\tinstanceVariableNames: '{0}' \n", String.Join(" ", this.InstanceVariableNames.Select(sr => sr.Value)));
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\tclassVariableNames: '{0}' \n", String.Join(" ", this.ClassVariableNames.Select(sr => sr.Value)));
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\tsharedPools: '{0}' \n", String.Join(" ", this.ImportedPoolNames.Select(sr => sr.Value)));
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\tclassInstanceVariableNames: '{0}'", String.Join(" ", this.ClassInstanceVariableNames.Select(sr => sr.Value)));
             return sb.ToString();
         }
 
@@ -120,7 +127,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         protected internal override bool CreateGlobalBinding(IDefinitionInstallerContext installer)
         {
             if (installer == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(installer));
             // 1. Check if the name is not complete garbage ... or reserved identifier
             if (!IronSmalltalk.Common.Utilities.ValidateIdentifier(this.Name.Value))
                 return installer.ReportError(this.Name, InstallerErrors.ClassInvalidName);
@@ -148,7 +155,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         protected internal override bool CreateGlobalObject(IDefinitionInstallerContext installer)
         {
             if (installer == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(installer));
             // 1. Get the binding to the global 
             Symbol name = installer.Runtime.GetSymbol(this.Name.Value);
             ClassBinding binding = installer.GetLocalClassBinding(name);
@@ -193,7 +200,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
                 Symbol varName = installer.Runtime.GetSymbol(identifier.Value);
                 if (!IronSmalltalk.Common.Utilities.ValidateIdentifier(identifier.Value))
                     return installer.ReportError(identifier, InstallerErrors.ClassInstanceVariableNotIdentifier);
-                if (((IEnumerable<InstanceVariableBinding>) instVars).Any(varBinding => varBinding.Name == varName))
+                if (((IEnumerable<InstanceVariableBinding>)instVars).Any(varBinding => varBinding.Name == varName))
                     return installer.ReportError(identifier, InstallerErrors.ClassInstanceVariableNotUnique);
                 if (classVars.Any<ClassVariableBinding>(varBinding => varBinding.Name == varName))
                     return installer.ReportError(identifier, InstallerErrors.ClassInstanceOrClassVariableNotUnique);
@@ -239,7 +246,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         protected internal override bool ValidateObject(IDefinitionInstallerContext installer)
         {
             if (installer == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(installer));
             // 1. Get the binding to the global 
             Symbol name = installer.Runtime.GetSymbol(this.Name.Value);
             ClassBinding binding = installer.GetLocalClassBinding(name);
@@ -257,8 +264,14 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
             while (tmp != null)
             {
                 if (classes.IndexOf(tmp.Name) != -1)
+                {
                     return installer.ReportError(this.SuperclassName, String.Format(
-                        InstallerErrors.ClassCircularReference, this.SuperclassName.Value, this.Name.Value));
+                        CultureInfo.CurrentCulture,
+                        InstallerErrors.ClassCircularReference,
+                        this.SuperclassName.Value,
+                        this.Name.Value));
+                }
+
                 classes.Add(tmp.Name);
                 tmp = tmp.Superclass;
             }
@@ -290,6 +303,5 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
 
             return true; // OK
         }
-
     }
 }

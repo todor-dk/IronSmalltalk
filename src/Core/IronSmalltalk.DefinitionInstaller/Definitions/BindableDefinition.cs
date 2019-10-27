@@ -22,6 +22,5 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
     /// </summary>
     public abstract class BindableDefinition : DefinitionBase
     {
-        
     }
 }

@@ -37,9 +37,9 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
             : base(sourceCodeService, methodSourceCodeService, code)
         {
             if (className == null)
-                throw new ArgumentNullException("className");
+                throw new ArgumentNullException(nameof(className));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             this.ClassName = className;
             this.Selector = selector;
         }
@@ -47,9 +47,9 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         protected internal bool CreateMethod(IDefinitionInstallerContext installer)
         {
             if (installer == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(installer));
             // 1. Check if the selector is not complete garbage.
-            if(String.IsNullOrWhiteSpace(this.Selector.Value))
+            if (String.IsNullOrWhiteSpace(this.Selector.Value))
                 return installer.ReportError(this.Selector, InstallerErrors.MethodInvalidSelector);
             // 2. Get the class.
             ClassBinding classBinding = installer.GetClassBinding(this.ClassName.Value);
@@ -66,7 +66,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         protected internal bool ValidateMethod(IDefinitionInstallerContext installer)
         {
             if (installer == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(installer));
             // 1. Check if the selector is not complete garbage.
             if (String.IsNullOrWhiteSpace(this.Selector.Value))
                 return installer.ReportError(this.Selector, InstallerErrors.MethodInvalidSelector);
@@ -79,7 +79,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
                 throw new InvalidOperationException("Should have been set in ClassDefinition.CreataGlobalObject().");
 
             // 3. Create the binding ... We allow duplicates and overwriting existing methods
-            return this.InternalValidateMethod(installer, classBinding.Value, 
+            return this.InternalValidateMethod(installer, classBinding.Value,
                 new IntermediateCodeValidationErrorSink(this.MethodSourceCodeService, installer));
         }
 

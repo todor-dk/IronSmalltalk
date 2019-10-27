@@ -33,19 +33,19 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
             : base(sourceCodeService, methodSourceCodeService, factory)
         {
             if (globalName == null)
-                throw new ArgumentNullException("globalName");
+                throw new ArgumentNullException(nameof(globalName));
             this.GlobalName = globalName;
         }
 
         public override string ToString()
         {
-            return String.Format("{0} initializer", this.GlobalName.Value);
+            return $"{this.GlobalName.Value} initializer";
         }
 
         protected internal override bool ValidateInitializer(IDefinitionInstallerContext installer)
         {
             if (installer == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(installer));
             // 2. Get the global.
             GlobalVariableOrConstantBinding globalBinding = installer.GetGlobalVariableOrConstantBinding(this.GlobalName.Value);
             ClassBinding classBinding = installer.GetClassBinding(this.GlobalName.Value);
@@ -57,8 +57,10 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
                 throw new InvalidOperationException("Should have been set in ClassDefinition.CreataGlobalObject().");
 
             if (classBinding != null)
-                return this.Factory.ValidateClassInitializer(this, classBinding.Value, installer, 
+            {
+                return this.Factory.ValidateClassInitializer(this, classBinding.Value, installer,
                     new IntermediateCodeValidationErrorSink(this.MethodSourceCodeService, installer));
+            }
 
             if (globalBinding.IsConstantBinding && globalBinding.HasBeenSet)
                 return installer.ReportError(this.GlobalName, InstallerErrors.GlobalIsConstant);

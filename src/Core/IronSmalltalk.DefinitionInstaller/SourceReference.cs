@@ -31,7 +31,7 @@ namespace IronSmalltalk.DefinitionInstaller
         public SourceReference(SourceLocation startPosition, SourceLocation stopPosition, ISourceCodeReferenceService service)
         {
             if (service == null)
-                throw new ArgumentNullException("service");
+                throw new ArgumentNullException(nameof(service));
 
             this._StartPosition = startPosition;
             this._StopPosition = stopPosition;
@@ -68,7 +68,7 @@ namespace IronSmalltalk.DefinitionInstaller
         /// Return the source code service for this source code reference.
         /// The service can translate the locations of source references from relative to absolute positions.
         /// </summary>
-        public ISourceCodeReferenceService Service 
+        public ISourceCodeReferenceService Service
         {
             get { return this.SourceCodeReferenceService; }
         }
@@ -103,10 +103,10 @@ namespace IronSmalltalk.DefinitionInstaller
         /// <param name="stopPosition">Stop location in the source code that defines the value.</param>
         /// <param name="service">Source reference service that translates the locations from relative to absolute positions.</param>
         public SourceReference(TValue value, SourceLocation startPosition, SourceLocation stopPosition, ISourceCodeReferenceService service)
-            : base (startPosition, stopPosition, service)
+            : base(startPosition, stopPosition, service)
         {
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             this.Value = value;
         }
     }

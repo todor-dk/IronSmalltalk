@@ -18,7 +18,7 @@ using IronSmalltalk.Runtime.Behavior;
 
 namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
-    public abstract class InitializerDefinition: CodeBasedDefinition<IInitializerFactory, CompiledInitializer>
+    public abstract class InitializerDefinition : CodeBasedDefinition<IInitializerFactory, CompiledInitializer>
     {
         public InitializerDefinition(ISourceCodeReferenceService sourceCodeService, ISourceCodeReferenceService methodSourceCodeService, IInitializerFactory factory)
             : base(sourceCodeService, methodSourceCodeService, factory)

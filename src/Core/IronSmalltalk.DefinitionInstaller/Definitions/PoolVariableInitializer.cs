@@ -29,22 +29,22 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
             : base(sourceCodeService, methodSourceCodeService, factory)
         {
             if (poolName == null)
-                throw new ArgumentNullException("poolName");
+                throw new ArgumentNullException(nameof(poolName));
             if (variableName == null)
-                throw new ArgumentNullException("variableName");
+                throw new ArgumentNullException(nameof(variableName));
             this.PoolName = poolName;
             this.VariableName = variableName;
         }
 
         public override string ToString()
         {
-            return String.Format("{0} initializerFor: '{1}'", this.PoolName.Value, this.VariableName.Value);
+            return $"{this.PoolName.Value} initializerFor: '{this.VariableName.Value}'";
         }
 
         protected internal override bool ValidateInitializer(IDefinitionInstallerContext installer)
         {
             if (installer == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(installer));
             // 1. Check if the name is not complete garbage.
             if (!IronSmalltalk.Common.Utilities.ValidateIdentifier(this.VariableName.Value))
                 return installer.ReportError(this.VariableName, InstallerErrors.PoolVarInvalidName);
@@ -65,7 +65,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
             if (poolItemBinding.IsConstantBinding && poolItemBinding.HasBeenSet)
                 return installer.ReportError(this.VariableName, InstallerErrors.PoolItemIsConstant);
 
-            return this.Factory.ValidatePoolVariableInitializer(this, poolBinding.Value, installer, 
+            return this.Factory.ValidatePoolVariableInitializer(this, poolBinding.Value, installer,
                 new IntermediateCodeValidationErrorSink(this.MethodSourceCodeService, installer));
         }
     }

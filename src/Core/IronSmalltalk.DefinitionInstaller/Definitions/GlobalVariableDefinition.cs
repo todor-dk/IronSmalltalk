@@ -21,15 +21,15 @@ using IronSmalltalk.Runtime.Bindings;
 namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
     /// <summary>
-    /// Definition description of a global constant.
+    /// Definition description of a global variable.
     /// </summary>
-    public class GlobalConstantDefinition : GlobalDefinition
+    public class GlobalVariableDefinition : GlobalDefinition
     {
         /// <summary>
-        /// Creates a new definition description of a global constant.
+        /// Creates a new definition description of a global variable.
         /// </summary>
         /// <param name="globalName">Name of the global.</param>
-        public GlobalConstantDefinition(SourceReference<string> globalName)
+        public GlobalVariableDefinition(SourceReference<string> globalName)
             : base(globalName)
         {
         }
@@ -40,11 +40,11 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         /// <returns>A System.String that represents the global definition object.</returns>
         public override string ToString()
         {
-            return String.Format("Global constant: '{0}'", this.Name.Value);
+            return $"Global variable: '{this.Name.Value}'";
         }
 
         /// <summary>
-        /// Create the binding object (association) for the global constant in the global name scope (system dictionary).
+        /// Create the binding object (association) for the global variable in the global name scope (system dictionary).
         /// </summary>
         /// <param name="installer">Context within which the binding is to be created.</param>
         /// <param name="name">Name of the global.</param>
@@ -52,7 +52,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         protected override bool InternalCreateBinding(IDefinitionInstallerContext installer, Symbol name)
         {
             // Everything else has been validate, so create a binding - so far pointing to null.
-            installer.AddGlobalConstantBinding(new GlobalConstantBinding(name));
+            installer.AddGlobalVariableBinding(new GlobalVariableBinding(name));
             return true;
         }
     }

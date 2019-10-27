@@ -34,7 +34,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         protected GlobalBase(SourceReference<string> name)
         {
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             this.Name = name;
         }
 
@@ -67,7 +67,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         protected internal override bool AnnotateObject(IDefinitionInstallerContext installer)
         {
             if (installer == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(installer));
 
             if (!this.Annotations.Any())
                 return true;

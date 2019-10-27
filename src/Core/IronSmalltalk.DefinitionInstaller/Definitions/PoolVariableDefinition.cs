@@ -22,41 +22,41 @@ using IronSmalltalk.Runtime.Bindings;
 namespace IronSmalltalk.DefinitionInstaller.Definitions
 {
     /// <summary>
-    /// Definition description of a pool constant.
+    /// Definition description of a pool variable.
     /// </summary>
-    public class PoolConstantDefinition : PoolValueDefinition
+    public class PoolVariableDefinition : PoolValueDefinition
     {
         /// <summary>
-        /// Creates a definition description of a pool constant.
+        /// Creates a definition description of a pool variable.
         /// </summary>
-        /// <param name="poolName">Name of the Pool that owns the pool constant.</param>
-        /// <param name="variableName">Name of the pool constant.</param>
-        public PoolConstantDefinition(SourceReference<string> poolName, SourceReference<string> variableName)
+        /// <param name="poolName">Name of the Pool that owns the pool variable.</param>
+        /// <param name="variableName">Name of the pool variable.</param>
+        public PoolVariableDefinition(SourceReference<string> poolName, SourceReference<string> variableName)
             : base(poolName, variableName)
         {
         }
 
         /// <summary>
-        /// Returns a System.String that represents the pool constant definition object.
+        /// Returns a System.String that represents the pool variable definition object.
         /// </summary>
-        /// <returns>A System.String that represents the pool constant definition object.</returns>
+        /// <returns>A System.String that represents the pool variable definition object.</returns>
         public override string ToString()
         {
-            return String.Format("{0} constant: '{1}'", this.PoolName.Value, this.VariableName.Value);
+            return $"{this.PoolName.Value} variable: '{this.VariableName.Value}'";
         }
 
         /// <summary>
-        /// Create a binding object (association) for the pool variable or pool constant in the pool that owns it.
+        /// Create a binding object (association) for the pool variable in the pool that owns it.
         /// </summary>
         /// <param name="installer">Context within which the binding is to be created.</param>
         /// <returns>Returns true if successful, otherwise false.</returns>
         protected internal override bool CreatePoolVariableBinding(IDefinitionInstallerContext installer)
         {
             if (installer == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(installer));
             // 1. Check if the name is not complete garbage.
             if (!IronSmalltalk.Common.Utilities.ValidateIdentifier(this.VariableName.Value))
-                return installer.ReportError(this.VariableName, InstallerErrors.PoolConstInvalidName);
+                return installer.ReportError(this.VariableName, InstallerErrors.PoolVarInvalidName);
             // 2. Get the pool dictionary.
             PoolBinding poolBinding = installer.GetPoolBinding(this.PoolName.Value);
             // 3. Check that such a binding exists
@@ -66,7 +66,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
                 throw new InvalidOperationException("Should have been set in PoolDefinition.CreataGlobalObject().");
             // 4. Check for reserved keywords
             if (IronSmalltalk.Common.GlobalConstants.ReservedIdentifiers.Contains(this.VariableName.Value))
-                return installer.ReportError(this.VariableName, InstallerErrors.PoolConstReservedName);
+                return installer.ReportError(this.VariableName, InstallerErrors.PoolVarReservedName);
             // 5. Check that no duplicate exists.
             Symbol varName = installer.Runtime.GetSymbol(this.VariableName.Value);
             PoolVariableOrConstantBinding existing;
@@ -74,7 +74,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
             if (existing != null)
                 return installer.ReportError(this.VariableName, InstallerErrors.PoolItemNameNotUnique);
             // 6. Create the binding
-            poolBinding.Value.Add(new PoolConstantBinding(varName));
+            poolBinding.Value.Add(new PoolVariableBinding(varName));
             return true;
         }
     }

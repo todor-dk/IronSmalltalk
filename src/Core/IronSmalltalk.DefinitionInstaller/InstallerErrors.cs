@@ -60,6 +60,5 @@ namespace IronSmalltalk.DefinitionInstaller
 
         public const string MethodInvalidSelector = "Invalid method selector.";
         public const string MethodInvalidClassName = "Invalid class name.";
-
     }
 }

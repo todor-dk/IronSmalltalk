@@ -29,7 +29,8 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         /// <summary>
         /// Name of the global.
         /// </summary>
-        public SourceReference<string> GlobalName {
+        public SourceReference<string> GlobalName
+        {
             get { return this.Name; }
         }
 
@@ -50,7 +51,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         protected internal override bool CreateGlobalBinding(IDefinitionInstallerContext installer)
         {
             if (installer == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(installer));
             // 1. Check if the name is not complete garbage.
             if (!IronSmalltalk.Common.Utilities.ValidateIdentifier(this.Name.Value))
                 return installer.ReportError(this.Name, InstallerErrors.GlobalInvalidName);
@@ -97,7 +98,4 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
             return true; // We did validate whatever is validatable when the global binding was created.
         }
     }
-
-
-
 }

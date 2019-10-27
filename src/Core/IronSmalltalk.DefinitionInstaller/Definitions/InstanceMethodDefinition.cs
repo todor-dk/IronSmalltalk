@@ -29,7 +29,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
 
         public override string ToString()
         {
-            return String.Format("{0} method", this.ClassName.Value);
+            return $"{this.ClassName.Value} method";
         }
 
         protected override bool InternalAddMethod(IDefinitionInstallerContext installer, SmalltalkClass cls)
@@ -45,7 +45,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
 
         protected override bool InternalValidateMethod(IDefinitionInstallerContext installer, SmalltalkClass cls, ICodeValidationErrorSink errorSink)
         {
-            return this.Factory.ValidateMethod(this, installer, cls, CompiledMethod.MethodType.Instance, errorSink);         
+            return this.Factory.ValidateMethod(this, installer, cls, CompiledMethod.MethodType.Instance, errorSink);
         }
     }
 }

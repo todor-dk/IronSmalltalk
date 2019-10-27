@@ -34,7 +34,7 @@ namespace IronSmalltalk.DefinitionInstaller.Definitions
         protected internal override bool ValidateInitializer(IDefinitionInstallerContext installer)
         {
             if (installer == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(installer));
 
             return this.Factory.ValidateProgramInitializer(this, installer,
                 new IntermediateCodeValidationErrorSink(this.MethodSourceCodeService, installer));
