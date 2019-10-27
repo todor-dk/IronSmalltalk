@@ -34,6 +34,7 @@ namespace IronSmalltalk.Runtime.Bindings
         /// Internal variable holding the name of the binding.
         /// </summary>
         protected readonly Symbol _Name;
+
         /// <summary>
         /// Internal variable holding the value of the binding.
         /// </summary>
@@ -52,7 +53,7 @@ namespace IronSmalltalk.Runtime.Bindings
         protected Binding(Symbol name)
         {
             if (name == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(name));
             this._Name = name;
             this.HasBeenSet = false;
         }
@@ -60,7 +61,8 @@ namespace IronSmalltalk.Runtime.Bindings
         /// <summary>
         /// Determines if the binding is a constant binding, i.e. a read-only binding.
         /// </summary>
-        public bool IsConstantBinding {
+        public bool IsConstantBinding
+        {
             get { return !(this is IWritableBinding); }
         }
 

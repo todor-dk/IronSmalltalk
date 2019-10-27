@@ -80,7 +80,7 @@ namespace IronSmalltalk.Runtime.Internal
         /// <param name="value">Value being returned.</param>
         [IronSmalltalk.Common.Internal.AccessedViaReflection]
         public BlockResult(HomeContext homeContext, object value)
-            //: base("Method has already returned")
+        //: base("Method has already returned")
         {
 #if DEBUG
             if (homeContext == null)

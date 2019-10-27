@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -108,7 +109,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals
                     return typeof(SmalltalkMethod32);
                 default:
                     throw new ImplementationLimitationException(
-                        String.Format(RuntimeErrors.TooManyMethodArguments, argumentCount, MethodSignatures.MaxArgumentCount));
+                        String.Format(CultureInfo.InvariantCulture, RuntimeErrors.TooManyMethodArguments, argumentCount, MethodSignatures.MaxArgumentCount));
             }
         }
 

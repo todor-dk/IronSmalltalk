@@ -44,6 +44,6 @@ namespace IronSmalltalk.Runtime.Internal
         /// <summary>
         /// Empty annotations
         /// </summary>
-        public static readonly KeyValuePair<string, string>[] Empty = new KeyValuePair<string, string>[0];
+        public static readonly KeyValuePair<string, string>[] Empty = System.Array.Empty<KeyValuePair<string, string>>();
     }
 }

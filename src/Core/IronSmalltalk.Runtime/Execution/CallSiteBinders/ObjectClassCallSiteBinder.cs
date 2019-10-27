@@ -50,24 +50,24 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         public override DynamicMetaObject Bind(DynamicMetaObject target, DynamicMetaObject[] args)
         {
             throw new NotImplementedException();
-//            BindingRestrictions restrictions;
-//            SmalltalkClass receiverClass = MethodLookupHelper.GetClassAndRestrictions(
-//                this.Runtime,
-//                target.Value,
-//                target,
-//                args,
-//                out restrictions);
+            //            BindingRestrictions restrictions;
+            //            SmalltalkClass receiverClass = MethodLookupHelper.GetClassAndRestrictions(
+            //                this.Runtime,
+            //                target.Value,
+            //                target,
+            //                args,
+            //                out restrictions);
 
-//#if DEBUG
-//            if (receiverClass == null)
-//                throw new InvalidOperationException("Should have found the Smalltalk class object - there is always supposed to be one.");
-//#endif
+            //#if DEBUG
+            //            if (receiverClass == null)
+            //                throw new InvalidOperationException("Should have found the Smalltalk class object - there is always supposed to be one.");
+            //#endif
 
-//            // Create a dynamic expression that returns a constant with the class object.
-//            Expression expression = Expression.Constant(receiverClass, typeof(object));
-//            // Important here are the restrictions, which ensure that as long as <self> is 
-//            // of the correct type, we can freely return the class object constant.
-//            return new DynamicMetaObject(expression, target.Restrictions.Merge(restrictions));
+            //            // Create a dynamic expression that returns a constant with the class object.
+            //            Expression expression = Expression.Constant(receiverClass, typeof(object));
+            //            // Important here are the restrictions, which ensure that as long as <self> is 
+            //            // of the correct type, we can freely return the class object constant.
+            //            return new DynamicMetaObject(expression, target.Restrictions.Merge(restrictions));
         }
     }
 }

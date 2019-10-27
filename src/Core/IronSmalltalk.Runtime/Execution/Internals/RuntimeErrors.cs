@@ -17,7 +17,7 @@
 
 namespace IronSmalltalk.Runtime.Execution.Internals
 {
-    public class RuntimeErrors
+    public static class RuntimeErrors
     {
         public const string DoesNotUnderstandMissing = "Could not find the #_doesNotUnderstand:arguments: method.";
         public const string TooManyMethodArguments = "IronSmalltalk does not support methods with {0} argument. Maximum argument number is {1}.";

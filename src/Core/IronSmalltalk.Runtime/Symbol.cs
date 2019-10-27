@@ -24,7 +24,7 @@ namespace IronSmalltalk.Runtime
     /// <summary>
     /// A Smalltalk Symbol object. Symbols are unique within a SmalltalkRuntime.
     /// </summary>
-    public class Symbol 
+    public class Symbol
     {
         /// <summary>
         /// The string value of the Symbol.
@@ -41,14 +41,14 @@ namespace IronSmalltalk.Runtime
         /// Internal. The FieldInfo of the Symbol.Manager field.
         /// </summary>
         public static readonly FieldInfo ManagerField = TypeUtilities.Field(typeof(Symbol), "Manager");
-        
+
         /// <summary>
         /// Create a new symbol. NB: Do not use this! It is intended for the SymbolTable!
         /// </summary>
         /// <param name="value">The string value of the Symbol.</param>
         /// <param name="manager">SymbolTable that contains the symbol and is notified when the symbol is GC'ed.</param>
-        internal Symbol (string value, SymbolTable manager)
-	    {
+        internal Symbol(string value, SymbolTable manager)
+        {
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
             if (manager == null)
@@ -56,7 +56,7 @@ namespace IronSmalltalk.Runtime
 
             this.Value = value;
             this.Manager = manager;
-	    }
+        }
 
         /// <summary>
         /// Destructor - Notify the Manager (SymbolTable) that we are GC'ed, so it can remove the symbol and clean-up.

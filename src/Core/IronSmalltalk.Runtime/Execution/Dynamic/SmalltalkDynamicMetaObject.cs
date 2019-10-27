@@ -45,14 +45,17 @@ namespace IronSmalltalk.Runtime.Execution.Dynamic
         internal static Expression CreateCaseConflictException(string message)
         {
             if (message == null)
-                throw new ArgumentNullException();
-           
+                throw new ArgumentNullException(nameof(message));
+
             return Expression.Throw(
                 Expression.New(SmalltalkDynamicMetaObject.InvalidOperationExceptionCtor, Expression.Constant(message, typeof(string))));
         }
 
         public override DynamicMetaObject BindInvokeMember(InvokeMemberBinder binder, DynamicMetaObject[] args)
         {
+            if (binder == null)
+                throw new ArgumentNullException(nameof(binder));
+
             DynamicMetaObject result = this.PerformOperation(binder.Name, binder.IgnoreCase, binder.CallInfo.ArgumentCount, args);
             if (result != null)
                 return result;
@@ -61,6 +64,9 @@ namespace IronSmalltalk.Runtime.Execution.Dynamic
 
         public override DynamicMetaObject BindGetMember(GetMemberBinder binder)
         {
+            if (binder == null)
+                throw new ArgumentNullException(nameof(binder));
+
             DynamicMetaObject result = this.PerformOperation(binder.Name, binder.IgnoreCase, 0, null);
             if (result != null)
                 return result;
@@ -70,6 +76,9 @@ namespace IronSmalltalk.Runtime.Execution.Dynamic
 
         public override DynamicMetaObject BindSetMember(SetMemberBinder binder, DynamicMetaObject value)
         {
+            if (binder == null)
+                throw new ArgumentNullException(nameof(binder));
+
             DynamicMetaObject result = this.PerformOperation(binder.Name, binder.IgnoreCase, 1, new DynamicMetaObject[] { value });
             if (result != null)
                 return result;
@@ -122,7 +131,7 @@ namespace IronSmalltalk.Runtime.Execution.Dynamic
         private DynamicMetaObject PerformOperation(string name, bool ignoreCase, int argumentCount, DynamicMetaObject[] args)
         {
             if (args == null)
-                args = new DynamicMetaObject[0];
+                args = Array.Empty<DynamicMetaObject>();
             bool caseConflict;
             DynamicMetaObject result = this.Self.PerformOperation(this, name, ignoreCase, argumentCount, args, out caseConflict);
             if (!caseConflict)
@@ -130,7 +139,7 @@ namespace IronSmalltalk.Runtime.Execution.Dynamic
 
             // The case-conflict exception
             return new DynamicMetaObject(SmalltalkDynamicMetaObject.CreateCaseConflictException(
-                String.Format("Several methods exist with the name '{0}' and only differ in case.", name)), this.Restrictions);
+                $"Several methods exist with the name '{name}' and only differ in case."), this.Restrictions);
         }
     }
 }

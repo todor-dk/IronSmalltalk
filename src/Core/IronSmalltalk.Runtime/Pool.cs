@@ -38,7 +38,7 @@ namespace IronSmalltalk.Runtime
             : base(runtime)
         {
             if (name == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(name));
             this.Name = name;
         }
     }

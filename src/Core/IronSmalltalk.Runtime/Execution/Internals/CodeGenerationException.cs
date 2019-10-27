@@ -37,7 +37,8 @@ namespace IronSmalltalk.Runtime.Execution.Internals
             : base(message, inner)
         {
         }
-        public CodeGenerationException(SerializationInfo info, StreamingContext context)
+
+        protected CodeGenerationException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }

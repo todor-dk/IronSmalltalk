@@ -19,6 +19,8 @@ using System.Numerics;
 
 namespace IronSmalltalk.Runtime.Internal
 {
+#pragma warning disable CA1062 // Validate arguments of public methods
+
     /// <summary>
     /// Utility class with methods called by Smalltalk code.
     /// </summary>
@@ -133,7 +135,7 @@ namespace IronSmalltalk.Runtime.Internal
         public static object Throw(Exception ex)
         {
             if (ex == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(ex));
             throw ex;
         }
     }

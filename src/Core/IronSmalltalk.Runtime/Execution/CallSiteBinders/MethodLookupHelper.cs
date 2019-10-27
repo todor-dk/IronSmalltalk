@@ -21,6 +21,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using IronSmalltalk.Common;
 using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Internal;
 
@@ -44,16 +45,16 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// <param name="methodClass">Return null if missing.</param>
         /// <param name="restrictions">Must Return!</param>
         /// <param name="executableCode">Return null if missing.</param>
-        public static void GetMethodInformation(SmalltalkRuntime runtime, 
-            Symbol selector, 
-            Symbol superLookupScope, 
+        public static void GetMethodInformation(SmalltalkRuntime runtime,
+            Symbol selector,
+            Symbol superLookupScope,
             object receiver,
             Expression self,
             Expression executionContext,
-            IEnumerable<Expression> arguments, 
+            IEnumerable<Expression> arguments,
             out SmalltalkClass receiverClass,
             out SmalltalkClass methodClass,
-            out BindingRestrictions restrictions, 
+            out BindingRestrictions restrictions,
             out Expression executableCode)
         {
             restrictions = null;
@@ -180,12 +181,14 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// <param name="arguments">Required: Currently not used.</param>
         /// <param name="restrictions">Restrictions for the given receiver.</param>
         /// <returns>The SmalltalkClass for the given receiver. This always returns an object (unless the given SmalltalkRuntime is inconsistent).</returns>
-        public static SmalltalkClass GetClassAndRestrictions(SmalltalkRuntime runtime, 
+        public static SmalltalkClass GetClassAndRestrictions(SmalltalkRuntime runtime,
             object receiver,
             Expression self,
-            IEnumerable<Expression> arguments, 
+            IEnumerable<Expression> arguments,
             out BindingRestrictions restrictions)
         {
+            Contract.ParameterNotUsed(arguments);
+
             SmalltalkClass cls;
             // Special case handling of null, so it acts like first-class-object.
             if (receiver == null)
@@ -329,7 +332,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                         restrictions = null;
                     else
                         // NB: Restriction below are no good for For class behavior. Caller must create own restrictions if class behavior.
-                        restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(SmalltalkClass)); 
+                        restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(SmalltalkClass));
                 }
                 else
                 {

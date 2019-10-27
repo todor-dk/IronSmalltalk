@@ -29,7 +29,7 @@ namespace IronSmalltalk.Runtime
     /// An object representing a Smalltalk class. It describes the properties and behavior
     /// of the class and the instances of that class.
     /// </summary>
-    public partial class SmalltalkClass 
+    public partial class SmalltalkClass
     {
         /// <summary>
         /// The SmalltalkRuntime that this class belongs to.
@@ -169,7 +169,7 @@ namespace IronSmalltalk.Runtime
                 throw new ArgumentNullException(nameof(runtime));
             if ((name == null) || (name.Value.Length == 0))
                 throw new ArgumentNullException(nameof(name));
-            if (!SmalltalkClass.ValidateIdentifiers <InstanceVariableBinding>(instanceVariables))
+            if (!SmalltalkClass.ValidateIdentifiers<InstanceVariableBinding>(instanceVariables))
                 throw new ArgumentException("Invalid or duplicate instance variable name found", nameof(instanceVariables));
             if (!SmalltalkClass.ValidateIdentifiers<ClassVariableBinding>(classVariables))
                 throw new ArgumentException("Invalid or duplicate class variable name found", nameof(classVariables));
@@ -177,7 +177,7 @@ namespace IronSmalltalk.Runtime
                 throw new ArgumentException("Invalid or duplicate class instance variable name found", nameof(classInstanceVariables));
             if (!SmalltalkClass.ValidateIdentifiers<PoolBinding>(importedPools))
                 throw new ArgumentException("Invalid or duplicate imported pool name found", nameof(importedPools));
-            if (!SmalltalkClass.CheckDuplicates <InstanceVariableBinding, ClassVariableBinding>(instanceVariables, classVariables))
+            if (!SmalltalkClass.CheckDuplicates<InstanceVariableBinding, ClassVariableBinding>(instanceVariables, classVariables))
                 throw new ArgumentException("Duplicate instance or class variable name. Instance and class variable names must be unique.");
             if (!SmalltalkClass.CheckDuplicates<ClassInstanceVariableBinding, ClassVariableBinding>(classInstanceVariables, classVariables))
                 throw new ArgumentException("Duplicate class-instance or class variable name. Class-instance and class variable names must be unique.");
@@ -193,7 +193,7 @@ namespace IronSmalltalk.Runtime
             this.SuperclassBinding = superclass; // Null is OK .... Object has null
             this.InstanceSize = 0;
             this.ClassInstanceSize = 0;
-            this.ClassInstanceVariables = new object[0];
+            this.ClassInstanceVariables = Array.Empty<object>();
         }
 
         /// <summary>
@@ -429,7 +429,7 @@ namespace IronSmalltalk.Runtime
         /// <returns>A System.String that represents the current Smalltalk class object.</returns>
         public override string ToString()
         {
-            return String.Format("{0}: {1}", base.ToString(), this.Name);
+            return $"{base.ToString()}: {this.Name}";
         }
 
         /// <summary>
@@ -446,6 +446,7 @@ namespace IronSmalltalk.Runtime
             /// because binary objects are primarily used when interfacing the OS.
             /// </remarks>
             ByteIndexable,
+
             /// <summary>
             /// Variable number of unnamed instance variables referencing other objects.
             /// </summary>
@@ -453,10 +454,12 @@ namespace IronSmalltalk.Runtime
             /// Indexable object may also have named instance variables.
             /// </remarks>
             ObjectIndexable,
+
             /// <summary>
             /// Object contains named instance variables only.
             /// </summary>
             NamedObjectVariables,
+
             /// <summary>
             /// This object is a native .Net object that has been mapped to a Smalltalk class.
             /// </summary>
@@ -502,7 +505,7 @@ namespace IronSmalltalk.Runtime
             else if (this.InstanceState == InstanceStateEnum.ObjectIndexable)
                 return new SmalltalkObject.ObjectIndexableSmalltalkObject(this, objectSize);
             else
-                throw new SmalltalkRuntimeException(String.Format("Class {0} does not have unnamed instance variables.", this.Name));
+                throw new SmalltalkRuntimeException($"Class {this.Name} does not have unnamed instance variables.");
         }
     }
 }

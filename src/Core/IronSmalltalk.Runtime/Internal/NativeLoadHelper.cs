@@ -25,6 +25,10 @@ using IronSmalltalk.Runtime.Behavior;
 using IronSmalltalk.Runtime.Bindings;
 using IronSmalltalk.Runtime.Execution;
 
+#pragma warning disable CA1062 // Validate arguments of public methods
+#pragma warning disable CA1801 // Review unused parameters
+
+
 namespace IronSmalltalk.Runtime.Internal
 {
     public static class NativeLoadHelper
@@ -107,7 +111,7 @@ namespace IronSmalltalk.Runtime.Internal
         }
 
         [IronSmalltalk.Common.Internal.AccessedViaReflection]
-        public static void CreateClass(SmalltalkRuntime runtime, SmalltalkNameScope scope, ClassBinding binding, string superclassName, 
+        public static void CreateClass(SmalltalkRuntime runtime, SmalltalkNameScope scope, ClassBinding binding, string superclassName,
             SmalltalkClass.InstanceStateEnum instanceState, string[] classVarNames, string[] instVarNames, string[] classInstVarNames, string[] importedPools,
             Func<SmalltalkClass, Dictionary<Symbol, CompiledMethod>> classMethodDicInitializer, Func<SmalltalkClass, Dictionary<Symbol, CompiledMethod>> instanceMethodDicInitializer)
         {
@@ -174,7 +178,7 @@ namespace IronSmalltalk.Runtime.Internal
                     Symbol varName = runtime.GetSymbol(identifier);
                     PoolBinding pool = scope.GetPoolBinding(varName);
                     if (pool == null)
-                        throw new InvalidOperationException(String.Format("Should have found a binding for pool {0}", identifier));
+                        throw new InvalidOperationException($"Should have found a binding for pool {identifier}");
                     pools.Add(pool);
                 }
             }
@@ -273,7 +277,7 @@ namespace IronSmalltalk.Runtime.Internal
             SmalltalkRuntime runtime = new SmalltalkRuntime();
 
             ExecutionContext executionContext = new ExecutionContext(runtime);
-    
+
             // Extension scope
             SmalltalkNameScope scope = runtime.ExtensionScope.Copy();
             extensionScopeInitializer(runtime, scope);
@@ -343,7 +347,7 @@ namespace IronSmalltalk.Runtime.Internal
         {
             ClassBinding binding = scope.GetClassBinding(className);
             if (binding == null)
-                throw new ArgumentException(String.Format("Class named {0} does not exist.", className));
+                throw new ArgumentException($"Class named {className} does not exist.");
             return NativeLoadHelper.AddInitializer(scope, InitializerType.ClassInitializer, binding, delegateType, delegateName);
         }
 
@@ -352,7 +356,7 @@ namespace IronSmalltalk.Runtime.Internal
         {
             GlobalVariableOrConstantBinding binding = scope.GetGlobalVariableOrConstantBinding(globalName);
             if (binding == null)
-                throw new ArgumentException(String.Format("Global variable or constant named {0} does not exist.", globalName));
+                throw new ArgumentException($"Global variable or constant named {globalName} does not exist.");
             return NativeLoadHelper.AddInitializer(scope, InitializerType.GlobalInitializer, binding, delegateType, delegateName);
         }
 
@@ -361,10 +365,10 @@ namespace IronSmalltalk.Runtime.Internal
         {
             PoolBinding poolBinding = scope.GetPoolBinding(poolName);
             if ((poolBinding == null) || (poolBinding.Value == null))
-                throw new ArgumentException(String.Format("Pool named {0} does not exist.", poolName));
+                throw new ArgumentException($"Pool named {poolName} does not exist.");
             PoolVariableOrConstantBinding binding = poolBinding.Value[poolItemName];
             if (binding == null)
-                throw new ArgumentException(String.Format("Pool variable or constant named {0} does not exist in pool {1}.", poolItemName, poolName));
+                throw new ArgumentException($"Pool variable or constant named {poolItemName} does not exist in pool {poolName}.");
             return NativeLoadHelper.AddInitializer(scope, InitializerType.PoolVariableInitializer, binding, delegateType, delegateName);
         }
 
@@ -407,7 +411,7 @@ namespace IronSmalltalk.Runtime.Internal
         {
 
             MethodInfo method = TypeUtilities.Method(delegateType, delegateName, BindingFlags.Public | BindingFlags.Static, NativeLoadHelper.InitializerDelegateTypes);
-            Func<object, ExecutionContext, object> functionDelegate = (Func<object, ExecutionContext, object>) method.CreateDelegate(typeof(Func<object, ExecutionContext, object>));
+            Func<object, ExecutionContext, object> functionDelegate = (Func<object, ExecutionContext, object>)method.CreateDelegate(typeof(Func<object, ExecutionContext, object>));
 
             NativeCompiledInitializer initializer = new NativeCompiledInitializer(type, binding, functionDelegate);
             scope.Initializers.Add(initializer);

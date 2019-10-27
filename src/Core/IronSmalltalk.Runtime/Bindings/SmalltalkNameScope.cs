@@ -249,7 +249,7 @@ namespace IronSmalltalk.Runtime.Bindings
         public bool IsProtectedName(Symbol name)
         {
             if (name == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(name));
             if (this.ProtectedNames.Contains(name) && (this.GetLocalGlobalBinding(name) != null))
                 return true;
             if (this.OuterScope == null)
@@ -344,7 +344,7 @@ namespace IronSmalltalk.Runtime.Bindings
         public void Accept(ISmalltalkNameScopeVisitor visitor)
         {
             if (visitor == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(visitor));
 
             foreach (Symbol name in this.ProtectedNames)
                 visitor.Visit(name);

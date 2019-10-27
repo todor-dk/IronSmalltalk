@@ -40,5 +40,17 @@ namespace IronSmalltalk.Common
                 throw new ArgumentNullException(name);
 #endif
         }
+
+        /// <summary>
+        /// This methods can be used to trick code analyzers that a parameter is used.
+        /// </summary>
+        /// <typeparam name="TValue">Type of the value.</typeparam>
+        /// <param name="value">This value is not used.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#pragma warning disable IDE0060, CA1801 // Remove unused parameter
+        public static void ParameterNotUsed<TValue>(TValue value)
+#pragma warning restore IDE0060, CA1801 // Remove unused parameter
+        {
+        }
     }
 }

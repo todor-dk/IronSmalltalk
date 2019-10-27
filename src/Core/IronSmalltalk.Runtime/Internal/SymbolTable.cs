@@ -50,7 +50,7 @@ namespace IronSmalltalk.Runtime.Internal
         public SymbolTable(SmalltalkRuntime runtime)
         {
             if (runtime == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(runtime));
             this.Runtime = runtime;
             // We expect very low concurrency on writing ... we use Environment.ProcessorCount
             // Pre-allocate 4000 objects ... we expect some symbols.
@@ -67,7 +67,7 @@ namespace IronSmalltalk.Runtime.Internal
         public Symbol GetSymbol(string value)
         {
             if (value == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(value));
 
             // 1. Try to get the symbol from the dictionary. There are good changes that:
             //      a. It's not there, then create it ... new WeakReference(new Symbol(value, this), false)

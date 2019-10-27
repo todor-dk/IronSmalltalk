@@ -73,17 +73,19 @@ namespace IronSmalltalk.Runtime.Bindings
             get
             {
                 if (key == null)
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException(nameof(key));
                 return this[this.ToSymbol(key)];
             }
         }
 
+#pragma warning disable CA1043 // Use integral or string argument for indexers
         public TItem this[Symbol key]
+#pragma warning restore CA1043 // Use integral or string argument for indexers
         {
             get
             {
                 if (key == null)
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException(nameof(key));
                 TItem value;
                 if (this.TryGetValue(key, out value))
                     return value;
@@ -95,14 +97,14 @@ namespace IronSmalltalk.Runtime.Bindings
         public bool TryGetValue(string key, out TItem binding)
         {
             if (key == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(key));
             return this.TryGetValue(this.ToSymbol(key), out binding);
         }
 
         public bool TryGetValue(Symbol key, out TItem binding)
         {
             if (key == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(key));
             return this._Contents.TryGetValue(key, out binding);
         }
 
@@ -157,7 +159,7 @@ namespace IronSmalltalk.Runtime.Bindings
         public void AddRange(IEnumerable<TItem> items)
         {
             if (items == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(items));
             if (this._readOnly)
                 throw new InvalidOperationException("Dictionary is in read-only state.");
             foreach (TItem item in items)
@@ -183,7 +185,7 @@ namespace IronSmalltalk.Runtime.Bindings
         public bool Remove(TItem binding)
         {
             if (binding == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(binding));
             return this.Remove(binding.Name);
         }
 
@@ -201,14 +203,14 @@ namespace IronSmalltalk.Runtime.Bindings
         public bool ContainsKey(string key)
         {
             if (key == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(key));
             return this.ContainsKey(this.ToSymbol(key));
         }
 
         public bool ContainsKey(Symbol key)
         {
             if (key == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(key));
             TItem item;
             return this.TryGetValue(key, out item) && (item != null);
         }
@@ -216,7 +218,7 @@ namespace IronSmalltalk.Runtime.Bindings
         public bool Contains(TItem binding)
         {
             if (binding == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(binding));
             TItem item;
             return this.TryGetValue(binding.Name, out item) && Object.ReferenceEquals(item, binding);
         }
@@ -238,7 +240,7 @@ namespace IronSmalltalk.Runtime.Bindings
 
         private TItem ElementMissing(string key)
         {
-            throw new KeyNotFoundException(String.Format("The given key '{0}' was not present in the dictionary.", key));
+            throw new KeyNotFoundException($"The given key '{key}' was not present in the dictionary.");
         }
 
         #endregion

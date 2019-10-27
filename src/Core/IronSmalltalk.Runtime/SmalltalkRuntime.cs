@@ -140,8 +140,10 @@ namespace IronSmalltalk
             this.GlobalScope = new SmalltalkNameScope(this, this.ExtensionScope);
             this.GlobalScope.WriteProtect();
             this.ServicesCache = new Dictionary<object, object>();
-            this.ExtensionScope.ProtectedNames.AddRange(new string[] {
-                "nil", "true", "false", "self", "super", "Object", "Smalltalk" }
+            this.ExtensionScope.ProtectedNames.AddRange(new string[]
+            {
+                "nil", "true", "false", "self", "super", "Object", "Smalltalk"
+            }
                     .Select(str => this.GetSymbol(str)));
         }
 
@@ -306,7 +308,7 @@ namespace IronSmalltalk
         public Symbol GetSymbol(string value)
         {
             if (value == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(value));
 
             return this.SymbolTable.GetSymbol(value);
         }
@@ -320,7 +322,7 @@ namespace IronSmalltalk
         public void SetExtensionScope(SmalltalkNameScope scope)
         {
             if (scope == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(scope));
             scope.WriteProtect();
             this.ExtensionScope = scope;
         }
@@ -332,7 +334,7 @@ namespace IronSmalltalk
         public void SetGlobalScope(SmalltalkNameScope scope)
         {
             if (scope == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(scope));
             scope.WriteProtect();
             this.GlobalScope = scope;
         }

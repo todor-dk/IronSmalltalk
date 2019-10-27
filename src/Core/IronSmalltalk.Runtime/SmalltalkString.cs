@@ -172,18 +172,20 @@ namespace IronSmalltalk.Runtime
         /// <exception cref="System.IndexOutOfRangeException"> index is greater than the length of this object or less than one.</exception>
         public char this[int index]
         {
+#pragma warning disable CA1065 // Do not raise exceptions in unexpected locations
             get
             {
                 if (this.Contents == null)
-                    throw new IndexOutOfRangeException();
-                return this.Contents[index-1];
+                    throw new IndexOutOfRangeException(nameof(index));
+                return this.Contents[index - 1];
             }
             set
             {
                 if (this.Contents == null)
-                    throw new IndexOutOfRangeException(); 
+                    throw new IndexOutOfRangeException(nameof(index));
                 this.Contents[index - 1] = value;
             }
+#pragma warning restore CA1065 // Do not raise exceptions in unexpected locations
         }
 
         /// <summary>
@@ -208,7 +210,7 @@ namespace IronSmalltalk.Runtime
                 return new SmalltalkString(0);
             char[] buffer = new char[this.Contents.Length];
             for (int i = 0; i < buffer.Length; i++)
-                buffer[i] = Char.ToUpper(this.Contents[i]);
+                buffer[i] = Char.ToUpper(this.Contents[i], culture);
             return new SmalltalkString(buffer, false);
         }
 
@@ -234,7 +236,7 @@ namespace IronSmalltalk.Runtime
                 return new SmalltalkString(0);
             char[] buffer = new char[this.Contents.Length];
             for (int i = 0; i < buffer.Length; i++)
-                buffer[i] = Char.ToLower(this.Contents[i]);
+                buffer[i] = Char.ToLower(this.Contents[i], culture);
             return new SmalltalkString(buffer, false);
         }
     }

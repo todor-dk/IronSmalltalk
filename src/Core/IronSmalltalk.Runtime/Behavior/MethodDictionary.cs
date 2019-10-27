@@ -109,7 +109,9 @@ namespace IronSmalltalk.Runtime.Behavior
         /// </summary>
         /// <param name="selector">Selector of the method to get or set.</param>
         /// <returns>The method with the specified selector.</returns>
+#pragma warning disable CA1043 // Use integral or string argument for indexers
         public CompiledMethod this[Symbol selector]
+#pragma warning restore CA1043 // Use integral or string argument for indexers
         {
             get
             {
@@ -119,7 +121,7 @@ namespace IronSmalltalk.Runtime.Behavior
                 if (this.TryGetValue(selector, out value))
                     return value;
                 else
-                    return this.ElementMissing(selector.Value);
+                    return MethodDictionary.ElementMissing(selector.Value);
             }
             set
             {
@@ -313,7 +315,7 @@ namespace IronSmalltalk.Runtime.Behavior
         public bool Remove(CompiledMethod method)
         {
             if (method == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(method));
             return this.Remove(method.Selector);
         }
 
@@ -335,7 +337,7 @@ namespace IronSmalltalk.Runtime.Behavior
             // thus giving the same CompiledMethod behavior several names (selectors).
 
             if ((method != null) && (method.Type != this.MethodType))
-                throw new ArgumentException(String.Format("Expected {0} method but was given {1} method.", this.MethodType, method.Type), nameof(method));
+                throw new ArgumentException($"Expected {this.MethodType} method but was given {method.Type} method.", nameof(method));
         }
 
         public abstract CompiledMethod.MethodType MethodType { get; }
@@ -377,7 +379,7 @@ namespace IronSmalltalk.Runtime.Behavior
         public bool Contains(CompiledMethod method)
         {
             if (method == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(method));
             CompiledMethod item;
             return this.TryGetValue(method.Selector, out item) && Object.ReferenceEquals(item, method);
         }
@@ -397,9 +399,9 @@ namespace IronSmalltalk.Runtime.Behavior
             return this._Runtime.GetSymbol(selector);
         }
 
-        private CompiledMethod ElementMissing(string selector)
+        private static CompiledMethod ElementMissing(string selector)
         {
-            throw new KeyNotFoundException(String.Format("Method with the given selector #'{0}' is not present in the dictionary.", selector));
+            throw new KeyNotFoundException($"Method with the given selector #'{selector}' is not present in the dictionary.");
         }
 
         #endregion

@@ -67,6 +67,9 @@ namespace IronSmalltalk
         /// </remarks>
         public override DynamicMetaObject BindGetMember(GetMemberBinder binder)
         {
+            if (binder == null)
+                throw new ArgumentNullException(nameof(binder));
+
             return this.GetSetMemberWorker(binder.Name, binder.IgnoreCase, binder.ReturnType, false,
                 value => value,
                 errorSuggestion => binder.FallbackGetMember(this, errorSuggestion));
@@ -91,14 +94,14 @@ namespace IronSmalltalk
             {
                 // The case-conflict exception
                 return new DynamicMetaObject(SmalltalkDynamicMetaObject.CreateCaseConflictException(
-                    String.Format("Several methods exist with the name '{0}' and only differ in case.", name)), this.Restrictions);
+                    $"Several methods exist with the name '{name}' and only differ in case."), this.Restrictions);
             }
 
             string msg = null;
             if (binding == null)
-                msg = String.Format("The Smalltalk Runtime does not contain a class or global named '{0}'", name);
+                msg = $"The Smalltalk Runtime does not contain a class or global named '{name}'";
             else if (isSetValue && !(binding is IWritableBinding))
-                msg = String.Format("The Smalltalk Runtime does not contain a global variable named '{0}'", name);
+                msg = $"The Smalltalk Runtime does not contain a global variable named '{name}'";
 
             if (msg != null)
             {
@@ -143,6 +146,9 @@ namespace IronSmalltalk
 
         public override DynamicMetaObject BindInvokeMember(InvokeMemberBinder binder, DynamicMetaObject[] args)
         {
+            if (binder == null)
+                throw new ArgumentNullException(nameof(binder));
+
             DynamicMetaObject result = this.PerformOperation(binder.Name, binder.IgnoreCase, binder.CallInfo.ArgumentCount, args);
             if (result != null)
                 return result;

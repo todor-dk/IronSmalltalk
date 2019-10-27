@@ -62,7 +62,7 @@ namespace IronSmalltalk.Runtime.Behavior
                 if (!(binding is PoolVariableOrConstantBinding))
                     throw new ArgumentException("ClassInitializers must have binding of type PoolVariableOrConstantBinding.");
             }
-            else 
+            else
             {
                 throw new ArgumentOutOfRangeException(nameof(type));
             }

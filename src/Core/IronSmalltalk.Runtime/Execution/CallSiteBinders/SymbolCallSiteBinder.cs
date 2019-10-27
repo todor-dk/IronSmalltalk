@@ -32,7 +32,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         public SymbolCallSiteBinder(string symbolKey)
         {
             if (symbolKey == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(symbolKey));
             this.SymbolKey = symbolKey;
         }
 
@@ -72,7 +72,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException(nameof(value));
                 this._finalizationManager = value;
             }
         }

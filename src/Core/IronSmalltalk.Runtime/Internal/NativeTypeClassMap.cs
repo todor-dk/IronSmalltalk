@@ -17,11 +17,14 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Numerics;
 using IronSmalltalk.Common;
 
 namespace IronSmalltalk.Runtime.Internal
 {
+#pragma warning disable CA1720 // Identifier contains type name
+
     /// <summary>
     /// This class contains the mappings between .Net types and Smalltalk classes.
     /// It is essential for the runtime to be able to find behavior (methods) for 
@@ -45,7 +48,7 @@ namespace IronSmalltalk.Runtime.Internal
         internal NativeTypeClassMap(SmalltalkRuntime runtime)
         {
             if (runtime == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(runtime));
             this.Runtime = runtime;
             this.TypeClassMap = new ConcurrentDictionary<Type, SmalltalkClass>();
         }
@@ -201,9 +204,7 @@ namespace IronSmalltalk.Runtime.Internal
             if (cls == null)
                 throw new ArgumentNullException(nameof(cls));
             if (System.String.IsNullOrWhiteSpace(typeName))
-                throw new SmalltalkDefinitionException(System.String.Format(
-                    "Invalid type name. Check native type mapping for class {0}",
-                    cls.Name), new ArgumentNullException(nameof(typeName)));
+                throw new SmalltalkDefinitionException($"Invalid type name. Check native type mapping for class {cls.Name}", new ArgumentNullException(nameof(typeName)));
 
             // Special case handling for Smalltalk specific classes.
             if (typeName == "true")
@@ -250,7 +251,7 @@ namespace IronSmalltalk.Runtime.Internal
 
             // Generic classes ... remap C# convenience names to FCL names.
             Type type;
-            if (typeName.StartsWith(NativeTypeClassMap.IstTypenamePrefix))
+            if (typeName.StartsWith(NativeTypeClassMap.IstTypenamePrefix, StringComparison.Ordinal))
             {
                 type = NativeTypeClassMap.GetIstType(typeName);
             }
@@ -263,9 +264,7 @@ namespace IronSmalltalk.Runtime.Internal
                 }
                 catch (Exception ex)
                 {
-                    throw new SmalltalkDefinitionException(System.String.Format(
-                        "Cannot find type {0}. Check native type mapping for class {1}",
-                        typeName, cls.Name), ex);
+                    throw new SmalltalkDefinitionException($"Cannot find type {typeName}. Check native type mapping for class {cls.Name}", ex);
                 }
             }
 
@@ -293,35 +292,35 @@ namespace IronSmalltalk.Runtime.Internal
 
         private static string RemapTypeName(string name)
         {
-            if (name == "bool") 
-                return "System.Boolean";	
-            if (name == "byte") 
-                return "System.Byte";	
-            if (name == "sbyte") 
-                return "System.SByte";	
-            if (name == "char") 
-                return "System.Char";	
-            if (name == "decimal") 
-                return "System.Decimal";	
-            if (name == "double") 
-                return "System.Double";	
-            if (name == "float") 
-                return "System.Single";	
-            if (name == "int") 
-                return "System.Int32";	
-            if (name == "uint") 
-                return "System.UInt32";	
-            if (name == "long") 
-                return "System.Int64";	
-            if (name == "ulong") 
-                return "System.UInt64";	
-            if (name == "object") 
-                return "System.Object";	
-            if (name == "short") 
-                return "System.Int16";	
-            if (name == "ushort") 
-                return "System.UInt16";	
-            if (name == "string") 
+            if (name == "bool")
+                return "System.Boolean";
+            if (name == "byte")
+                return "System.Byte";
+            if (name == "sbyte")
+                return "System.SByte";
+            if (name == "char")
+                return "System.Char";
+            if (name == "decimal")
+                return "System.Decimal";
+            if (name == "double")
+                return "System.Double";
+            if (name == "float")
+                return "System.Single";
+            if (name == "int")
+                return "System.Int32";
+            if (name == "uint")
+                return "System.UInt32";
+            if (name == "long")
+                return "System.Int64";
+            if (name == "ulong")
+                return "System.UInt64";
+            if (name == "object")
+                return "System.Object";
+            if (name == "short")
+                return "System.Int16";
+            if (name == "ushort")
+                return "System.UInt16";
+            if (name == "string")
                 return "System.String";
             return name;
         }
@@ -343,37 +342,37 @@ namespace IronSmalltalk.Runtime.Internal
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
 
-            if (name == "bool") 
-                return typeof(bool);	
-            if (name == "byte") 
-                return typeof(byte);	
-            if (name == "sbyte") 
-                return typeof(sbyte);	
-            if (name == "char") 
-                return typeof(char);	
-            if (name == "decimal") 
-                return typeof(decimal);	
-            if (name == "double") 
-                return typeof(double);	
-            if (name == "float") 
-                return typeof(float);	
-            if (name == "int") 
-                return typeof(int);	
-            if (name == "uint") 
-                return typeof(uint);	
-            if (name == "long") 
-                return typeof(long);	
-            if (name == "ulong") 
-                return typeof(ulong);	
-            if (name == "object") 
-                return typeof(object);	
-            if (name == "short") 
-                return typeof(short);	
-            if (name == "ushort") 
-                return typeof(ushort);	
-            if (name == "string") 
+            if (name == "bool")
+                return typeof(bool);
+            if (name == "byte")
+                return typeof(byte);
+            if (name == "sbyte")
+                return typeof(sbyte);
+            if (name == "char")
+                return typeof(char);
+            if (name == "decimal")
+                return typeof(decimal);
+            if (name == "double")
+                return typeof(double);
+            if (name == "float")
+                return typeof(float);
+            if (name == "int")
+                return typeof(int);
+            if (name == "uint")
+                return typeof(uint);
+            if (name == "long")
+                return typeof(long);
+            if (name == "ulong")
+                return typeof(ulong);
+            if (name == "object")
+                return typeof(object);
+            if (name == "short")
+                return typeof(short);
+            if (name == "ushort")
+                return typeof(ushort);
+            if (name == "string")
                 return typeof(string);
-            if (name.StartsWith(NativeTypeClassMap.IstTypenamePrefix))
+            if (name.StartsWith(NativeTypeClassMap.IstTypenamePrefix, StringComparison.Ordinal))
                 return NativeTypeClassMap.GetIstType(name);
             return Type.GetType(name, false, false);
         }
@@ -382,7 +381,8 @@ namespace IronSmalltalk.Runtime.Internal
 
         private static readonly Dictionary<string, Type> IstTypes = new Dictionary<string, Type>();
 
-        private static readonly string[] IstNamespaces = new string[] {
+        private static readonly string[] IstNamespaces = new string[]
+        {
             "IronSmalltalk.{0}, IronSmalltalk.Runtime",
             "IronSmalltalk.Common.{0}, IronSmalltalk.Common",
             "IronSmalltalk.Runtime.{0}, IronSmalltalk.Runtime",
@@ -393,21 +393,21 @@ namespace IronSmalltalk.Runtime.Internal
         private static Type GetIstType(string name)
         {
             if (System.String.IsNullOrWhiteSpace(name))
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(name));
 
             Type result;
             if (NativeTypeClassMap.IstTypes.TryGetValue(name, out result))
             {
                 if (result == null)
-                    throw new SmalltalkDefinitionException(System.String.Format("Cannot find IronSmalltalk type {0}", name));
+                    throw new SmalltalkDefinitionException($"Cannot find IronSmalltalk type {name}");
                 return result;
             }
 
             string postfix = name.Substring(NativeTypeClassMap.IstTypenamePrefix.Length);
             for (int i = 0; i < NativeTypeClassMap.IstNamespaces.Length; i++)
-			{
+            {
                 string typename = NativeTypeClassMap.IstNamespaces[i];
-                typename = System.String.Format(typename, postfix);
+                typename = System.String.Format(CultureInfo.InvariantCulture, typename, postfix);
 
                 result = Type.GetType(typename, false, false);
                 if (result != null)
@@ -415,10 +415,10 @@ namespace IronSmalltalk.Runtime.Internal
                     NativeTypeClassMap.IstTypes[name] = result;
                     return result;
                 }
-			}
+            }
 
             NativeTypeClassMap.IstTypes[name] = null;
-            throw new SmalltalkDefinitionException(System.String.Format("Cannot find IronSmalltalk type {0}", name));
+            throw new SmalltalkDefinitionException($"Cannot find IronSmalltalk type {name}");
         }
     }
 }

@@ -61,20 +61,21 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// The list below was creating by examining an existing Smalltalk source code
         /// and determining the most often sent messages (as number of call-sites).
         /// </remarks>
-        public static readonly string[] CommonSelectors = new string[] {
+        public static readonly string[] CommonSelectors = new string[]
+        {
             "=", "~=", "==", "~~", ">", ">=", "<", "<=",    // comparison operations 
             "+", "-", "*", "/", "\\\\", "//",               // arithmetic operations 
             "&", "|",                                       // logical operations 
             "@", ",",                                       // miscellaneous 
-            "add:", "addAll:", "and:", "asString", "at:", "at:ifAbsent:", "at:put:", "atEnd", 
-            "basicAt:", "basicAt:put:", "basicHash", "basicHash:", "basicNew", "basicNew:", "basicSize", 
+            "add:", "addAll:", "and:", "asString", "at:", "at:ifAbsent:", "at:put:", "atEnd",
+            "basicAt:", "basicAt:put:", "basicHash", "basicHash:", "basicNew", "basicNew:", "basicSize",
             "between:and:", "class", "do:", "doesNotUnderstand:", "ensure:",
-            "ifFalse:", "ifFalse:ifTrue:", "ifTrue:", "ifTrue:ifFalse:", 
-            "isEmpty", "isNil", "key", "max:", "min:", "new", "new:", 
-            "nextPut:", "nextPutAll:", "not", "notNil", "on:do:", "or:", "printOn:", "printString", 
-            "propertyAt:", "propertyAt:ifAbsent:", "propertyAt:ifAbsentPut:", "propertyAt:put:", 
-            "release", "size", "to:by:do:", "to:do:", "triggerEvent:", "value", "value:", "value:value:", 
-            "vmInterrupt:", "when:send:to:", "when:send:to:with:", 
+            "ifFalse:", "ifFalse:ifTrue:", "ifTrue:", "ifTrue:ifFalse:",
+            "isEmpty", "isNil", "key", "max:", "min:", "new", "new:",
+            "nextPut:", "nextPutAll:", "not", "notNil", "on:do:", "or:", "printOn:", "printString",
+            "propertyAt:", "propertyAt:ifAbsent:", "propertyAt:ifAbsentPut:", "propertyAt:put:",
+            "release", "size", "to:by:do:", "to:do:", "triggerEvent:", "value", "value:", "value:value:",
+            "vmInterrupt:", "when:send:to:", "when:send:to:with:",
             "whileFalse", "whileFalse:", "whileTrue", "whileTrue:", "with:", "with:with:", "x", "y", "yourself"
         };
 
@@ -119,7 +120,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         public static SymbolCallSiteBinder GetSymbolBinder(string symbolKey)
         {
             if (symbolKey == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(symbolKey));
             SymbolCallSiteBinder binder = CallSiteBinderCache.Current.SymbolCache.GetBinder(symbolKey);
             if (binder == null)
                 binder = CallSiteBinderCache.Current.SymbolCache.AddBinder(new SymbolCallSiteBinder(symbolKey));
@@ -136,7 +137,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         public static DiscreteBindingVariableValueCallSiteBinder GetDiscreteVariableBinding(string moniker)
         {
             if (moniker == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(moniker));
             DiscreteBindingVariableValueCallSiteBinder binder = CallSiteBinderCache.Current.DiscreteVariableBindingCache.GetBinder(moniker);
             if (binder == null)
                 binder = CallSiteBinderCache.Current.DiscreteVariableBindingCache.AddBinder(new DiscreteBindingVariableValueCallSiteBinder(moniker));
@@ -147,7 +148,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         public static DiscreteBindingConstantValueCallSiteBinder GetDiscreteConstantBinding(string moniker)
         {
             if (moniker == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(moniker));
             DiscreteBindingConstantValueCallSiteBinder binder = CallSiteBinderCache.Current.DiscreteConstantBindingCache.GetBinder(moniker);
             if (binder == null)
                 binder = CallSiteBinderCache.Current.DiscreteConstantBindingCache.AddBinder(new DiscreteBindingConstantValueCallSiteBinder(moniker));
@@ -158,7 +159,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         public static DiscreteBindingObjectCallSiteBinder GetDiscreteObjectBinding(string moniker)
         {
             if (moniker == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(moniker));
             DiscreteBindingObjectCallSiteBinder binder = CallSiteBinderCache.Current.DiscreteObjectBindingCache.GetBinder(moniker);
             if (binder == null)
                 binder = CallSiteBinderCache.Current.DiscreteObjectBindingCache.AddBinder(new DiscreteBindingObjectCallSiteBinder(moniker));

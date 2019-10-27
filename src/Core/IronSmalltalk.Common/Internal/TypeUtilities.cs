@@ -41,7 +41,7 @@ namespace IronSmalltalk.Common.Internal
                 argumentTypes = TypeUtilities.EmptyTypeArray;
             ConstructorInfo ctor = type.GetConstructor(bindingFlags, null, argumentTypes, null);
             if (ctor == null)
-                throw new MissingMemberException(type.Name, String.Format(CultureInfo.CurrentCulture, ".ctor({0})", TypeUtilities.ConcatArgumentTypes(argumentTypes)));
+                throw new MissingMemberException(type.Name, $".ctor({TypeUtilities.ConcatArgumentTypes(argumentTypes)})");
 
             return ctor;
         }
@@ -68,7 +68,7 @@ namespace IronSmalltalk.Common.Internal
 
             MethodInfo method = type.GetMethod(name);
             if (method == null)
-                throw new MissingMethodException(type.Name, String.Format(CultureInfo.CurrentCulture, "{0}(...)", name));
+                throw new MissingMethodException(type.Name, $"{name}(...)");
 
             return method;
         }
@@ -86,7 +86,7 @@ namespace IronSmalltalk.Common.Internal
                 argumentTypes = TypeUtilities.EmptyTypeArray;
             MethodInfo method = type.GetMethod(name, bindingFlags, null, argumentTypes, null);
             if (method == null)
-                throw new MissingMethodException(type.Name, String.Format(CultureInfo.CurrentCulture, "{0}({1})", name, TypeUtilities.ConcatArgumentTypes(argumentTypes)));
+                throw new MissingMethodException(type.Name, $"{name}({TypeUtilities.ConcatArgumentTypes(argumentTypes)})");
 
             return method;
         }
@@ -115,8 +115,7 @@ namespace IronSmalltalk.Common.Internal
             PropertyInfo property = type.GetProperty(name, bindingFlags, null, returnType, argumentTypes, null);
             if (property == null)
             {
-                throw new MissingMemberException(type.Name, String.Format(CultureInfo.CurrentCulture, "{0} {1}({2})",
-                    (returnType == null) ? "" : returnType.FullName, name, TypeUtilities.ConcatArgumentTypes(argumentTypes)));
+                throw new MissingMemberException(type.Name, $"{((returnType == null) ? "" : returnType.FullName)} {name}({TypeUtilities.ConcatArgumentTypes(argumentTypes)})");
             }
 
             return property;

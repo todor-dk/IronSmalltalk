@@ -27,7 +27,7 @@ namespace IronSmalltalk.Runtime
     /// Some classes cannot create instances of a SmalltalkObject and 
     /// either have built-in .Net types or wrap around existing .Net types.
     /// </remarks>
-    public partial class SmalltalkObject 
+    public partial class SmalltalkObject
     {
         /// <summary>
         /// The SmalltalkClass that this object is instance of.
@@ -58,7 +58,7 @@ namespace IronSmalltalk.Runtime
         public SmalltalkObject(SmalltalkClass cls)
         {
             if (cls == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(cls));
             this.Class = cls;
             this.InstanceVariables = new object[cls.InstanceSize];
         }

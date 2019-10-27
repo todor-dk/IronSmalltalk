@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using IronSmalltalk.Common;
 using IronSmalltalk.Runtime.Execution.Dynamic;
 
 namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
@@ -67,6 +68,8 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 
         private DynamicMetaObject FallbackInvokeMember(DynamicMetaObject target, DynamicMetaObject[] args, DynamicMetaObject errorSuggestion)
         {
+            Contract.ParameterNotUsed(errorSuggestion);
+
             return base.Bind(target, args);
         }
 
@@ -124,7 +127,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 List<string> argumentNames = new List<string>();
                 argumentNames.Add("self");
                 for (int i = 0; i < args; i++)
-                    argumentNames.Add(String.Format("_arg_{0}", i));
+                    argumentNames.Add($"_arg_{i}");
                 CallInfo result = new CallInfo(argumentNames.Count, argumentNames);
                 if (args < MessageSendInvokeMemberBinder.CachedCallInfos.Length)
                     MessageSendInvokeMemberBinder.CachedCallInfos[args] = result;
@@ -152,7 +155,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException(nameof(value));
                 this._finalizationManager = value;
             }
         }

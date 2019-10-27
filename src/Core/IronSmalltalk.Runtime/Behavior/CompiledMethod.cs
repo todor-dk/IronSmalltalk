@@ -93,8 +93,9 @@ namespace IronSmalltalk.Runtime.Behavior
                     if (binary)
                     {
                         if (!GlobalConstants.BinaryCharacters.Contains(c))
-                        binary = false;
-                    } else 
+                            binary = false;
+                    }
+                    else
                     {
                         if (c == GlobalConstants.KeywordPostfix)
                             args++;
@@ -116,6 +117,7 @@ namespace IronSmalltalk.Runtime.Behavior
             /// The method is part of the instance behavior of a Smalltalk class.
             /// </summary>
             Instance,
+
             /// <summary>
             /// The method is part of the class behavior of a Smalltalk class.
             /// </summary>

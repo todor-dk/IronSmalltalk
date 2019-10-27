@@ -33,7 +33,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         public ArrayCallSiteBinder(object[] arrayTemplate)
         {
             if (arrayTemplate == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(arrayTemplate));
             this.ArrayTemplate = arrayTemplate;
         }
 

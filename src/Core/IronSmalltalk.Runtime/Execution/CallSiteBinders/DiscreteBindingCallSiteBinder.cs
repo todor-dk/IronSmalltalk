@@ -19,6 +19,7 @@ using IronSmalltalk.Runtime.Execution.Internals;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -37,7 +38,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         public static string GetMoniker(IDiscreteGlobalBinding binding)
         {
             if (binding == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(binding));
 
             return DiscreteBindingCallSiteBinderBase.GetMoniker(
                 DiscreteBindingCallSiteBinderBase.GlobalPrefix,
@@ -72,7 +73,8 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
 
         private static string GetMoniker(params string[] paths)
         {
-            return String.Join(".", paths.Select(each => {
+            return String.Join(".", paths.Select(each =>
+            {
                 if (each.Contains('.') || each.Contains('\''))
                     return "'" + each.Replace("'", "''") + "'";
                 else
@@ -84,13 +86,13 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         {
             string[] monikerParts = DiscreteBindingCallSiteBinderBase.ParseMoniker(moniker);
             for (int i = 0; i < monikerParts.Length; i++)
-			{
+            {
                 if (String.IsNullOrWhiteSpace(monikerParts[i]))
-                    throw new ImplementationException(String.Format("Invalid discrete binding moniker ({0})", moniker));
-			}
+                    throw new ImplementationException($"Invalid discrete binding moniker ({moniker})");
+            }
 
             if (monikerParts.Length < 1)
-                throw new ImplementationException(String.Format("Invalid discrete binding moniker ({0})", moniker));
+                throw new ImplementationException($"Invalid discrete binding moniker ({moniker})");
             string type = monikerParts[0];
 
             if ((type == DiscreteBindingCallSiteBinderBase.GlobalPrefix) && (monikerParts.Length == 2))
@@ -99,13 +101,13 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 return new GetClassVariableBindingStrategy(monikerParts[1], monikerParts[2]);
             if ((type == DiscreteBindingCallSiteBinderBase.PoolItemPrefix) && (monikerParts.Length == 3))
                 return new GetPoolItemBindingStrategy(monikerParts[1], monikerParts[2]);
-            throw new ImplementationException(String.Format("Invalid discrete binding moniker ({0})", moniker));
+            throw new ImplementationException($"Invalid discrete binding moniker ({moniker})");
         }
 
         private static string[] ParseMoniker(string moniker)
         {
             List<string> parts = new List<string>();
-            
+
             bool insideQuote = false;
             StringBuilder part = new StringBuilder();
             for (int i = 0; i < moniker.Length; i++)
@@ -258,7 +260,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException(nameof(value));
                 this._finalizationManager = value;
             }
         }
@@ -308,10 +310,10 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         {
             IDiscreteBinding binding = this.GetBindingStrategy.GetBinding(executionContext);
             if (binding == null)
-                throw new CodeGenerationException(String.Format("Could not find global binding {0}. This may indicate a bug in our code.", this.Moniker));
+                throw new CodeGenerationException($"Could not find global binding {this.Moniker}. This may indicate a bug in our code.");
             return Expression.Property(
                 Expression.Constant(binding, binding.GetType()),
-                DiscreteBindingCallSiteBinderBase.GetPropertyInfo(binding.GetType())); 
+                DiscreteBindingCallSiteBinderBase.GetPropertyInfo(binding.GetType()));
         }
     }
 
@@ -326,7 +328,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         {
             IDiscreteBinding binding = this.GetBindingStrategy.GetBinding(executionContext);
             if (binding == null)
-                throw new CodeGenerationException(String.Format("Could not find global binding {0}. This may indicate a bug in our code.", this.Moniker));
+                throw new CodeGenerationException($"Could not find global binding {this.Moniker}. This may indicate a bug in our code.");
             return Expression.Constant(binding.Value, this.ReturnType);
         }
     }
@@ -342,7 +344,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         {
             IDiscreteBinding binding = this.GetBindingStrategy.GetBinding(executionContext);
             if (binding == null)
-                throw new CodeGenerationException(String.Format("Could not find global binding {0}. This may indicate a bug in our code.", this.Moniker));
+                throw new CodeGenerationException($"Could not find global binding {this.Moniker}. This may indicate a bug in our code.");
             return Expression.Constant(binding, binding.GetType());
         }
     }

@@ -25,7 +25,7 @@ namespace IronSmalltalk.Runtime.Bindings
     /// and the value hold by that variable.
     /// </summary>
     public abstract class DiscreteBinding<TValue> : Binding<TValue>, IDiscreteBinding
-        where TValue : class 
+        where TValue : class
     {
         /// <summary>
         /// Creates a new discrete binding with the given name.
@@ -99,7 +99,7 @@ namespace IronSmalltalk.Runtime.Bindings
         public void Annotate(string key, string value)
         {
             if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(key));
             if (value == null)
             {
                 if (this._annotations == null)

@@ -53,7 +53,7 @@ namespace IronSmalltalk.Runtime.Behavior
         public void Annotate(string key, string value)
         {
             if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(key));
             if (value == null)
             {
                 if (this._Annotations == null)

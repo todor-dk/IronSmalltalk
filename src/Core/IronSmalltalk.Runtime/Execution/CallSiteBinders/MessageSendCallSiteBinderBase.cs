@@ -56,6 +56,9 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
         /// <returns>The System.Dynamic.DynamicMetaObject representing the result of the binding.</returns>
         public override DynamicMetaObject Bind(DynamicMetaObject target, DynamicMetaObject[] args)
         {
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+
             ExecutionContext executionContext = this.GetExecutionContext(args);
             if (executionContext == null)
                 // If this is null, the binder was not used by a Smalltalk method. Or may be somebody passed null for the ExecutionContext, which is illegal too.
@@ -97,7 +100,7 @@ namespace IronSmalltalk.Runtime.Execution.CallSiteBinders
                 //     tmp := anObject _doesNotUnderstand: #invalidMessageWith:with:with:
                 //         arguments: (Array with: arg1 with: arg2 with: arg3).
                 // 
-                Expression[] dnuArgs = new Expression[] 
+                Expression[] dnuArgs = new Expression[]
                 {
                     Expression.Constant(runtime.GetSymbol(this.Selector), typeof(object)), // The selector
                     Expression.NewArrayInit(typeof(object), args.Skip(1).Select(d => Expression.Convert(d.Expression, typeof(object)))) // The remeaining args as an array

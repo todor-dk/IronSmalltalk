@@ -256,8 +256,7 @@ namespace IronSmalltalk.Common
         /// <returns>A human readable string representation of the source location.</returns>
         public override string ToString()
         {
-            return String.Format(System.Globalization.CultureInfo.CurrentCulture,
-                "Ln {0}, Col {1}, Pos {2}", this.Line, this.Column, this.Position);
+            return $"Ln {this.Line}, Col {this.Column}, Pos {this.Position}";
         }
     }
 }

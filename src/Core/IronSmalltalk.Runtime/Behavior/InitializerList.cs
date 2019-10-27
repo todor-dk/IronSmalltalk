@@ -58,7 +58,7 @@ namespace IronSmalltalk.Runtime.Behavior
         public void RemoveAt(int index)
         {
             if (this.ReadOnly)
-                throw new InvalidOperationException("List is in read-only state."); 
+                throw new InvalidOperationException("List is in read-only state.");
             this.Contents.RemoveAt(index);
         }
 

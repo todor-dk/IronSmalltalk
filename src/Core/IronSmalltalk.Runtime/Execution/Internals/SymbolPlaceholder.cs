@@ -30,7 +30,7 @@ namespace IronSmalltalk.Runtime.Execution.Internals
         public SymbolPlaceholder(string value)
         {
             if (value == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(value));
             this.Value = value;
         }
     }
